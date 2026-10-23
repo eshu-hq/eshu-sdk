@@ -1,19 +1,19 @@
 # Release and cutover checklist
 
-The first versions planned for the new module identities are
-`collector/v0.1.0-rc.1` and `factschema/v0.1.0-rc.1`. Neither tag is published.
-Source preparation, candidate availability, consumer/core qualification, and
-deployed acceptance are separate states. See the [compatibility policy](compatibility.md)
-for the exact old and new paths and current scope.
+Source is prepared for the new module identities at
+`collector/v0.1.0-rc.1` and `factschema/v0.1.0-rc.1`. This preparation does
+not publish either tag. Git tags and public proxy resolution determine current
+availability. Source preparation, candidate availability, consumer/core
+qualification, and deployed acceptance are separate states. See the
+[compatibility policy](compatibility.md) for the exact paths and scope.
 
 1. Confirm an independently reviewed mapping of inherited schemas, fixtures,
    public APIs and decoder bindings, and review all new SDK behavior.
-2. Treat this policy and path-mapping preparation as not taggable. Before tag
-   approval, separately review a versioned candidate preparation that replaces
-   `[Unreleased]` for each selected candidate in its changelog and makes the
-   plan/status wording accurate for that source commit. Do not claim a tag is
-   published before it exists; Git tags and public proxy resolution are the
-   authority for current publication status.
+2. Confirm the separately reviewed versioned candidate preparation has a
+   `0.1.0-rc.1` entry in each new-path changelog and accurate source/status
+   wording. The policy and path mapping alone were not taggable; this source
+   preparation is not tag approval. Do not claim a tag is published before it
+   exists; Git tags and public proxy resolution are authoritative.
 3. Run standalone module CI. Bind the decision packet and separate tag approval
    to the exact reviewed and merged source commit with green CI. Do not hardcode
    a source SHA in these docs, because a docs edit changes the commit.

@@ -1,22 +1,23 @@
 # SDK module compatibility and candidate status
 
-The new repository contains two independent Go module identities. Its first
-candidate versions are **planned, not published**. A candidate tag makes bytes
-available for testing; it does not qualify a core consumer or establish a
-deployed pair.
+The new repository contains two independent Go module identities. Source for
+their first candidates is prepared as `v0.1.0-rc.1`. At preparation time, no
+candidate tag had been published; check Git tags and the Go proxy for current
+availability. A candidate tag makes bytes available for testing; it does not
+qualify a core consumer or establish a deployed pair.
 
-| Existing published module | Existing version | New module identity | Planned first candidate |
+| Existing published module | Existing version | New module identity | Prepared first candidate |
 | --- | --- | --- | --- |
 | `github.com/eshu-hq/eshu/sdk/go/collector` | `v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.1.0-rc.1` |
 | `github.com/eshu-hq/eshu/sdk/go/factschema` | `v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.1` |
 
-The old and new import paths name different Go types. The proposed `v0.1.0`
+The old and new import paths name different Go types. The new `v0.1.0`
 line is a new module identity, not a continuation of the old path's `v0.2.0`
 line or a drop-in replacement. Both modules require Go `1.26.5` or newer.
 The old `v0.2.0` paths, their source, and their support and security policy
 remain in place until consumer and deployed acceptance authorize a cutover.
 
-## Scope of the planned candidate
+## Scope of the prepared candidate
 
 The candidate includes the current collector contracts and tooling: transport,
 conformance, public `Request`, bounded `command.Run`, neutral entrypoint
@@ -37,9 +38,9 @@ per-file changes, and commands to reproduce them.
 
 ## Acceptance states
 
-| State | Evidence required | Current status |
+| State | Evidence required | Status at source preparation |
 | --- | --- | --- |
-| Candidate available | Exact reviewed and merged source commit, green CI on that commit, separate tag approval, immutable directory-prefixed tags, and fresh proxy resolution | Planned; not published |
+| Candidate available | Exact reviewed and merged source commit, green CI on that commit, separate tag approval, immutable directory-prefixed tags, and fresh proxy resolution | Source prepared; publication requires live Git/proxy checks |
 | Qualified consumer/core pair | Exact candidate pins, contract and runtime gates for that consumer and core version, including grant-aware conformance for reserved kinds | Not qualified |
 | Deployed accepted pair | Matching deployment, reducer, graph, API/MCP, retry, operator, and rollback evidence | Not accepted |
 

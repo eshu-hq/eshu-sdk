@@ -1,13 +1,13 @@
 # Eshu Go SDK preparation
 
-This repository is a local preparation of two independent public Go modules copied from Eshu at commit `eb62fa3056f5ed3518bb5aa676bf2e3adc96c1d5`. Neither proposed module path has been tagged, published as a Go module, or accepted by a production Eshu consumer.
+This repository prepares two independent public Go modules initially copied from Eshu at commit `eb62fa3056f5ed3518bb5aa676bf2e3adc96c1d5`. Source for their first release candidates is prepared; this source preparation does not establish tag publication or acceptance by a production Eshu consumer. Check Git tags and the Go proxy for current availability.
 
 | Directory | Proposed module path | Tag prefix |
 | --- | --- | --- |
 | `collector/` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/vX.Y.Z` |
 | `factschema/` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/vX.Y.Z` |
 
-There is no root Go module. Each module is tested and versioned independently. The first candidate tags are planned as `collector/v0.1.0-rc.1` and `factschema/v0.1.0-rc.1`; neither is published. The original in-tree modules and existing immutable tags remain in place until consumer tests and production cutover pass. See the [compatibility policy](docs/compatibility.md) for the old/new paths and acceptance states.
+There is no root Go module. Each module is tested and versioned independently. Their first candidate source is prepared for `collector/v0.1.0-rc.1` and `factschema/v0.1.0-rc.1`. The original in-tree modules and existing immutable tags remain in place until consumer tests and production cutover pass. See the [compatibility policy](docs/compatibility.md) for the old/new paths and acceptance states.
 
 ## Source and scope
 
