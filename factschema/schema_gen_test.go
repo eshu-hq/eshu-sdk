@@ -222,7 +222,7 @@ func TestSchemasHaveNoDrift(t *testing.T) {
 			}
 
 			if !bytes.Equal(got, want) {
-				t.Fatalf("generated %s drifted from committed artifact; run `go generate ./...` in sdk/go/factschema and commit the result\n\ngenerated:\n%s\n\ncommitted:\n%s", tc.file, got, want)
+				t.Fatalf("generated %s drifted from committed artifact; run `go generate ./...` in factschema and commit the result\n\ngenerated:\n%s\n\ncommitted:\n%s", tc.file, got, want)
 			}
 		})
 	}

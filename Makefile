@@ -12,7 +12,10 @@ vet:
 
 generate-check:
 	cd factschema && GOWORK=off $(GO) generate ./...
-	git diff --exit-code -- factschema/schema
+	@status="$$(git status --porcelain --untracked-files=all --ignored=matching -- factschema/schema)" || exit $$?; \
+	if [ -n "$$status" ]; then \
+		printf '%s\n' 'Generated schemas differ from committed artifacts:' "$$status" >&2; exit 1; \
+	fi
 
 file-cap:
 	@bash scripts/dev/check-file-cap.sh

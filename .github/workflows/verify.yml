@@ -28,6 +28,6 @@ jobs:
           go-version-file: factschema/go.mod
           cache-dependency-path: factschema/go.sum
       - name: Check generated schemas
-        run: cd factschema && GOWORK=off go generate ./... && git diff --exit-code -- schema
+        run: make generate-check
       - name: Check file cap
         run: make file-cap

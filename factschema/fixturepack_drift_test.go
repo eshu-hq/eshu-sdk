@@ -47,7 +47,7 @@ func TestFixturePackSchemasMatchCanonical(t *testing.T) {
 	}
 	for name := range canonical {
 		if _, ok := packSet[name]; !ok {
-			t.Errorf("canonical schema %q is missing from the fixture pack; add it under sdk/go/factschema/fixturepack/schema/", name)
+			t.Errorf("canonical schema %q is missing from the fixture pack; add it under factschema/fixturepack/schema/", name)
 		}
 	}
 

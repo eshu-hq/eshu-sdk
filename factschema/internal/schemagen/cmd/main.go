@@ -2,8 +2,8 @@
 // Copyright (c) 2025-2026 eshu-hq
 
 // Command schemagen regenerates the checked-in JSON Schema artifacts under
-// sdk/go/factschema/schema/. Run it via `go generate ./...` from the
-// sdk/go/factschema module root (see the //go:generate directive in
+// factschema/schema/. Run it via `go generate ./...` from the
+// factschema module root (see the //go:generate directive in
 // decode.go), or directly with:
 //
 //	go run ./internal/schemagen/cmd
