@@ -1,0 +1,43 @@
+README.md
+  s_ff8a600f1fc93e::t_905eb2015266db 14-25
+collector/CHANGELOG.md
+  s_ff8a600f1fc93e::t_f65d1dcf2a97ca 7-8,26-33,40-41,91
+collector/entrypoints/entrypoints_test.go
+  s_ff8a600f1fc93e::t_4f0857ec9e2376 39,96-103
+collector/entrypoints/generate.go
+  s_ff8a600f1fc93e::t_c938045921b5fe 47,69
+collector/entrypoints/generated_command_test.go
+  s_ff8a600f1fc93e::t_d9f1a9c6ac4f36 1-99
+collector/entrypoints/manifest.go
+  s_ff8a600f1fc93e::t_ea66fb63f2ac15 106
+collector/entrypoints/testdata/provider/AGENTS.md
+  s_ff8a600f1fc93e::t_1192df74459f60 1-4
+collector/entrypoints/testdata/provider/README.md
+  s_ff8a600f1fc93e::t_a0d2085e814633 1-4
+collector/entrypoints/testdata/provider/doc.go
+  s_ff8a600f1fc93e::t_f566299e4c98fe 1-5
+collector/entrypoints/testdata/provider/handler.go
+  s_ff8a600f1fc93e::t_4bc6d5d13d375b 1-95
+collector/request.go
+  s_ff8a600f1fc93e::t_dc3b329d37cf13 9-10
+docs/provenance.md
+  s_ff8a600f1fc93e::t_ffbf7dfa87bf8a 9,11,13,16-19,21-32
+docs/release.md
+  s_ff8a600f1fc93e::t_8084e0e3360c3d 3-34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3e5c3d1dc2047b803a9a6ba0059ca2a3bac933ed",
+  "prompts": {},
+  "sessions": {
+    "s_ff8a600f1fc93e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a16a06-8788-7df0-b732-4e9dcaee59ce",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
