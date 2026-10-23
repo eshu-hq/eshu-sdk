@@ -8,25 +8,31 @@ for the exact old and new paths and current scope.
 
 1. Confirm an independently reviewed mapping of inherited schemas, fixtures,
    public APIs and decoder bindings, and review all new SDK behavior.
-2. Run standalone module CI. Bind the decision packet and separate tag approval
+2. Treat this policy and path-mapping preparation as not taggable. Before tag
+   approval, separately review a versioned candidate preparation that replaces
+   `[Unreleased]` for each selected candidate in its changelog and makes the
+   plan/status wording accurate for that source commit. Do not claim a tag is
+   published before it exists; Git tags and public proxy resolution are the
+   authority for current publication status.
+3. Run standalone module CI. Bind the decision packet and separate tag approval
    to the exact reviewed and merged source commit with green CI. Do not hardcode
    a source SHA in these docs, because a docs edit changes the commit.
-3. Tag each module independently with its directory-prefixed candidate tag only
+4. Tag each module independently with its directory-prefixed candidate tag only
    after that approval. Preserve all published tags, including prereleases:
    repair an `rc.1` candidate with a reviewed `rc.2`, never a retarget.
-4. From a fresh external consumer, resolve each exact candidate version with
+5. From a fresh external consumer, resolve each exact candidate version with
    `GOWORK=off`, no `replace`, and no `@latest`. Record proxy checksums, the
    tag origin SHA, and a successful build. Candidate availability alone does
    not establish a qualified consumer or production compatibility.
-5. Migrate consumers to exact published versions and run their contract and
+6. Migrate consumers to exact published versions and run their contract and
    runtime gates. Grant-aware conformance blocks reserved-kind collector
    qualification. Reuse the existing core envelope adapter; retire duplicate
    generic helpers and identity derivation only at their documented adoption
    steps.
-6. Validate the designated deployment and rehearse rollback without overlapping
+7. Validate the designated deployment and rehearse rollback without overlapping
    producer authority or lost facts. Mark a pair deployed only with matching
    runtime, reducer, graph, API, MCP, retry and operator evidence.
-7. Remove superseded in-tree sources only after consumer production acceptance;
+8. Remove superseded in-tree sources only after consumer production acceptance;
    preserve the existing `github.com/eshu-hq/eshu/sdk/go/{collector,factschema}`
    `v0.2.0` support and security policy during migration. Review a final stable
    `v0.1.0` separately; do not infer it from candidate publication.

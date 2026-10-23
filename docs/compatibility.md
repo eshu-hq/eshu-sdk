@@ -5,7 +5,7 @@ candidate versions are **planned, not published**. A candidate tag makes bytes
 available for testing; it does not qualify a core consumer or establish a
 deployed pair.
 
-| Existing supported module | Existing version | New module identity | Planned first candidate |
+| Existing published module | Existing version | New module identity | Planned first candidate |
 | --- | --- | --- | --- |
 | `github.com/eshu-hq/eshu/sdk/go/collector` | `v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.1.0-rc.1` |
 | `github.com/eshu-hq/eshu/sdk/go/factschema` | `v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.1` |
@@ -31,9 +31,9 @@ candidate modules for other consumer tests.
 The comparison against the supported old `factschema@v0.2.0` has 176 old
 schemas and 179 current schemas: three added, none removed, and four existing
 schemas with optional nullable field additions. This is an additive schema
-comparison, not proof that old core accepts new SDK output. The source counts
-and per-file changes are recorded in the local candidate evidence artifacts
-`sdk-old-new-schema-census.json` and `sdk-old-new-schema-diff.json`.
+comparison, not proof that old core accepts new SDK output. The
+[migration evidence](sdk-migration-evidence.md) records the source counts,
+per-file changes, and commands to reproduce them.
 
 ## Acceptance states
 
@@ -54,6 +54,6 @@ successful build. Never retarget a published tag, including a prerelease. If
 release needs separate evidence and approval; it does not follow automatically
 from a candidate.
 
-The prior published module records are in the local evidence artifact
-`sdk-supported-old-modules-proxy.json`. See [release and cutover](release.md)
-for the order of approval and qualification.
+The [migration evidence](sdk-migration-evidence.md) also records the original
+module tag origins and Go checksums. See [release and cutover](release.md) for
+the order of approval and qualification.

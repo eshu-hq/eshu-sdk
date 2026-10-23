@@ -39,10 +39,10 @@ and [contract-test migration](contracttest-migration.md). Temporary overlap does
 not permit permanently independent canonical implementations.
 
 The supported old modules resolve through the Go proxy at exact `v0.2.0`
-versions (`sdk-supported-old-modules-proxy.json`). Against that old factschema
-version, the current source has 176 to 179 schemas: three additions, no
-removals, and four optional nullable field additions
-(`sdk-old-new-schema-census.json`, `sdk-old-new-schema-diff.json`). This is a
+versions. Against that old factschema version, the source baseline has 176 to
+179 schemas: three additions, no removals, and four optional nullable field
+additions. The [migration evidence](sdk-migration-evidence.md) records the tag
+origins, checksums, full schema diff, and reproduction commands. This is a
 source comparison, not a qualified core/SDK pair or a deployed result. The
 release decision packet will bind any candidate tag to its final reviewed,
 merged source commit and green CI; this provenance note does not preselect
