@@ -1,0 +1,25 @@
+collector/entrypoints/generate.go
+  s_ff8a600f1fc93e::t_b6f55f54f069aa 58-63
+collector/entrypoints/generated_command_test.go
+  s_ff8a600f1fc93e::t_d2ee42a1cacff6 95-103
+collector/entrypoints/testdata/provider/handler.go
+  s_ff8a600f1fc93e::t_bf305d7e2f81d8 21-23
+docs/entrypoints.md
+  s_ff8a600f1fc93e::t_33a61bf6b39985 41-45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8a3ce28a1f5b5bc8ea840987933ed5927374c7b2",
+  "prompts": {},
+  "sessions": {
+    "s_ff8a600f1fc93e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a16a06-8788-7df0-b732-4e9dcaee59ce",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
