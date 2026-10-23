@@ -97,7 +97,7 @@ type JSONRequest struct {
 	Decode      func(io.Reader) error
 }
 
-// ParseBaseURL validates a provider base URL without checking credentials.
+// ParseBaseURL validates a provider base URL and rejects embedded credentials.
 func ParseBaseURL(provider string, rawURL string) (*url.URL, error) {
 	base, err := url.Parse(strings.TrimRight(strings.TrimSpace(rawURL), "/"))
 	if err != nil {

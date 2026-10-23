@@ -12,7 +12,8 @@ import (
 	"time"
 )
 
-// Version is the first-party collector SDK contract version.
+// Version is the inherited first-party helper contract marker.
+// It does not identify the collector module release.
 const Version = "v0.1.0"
 
 // FailureClass is a bounded workflow retry class safe for status rows,

@@ -27,7 +27,8 @@ const (
 	TLSModeCustomCA TLSMode = "custom_ca"
 	// TLSModeInsecureSkipVerify disables server certificate verification. It is
 	// test/local-only, never a production default, and must be opted into
-	// explicitly. It logs as an insecure posture so operators can detect it.
+	// explicitly. Callers own reporting this mode to operators; this helper
+	// emits no telemetry.
 	TLSModeInsecureSkipVerify TLSMode = "insecure_skip_verify"
 )
 
