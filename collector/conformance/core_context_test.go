@@ -15,6 +15,7 @@ import (
 )
 
 const syntheticPhase = "proof.synthetic:context" // Mechanism token, not a core registry phase.
+const opaqueSyntheticPhase = "proof_phase_v2"    // Mechanism token, not a core registry phase.
 
 func coreContextRequest() conformance.Request {
 	manifest := validManifest()
@@ -109,6 +110,8 @@ func TestCoreContextRejectsInvalidTrustedInput(t *testing.T) {
 		{"noncanonical kind", func(r *conformance.Request) { r.CoreFacts.Facts[0].Kind = " incident.record" }, conformance.FindingManifestInvalid},
 		{"noncanonical collector", func(r *conformance.Request) { r.CoreFacts.Facts[0].Emissions[0].CollectorKind = " scorecard" }, conformance.FindingManifestInvalid},
 		{"noncanonical phase", func(r *conformance.Request) { r.CoreFacts.Facts[0].ReducerPhases[0] = " proof.synthetic:context" }, conformance.FindingManifestInvalid},
+		{"blank phase token", func(r *conformance.Request) { r.CoreFacts.Facts[0].ReducerPhases[0] = "" }, conformance.FindingManifestInvalid},
+		{"whitespace phase token", func(r *conformance.Request) { r.CoreFacts.Facts[0].ReducerPhases[0] = " " }, conformance.FindingManifestInvalid},
 		{"empty phase", func(r *conformance.Request) { r.CoreFacts.Facts[0].ReducerPhases = nil }, conformance.FindingManifestInvalid},
 		{"duplicate phase", func(r *conformance.Request) {
 			r.CoreFacts.Facts[0].ReducerPhases = []string{syntheticPhase, syntheticPhase}
@@ -118,6 +121,9 @@ func TestCoreContextRejectsInvalidTrustedInput(t *testing.T) {
 		}, conformance.FindingMissingReducerConsumer},
 		{"extra phase", func(r *conformance.Request) {
 			r.Manifest.Spec.ConsumerContracts.Reducer.Phases = append(r.Manifest.Spec.ConsumerContracts.Reducer.Phases, "proof.untrusted:phase")
+		}, conformance.FindingMissingReducerConsumer},
+		{"exact phase mismatch", func(r *conformance.Request) {
+			r.Manifest.Spec.ConsumerContracts.Reducer.Phases[0] = "Proof.synthetic:context"
 		}, conformance.FindingMissingReducerConsumer},
 		{"wrong fixture component", func(r *conformance.Request) { r.Fixtures[2].Claim.ComponentID = "other" }, conformance.FindingFixtureContractFailed},
 		{"wrong fixture collector", func(r *conformance.Request) { r.Fixtures[2].Claim.CollectorKind = "other" }, conformance.FindingFixtureContractFailed},
@@ -180,6 +186,19 @@ func TestCoreContextAcceptsUndottedReservedKindAndTrustedSchema(t *testing.T) {
 	}
 	if report := conformance.Run(req); !report.OK() {
 		t.Fatalf("undotted core kind/schema: %#v", report.Findings)
+	}
+}
+
+func TestCoreContextAcceptsOpaqueTrustedPhase(t *testing.T) {
+	for _, phase := range []string{opaqueSyntheticPhase, "Proof Phase V2"} {
+		req := coreContextRequest()
+		for index := range req.CoreFacts.Facts {
+			req.CoreFacts.Facts[index].ReducerPhases = []string{phase}
+		}
+		req.Manifest.Spec.ConsumerContracts.Reducer.Phases = []string{phase, conformance.SourceEvidenceOnlyReducerPhase}
+		if report := conformance.Run(req); !report.OK() {
+			t.Fatalf("matching opaque phase %q rejected: %#v", phase, report.Findings)
+		}
 	}
 }
 

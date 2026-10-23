@@ -21,6 +21,9 @@ combine into a new tuple.
 
 The manifest must declare the union of trusted reducer phases. It may also
 declare `source_evidence_only:no_graph_truth`, and no other extra phase.
+Phase strings are opaque exact bytes: the SDK requires a nonempty value with no
+surrounding whitespace, then compares it without parsing a format or changing
+case. The core host owns phase provenance and meaning.
 Optional namespaced kinds retain the source-only rule when no context is
 supplied. A trusted `PayloadSchemaRef` requires caller-supplied
 `PayloadSchemas[kind]` even when the manifest omits its own reference; a

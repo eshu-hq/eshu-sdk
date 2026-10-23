@@ -164,8 +164,7 @@ func canonicalVersion(value string) bool {
 }
 
 func canonicalPhase(value string) bool {
-	left, right, ok := strings.Cut(value, ":")
-	return ok && canonicalIdentifier(left) && canonicalIdentifier(right)
+	return value != "" && strings.TrimSpace(value) == value
 }
 
 func containsString(values []string, sought string) bool {
