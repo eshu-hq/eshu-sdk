@@ -15,7 +15,7 @@ import (
 // own embed, byte-identical to the canonical artifact under schema/. This is
 // the accessor a runtime conformance test in the core `go` module uses to
 // validate a real emitter payload against its committed schema without
-// duplicating the schema tree (unlike sdk/go/factschema/fixturepack, whose
+// duplicating the schema tree (unlike factschema/fixturepack, whose
 // embedded copy exists only because go:embed cannot reach a sibling
 // directory).
 func TestSchemaBytesReturnsCanonicalSchema(t *testing.T) {

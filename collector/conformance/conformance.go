@@ -94,7 +94,7 @@ type Request struct {
 	// host-owned and reserved and cannot be emitted directly. The caller supplies
 	// the schema bytes so this package performs no file I/O and takes no
 	// schema-library dependency; an out-of-tree collector reads the shape from
-	// the pinned sdk/go/factschema/fixturepack. A fixture fact whose kind has an
+	// the pinned factschema/fixturepack. A fixture fact whose kind has an
 	// entry here is validated against it and fails closed on a missing required
 	// field, a wrong-typed field, or a schema construct the harness cannot
 	// validate. A manifest fact that declares payloadSchemaRef must have a schema

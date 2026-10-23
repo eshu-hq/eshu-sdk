@@ -44,7 +44,7 @@ import "encoding/json"
 //     Attributes[key] — never Attributes["attributes"][key].
 //
 // The generated JSON Schema at
-// sdk/go/factschema/schema/azure_cloud_resource.v1.schema.json mirrors this:
+// factschema/schema/azure_cloud_resource.v1.schema.json mirrors this:
 // its "required" array lists only the four identity fields, and Attributes is
 // an open object (additionalProperties) so the schema stays honest about the
 // untyped pass-through.

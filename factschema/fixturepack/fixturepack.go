@@ -13,7 +13,7 @@ import (
 )
 
 // schemaFS embeds the checked-in JSON Schema for every typed fact kind. The
-// files are byte-identical to sdk/go/factschema/schema/*.json; the parent
+// files are byte-identical to factschema/schema/*.json; the parent
 // module's drift-lock test enforces that equality.
 //
 //go:embed schema/*.json

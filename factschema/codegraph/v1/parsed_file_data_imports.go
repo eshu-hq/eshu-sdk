@@ -13,7 +13,7 @@ package v1
 // why only the fields a consumer reads are named here, with every other
 // producer field carried verbatim in the open Attributes pass-through
 // (import_type, full_import_name, resolved_source, component_type_assertion,
-// end_line, …), the same aws_resource/Attributes shape sdk/go/factschema/AGENTS.md
+// end_line, …), the same aws_resource/Attributes shape factschema/AGENTS.md
 // prescribes. Naming a per-language field here would silently drop it for every
 // other language.
 //

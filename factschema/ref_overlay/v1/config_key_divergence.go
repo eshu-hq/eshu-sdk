@@ -71,7 +71,7 @@ func StripURLUserinfo(raw string) string {
 // stays optional: it identifies the collector run, not the divergence claim.
 //
 // Emitters MUST NOT emit a row for a sensitive key name at all: a key the
-// collector's sensitive-key rule (sdk/go/collector IsSensitiveKeyName)
+// collector's sensitive-key rule (collector IsSensitiveKeyName)
 // rejects carries no divergence row, so even the key's existence on a
 // non-default ref stays out of the fact stream.
 type ConfigKeyDivergence struct {

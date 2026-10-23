@@ -39,7 +39,7 @@
 // loader actually reads for identity, join, or graph-edge construction — not
 // the full wire shape. A field the collector unconditionally emits but no
 // consumer reads is OPTIONAL, matching the codegraph family's precedent
-// (sdk/go/factschema/codegraph/v1/doc.go): requiring an emit-only field would
+// (factschema/codegraph/v1/doc.go): requiring an emit-only field would
 // dead-letter usable graph truth, the wrong contract under Contract System
 // v1's "don't drop right results" accuracy guarantee.
 //
@@ -53,7 +53,7 @@
 // []map[string]any rather than a fully open []any: an open []any generates
 // an unconstrained "items: true" JSON Schema, a construct the collector
 // conformance validator's supported schema subset rejects
-// (sdk/go/collector/conformance) — see dataflow_function.go's CFGBlocks/
+// (collector/conformance) — see dataflow_function.go's CFGBlocks/
 // CFGEdges field comments for the concrete failure this avoids.
 //
 // None of these six kinds are registered in specs/fact-kind-registry.v1.yaml

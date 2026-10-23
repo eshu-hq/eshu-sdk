@@ -62,7 +62,7 @@ type DataflowFunction struct {
 	// scalar — so this is []map[string]any rather than []any: an open []any
 	// generates an unconstrained "items: true" JSON Schema, a construct the
 	// collector conformance validator's supported schema subset rejects
-	// (sdk/go/collector/conformance), unlike []map[string]any's constrained
+	// (collector/conformance), unlike []map[string]any's constrained
 	// "items: object" shape. The inner map keys stay UNTYPED (read-and-forward,
 	// mirroring codegraphv1.File.ParsedFileData's opacity precedent) — only
 	// the outer "each element is an object" shape is asserted here. Optional:

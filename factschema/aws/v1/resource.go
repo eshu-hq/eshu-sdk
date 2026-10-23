@@ -52,7 +52,7 @@ import "encoding/json"
 // which is complete and uniform across every aws_resource consumer.
 //
 // The generated JSON Schema at
-// sdk/go/factschema/schema/aws_resource.v1.schema.json mirrors this: its
+// factschema/schema/aws_resource.v1.schema.json mirrors this: its
 // "required" array lists only the four identity fields, and Attributes is an
 // open object (additionalProperties) so the schema stays honest about the
 // untyped pass-through.

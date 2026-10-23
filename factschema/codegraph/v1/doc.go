@@ -24,7 +24,7 @@
 // container is never narrowed to a closed struct (narrowing it would drop
 // unmodeled inner keys, force a schema major bump, and break the parsed_file_data
 // wire byte-identity). This mirrors the shipped aws_resource/Attributes
-// open-object pattern (sdk/go/factschema/AGENTS.md) — the difference is that
+// open-object pattern (factschema/AGENTS.md) — the difference is that
 // ParsedFileData is a single named required field, not a remainder-catching
 // Attributes map, so it carries no custom MarshalJSON/UnmarshalJSON: the parent
 // module's decodeMapInto already assigns a payload map value directly onto a

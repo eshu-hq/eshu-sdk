@@ -23,7 +23,7 @@ import (
 const awsResourceKind = "dev.eshu.examples.aws.resource"
 
 // awsResourceSchema is the checked-in aws_resource.v1 payload schema
-// (sdk/go/factschema/schema/aws_resource.v1.schema.json). It is inlined here so
+// (factschema/schema/aws_resource.v1.schema.json). It is inlined here so
 // the conformance package test proves payload validation without importing the
 // factschema module (which would pull that module's schema-generator dependency
 // into the dependency-free collector module). The fixture pack ships this exact

@@ -12,7 +12,7 @@ import (
 // payloadSchema is the decoded, minimal JSON Schema subset the conformance
 // harness understands for a fact payload. It implements exactly the constructs
 // the checked-in factschema payload schemas use
-// (sdk/go/factschema/schema/*.json): an object with required keys and typed
+// (factschema/schema/*.json): an object with required keys and typed
 // properties, where each property is a primitive/nullable type, an optional
 // string-or-null enum, an array with a typed item schema, or a nested object
 // (open or a string-valued map). Every unrecognized keyword, type, or composition

@@ -9,7 +9,7 @@ import "embed"
 // schema/. The embed directive lives directly in this package because
 // go:embed can only reach files at or below its own package directory;
 // schema/ is a direct child of factschema, so no duplicate copy is needed
-// here (contrast sdk/go/factschema/fixturepack, which embeds its own copy of
+// here (contrast factschema/fixturepack, which embeds its own copy of
 // schema/ because fixturepack cannot reach the sibling directory).
 //
 //go:embed schema/*.json

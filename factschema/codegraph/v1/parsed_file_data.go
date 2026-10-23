@@ -9,7 +9,7 @@ package v1
 // these structs type only the specific inner keys the code-graph-core reducer
 // READS, decoded on demand through the parent factschema package's
 // DecodeParsedFileData* accessors (decode_parsed_file_data.go), mirroring the
-// aws_resource/Attributes open-object pattern (sdk/go/factschema/AGENTS.md):
+// aws_resource/Attributes open-object pattern (factschema/AGENTS.md):
 // type what a consumer joins on, pass everything else through untyped so no
 // producer field is dropped and the wire schema for parsed_file_data stays
 // byte-identical (no schema major bump).

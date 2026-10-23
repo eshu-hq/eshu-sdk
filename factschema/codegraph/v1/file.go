@@ -57,7 +57,7 @@ type File struct {
 	// inner shape is intentionally opaque (deferred to issue #4750, the
 	// inner-AST typing follow-up) and MUST be read as map[string]any by
 	// consumers, mirroring the aws_resource/Attributes open-object pattern
-	// documented in sdk/go/factschema/AGENTS.md.
+	// documented in factschema/AGENTS.md.
 	ParsedFileData map[string]any `json:"parsed_file_data"`
 
 	// GraphID is the canonical graph node identity the collector assigns this

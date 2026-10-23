@@ -9,7 +9,7 @@
 // fixture-pack version and prove in its own CI that it emits exactly the
 // payload shapes the target reducer release consumes.
 //
-// The pack ships inside the sdk/go/factschema module and is released in
+// The pack ships inside the factschema module and is released in
 // lockstep with it: the fixture-pack "version" IS the factschema module
 // version. A collector that pins github.com/eshu-hq/eshu-sdk/factschema at a
 // tag pins the schemas and fixtures that were valid at that tag together. A
@@ -18,7 +18,7 @@
 // versioning independently.
 //
 // The schemas exposed here are byte-identical to the canonical generated
-// artifacts under sdk/go/factschema/schema/*.json; the drift-lock test
+// artifacts under factschema/schema/*.json; the drift-lock test
 // TestFixturePackSchemasMatchCanonical (in the parent module) fails the build
 // if the embedded copy and the generated source ever diverge, so the pack can
 // never ship a stale schema.

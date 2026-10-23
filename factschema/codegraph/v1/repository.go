@@ -77,7 +77,7 @@ type Repository struct {
 	// repositoryDefaultBranch and written only when a default branch was
 	// resolved. Schema-declared even though only the projector reads it
 	// (go/internal/projector/canonical_*), matching the incident-family
-	// SQL-loader-only field precedent (sdk/go/factschema/AGENTS.md).
+	// SQL-loader-only field precedent (factschema/AGENTS.md).
 	DefaultBranch *string `json:"default_branch,omitempty"`
 
 	// imports_map (the repository-level import graph the parser resolved,
@@ -85,7 +85,7 @@ type Repository struct {
 	// a typed field. Its wire shape is map[string][]string, which renders as a
 	// JSON Schema "additionalProperties" of array type — a shape the collector
 	// conformance validator's supported subset rejects
-	// (sdk/go/collector/conformance/payload_schema.go: additionalProperties
+	// (collector/conformance/payload_schema.go: additionalProperties
 	// value type "array" is not supported). No code-graph-core reducer read
 	// site consumes imports_map, so it passes through the open top-level object
 	// (additionalProperties: true) untyped, exactly like an aws_resource
