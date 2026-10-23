@@ -55,6 +55,12 @@ import (
 )
 
 func main() {
+ defer func() {
+  if recover() != nil {
+   os.Stderr.WriteString("collector command failed: panic\n")
+   os.Exit(1)
+  }
+ }()
  flags := flag.NewFlagSet("collector", flag.ContinueOnError)
  flags.SetOutput(io.Discard)
  stdio := flags.Bool("sdk-stdio", false, "serve one collector request over stdio")

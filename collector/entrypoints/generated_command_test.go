@@ -92,6 +92,15 @@ func TestGeneratedCommandContract(t *testing.T) {
 	if err == nil || len(out) != 0 || !strings.Contains(stderr, "command handler failed") || strings.Contains(stderr, "SECRET_CANARY_8851") {
 		t.Fatalf("handler stage or redaction failed: err=%v out=%q stderr=%q", err, out, stderr)
 	}
+	request.Config["proof_mode"] = "handler_panic"
+	input, err = json.Marshal(request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	out, stderr, err = run(input)
+	if err == nil || len(out) != 0 || stderr != "collector command failed: panic\n" {
+		t.Fatalf("panic containment failed: err=%v out=%q stderr=%q", err, out, stderr)
+	}
 	out, stderr, err = run([]byte("{invalid SECRET_CANARY_8851"))
 	if err == nil || len(out) != 0 || !strings.Contains(stderr, "command decode failed") || strings.Contains(stderr, "SECRET_CANARY_8851") {
 		t.Fatalf("decode stage or redaction failed: err=%v out=%q stderr=%q", err, out, stderr)

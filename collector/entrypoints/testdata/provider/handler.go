@@ -18,6 +18,9 @@ import (
 // Handle returns deterministic source facts for generated-command contract tests.
 func Handle(ctx context.Context, r sdk.Request) (sdk.Result, error) {
 	mode, _ := r.Config["proof_mode"].(string)
+	if mode == "handler_panic" {
+		panic("SECRET_CANARY_8851")
+	}
 	if mode == "handler_error" {
 		return sdk.Result{}, errors.New("SECRET_CANARY_8851")
 	}
