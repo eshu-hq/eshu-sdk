@@ -1,0 +1,29 @@
+docs/provenance.md
+  s_ff8a600f1fc93e::t_b8dc46f5659b8c 42-45
+docs/release.md
+  s_ff8a600f1fc93e::t_d6b5d6e294a971 11-17,20,23,27,32,35
+docs/sdk-migration-evidence.md
+  s_ff8a600f1fc93e::t_d6b5d6e294a971 17-23
+  s_ff8a600f1fc93e::t_68d3a295e300fa 34-35,39-40,45-52,57-60,71-81,86-89,92-94
+  s_ff8a600f1fc93e::t_e47bf746c77c2a 61-66
+  s_ff8a600f1fc93e::t_badd71640bf37e 1-16,24-33,36-38,41-44,53-56,67-70,82-85,90-91,95-125
+docs/compatibility.md
+  s_ff8a600f1fc93e::t_d6b5d6e294a971 8
+  s_ff8a600f1fc93e::t_b8dc46f5659b8c 34-36,57-59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "749474443dd3a1892bc4cb8c3346b3641e044c22",
+  "prompts": {},
+  "sessions": {
+    "s_ff8a600f1fc93e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a16a06-8788-7df0-b732-4e9dcaee59ce",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
