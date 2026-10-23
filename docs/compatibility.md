@@ -40,7 +40,7 @@ per-file changes, and commands to reproduce them.
 
 | State | Evidence required | Status at source preparation |
 | --- | --- | --- |
-| Candidate available | Exact reviewed and merged source commit, green CI on that commit, separate tag approval, immutable directory-prefixed tags, and fresh proxy resolution | Source prepared; publication requires live Git/proxy checks |
+| Candidate available | Merged core path mapping, exact reviewed and merged source commit, green CI on that commit, separate tag approval, immutable directory-prefixed tags, and fresh proxy resolution | Source prepared; publication requires live Git/proxy checks |
 | Qualified consumer/core pair | Exact candidate pins, contract and runtime gates for that consumer and core version, including grant-aware conformance for reserved kinds | Not qualified |
 | Deployed accepted pair | Matching deployment, reducer, graph, API/MCP, retry, operator, and rollback evidence | Not accepted |
 

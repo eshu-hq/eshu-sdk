@@ -8,7 +8,10 @@ qualification, and deployed acceptance are separate states. See the
 [compatibility policy](compatibility.md) for the exact paths and scope.
 
 1. Confirm an independently reviewed mapping of inherited schemas, fixtures,
-   public APIs and decoder bindings, and review all new SDK behavior.
+   public APIs and decoder bindings, and review all new SDK behavior. Before
+   either new-path tag, merge the path mapping into the core
+   [SDK compatibility matrix](https://github.com/eshu-hq/eshu/blob/main/docs/public/extend/sdk-compatibility.md).
+   The standalone SDK mapping alone does not satisfy that core prerequisite.
 2. Confirm the separately reviewed versioned candidate preparation has a
    `0.1.0-rc.1` entry in each new-path changelog and accurate source/status
    wording. The policy and path mapping alone were not taggable; this source
