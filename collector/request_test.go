@@ -49,7 +49,7 @@ func TestRequestJSONSchemaMatchesGolden(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !jsonEqual(got, want) {
+	if !bytes.Equal(got, want) {
 		t.Fatalf("request schema drift:\n%s", got)
 	}
 	var schema map[string]any
