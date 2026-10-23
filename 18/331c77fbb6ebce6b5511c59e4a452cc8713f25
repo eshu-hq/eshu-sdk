@@ -1,0 +1,2201 @@
+.github/workflows/verify.yml
+  s_ff8a600f1fc93e::t_9ca7b1be71a1e4 1-33
+.gitignore
+  s_ff8a600f1fc93e::t_dda8d2bc390819 1-2
+AGENTS.md
+  s_ff8a600f1fc93e::t_4091c4a302b83d 1-12
+LICENSE
+  s_ff8a600f1fc93e::t_ac6461f3f2fced 1-21
+Makefile
+  s_ff8a600f1fc93e::t_cbf7a62f828bd7 1-21
+README.md
+  s_ff8a600f1fc93e::t_4238b8f0550026 1-22
+collector/AGENTS.md
+  s_ff8a600f1fc93e::t_9ee434b7ed055b 1-23
+collector/CHANGELOG.md
+  s_ff8a600f1fc93e::t_c085c496b7f315 1-116
+collector/README.md
+  s_ff8a600f1fc93e::t_adb6907ce089b9 1-70
+collector/conformance/AGENTS.md
+  s_ff8a600f1fc93e::t_2d03d796affb27 1-43
+collector/conformance/README.md
+  s_ff8a600f1fc93e::t_58cda8adca68f5 1-86
+collector/conformance/conformance.go
+  s_ff8a600f1fc93e::t_793e468fc5989c 1-375
+collector/conformance/conformance_test.go
+  s_ff8a600f1fc93e::t_d2350843da8b27 1-395
+collector/conformance/doc.go
+  s_ff8a600f1fc93e::t_6d0fff87fb245c 1-34
+collector/conformance/manifest.go
+  s_ff8a600f1fc93e::t_b0de314a158007 1-322
+collector/conformance/payload_enum_bench_test.go
+  s_ff8a600f1fc93e::t_53ad959a11b6df 1-58
+collector/conformance/payload_enum_test.go
+  s_ff8a600f1fc93e::t_5910804786431e 1-130
+collector/conformance/payload_schema.go
+  s_ff8a600f1fc93e::t_e6955cf965fae8 1-446
+collector/conformance/payload_schema_test.go
+  s_ff8a600f1fc93e::t_bcba3342b42847 1-494
+collector/conformance/payload_validate.go
+  s_ff8a600f1fc93e::t_fafe7f7c030a0d 1-251
+collector/conformance/payload_validation_bench_test.go
+  s_ff8a600f1fc93e::t_ecc3029825967c 1-206
+collector/contract_test.go
+  s_ff8a600f1fc93e::t_98aa87ae4b2ce7 1-271
+collector/credential_canary_test.go
+  s_ff8a600f1fc93e::t_6866de205eb120 1-70
+collector/doc.go
+  s_ff8a600f1fc93e::t_f394635c57906b 1-10
+collector/go.mod
+  s_ff8a600f1fc93e::t_8147dfd82a04f8 1-3
+collector/redaction.go
+  s_ff8a600f1fc93e::t_4a026f74ec8a61 1-41
+collector/redaction_test.go
+  s_ff8a600f1fc93e::t_7924e9d5f45b93 1-106
+collector/schema.go
+  s_ff8a600f1fc93e::t_0b548034e352bb 1-218
+collector/schema/cassette-format.v1.schema.json
+  s_ff8a600f1fc93e::t_e4b33aa66de00e 1-134
+collector/schema/collector-sdk-v1alpha1.schema.json
+  s_ff8a600f1fc93e::t_f6f6fa0c9c6606 1-159
+collector/testdata/fixtures/complete.json
+  s_ff8a600f1fc93e::t_592094f4c8482f 1-54
+collector/testdata/fixtures/conflict.json
+  s_ff8a600f1fc93e::t_2967729c0e7811 1-73
+collector/testdata/fixtures/duplicate.json
+  s_ff8a600f1fc93e::t_33c8c25fac0f66 1-73
+collector/testdata/fixtures/partial.json
+  s_ff8a600f1fc93e::t_2827ff2b630e00 1-56
+collector/testdata/fixtures/redaction.json
+  s_ff8a600f1fc93e::t_077a96772dbc5b 1-62
+collector/testdata/fixtures/retryable.json
+  s_ff8a600f1fc93e::t_1c85c068665c00 1-34
+collector/testdata/fixtures/terminal.json
+  s_ff8a600f1fc93e::t_f1ce5ffc6270f2 1-33
+collector/testdata/fixtures/tombstone.json
+  s_ff8a600f1fc93e::t_ef6ffdff15187f 1-54
+collector/testdata/fixtures/unchanged.json
+  s_ff8a600f1fc93e::t_050c908ae53d74 1-33
+collector/types.go
+  s_ff8a600f1fc93e::t_182df5d996c872 1-171
+collector/validation.go
+  s_ff8a600f1fc93e::t_f9b8fa0c40b403 1-471
+collector/validation_test.go
+  s_ff8a600f1fc93e::t_d83118b3e3a8c2 1-92
+docs/provenance.md
+  s_ff8a600f1fc93e::t_28f5b4d3f052bc 1-12
+docs/release.md
+  s_ff8a600f1fc93e::t_2a68b232a9e8fe 1-12
+factschema/AGENTS.md
+  s_ff8a600f1fc93e::t_f80eccbef2a035 1-127
+factschema/CHANGELOG.md
+  s_ff8a600f1fc93e::t_8494af0eeb0334 1-134
+factschema/README.md
+  s_ff8a600f1fc93e::t_ff27894183de5b 1-237
+factschema/aws/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_c1fbccdff71f4a 1-69
+factschema/aws/v1/README.md
+  s_ff8a600f1fc93e::t_3a26719b0fb051 1-207
+factschema/aws/v1/attribute_shapes.go
+  s_ff8a600f1fc93e::t_edceef52a636a4 1-458
+factschema/aws/v1/attribute_shapes_relationship.go
+  s_ff8a600f1fc93e::t_20a07e66fb6b7e 1-52
+factschema/aws/v1/attribute_shapes_running_image.go
+  s_ff8a600f1fc93e::t_cf64a9cd6d285b 1-140
+factschema/aws/v1/attribute_shapes_running_image_test.go
+  s_ff8a600f1fc93e::t_2d4bd57c522522 1-180
+factschema/aws/v1/attribute_shapes_test.go
+  s_ff8a600f1fc93e::t_a50ed708482aa3 1-367
+factschema/aws/v1/attribute_shapes_trim_test.go
+  s_ff8a600f1fc93e::t_82ed64909d3e58 1-47
+factschema/aws/v1/dns_record.go
+  s_ff8a600f1fc93e::t_dd098004c81c01 1-56
+factschema/aws/v1/doc.go
+  s_ff8a600f1fc93e::t_e38ca4d7c2a090 1-73
+factschema/aws/v1/ec2_instance_posture.go
+  s_ff8a600f1fc93e::t_8f0d826620f65f 1-127
+factschema/aws/v1/image_reference.go
+  s_ff8a600f1fc93e::t_b6760667080138 1-26
+factschema/aws/v1/rds_instance_posture.go
+  s_ff8a600f1fc93e::t_4a9d71c23909d4 1-33
+factschema/aws/v1/relationship.go
+  s_ff8a600f1fc93e::t_c3951d083d6b3a 1-167
+factschema/aws/v1/resource.go
+  s_ff8a600f1fc93e::t_7d689d759f9839 1-207
+factschema/aws/v1/resource_types.go
+  s_ff8a600f1fc93e::t_11f2173a9cd6d6 1-63
+factschema/aws/v1/s3_bucket_posture.go
+  s_ff8a600f1fc93e::t_21994cd1d9f831 1-120
+factschema/aws/v1/s3_external_principal_grant.go
+  s_ff8a600f1fc93e::t_efeea1eb6f2dd4 1-29
+factschema/aws/v1/security_group_rule.go
+  s_ff8a600f1fc93e::t_e04ec1ded8a809 1-91
+factschema/aws/v1/warning.go
+  s_ff8a600f1fc93e::t_9f59557a52aecf 1-16
+factschema/azure/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_706b5ffe726ff7 1-73
+factschema/azure/v1/README.md
+  s_ff8a600f1fc93e::t_695a62f4f19dd3 1-164
+factschema/azure/v1/collection_warning.go
+  s_ff8a600f1fc93e::t_9d0539e43892a5 1-48
+factschema/azure/v1/dns_record.go
+  s_ff8a600f1fc93e::t_3c094aa91ac112 1-61
+factschema/azure/v1/doc.go
+  s_ff8a600f1fc93e::t_808f9615c39b80 1-43
+factschema/azure/v1/identity_observation.go
+  s_ff8a600f1fc93e::t_beb8577413560d 1-47
+factschema/azure/v1/image_reference.go
+  s_ff8a600f1fc93e::t_e95e3d4190ef3f 1-39
+factschema/azure/v1/relationship.go
+  s_ff8a600f1fc93e::t_215413d472bd10 1-157
+factschema/azure/v1/resource.go
+  s_ff8a600f1fc93e::t_5155b6b248d1d4 1-171
+factschema/azure/v1/resource_change.go
+  s_ff8a600f1fc93e::t_268ebcfa0ce0f8 1-53
+factschema/azure/v1/tag_observation.go
+  s_ff8a600f1fc93e::t_1adbf091ecdf67 1-50
+factschema/cicdrun/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_bde5f5d01a9bbc 1-112
+factschema/cicdrun/v1/README.md
+  s_ff8a600f1fc93e::t_ea8f52fccd0c28 1-78
+factschema/cicdrun/v1/deployment_event.go
+  s_ff8a600f1fc93e::t_c0e1ad7351d099 1-154
+factschema/cicdrun/v1/doc.go
+  s_ff8a600f1fc93e::t_ef217e6db65c6f 1-63
+factschema/cicdrun/v1/evidence.go
+  s_ff8a600f1fc93e::t_53f1b1ffa503b1 1-155
+factschema/cicdrun/v1/run.go
+  s_ff8a600f1fc93e::t_790daf5b5c091b 1-182
+factschema/cicdrun/v1/workflow_image_evidence.go
+  s_ff8a600f1fc93e::t_7029c0ef1c8a8c 1-86
+factschema/codedataflow/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_19c104975eb171 1-77
+factschema/codedataflow/v1/README.md
+  s_ff8a600f1fc93e::t_4d96a02cf8210b 1-168
+factschema/codedataflow/v1/dataflow_function.go
+  s_ff8a600f1fc93e::t_6c4f99d0c7a671 1-96
+factschema/codedataflow/v1/dataflow_scanned.go
+  s_ff8a600f1fc93e::t_32e7980641e375 1-38
+factschema/codedataflow/v1/doc.go
+  s_ff8a600f1fc93e::t_c114cf1c0ea848 1-71
+factschema/codedataflow/v1/function_source.go
+  s_ff8a600f1fc93e::t_4af1bce8cd31e3 1-52
+factschema/codedataflow/v1/function_summary.go
+  s_ff8a600f1fc93e::t_427883d3b6ab13 1-90
+factschema/codedataflow/v1/interproc_evidence.go
+  s_ff8a600f1fc93e::t_bd65116167c0da 1-88
+factschema/codedataflow/v1/taint_evidence.go
+  s_ff8a600f1fc93e::t_15e136fa09a8d6 1-99
+factschema/codegraph/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_e40c474bbd9733 1-91
+factschema/codegraph/v1/README.md
+  s_ff8a600f1fc93e::t_efa3fff16423bb 1-246
+factschema/codegraph/v1/doc.go
+  s_ff8a600f1fc93e::t_4c54cf4c9c69b6 1-73
+factschema/codegraph/v1/file.go
+  s_ff8a600f1fc93e::t_6eaf2423bf2efd 1-87
+factschema/codegraph/v1/parsed_file_data.go
+  s_ff8a600f1fc93e::t_fd1c34ed27a238 1-205
+factschema/codegraph/v1/parsed_file_data_gitops.go
+  s_ff8a600f1fc93e::t_3935e7e926bad1 1-232
+factschema/codegraph/v1/parsed_file_data_imports.go
+  s_ff8a600f1fc93e::t_d2bf629eb9b828 1-90
+factschema/codegraph/v1/parsed_file_data_terraform.go
+  s_ff8a600f1fc93e::t_c1a2898153f1ce 1-105
+factschema/codegraph/v1/repository.go
+  s_ff8a600f1fc93e::t_3041ecc1eefa49 1-157
+factschema/codeowners/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_adccf67df5fd3d 1-57
+factschema/codeowners/v1/README.md
+  s_ff8a600f1fc93e::t_a9b18c6959bb5f 1-122
+factschema/codeowners/v1/doc.go
+  s_ff8a600f1fc93e::t_996781b6dd443e 1-32
+factschema/codeowners/v1/ownership.go
+  s_ff8a600f1fc93e::t_7115c20b9709ee 1-60
+factschema/decode.go
+  s_ff8a600f1fc93e::t_ddf0cfe5539271 1-225
+factschema/decode_attributes_skip_test.go
+  s_ff8a600f1fc93e::t_9a0f812f95567d 1-156
+factschema/decode_attributes_test.go
+  s_ff8a600f1fc93e::t_77461fa333931a 1-146
+factschema/decode_aws.go
+  s_ff8a600f1fc93e::t_826a7b695a0a2a 1-406
+factschema/decode_aws_test.go
+  s_ff8a600f1fc93e::t_6e25fdae82a7f1 1-244
+factschema/decode_azure.go
+  s_ff8a600f1fc93e::t_edb57740390d97 1-214
+factschema/decode_cicdrun.go
+  s_ff8a600f1fc93e::t_fd4a3dc461bf8f 1-112
+factschema/decode_codedataflow.go
+  s_ff8a600f1fc93e::t_fa8b42888415f5 1-86
+factschema/decode_codegraph.go
+  s_ff8a600f1fc93e::t_1763697d8214b4 1-150
+factschema/decode_codeowners.go
+  s_ff8a600f1fc93e::t_0af894c6dde774 1-28
+factschema/decode_contracts_coverage_test.go
+  s_ff8a600f1fc93e::t_fbcb65b5fe426b 1-234
+factschema/decode_contracts_test.go
+  s_ff8a600f1fc93e::t_3030b1d41ca164 1-232
+factschema/decode_documentation.go
+  s_ff8a600f1fc93e::t_943055cd9bd867 1-146
+factschema/decode_family_dispatch_test.go
+  s_ff8a600f1fc93e::t_cf7f4939dd132a 1-214
+factschema/decode_family_helpers_test.go
+  s_ff8a600f1fc93e::t_e2e8bd93dee195 1-127
+factschema/decode_family_kinds_test.go
+  s_ff8a600f1fc93e::t_1b47d6e6dcd910 1-193
+factschema/decode_family_required_test.go
+  s_ff8a600f1fc93e::t_b42060483adf46 1-89
+factschema/decode_family_version_test.go
+  s_ff8a600f1fc93e::t_8d07ef47b9f40a 1-25
+factschema/decode_gcp.go
+  s_ff8a600f1fc93e::t_883363ee00474f 1-184
+factschema/decode_gcp_test.go
+  s_ff8a600f1fc93e::t_b7782a32f16f01 1-169
+factschema/decode_iam.go
+  s_ff8a600f1fc93e::t_bb1dccd5d13d28 1-119
+factschema/decode_incident.go
+  s_ff8a600f1fc93e::t_cd2c42d0a6b40f 1-137
+factschema/decode_kuberneteslive.go
+  s_ff8a600f1fc93e::t_7b3adab2173b34 1-142
+factschema/decode_kuberneteslive_test.go
+  s_ff8a600f1fc93e::t_c195441199ddf5 1-82
+factschema/decode_map.go
+  s_ff8a600f1fc93e::t_277733a18378d8 1-367
+factschema/decode_map_coerce.go
+  s_ff8a600f1fc93e::t_aa30e3c09a4573 1-186
+factschema/decode_map_numbers.go
+  s_ff8a600f1fc93e::t_866e898770647b 1-121
+factschema/decode_map_test.go
+  s_ff8a600f1fc93e::t_400b12922026f4 1-408
+factschema/decode_named_attributes_test.go
+  s_ff8a600f1fc93e::t_86a9b131994185 1-183
+factschema/decode_observability.go
+  s_ff8a600f1fc93e::t_115ea075c14f4e 1-314
+factschema/decode_ociregistry.go
+  s_ff8a600f1fc93e::t_06410945ab4dae 1-153
+factschema/decode_packageregistry.go
+  s_ff8a600f1fc93e::t_ba85cbbcadbc91 1-183
+factschema/decode_packageregistry_test.go
+  s_ff8a600f1fc93e::t_adaff7f4e2ce18 1-76
+factschema/decode_parsed_file_data.go
+  s_ff8a600f1fc93e::t_0ac77778d6a162 1-206
+factschema/decode_parsed_file_data_gitops.go
+  s_ff8a600f1fc93e::t_4d0ecd4599e6c5 1-132
+factschema/decode_parsed_file_data_gitops_test.go
+  s_ff8a600f1fc93e::t_14fe0a1b52ed29 1-440
+factschema/decode_parsed_file_data_imports.go
+  s_ff8a600f1fc93e::t_17edce4e236e5e 1-46
+factschema/decode_parsed_file_data_imports_test.go
+  s_ff8a600f1fc93e::t_171e58aed108ab 1-198
+factschema/decode_parsed_file_data_map_shape_test.go
+  s_ff8a600f1fc93e::t_4d8415fcf49114 1-197
+factschema/decode_parsed_file_data_terraform.go
+  s_ff8a600f1fc93e::t_a311628b21c797 1-79
+factschema/decode_parsed_file_data_terraform_test.go
+  s_ff8a600f1fc93e::t_0ab42aa84614ef 1-234
+factschema/decode_parsed_file_data_test.go
+  s_ff8a600f1fc93e::t_e916c6c68c718a 1-340
+factschema/decode_parsed_file_data_tolerant.go
+  s_ff8a600f1fc93e::t_d0af6c959e52b3 1-91
+factschema/decode_parsed_file_data_tolerant_test.go
+  s_ff8a600f1fc93e::t_e1db439cab86bf 1-87
+factschema/decode_reducerderived.go
+  s_ff8a600f1fc93e::t_683ba03e269d27 1-132
+factschema/decode_reducerderived_test.go
+  s_ff8a600f1fc93e::t_ba7e4c91ae129b 1-265
+factschema/decode_ref_overlay.go
+  s_ff8a600f1fc93e::t_a6b81f9e2d1589 1-49
+factschema/decode_ref_overlay_test.go
+  s_ff8a600f1fc93e::t_821a89fe3daead 1-128
+factschema/decode_sbom.go
+  s_ff8a600f1fc93e::t_2228b22b0d4609 1-131
+factschema/decode_scannerworker.go
+  s_ff8a600f1fc93e::t_d5f3ca05caaf90 1-72
+factschema/decode_scannerworker_test.go
+  s_ff8a600f1fc93e::t_f97011dc409428 1-173
+factschema/decode_secretsiam.go
+  s_ff8a600f1fc93e::t_361b13c2dbfd52 1-176
+factschema/decode_secretsiam_infra.go
+  s_ff8a600f1fc93e::t_2756d7b6d0416b 1-285
+factschema/decode_secretsiam_source.go
+  s_ff8a600f1fc93e::t_4f2d4990cffdee 1-274
+factschema/decode_securityalert.go
+  s_ff8a600f1fc93e::t_d96456dbd00d5b 1-27
+factschema/decode_semantic.go
+  s_ff8a600f1fc93e::t_c9db9226644bde 1-31
+factschema/decode_servicecatalog.go
+  s_ff8a600f1fc93e::t_f6b65a3170209c 1-76
+factschema/decode_submodule.go
+  s_ff8a600f1fc93e::t_a2ce2506eefaac 1-29
+factschema/decode_terraformstate.go
+  s_ff8a600f1fc93e::t_99218ee2c396f1 1-137
+factschema/decode_terraformstate_test.go
+  s_ff8a600f1fc93e::t_fd462420f844f0 1-267
+factschema/decode_test.go
+  s_ff8a600f1fc93e::t_c2b7fd21733622 1-254
+factschema/decode_vulnerability.go
+  s_ff8a600f1fc93e::t_805772a34e7fce 1-168
+factschema/decode_vulnerabilitysuppression.go
+  s_ff8a600f1fc93e::t_ff0c1e028e7cad 1-18
+factschema/decode_vulnerabilitysuppression_test.go
+  s_ff8a600f1fc93e::t_b25066e1a6eda5 1-140
+factschema/decode_workitem.go
+  s_ff8a600f1fc93e::t_879518812e263a 1-147
+factschema/doc.go
+  s_ff8a600f1fc93e::t_791da05645ff98 1-37
+factschema/documentation/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_b7e8ac69f65e37 1-84
+factschema/documentation/v1/README.md
+  s_ff8a600f1fc93e::t_a5d9fb5c88b773 1-173
+factschema/documentation/v1/doc.go
+  s_ff8a600f1fc93e::t_52d211a055f004 1-66
+factschema/documentation/v1/document.go
+  s_ff8a600f1fc93e::t_ffbd74dca68968 1-259
+factschema/documentation/v1/entity_mention.go
+  s_ff8a600f1fc93e::t_790ccf2de35fe5 1-153
+factschema/documentation/v1/finding.go
+  s_ff8a600f1fc93e::t_7f11a1c59fcab6 1-158
+factschema/documentation/v1/shared.go
+  s_ff8a600f1fc93e::t_2252d5c77115bd 1-85
+factschema/emit_strategy_bench_test.go
+  s_ff8a600f1fc93e::t_3baafdb9f6e270 1-496
+factschema/emit_strategy_secretsiam_bench_test.go
+  s_ff8a600f1fc93e::t_85965ff931a0a6 1-63
+factschema/encode_direct.go
+  s_ff8a600f1fc93e::t_b125ad06ab19f5 1-186
+factschema/encode_direct_test.go
+  s_ff8a600f1fc93e::t_33797e936415b9 1-45
+factschema/envelope.go
+  s_ff8a600f1fc93e::t_625bc3718bc482 1-71
+factschema/fact_kinds.go
+  s_ff8a600f1fc93e::t_340e9e8585034e 1-496
+factschema/fact_kinds_aws.go
+  s_ff8a600f1fc93e::t_d0deb746dbe0e5 1-35
+factschema/fact_kinds_codeowners.go
+  s_ff8a600f1fc93e::t_7eccf95233539c 1-13
+factschema/fact_kinds_ref_overlay.go
+  s_ff8a600f1fc93e::t_4c0bac86dc03b3 1-21
+factschema/fact_kinds_secretsiam.go
+  s_ff8a600f1fc93e::t_cf8ac9a7bb88f8 1-78
+factschema/fact_kinds_submodule.go
+  s_ff8a600f1fc93e::t_d4de4bf3b90aab 1-18
+factschema/fact_kinds_w1b.go
+  s_ff8a600f1fc93e::t_0dc69e419f68e2 1-20
+factschema/fields.go
+  s_ff8a600f1fc93e::t_d66d4aa6aca212 1-134
+factschema/fields_test.go
+  s_ff8a600f1fc93e::t_9dc6d664a2ad52 1-136
+factschema/fixturepack/AGENTS.md
+  s_ff8a600f1fc93e::t_e1815bd164d4b5 1-38
+factschema/fixturepack/README.md
+  s_ff8a600f1fc93e::t_83489c5229a3d9 1-89
+factschema/fixturepack/doc.go
+  s_ff8a600f1fc93e::t_4c1d08f10804e9 1-34
+factschema/fixturepack/fixturepack.go
+  s_ff8a600f1fc93e::t_76dd5dad3fc3b6 1-170
+factschema/fixturepack/payloads/attestation.signature_verification.invalid.json
+  s_ff8a600f1fc93e::t_b5cb58df6ee1b0 1-5
+factschema/fixturepack/payloads/attestation.signature_verification.valid.json
+  s_ff8a600f1fc93e::t_b76626dbfcbe2c 1-8
+factschema/fixturepack/payloads/attestation.slsa_provenance.invalid.json
+  s_ff8a600f1fc93e::t_da2088c285d1ae 1-4
+factschema/fixturepack/payloads/attestation.slsa_provenance.valid.json
+  s_ff8a600f1fc93e::t_126cc1a5b2b231 1-20
+factschema/fixturepack/payloads/attestation.statement.invalid.json
+  s_ff8a600f1fc93e::t_c6a5cab84a69a6 1-6
+factschema/fixturepack/payloads/attestation.statement.valid.json
+  s_ff8a600f1fc93e::t_8ac0ee53d323dc 1-13
+factschema/fixturepack/payloads/aws_dns_record.invalid.json
+  s_ff8a600f1fc93e::t_da41f62cd7f09b 1-10
+factschema/fixturepack/payloads/aws_dns_record.valid.json
+  s_ff8a600f1fc93e::t_652aa7801df014 1-12
+factschema/fixturepack/payloads/aws_iam_access_analyzer_finding.invalid.json
+  s_ff8a600f1fc93e::t_860d92f2d05e42 1-6
+factschema/fixturepack/payloads/aws_iam_access_analyzer_finding.valid.json
+  s_ff8a600f1fc93e::t_60e9582989fdff 1-7
+factschema/fixturepack/payloads/aws_iam_instance_profile.invalid.json
+  s_ff8a600f1fc93e::t_8032e9653fe5f5 1-7
+factschema/fixturepack/payloads/aws_iam_instance_profile.valid.json
+  s_ff8a600f1fc93e::t_672366ba52dd2e 1-8
+factschema/fixturepack/payloads/aws_iam_permission.invalid.json
+  s_ff8a600f1fc93e::t_9dfc19510796de 1-6
+factschema/fixturepack/payloads/aws_iam_permission.valid.json
+  s_ff8a600f1fc93e::t_7685bd60515567 1-10
+factschema/fixturepack/payloads/aws_iam_permission_boundary.invalid.json
+  s_ff8a600f1fc93e::t_c379c8c44718c8 1-8
+factschema/fixturepack/payloads/aws_iam_permission_boundary.valid.json
+  s_ff8a600f1fc93e::t_11add68892de90 1-9
+factschema/fixturepack/payloads/aws_iam_permission_policy.invalid.json
+  s_ff8a600f1fc93e::t_ee77eec0122fc9 1-9
+factschema/fixturepack/payloads/aws_iam_permission_policy.valid.json
+  s_ff8a600f1fc93e::t_69f7af3c7f0d9d 1-10
+factschema/fixturepack/payloads/aws_iam_policy_attachment.invalid.json
+  s_ff8a600f1fc93e::t_677b1ebb7c472e 1-8
+factschema/fixturepack/payloads/aws_iam_policy_attachment.valid.json
+  s_ff8a600f1fc93e::t_844b5b76593f72 1-9
+factschema/fixturepack/payloads/aws_iam_principal.invalid.json
+  s_ff8a600f1fc93e::t_8793957ea6acf6 1-5
+factschema/fixturepack/payloads/aws_iam_principal.valid.json
+  s_ff8a600f1fc93e::t_9a975da47d8993 1-6
+factschema/fixturepack/payloads/aws_iam_trust_policy.invalid.json
+  s_ff8a600f1fc93e::t_3e439683fe6884 1-9
+factschema/fixturepack/payloads/aws_iam_trust_policy.valid.json
+  s_ff8a600f1fc93e::t_72276c91f324d8 1-10
+factschema/fixturepack/payloads/aws_image_reference.invalid.json
+  s_ff8a600f1fc93e::t_5d3ce6be1a66ca 1-6
+factschema/fixturepack/payloads/aws_image_reference.valid.json
+  s_ff8a600f1fc93e::t_c8c54b298ffbdc 1-7
+factschema/fixturepack/payloads/aws_relationship.invalid.json
+  s_ff8a600f1fc93e::t_c008c0651667de 1-6
+factschema/fixturepack/payloads/aws_relationship.valid.json
+  s_ff8a600f1fc93e::t_6e161226ff827a 1-9
+factschema/fixturepack/payloads/aws_resource.invalid.json
+  s_ff8a600f1fc93e::t_bbefe7de3ec232 1-5
+factschema/fixturepack/payloads/aws_resource.valid.json
+  s_ff8a600f1fc93e::t_c89bbe6c85562f 1-10
+factschema/fixturepack/payloads/aws_resource_policy_permission.invalid.json
+  s_ff8a600f1fc93e::t_7cdf5481721ff5 1-6
+factschema/fixturepack/payloads/aws_resource_policy_permission.valid.json
+  s_ff8a600f1fc93e::t_f67ae918e80f7d 1-11
+factschema/fixturepack/payloads/aws_security_group_rule.invalid.json
+  s_ff8a600f1fc93e::t_5780f60d60ca2b 1-8
+factschema/fixturepack/payloads/aws_security_group_rule.valid.json
+  s_ff8a600f1fc93e::t_c94401b60aa98d 1-12
+factschema/fixturepack/payloads/aws_warning.invalid.json
+  s_ff8a600f1fc93e::t_cee8783a5b97ce 1-5
+factschema/fixturepack/payloads/aws_warning.valid.json
+  s_ff8a600f1fc93e::t_62d5e66c92130a 1-6
+factschema/fixturepack/payloads/azure_cloud_relationship.invalid.json
+  s_ff8a600f1fc93e::t_a6fdf5e46f9df6 1-4
+factschema/fixturepack/payloads/azure_cloud_relationship.valid.json
+  s_ff8a600f1fc93e::t_82f3d7a3e0c227 1-9
+factschema/fixturepack/payloads/azure_cloud_resource.invalid.json
+  s_ff8a600f1fc93e::t_edbbf756b7eeab 1-5
+factschema/fixturepack/payloads/azure_cloud_resource.valid.json
+  s_ff8a600f1fc93e::t_ce6a6450030b24 1-9
+factschema/fixturepack/payloads/azure_collection_warning.invalid.json
+  s_ff8a600f1fc93e::t_2c736a3a97eeac 1-4
+factschema/fixturepack/payloads/azure_collection_warning.valid.json
+  s_ff8a600f1fc93e::t_36df1df02ccfb6 1-8
+factschema/fixturepack/payloads/azure_dns_record.invalid.json
+  s_ff8a600f1fc93e::t_329dd5947701f3 1-4
+factschema/fixturepack/payloads/azure_dns_record.valid.json
+  s_ff8a600f1fc93e::t_fadfd126c74f81 1-8
+factschema/fixturepack/payloads/azure_identity_observation.invalid.json
+  s_ff8a600f1fc93e::t_57166cc55fdc53 1-6
+factschema/fixturepack/payloads/azure_identity_observation.valid.json
+  s_ff8a600f1fc93e::t_4f923c5193f9d7 1-7
+factschema/fixturepack/payloads/azure_image_reference.invalid.json
+  s_ff8a600f1fc93e::t_21ef227afd8ba2 1-6
+factschema/fixturepack/payloads/azure_image_reference.valid.json
+  s_ff8a600f1fc93e::t_d8170e7394f6a6 1-7
+factschema/fixturepack/payloads/azure_resource_change.invalid.json
+  s_ff8a600f1fc93e::t_2276a38eb730f9 1-6
+factschema/fixturepack/payloads/azure_resource_change.valid.json
+  s_ff8a600f1fc93e::t_6f720833a4d1c4 1-7
+factschema/fixturepack/payloads/azure_tag_observation.invalid.json
+  s_ff8a600f1fc93e::t_56226bef99afaf 1-7
+factschema/fixturepack/payloads/azure_tag_observation.valid.json
+  s_ff8a600f1fc93e::t_397097ed00569e 1-8
+factschema/fixturepack/payloads/change.record.invalid.json
+  s_ff8a600f1fc93e::t_4ed44d5fd1cd5d 1-5
+factschema/fixturepack/payloads/change.record.valid.json
+  s_ff8a600f1fc93e::t_d9c7f6f65bb684 1-6
+factschema/fixturepack/payloads/ci.artifact.invalid.json
+  s_ff8a600f1fc93e::t_25f7baea2563be 1-7
+factschema/fixturepack/payloads/ci.artifact.valid.json
+  s_ff8a600f1fc93e::t_bc9463774d0188 1-15
+factschema/fixturepack/payloads/ci.deployment_event.invalid.json
+  s_ff8a600f1fc93e::t_254d563699bdde 1-6
+factschema/fixturepack/payloads/ci.deployment_event.valid.json
+  s_ff8a600f1fc93e::t_4d9af65c868759 1-19
+factschema/fixturepack/payloads/ci.environment_observation.invalid.json
+  s_ff8a600f1fc93e::t_f3c8415a43e7eb 1-7
+factschema/fixturepack/payloads/ci.environment_observation.valid.json
+  s_ff8a600f1fc93e::t_e8dc143a776207 1-8
+factschema/fixturepack/payloads/ci.run.invalid.json
+  s_ff8a600f1fc93e::t_cd64c161630573 1-8
+factschema/fixturepack/payloads/ci.run.valid.json
+  s_ff8a600f1fc93e::t_2823a41eb5e0bf 1-19
+factschema/fixturepack/payloads/ci.step.invalid.json
+  s_ff8a600f1fc93e::t_a6e28f3a077e49 1-9
+factschema/fixturepack/payloads/ci.step.valid.json
+  s_ff8a600f1fc93e::t_14e7ec229f1792 1-14
+factschema/fixturepack/payloads/ci.trigger_edge.invalid.json
+  s_ff8a600f1fc93e::t_5f4e81987d1493 1-7
+factschema/fixturepack/payloads/ci.trigger_edge.valid.json
+  s_ff8a600f1fc93e::t_b927e49dfba261 1-8
+factschema/fixturepack/payloads/ci.workflow_image_evidence.invalid.json
+  s_ff8a600f1fc93e::t_27cd830779c060 1-8
+factschema/fixturepack/payloads/ci.workflow_image_evidence.valid.json
+  s_ff8a600f1fc93e::t_b720a899ae3252 1-10
+factschema/fixturepack/payloads/code_dataflow_function.invalid.json
+  s_ff8a600f1fc93e::t_a496b801bcbcd1 1-8
+factschema/fixturepack/payloads/code_dataflow_function.valid.json
+  s_ff8a600f1fc93e::t_4d4816e77b1678 1-11
+factschema/fixturepack/payloads/code_dataflow_scanned.invalid.json
+  s_ff8a600f1fc93e::t_ff626573b28f93 1-4
+factschema/fixturepack/payloads/code_dataflow_scanned.valid.json
+  s_ff8a600f1fc93e::t_3ea5e0e4afe517 1-4
+factschema/fixturepack/payloads/code_function_source.invalid.json
+  s_ff8a600f1fc93e::t_6983609d869f8d 1-7
+factschema/fixturepack/payloads/code_function_source.valid.json
+  s_ff8a600f1fc93e::t_5ae006d1eca9c8 1-8
+factschema/fixturepack/payloads/code_function_summary.invalid.json
+  s_ff8a600f1fc93e::t_87210cafa08a5c 1-6
+factschema/fixturepack/payloads/code_function_summary.valid.json
+  s_ff8a600f1fc93e::t_688c8465af42e9 1-15
+factschema/fixturepack/payloads/code_interproc_evidence.invalid.json
+  s_ff8a600f1fc93e::t_302141ec341c57 1-12
+factschema/fixturepack/payloads/code_interproc_evidence.valid.json
+  s_ff8a600f1fc93e::t_272cb5d79f5e58 1-13
+factschema/fixturepack/payloads/code_taint_evidence.invalid.json
+  s_ff8a600f1fc93e::t_9e6c2883953a5b 1-14
+factschema/fixturepack/payloads/code_taint_evidence.valid.json
+  s_ff8a600f1fc93e::t_ad4b200d064443 1-15
+factschema/fixturepack/payloads/codeowners.ownership.invalid.json
+  s_ff8a600f1fc93e::t_32f980bba0a065 1-6
+factschema/fixturepack/payloads/codeowners.ownership.valid.json
+  s_ff8a600f1fc93e::t_28dc68a04ecc66 1-7
+factschema/fixturepack/payloads/config_key_divergence.invalid.json
+  s_ff8a600f1fc93e::t_7a3a37acfe2fe0 1-7
+factschema/fixturepack/payloads/config_key_divergence.valid.json
+  s_ff8a600f1fc93e::t_3ed5f1fd3abeaf 1-9
+factschema/fixturepack/payloads/documentation_claim_candidate.invalid.json
+  s_ff8a600f1fc93e::t_32b80e361bbebe 1-8
+factschema/fixturepack/payloads/documentation_claim_candidate.valid.json
+  s_ff8a600f1fc93e::t_8f4f6a3af13665 1-11
+factschema/fixturepack/payloads/documentation_document.invalid.json
+  s_ff8a600f1fc93e::t_3e709bb605414a 1-5
+factschema/fixturepack/payloads/documentation_document.valid.json
+  s_ff8a600f1fc93e::t_a2e31a1219291f 1-14
+factschema/fixturepack/payloads/documentation_entity_mention.invalid.json
+  s_ff8a600f1fc93e::t_82b895930b9b33 1-5
+factschema/fixturepack/payloads/documentation_entity_mention.valid.json
+  s_ff8a600f1fc93e::t_1bc2abb0575e39 1-12
+factschema/fixturepack/payloads/documentation_evidence_packet.invalid.json
+  s_ff8a600f1fc93e::t_12df5174b86748 1-4
+factschema/fixturepack/payloads/documentation_evidence_packet.valid.json
+  s_ff8a600f1fc93e::t_59330c66766993 1-6
+factschema/fixturepack/payloads/documentation_finding.invalid.json
+  s_ff8a600f1fc93e::t_7a6474b5996e44 1-5
+factschema/fixturepack/payloads/documentation_finding.valid.json
+  s_ff8a600f1fc93e::t_bfdd6ccdfb08b4 1-15
+factschema/fixturepack/payloads/documentation_link.invalid.json
+  s_ff8a600f1fc93e::t_1b808f22950db4 1-6
+factschema/fixturepack/payloads/documentation_link.valid.json
+  s_ff8a600f1fc93e::t_abcebca4fc584b 1-8
+factschema/fixturepack/payloads/documentation_section.invalid.json
+  s_ff8a600f1fc93e::t_3042061310c4c0 1-5
+factschema/fixturepack/payloads/documentation_section.valid.json
+  s_ff8a600f1fc93e::t_c625949b9e1e7e 1-11
+factschema/fixturepack/payloads/documentation_source.invalid.json
+  s_ff8a600f1fc93e::t_8c3671d12d5187 1-5
+factschema/fixturepack/payloads/documentation_source.valid.json
+  s_ff8a600f1fc93e::t_4e5d199e6b13c7 1-9
+factschema/fixturepack/payloads/ec2_instance_posture.invalid.json
+  s_ff8a600f1fc93e::t_8142fc2e2f6849 1-4
+factschema/fixturepack/payloads/ec2_instance_posture.valid.json
+  s_ff8a600f1fc93e::t_a1784d241eafcd 1-9
+factschema/fixturepack/payloads/eks_irsa_annotation.invalid.json
+  s_ff8a600f1fc93e::t_a55a6a19a6ff34 1-4
+factschema/fixturepack/payloads/eks_irsa_annotation.valid.json
+  s_ff8a600f1fc93e::t_6f9552e6f1a5f7 1-5
+factschema/fixturepack/payloads/eks_pod_identity_association.invalid.json
+  s_ff8a600f1fc93e::t_84942a5cb6a010 1-3
+factschema/fixturepack/payloads/eks_pod_identity_association.valid.json
+  s_ff8a600f1fc93e::t_eb32108ebca174 1-4
+factschema/fixturepack/payloads/file.invalid.json
+  s_ff8a600f1fc93e::t_0d84e79074b414 1-9
+factschema/fixturepack/payloads/file.valid.json
+  s_ff8a600f1fc93e::t_12d09eee3d0853 1-16
+factschema/fixturepack/payloads/gcp_cloud_relationship.invalid.json
+  s_ff8a600f1fc93e::t_07fe7f95978dbb 1-4
+factschema/fixturepack/payloads/gcp_cloud_relationship.valid.json
+  s_ff8a600f1fc93e::t_4c148741dbe7ae 1-8
+factschema/fixturepack/payloads/gcp_cloud_resource.invalid.json
+  s_ff8a600f1fc93e::t_d10b9ddac2bc90 1-4
+factschema/fixturepack/payloads/gcp_cloud_resource.valid.json
+  s_ff8a600f1fc93e::t_96aeb0ca0d86ab 1-10
+factschema/fixturepack/payloads/gcp_collection_warning.invalid.json
+  s_ff8a600f1fc93e::t_3cadb07fa02324 1-4
+factschema/fixturepack/payloads/gcp_collection_warning.valid.json
+  s_ff8a600f1fc93e::t_66d91ceb2def5e 1-7
+factschema/fixturepack/payloads/gcp_dns_record.invalid.json
+  s_ff8a600f1fc93e::t_c1b7559bc55742 1-4
+factschema/fixturepack/payloads/gcp_dns_record.valid.json
+  s_ff8a600f1fc93e::t_ad546a8e4224d5 1-10
+factschema/fixturepack/payloads/gcp_iam_permission_policy.invalid.json
+  s_ff8a600f1fc93e::t_a2269fff2fb3e3 1-8
+factschema/fixturepack/payloads/gcp_iam_permission_policy.valid.json
+  s_ff8a600f1fc93e::t_213cff41f61650 1-9
+factschema/fixturepack/payloads/gcp_iam_policy_observation.invalid.json
+  s_ff8a600f1fc93e::t_5fe9ccc54e1ac7 1-6
+factschema/fixturepack/payloads/gcp_iam_policy_observation.valid.json
+  s_ff8a600f1fc93e::t_6dcc7a724c5359 1-10
+factschema/fixturepack/payloads/gcp_iam_principal.invalid.json
+  s_ff8a600f1fc93e::t_d5c16c1364a38a 1-6
+factschema/fixturepack/payloads/gcp_iam_principal.valid.json
+  s_ff8a600f1fc93e::t_8f9db91617b4b3 1-7
+factschema/fixturepack/payloads/gcp_iam_trust_policy.invalid.json
+  s_ff8a600f1fc93e::t_4505332640c516 1-8
+factschema/fixturepack/payloads/gcp_iam_trust_policy.valid.json
+  s_ff8a600f1fc93e::t_2799d745523a03 1-9
+factschema/fixturepack/payloads/gcp_image_reference.invalid.json
+  s_ff8a600f1fc93e::t_53be11258b42d1 1-4
+factschema/fixturepack/payloads/gcp_image_reference.valid.json
+  s_ff8a600f1fc93e::t_f3c9fc068e48ff 1-5
+factschema/fixturepack/payloads/gcp_tag_observation.invalid.json
+  s_ff8a600f1fc93e::t_df496df85b6099 1-6
+factschema/fixturepack/payloads/gcp_tag_observation.valid.json
+  s_ff8a600f1fc93e::t_f55400cf02c2fa 1-7
+factschema/fixturepack/payloads/incident.lifecycle_event.invalid.json
+  s_ff8a600f1fc93e::t_254e48a1824aae 1-5
+factschema/fixturepack/payloads/incident.lifecycle_event.valid.json
+  s_ff8a600f1fc93e::t_f821eddb1627a5 1-7
+factschema/fixturepack/payloads/incident.record.invalid.json
+  s_ff8a600f1fc93e::t_62e279cc6abcdb 1-5
+factschema/fixturepack/payloads/incident.record.valid.json
+  s_ff8a600f1fc93e::t_943862996e6fe8 1-7
+factschema/fixturepack/payloads/incident_routing.applied_alert_route.invalid.json
+  s_ff8a600f1fc93e::t_da1ee12a66d4cf 1-17
+factschema/fixturepack/payloads/incident_routing.applied_alert_route.valid.json
+  s_ff8a600f1fc93e::t_3ef4fd2c5814e5 1-18
+factschema/fixturepack/payloads/incident_routing.applied_pagerduty_resource.invalid.json
+  s_ff8a600f1fc93e::t_ff5de65a8c9124 1-17
+factschema/fixturepack/payloads/incident_routing.applied_pagerduty_resource.valid.json
+  s_ff8a600f1fc93e::t_be12d151164fd8 1-19
+factschema/fixturepack/payloads/incident_routing.coverage_warning.invalid.json
+  s_ff8a600f1fc93e::t_44ee10aa6228ed 1-9
+factschema/fixturepack/payloads/incident_routing.coverage_warning.valid.json
+  s_ff8a600f1fc93e::t_d2cdbc20966f9c 1-10
+factschema/fixturepack/payloads/incident_routing.observed_pagerduty_integration.invalid.json
+  s_ff8a600f1fc93e::t_4b2af12fddba1b 1-12
+factschema/fixturepack/payloads/incident_routing.observed_pagerduty_integration.valid.json
+  s_ff8a600f1fc93e::t_7ebf2d7d2ea3fa 1-13
+factschema/fixturepack/payloads/incident_routing.observed_pagerduty_service.invalid.json
+  s_ff8a600f1fc93e::t_db43a39b28f21c 1-12
+factschema/fixturepack/payloads/incident_routing.observed_pagerduty_service.valid.json
+  s_ff8a600f1fc93e::t_525d30058709fe 1-13
+factschema/fixturepack/payloads/k8s_gcp_workload_identity_binding.invalid.json
+  s_ff8a600f1fc93e::t_4a4c3f36111a06 1-4
+factschema/fixturepack/payloads/k8s_gcp_workload_identity_binding.valid.json
+  s_ff8a600f1fc93e::t_ae031eef0b8aaa 1-5
+factschema/fixturepack/payloads/k8s_rbac_binding.invalid.json
+  s_ff8a600f1fc93e::t_524aff5770d59e 1-9
+factschema/fixturepack/payloads/k8s_rbac_binding.valid.json
+  s_ff8a600f1fc93e::t_ef298afd3f1de8 1-10
+factschema/fixturepack/payloads/k8s_rbac_role.invalid.json
+  s_ff8a600f1fc93e::t_9906c825906537 1-8
+factschema/fixturepack/payloads/k8s_rbac_role.valid.json
+  s_ff8a600f1fc93e::t_7fc9c5dce9ca17 1-9
+factschema/fixturepack/payloads/k8s_service_account.invalid.json
+  s_ff8a600f1fc93e::t_8c2f387f024231 1-3
+factschema/fixturepack/payloads/k8s_service_account.valid.json
+  s_ff8a600f1fc93e::t_c5e4a9467499d4 1-3
+factschema/fixturepack/payloads/k8s_service_account_token_posture.invalid.json
+  s_ff8a600f1fc93e::t_1421ba0443abdd 1-6
+factschema/fixturepack/payloads/k8s_service_account_token_posture.valid.json
+  s_ff8a600f1fc93e::t_9db3f8cf538d7b 1-7
+factschema/fixturepack/payloads/k8s_workload_identity_use.invalid.json
+  s_ff8a600f1fc93e::t_1f26ef6c48c3e0 1-4
+factschema/fixturepack/payloads/k8s_workload_identity_use.valid.json
+  s_ff8a600f1fc93e::t_e219ba4592d27c 1-5
+factschema/fixturepack/payloads/kubernetes_live.namespace.invalid.json
+  s_ff8a600f1fc93e::t_0c435e646a3a28 1-7
+factschema/fixturepack/payloads/kubernetes_live.namespace.valid.json
+  s_ff8a600f1fc93e::t_4f44e2a68033c0 1-10
+factschema/fixturepack/payloads/kubernetes_live.pod_template.invalid.json
+  s_ff8a600f1fc93e::t_1174e4427e5f30 1-8
+factschema/fixturepack/payloads/kubernetes_live.pod_template.valid.json
+  s_ff8a600f1fc93e::t_827517cc3c9f29 1-23
+factschema/fixturepack/payloads/kubernetes_live.relationship.invalid.json
+  s_ff8a600f1fc93e::t_53f5ef5402578c 1-4
+factschema/fixturepack/payloads/kubernetes_live.relationship.valid.json
+  s_ff8a600f1fc93e::t_4605f539339d60 1-12
+factschema/fixturepack/payloads/kubernetes_live.warning.invalid.json
+  s_ff8a600f1fc93e::t_c6c9e76fd1d0d6 1-4
+factschema/fixturepack/payloads/kubernetes_live.warning.valid.json
+  s_ff8a600f1fc93e::t_6a9cdac7a378cb 1-7
+factschema/fixturepack/payloads/observability.applied_resource.invalid.json
+  s_ff8a600f1fc93e::t_f124fe88cfd08e 1-8
+factschema/fixturepack/payloads/observability.applied_resource.valid.json
+  s_ff8a600f1fc93e::t_c3a67f3cd68ef2 1-9
+factschema/fixturepack/payloads/observability.applied_sync_state.invalid.json
+  s_ff8a600f1fc93e::t_12929a9b9cbabc 1-8
+factschema/fixturepack/payloads/observability.applied_sync_state.valid.json
+  s_ff8a600f1fc93e::t_b1ded173afae0e 1-9
+factschema/fixturepack/payloads/observability.coverage_warning.invalid.json
+  s_ff8a600f1fc93e::t_cc612678244b35 1-10
+factschema/fixturepack/payloads/observability.coverage_warning.valid.json
+  s_ff8a600f1fc93e::t_f3029400b02a16 1-11
+factschema/fixturepack/payloads/observability.declared_alert_rule.invalid.json
+  s_ff8a600f1fc93e::t_b6500ab73d16ab 1-8
+factschema/fixturepack/payloads/observability.declared_alert_rule.valid.json
+  s_ff8a600f1fc93e::t_62980642f19ef6 1-9
+factschema/fixturepack/payloads/observability.declared_dashboard.invalid.json
+  s_ff8a600f1fc93e::t_824eda97f1647e 1-9
+factschema/fixturepack/payloads/observability.declared_dashboard.valid.json
+  s_ff8a600f1fc93e::t_350aae160e4fcf 1-10
+factschema/fixturepack/payloads/observability.declared_datasource.invalid.json
+  s_ff8a600f1fc93e::t_b00abcaa2f631a 1-8
+factschema/fixturepack/payloads/observability.declared_datasource.valid.json
+  s_ff8a600f1fc93e::t_542b19efaff994 1-9
+factschema/fixturepack/payloads/observability.declared_folder.invalid.json
+  s_ff8a600f1fc93e::t_4354d700a03415 1-8
+factschema/fixturepack/payloads/observability.declared_folder.valid.json
+  s_ff8a600f1fc93e::t_0c05f8a8693878 1-9
+factschema/fixturepack/payloads/observability.declared_log_route.invalid.json
+  s_ff8a600f1fc93e::t_87b2948ed0d58b 1-8
+factschema/fixturepack/payloads/observability.declared_log_route.valid.json
+  s_ff8a600f1fc93e::t_a25a87449ffece 1-9
+factschema/fixturepack/payloads/observability.declared_metric_route.invalid.json
+  s_ff8a600f1fc93e::t_23f5aa76e724f1 1-9
+factschema/fixturepack/payloads/observability.declared_metric_route.valid.json
+  s_ff8a600f1fc93e::t_d711bcddd9f8e3 1-10
+factschema/fixturepack/payloads/observability.declared_metric_rule.invalid.json
+  s_ff8a600f1fc93e::t_bf4f616bc19f65 1-9
+factschema/fixturepack/payloads/observability.declared_metric_rule.valid.json
+  s_ff8a600f1fc93e::t_1e5f443ff47a48 1-10
+factschema/fixturepack/payloads/observability.declared_scrape_config.invalid.json
+  s_ff8a600f1fc93e::t_0467154dc74fed 1-8
+factschema/fixturepack/payloads/observability.declared_scrape_config.valid.json
+  s_ff8a600f1fc93e::t_a1c234ee33de12 1-9
+factschema/fixturepack/payloads/observability.declared_trace_route.invalid.json
+  s_ff8a600f1fc93e::t_43c819052b4c8f 1-8
+factschema/fixturepack/payloads/observability.declared_trace_route.valid.json
+  s_ff8a600f1fc93e::t_0b933109d48569 1-9
+factschema/fixturepack/payloads/observability.observed_dashboard.invalid.json
+  s_ff8a600f1fc93e::t_c2e4cc290095d3 1-10
+factschema/fixturepack/payloads/observability.observed_dashboard.valid.json
+  s_ff8a600f1fc93e::t_864a343c828a06 1-11
+factschema/fixturepack/payloads/observability.observed_log_signal.invalid.json
+  s_ff8a600f1fc93e::t_33f01e4c026f87 1-10
+factschema/fixturepack/payloads/observability.observed_log_signal.valid.json
+  s_ff8a600f1fc93e::t_a7090324daa5d9 1-11
+factschema/fixturepack/payloads/observability.observed_rule.invalid.json
+  s_ff8a600f1fc93e::t_2cb6f807349342 1-9
+factschema/fixturepack/payloads/observability.observed_rule.valid.json
+  s_ff8a600f1fc93e::t_a64dfea890dcca 1-10
+factschema/fixturepack/payloads/observability.observed_target.invalid.json
+  s_ff8a600f1fc93e::t_24823fb784f4b0 1-9
+factschema/fixturepack/payloads/observability.observed_target.valid.json
+  s_ff8a600f1fc93e::t_972a84ae074ec4 1-10
+factschema/fixturepack/payloads/observability.observed_trace_signal.invalid.json
+  s_ff8a600f1fc93e::t_4bcd8151cfc427 1-10
+factschema/fixturepack/payloads/observability.observed_trace_signal.valid.json
+  s_ff8a600f1fc93e::t_c8c609a2f61d22 1-11
+factschema/fixturepack/payloads/observability.source_instance.invalid.json
+  s_ff8a600f1fc93e::t_a055885cc8e66e 1-7
+factschema/fixturepack/payloads/observability.source_instance.valid.json
+  s_ff8a600f1fc93e::t_321005b2038cfb 1-8
+factschema/fixturepack/payloads/oci_registry.image_descriptor.invalid.json
+  s_ff8a600f1fc93e::t_94aef5f699d186 1-4
+factschema/fixturepack/payloads/oci_registry.image_descriptor.valid.json
+  s_ff8a600f1fc93e::t_eac2b650f248d3 1-6
+factschema/fixturepack/payloads/oci_registry.image_index.invalid.json
+  s_ff8a600f1fc93e::t_a86597d60755b1 1-4
+factschema/fixturepack/payloads/oci_registry.image_index.valid.json
+  s_ff8a600f1fc93e::t_427b22ac49982e 1-6
+factschema/fixturepack/payloads/oci_registry.image_manifest.invalid.json
+  s_ff8a600f1fc93e::t_fa76e61d862da3 1-4
+factschema/fixturepack/payloads/oci_registry.image_manifest.valid.json
+  s_ff8a600f1fc93e::t_d7c84b3d07e120 1-10
+factschema/fixturepack/payloads/oci_registry.image_referrer.invalid.json
+  s_ff8a600f1fc93e::t_ddf9af04519a64 1-4
+factschema/fixturepack/payloads/oci_registry.image_referrer.valid.json
+  s_ff8a600f1fc93e::t_f4ac583b25f760 1-9
+factschema/fixturepack/payloads/oci_registry.image_tag_observation.invalid.json
+  s_ff8a600f1fc93e::t_76c09bbc5d181a 1-4
+factschema/fixturepack/payloads/oci_registry.image_tag_observation.valid.json
+  s_ff8a600f1fc93e::t_ec27ec0af094aa 1-8
+factschema/fixturepack/payloads/oci_registry.repository.invalid.json
+  s_ff8a600f1fc93e::t_7236acab48e067 1-5
+factschema/fixturepack/payloads/oci_registry.repository.valid.json
+  s_ff8a600f1fc93e::t_bb37ff6281f3f8 1-9
+factschema/fixturepack/payloads/oci_registry.warning.invalid.json
+  s_ff8a600f1fc93e::t_daf2e2f2b6a75b 1-4
+factschema/fixturepack/payloads/oci_registry.warning.valid.json
+  s_ff8a600f1fc93e::t_4733fafb015259 1-8
+factschema/fixturepack/payloads/package_registry.package.invalid.json
+  s_ff8a600f1fc93e::t_484e47da525a53 1-6
+factschema/fixturepack/payloads/package_registry.package.valid.json
+  s_ff8a600f1fc93e::t_2e5ac1a39bc0ab 1-17
+factschema/fixturepack/payloads/package_registry.package_artifact.invalid.json
+  s_ff8a600f1fc93e::t_20048462280c92 1-9
+factschema/fixturepack/payloads/package_registry.package_artifact.valid.json
+  s_ff8a600f1fc93e::t_61facdbf2186a0 1-17
+factschema/fixturepack/payloads/package_registry.package_dependency.invalid.json
+  s_ff8a600f1fc93e::t_75552ade2267a8 1-10
+factschema/fixturepack/payloads/package_registry.package_dependency.valid.json
+  s_ff8a600f1fc93e::t_bedb9de7d5766d 1-27
+factschema/fixturepack/payloads/package_registry.package_version.invalid.json
+  s_ff8a600f1fc93e::t_23605574833050 1-11
+factschema/fixturepack/payloads/package_registry.package_version.valid.json
+  s_ff8a600f1fc93e::t_ce3ea9945a065a 1-22
+factschema/fixturepack/payloads/package_registry.registry_event.invalid.json
+  s_ff8a600f1fc93e::t_f594faa6497dbb 1-8
+factschema/fixturepack/payloads/package_registry.registry_event.valid.json
+  s_ff8a600f1fc93e::t_5914877895f863 1-15
+factschema/fixturepack/payloads/package_registry.repository_hosting.invalid.json
+  s_ff8a600f1fc93e::t_103344e9e3dc42 1-6
+factschema/fixturepack/payloads/package_registry.repository_hosting.valid.json
+  s_ff8a600f1fc93e::t_475c180841ab13 1-11
+factschema/fixturepack/payloads/package_registry.source_hint.invalid.json
+  s_ff8a600f1fc93e::t_bd503094b44e47 1-9
+factschema/fixturepack/payloads/package_registry.source_hint.valid.json
+  s_ff8a600f1fc93e::t_1076a86e2c8400 1-13
+factschema/fixturepack/payloads/package_registry.vulnerability_hint.invalid.json
+  s_ff8a600f1fc93e::t_a0ff0b219bd542 1-7
+factschema/fixturepack/payloads/package_registry.vulnerability_hint.valid.json
+  s_ff8a600f1fc93e::t_1cb55930c5fa26 1-19
+factschema/fixturepack/payloads/package_registry.warning.invalid.json
+  s_ff8a600f1fc93e::t_a95ac1e5918770 1-6
+factschema/fixturepack/payloads/package_registry.warning.valid.json
+  s_ff8a600f1fc93e::t_c0fa66b6155b77 1-13
+factschema/fixturepack/payloads/rds_instance_posture.invalid.json
+  s_ff8a600f1fc93e::t_afa1f9b76b7b42 1-11
+factschema/fixturepack/payloads/rds_instance_posture.valid.json
+  s_ff8a600f1fc93e::t_45f0d3940595f5 1-12
+factschema/fixturepack/payloads/reducer_aws_cloud_runtime_drift_finding.invalid.json
+  s_ff8a600f1fc93e::t_1f29930546a2a2 1-26
+factschema/fixturepack/payloads/reducer_aws_cloud_runtime_drift_finding.valid.json
+  s_ff8a600f1fc93e::t_33d6bd11535d47 1-27
+factschema/fixturepack/payloads/reducer_code_drifted_finding.invalid.json
+  s_ff8a600f1fc93e::t_e3f427c7385fbd 1-35
+factschema/fixturepack/payloads/reducer_code_drifted_finding.valid.json
+  s_ff8a600f1fc93e::t_4c849c30d6dc48 1-36
+factschema/fixturepack/payloads/reducer_multi_cloud_runtime_drift_finding.invalid.json
+  s_ff8a600f1fc93e::t_12d3d530ecc498 1-28
+factschema/fixturepack/payloads/reducer_multi_cloud_runtime_drift_finding.valid.json
+  s_ff8a600f1fc93e::t_7033d8c033e256 1-29
+factschema/fixturepack/payloads/reducer_package_consumption_correlation.invalid.json
+  s_ff8a600f1fc93e::t_d1bf18ebd3dd76 1
+factschema/fixturepack/payloads/reducer_package_consumption_correlation.valid.json
+  s_ff8a600f1fc93e::t_c5627b579eeebc 1
+factschema/fixturepack/payloads/reducer_package_ownership_correlation.invalid.json
+  s_ff8a600f1fc93e::t_2a40351ab26c64 1
+factschema/fixturepack/payloads/reducer_package_ownership_correlation.valid.json
+  s_ff8a600f1fc93e::t_123339d1f94d1e 1
+factschema/fixturepack/payloads/reducer_package_publication_correlation.invalid.json
+  s_ff8a600f1fc93e::t_bb7aafc282683a 1
+factschema/fixturepack/payloads/reducer_package_publication_correlation.valid.json
+  s_ff8a600f1fc93e::t_c28c7bd0bb90e6 1
+factschema/fixturepack/payloads/reducer_supply_chain_impact_finding.invalid.json
+  s_ff8a600f1fc93e::t_7eb65ea1e82ea7 1-51
+factschema/fixturepack/payloads/reducer_supply_chain_impact_finding.valid.json
+  s_ff8a600f1fc93e::t_ba37c34e5cdbd6 1-52
+factschema/fixturepack/payloads/reducer_terraform_config_state_drift_finding.invalid.json
+  s_ff8a600f1fc93e::t_18b9ef0c657466 1-18
+factschema/fixturepack/payloads/reducer_terraform_config_state_drift_finding.valid.json
+  s_ff8a600f1fc93e::t_97ddac191b9b12 1-19
+factschema/fixturepack/payloads/ref_overlay.branch_observation.invalid.json
+  s_ff8a600f1fc93e::t_8a4f82146a9986 1-6
+factschema/fixturepack/payloads/ref_overlay.branch_observation.valid.json
+  s_ff8a600f1fc93e::t_6e764b30f5691f 1-8
+factschema/fixturepack/payloads/repository.invalid.json
+  s_ff8a600f1fc93e::t_d3bc0caf1ac655 1-7
+factschema/fixturepack/payloads/repository.valid.json
+  s_ff8a600f1fc93e::t_8f2f07a4ea331d 1-21
+factschema/fixturepack/payloads/s3_bucket_posture.invalid.json
+  s_ff8a600f1fc93e::t_7c7a7daf6b3797 1-4
+factschema/fixturepack/payloads/s3_bucket_posture.valid.json
+  s_ff8a600f1fc93e::t_e1ac44079a0edd 1-6
+factschema/fixturepack/payloads/s3_external_principal_grant.invalid.json
+  s_ff8a600f1fc93e::t_c40e94fd02d1ad 1-10
+factschema/fixturepack/payloads/s3_external_principal_grant.valid.json
+  s_ff8a600f1fc93e::t_bf4b18134c8db8 1-11
+factschema/fixturepack/payloads/sbom.component.invalid.json
+  s_ff8a600f1fc93e::t_2d921626bcf693 1-6
+factschema/fixturepack/payloads/sbom.component.valid.json
+  s_ff8a600f1fc93e::t_566dc5845f994f 1-9
+factschema/fixturepack/payloads/sbom.dependency_relationship.invalid.json
+  s_ff8a600f1fc93e::t_e8310143953314 1-6
+factschema/fixturepack/payloads/sbom.dependency_relationship.valid.json
+  s_ff8a600f1fc93e::t_86e2770fe2269e 1-7
+factschema/fixturepack/payloads/sbom.document.invalid.json
+  s_ff8a600f1fc93e::t_8ebac86a894ad3 1-6
+factschema/fixturepack/payloads/sbom.document.valid.json
+  s_ff8a600f1fc93e::t_acad271da97a5d 1-10
+factschema/fixturepack/payloads/sbom.external_reference.invalid.json
+  s_ff8a600f1fc93e::t_8ed7de90335f0e 1-5
+factschema/fixturepack/payloads/sbom.external_reference.valid.json
+  s_ff8a600f1fc93e::t_75c1c5f59a43af 1-7
+factschema/fixturepack/payloads/sbom.warning.invalid.json
+  s_ff8a600f1fc93e::t_b6600bde8985ca 1-6
+factschema/fixturepack/payloads/sbom.warning.valid.json
+  s_ff8a600f1fc93e::t_d1af0656b9d386 1-6
+factschema/fixturepack/payloads/scanner_worker.analysis.invalid.json
+  s_ff8a600f1fc93e::t_61ff02d5143057 1-12
+factschema/fixturepack/payloads/scanner_worker.analysis.valid.json
+  s_ff8a600f1fc93e::t_1221d720d83b78 1-17
+factschema/fixturepack/payloads/scanner_worker.warning.invalid.json
+  s_ff8a600f1fc93e::t_54bfd4ed8d2c09 1-12
+factschema/fixturepack/payloads/scanner_worker.warning.valid.json
+  s_ff8a600f1fc93e::t_fc9564e171a181 1-16
+factschema/fixturepack/payloads/secrets_iam_coverage_warning.invalid.json
+  s_ff8a600f1fc93e::t_c0c299d7ed5c34 1-6
+factschema/fixturepack/payloads/secrets_iam_coverage_warning.valid.json
+  s_ff8a600f1fc93e::t_635ca01d44f5ef 1-17
+factschema/fixturepack/payloads/security_alert.repository_alert.invalid.json
+  s_ff8a600f1fc93e::t_a3367166367806 1-12
+factschema/fixturepack/payloads/security_alert.repository_alert.valid.json
+  s_ff8a600f1fc93e::t_d785a5e965db5f 1-45
+factschema/fixturepack/payloads/semantic.code_hint.invalid.json
+  s_ff8a600f1fc93e::t_41d07babcdfc74 1-29
+factschema/fixturepack/payloads/semantic.code_hint.valid.json
+  s_ff8a600f1fc93e::t_392db8ce24c85a 1-32
+factschema/fixturepack/payloads/semantic.documentation_observation.invalid.json
+  s_ff8a600f1fc93e::t_e208f78f8da1ad 1-25
+factschema/fixturepack/payloads/semantic.documentation_observation.valid.json
+  s_ff8a600f1fc93e::t_ae51a923e09f0b 1-28
+factschema/fixturepack/payloads/service_catalog.entity.invalid.json
+  s_ff8a600f1fc93e::t_f9f0048cdcab46 1-5
+factschema/fixturepack/payloads/service_catalog.entity.legacy-handle.valid.json
+  s_ff8a600f1fc93e::t_50e7da1bf9bde8 1-10
+factschema/fixturepack/payloads/service_catalog.entity.valid.json
+  s_ff8a600f1fc93e::t_e939d522a3ca5b 1-11
+factschema/fixturepack/payloads/service_catalog.operational_link.invalid.json
+  s_ff8a600f1fc93e::t_2fe388b1af15c5 1-5
+factschema/fixturepack/payloads/service_catalog.operational_link.valid.json
+  s_ff8a600f1fc93e::t_d327ac6aad7660 1-7
+factschema/fixturepack/payloads/service_catalog.ownership.invalid.json
+  s_ff8a600f1fc93e::t_3c3bc578c96d31 1-4
+factschema/fixturepack/payloads/service_catalog.ownership.valid.json
+  s_ff8a600f1fc93e::t_096646ab16e442 1-5
+factschema/fixturepack/payloads/service_catalog.repository_link.invalid.json
+  s_ff8a600f1fc93e::t_e1f1f848ead4c8 1-4
+factschema/fixturepack/payloads/service_catalog.repository_link.legacy-handle.valid.json
+  s_ff8a600f1fc93e::t_813a595e50e9f5 1-7
+factschema/fixturepack/payloads/service_catalog.repository_link.valid.json
+  s_ff8a600f1fc93e::t_cec7b213004ae3 1-9
+factschema/fixturepack/payloads/submodule.pin.invalid.json
+  s_ff8a600f1fc93e::t_4f9f34b96adc57 1-5
+factschema/fixturepack/payloads/submodule.pin.valid.json
+  s_ff8a600f1fc93e::t_ffd27e53c6c37c 1-8
+factschema/fixturepack/payloads/terraform_state_candidate.invalid.json
+  s_ff8a600f1fc93e::t_c5eb1a2f9ea669 1-6
+factschema/fixturepack/payloads/terraform_state_candidate.valid.json
+  s_ff8a600f1fc93e::t_0a4a61d54106cf 1-9
+factschema/fixturepack/payloads/terraform_state_module.invalid.json
+  s_ff8a600f1fc93e::t_a2b756a8576d4e 1-3
+factschema/fixturepack/payloads/terraform_state_module.valid.json
+  s_ff8a600f1fc93e::t_56963dbde187c1 1-4
+factschema/fixturepack/payloads/terraform_state_output.invalid.json
+  s_ff8a600f1fc93e::t_2ba48c29637080 1-4
+factschema/fixturepack/payloads/terraform_state_output.valid.json
+  s_ff8a600f1fc93e::t_48b9d300a3e524 1-6
+factschema/fixturepack/payloads/terraform_state_provider_binding.invalid.json
+  s_ff8a600f1fc93e::t_cd813a04d31c3c 1-4
+factschema/fixturepack/payloads/terraform_state_provider_binding.valid.json
+  s_ff8a600f1fc93e::t_e0f48eeb8dec44 1-8
+factschema/fixturepack/payloads/terraform_state_resource.invalid.json
+  s_ff8a600f1fc93e::t_92a3c38419dac6 1-5
+factschema/fixturepack/payloads/terraform_state_resource.valid.json
+  s_ff8a600f1fc93e::t_853d75113ee451 1-16
+factschema/fixturepack/payloads/terraform_state_snapshot.invalid.json
+  s_ff8a600f1fc93e::t_9d27dd7dd8c597 1-6
+factschema/fixturepack/payloads/terraform_state_snapshot.valid.json
+  s_ff8a600f1fc93e::t_4ced21533f02a2 1-10
+factschema/fixturepack/payloads/terraform_state_tag_observation.invalid.json
+  s_ff8a600f1fc93e::t_d2be0d4f7c8741 1-4
+factschema/fixturepack/payloads/terraform_state_tag_observation.valid.json
+  s_ff8a600f1fc93e::t_1f5ab02058eaae 1-5
+factschema/fixturepack/payloads/terraform_state_warning.invalid.json
+  s_ff8a600f1fc93e::t_7e59a2749517ba 1-4
+factschema/fixturepack/payloads/terraform_state_warning.valid.json
+  s_ff8a600f1fc93e::t_2163fa12e490c2 1-7
+factschema/fixturepack/payloads/vault_acl_policy.invalid.json
+  s_ff8a600f1fc93e::t_e8fb67f44a686a 1-9
+factschema/fixturepack/payloads/vault_acl_policy.valid.json
+  s_ff8a600f1fc93e::t_dc7ea7064da6b2 1-10
+factschema/fixturepack/payloads/vault_auth_mount.invalid.json
+  s_ff8a600f1fc93e::t_fe0b1f8349104e 1-7
+factschema/fixturepack/payloads/vault_auth_mount.valid.json
+  s_ff8a600f1fc93e::t_9abb36405ab03a 1-8
+factschema/fixturepack/payloads/vault_auth_role.invalid.json
+  s_ff8a600f1fc93e::t_835432919faeb4 1-3
+factschema/fixturepack/payloads/vault_auth_role.valid.json
+  s_ff8a600f1fc93e::t_a9c48582c936a0 1-7
+factschema/fixturepack/payloads/vault_identity_alias.invalid.json
+  s_ff8a600f1fc93e::t_4e782939680f79 1-8
+factschema/fixturepack/payloads/vault_identity_alias.valid.json
+  s_ff8a600f1fc93e::t_bf4ce722d39b40 1-9
+factschema/fixturepack/payloads/vault_identity_entity.invalid.json
+  s_ff8a600f1fc93e::t_450b293918d3c8 1-6
+factschema/fixturepack/payloads/vault_identity_entity.valid.json
+  s_ff8a600f1fc93e::t_adebd9301dfdeb 1-7
+factschema/fixturepack/payloads/vault_kv_metadata.invalid.json
+  s_ff8a600f1fc93e::t_d6e7c1c9816557 1-4
+factschema/fixturepack/payloads/vault_kv_metadata.valid.json
+  s_ff8a600f1fc93e::t_60ce1a1ec2b2ab 1-5
+factschema/fixturepack/payloads/vault_secret_engine_mount.invalid.json
+  s_ff8a600f1fc93e::t_daeb324bfef27f 1-7
+factschema/fixturepack/payloads/vault_secret_engine_mount.valid.json
+  s_ff8a600f1fc93e::t_f74b224f400784 1-8
+factschema/fixturepack/payloads/vulnerability.affected_package.invalid.json
+  s_ff8a600f1fc93e::t_de6c4b534aa0a8 1-5
+factschema/fixturepack/payloads/vulnerability.affected_package.valid.json
+  s_ff8a600f1fc93e::t_7302a724c2385c 1-20
+factschema/fixturepack/payloads/vulnerability.affected_product.invalid.json
+  s_ff8a600f1fc93e::t_40deeb7990c164 1-5
+factschema/fixturepack/payloads/vulnerability.affected_product.valid.json
+  s_ff8a600f1fc93e::t_93cb2d8206e04b 1-6
+factschema/fixturepack/payloads/vulnerability.cve.invalid.json
+  s_ff8a600f1fc93e::t_2772914e443f52 1-4
+factschema/fixturepack/payloads/vulnerability.cve.valid.json
+  s_ff8a600f1fc93e::t_3ba8956ca6ec33 1-10
+factschema/fixturepack/payloads/vulnerability.epss_score.invalid.json
+  s_ff8a600f1fc93e::t_e044f0a5da2f9a 1-5
+factschema/fixturepack/payloads/vulnerability.epss_score.valid.json
+  s_ff8a600f1fc93e::t_8b06b276691fab 1-6
+factschema/fixturepack/payloads/vulnerability.go_call_reachability.invalid.json
+  s_ff8a600f1fc93e::t_c2291cea6ec5eb 1-5
+factschema/fixturepack/payloads/vulnerability.go_call_reachability.valid.json
+  s_ff8a600f1fc93e::t_6cc2247acda423 1-20
+factschema/fixturepack/payloads/vulnerability.go_module_evidence.invalid.json
+  s_ff8a600f1fc93e::t_8f87411e14a65b 1-5
+factschema/fixturepack/payloads/vulnerability.go_module_evidence.valid.json
+  s_ff8a600f1fc93e::t_6e01f952c1126c 1-8
+factschema/fixturepack/payloads/vulnerability.known_exploited.invalid.json
+  s_ff8a600f1fc93e::t_e9df58b374ed50 1-5
+factschema/fixturepack/payloads/vulnerability.known_exploited.valid.json
+  s_ff8a600f1fc93e::t_c36665f87986c4 1-14
+factschema/fixturepack/payloads/vulnerability.os_package.invalid.json
+  s_ff8a600f1fc93e::t_5d3449fa80fdcc 1-7
+factschema/fixturepack/payloads/vulnerability.os_package.valid.json
+  s_ff8a600f1fc93e::t_e9f90b94402ac5 1-11
+factschema/fixturepack/payloads/vulnerability.reference.invalid.json
+  s_ff8a600f1fc93e::t_f58faefb80752a 1-5
+factschema/fixturepack/payloads/vulnerability.reference.valid.json
+  s_ff8a600f1fc93e::t_3e93e1758fdd3d 1-8
+factschema/fixturepack/payloads/vulnerability.source_snapshot.invalid.json
+  s_ff8a600f1fc93e::t_1859031aac1cf3 1-4
+factschema/fixturepack/payloads/vulnerability.source_snapshot.valid.json
+  s_ff8a600f1fc93e::t_2e42501c57d084 1-11
+factschema/fixturepack/payloads/vulnerability.suppression.invalid.json
+  s_ff8a600f1fc93e::t_d7952eb6dbed0e 1-10
+factschema/fixturepack/payloads/vulnerability.suppression.legacy-handle.valid.json
+  s_ff8a600f1fc93e::t_881643fe736fd4 1-22
+factschema/fixturepack/payloads/vulnerability.suppression.valid.json
+  s_ff8a600f1fc93e::t_9b455e16874443 1-23
+factschema/fixturepack/payloads/work_item.external_link.invalid.json
+  s_ff8a600f1fc93e::t_794909774f7fc6 1-5
+factschema/fixturepack/payloads/work_item.external_link.valid.json
+  s_ff8a600f1fc93e::t_1ee786d55a9978 1-9
+factschema/fixturepack/payloads/work_item.field_metadata.invalid.json
+  s_ff8a600f1fc93e::t_d4af6c2509107d 1-4
+factschema/fixturepack/payloads/work_item.field_metadata.valid.json
+  s_ff8a600f1fc93e::t_302b6e9a7dee67 1-7
+factschema/fixturepack/payloads/work_item.issue_type_metadata.invalid.json
+  s_ff8a600f1fc93e::t_b220f4e0e89075 1-5
+factschema/fixturepack/payloads/work_item.issue_type_metadata.valid.json
+  s_ff8a600f1fc93e::t_6f34b1a0d53b63 1-6
+factschema/fixturepack/payloads/work_item.metadata_warning.invalid.json
+  s_ff8a600f1fc93e::t_9b1fe31344f729 1-4
+factschema/fixturepack/payloads/work_item.metadata_warning.valid.json
+  s_ff8a600f1fc93e::t_7188fa78c3cc8c 1-6
+factschema/fixturepack/payloads/work_item.project_metadata.invalid.json
+  s_ff8a600f1fc93e::t_1f0d602124a6f4 1-5
+factschema/fixturepack/payloads/work_item.project_metadata.valid.json
+  s_ff8a600f1fc93e::t_e5e089b5e7327a 1-6
+factschema/fixturepack/payloads/work_item.record.invalid.json
+  s_ff8a600f1fc93e::t_7455c179cb3672 1-5
+factschema/fixturepack/payloads/work_item.record.valid.json
+  s_ff8a600f1fc93e::t_704f986528ec0b 1-7
+factschema/fixturepack/payloads/work_item.status_metadata.invalid.json
+  s_ff8a600f1fc93e::t_617cf82db183e7 1-5
+factschema/fixturepack/payloads/work_item.status_metadata.valid.json
+  s_ff8a600f1fc93e::t_f3a4cb50aac7e5 1-7
+factschema/fixturepack/payloads/work_item.transition.invalid.json
+  s_ff8a600f1fc93e::t_d4edd924b9fc10 1-6
+factschema/fixturepack/payloads/work_item.transition.valid.json
+  s_ff8a600f1fc93e::t_34ce9a2d43fc1e 1-8
+factschema/fixturepack/payloads/work_item.workflow_metadata.invalid.json
+  s_ff8a600f1fc93e::t_d94038e82dc4b2 1-5
+factschema/fixturepack/payloads/work_item.workflow_metadata.valid.json
+  s_ff8a600f1fc93e::t_71910d6470aa67 1-19
+factschema/fixturepack/schema/attestation.signature_verification.v1.schema.json
+  s_ff8a600f1fc93e::t_ba4766604e587e 1-51
+factschema/fixturepack/schema/attestation.slsa_provenance.v1.schema.json
+  s_ff8a600f1fc93e::t_bf78e9605d92e3 1-84
+factschema/fixturepack/schema/attestation.statement.v1.schema.json
+  s_ff8a600f1fc93e::t_c8c6068321ee76 1-84
+factschema/fixturepack/schema/aws_dns_record.v1.schema.json
+  s_ff8a600f1fc93e::t_42c2715351bf65 1-220
+factschema/fixturepack/schema/aws_iam_access_analyzer_finding.v1.schema.json
+  s_ff8a600f1fc93e::t_525937549eaf54 1-76
+factschema/fixturepack/schema/aws_iam_instance_profile.v1.schema.json
+  s_ff8a600f1fc93e::t_2f2d5e59cf4579 1-62
+factschema/fixturepack/schema/aws_iam_permission.v1.schema.json
+  s_ff8a600f1fc93e::t_a0bb6325eafc3a 1-154
+factschema/fixturepack/schema/aws_iam_permission_boundary.v1.schema.json
+  s_ff8a600f1fc93e::t_b2baf6af9abd59 1-51
+factschema/fixturepack/schema/aws_iam_permission_policy.v1.schema.json
+  s_ff8a600f1fc93e::t_dfb60897a255cd 1-145
+factschema/fixturepack/schema/aws_iam_policy_attachment.v1.schema.json
+  s_ff8a600f1fc93e::t_022c759c8a1884 1-57
+factschema/fixturepack/schema/aws_iam_principal.v1.schema.json
+  s_ff8a600f1fc93e::t_aa85cfaa4b6805 1-96
+factschema/fixturepack/schema/aws_iam_trust_policy.v1.schema.json
+  s_ff8a600f1fc93e::t_f0c0fe95274608 1-112
+factschema/fixturepack/schema/aws_image_reference.v1.schema.json
+  s_ff8a600f1fc93e::t_06521aa513adf0 1-95
+factschema/fixturepack/schema/aws_relationship.v1.schema.json
+  s_ff8a600f1fc93e::t_306477f2af4b85 1-49
+factschema/fixturepack/schema/aws_resource.v1.schema.json
+  s_ff8a600f1fc93e::t_51d331b24bd2f5 1-69
+factschema/fixturepack/schema/aws_resource_policy_permission.v1.schema.json
+  s_ff8a600f1fc93e::t_b80fc01875e959 1-166
+factschema/fixturepack/schema/aws_security_group_rule.v1.schema.json
+  s_ff8a600f1fc93e::t_b8d022bfa7363d 1-108
+factschema/fixturepack/schema/aws_warning.v1.schema.json
+  s_ff8a600f1fc93e::t_5eaca585c0f4f0 1-53
+factschema/fixturepack/schema/azure_cloud_relationship.v1.schema.json
+  s_ff8a600f1fc93e::t_c96f37390d3984 1-47
+factschema/fixturepack/schema/azure_cloud_resource.v1.schema.json
+  s_ff8a600f1fc93e::t_2100ef3b162a8c 1-45
+factschema/fixturepack/schema/azure_collection_warning.v1.schema.json
+  s_ff8a600f1fc93e::t_8de48b2d2bd713 1-43
+factschema/fixturepack/schema/azure_dns_record.v1.schema.json
+  s_ff8a600f1fc93e::t_9a6f19c2cf2b73 1-68
+factschema/fixturepack/schema/azure_identity_observation.v1.schema.json
+  s_ff8a600f1fc93e::t_e004b519197217 1-75
+factschema/fixturepack/schema/azure_image_reference.v1.schema.json
+  s_ff8a600f1fc93e::t_691021afd2273d 1-57
+factschema/fixturepack/schema/azure_resource_change.v1.schema.json
+  s_ff8a600f1fc93e::t_da5f49f50337e1 1-88
+factschema/fixturepack/schema/azure_tag_observation.v1.schema.json
+  s_ff8a600f1fc93e::t_e5669c21388ef6 1-87
+factschema/fixturepack/schema/change.record.v1.schema.json
+  s_ff8a600f1fc93e::t_0cdebf90977b91 1-109
+factschema/fixturepack/schema/ci.artifact.v1.schema.json
+  s_ff8a600f1fc93e::t_b6b2107c10c1b0 1-94
+factschema/fixturepack/schema/ci.deployment_event.v1.schema.json
+  s_ff8a600f1fc93e::t_74c9b34feaecc6 1-105
+factschema/fixturepack/schema/ci.environment_observation.v1.schema.json
+  s_ff8a600f1fc93e::t_7db58b475e06cf 1-49
+factschema/fixturepack/schema/ci.run.v1.schema.json
+  s_ff8a600f1fc93e::t_e90e8009063fdb 1-124
+factschema/fixturepack/schema/ci.step.v1.schema.json
+  s_ff8a600f1fc93e::t_dbd1de9af708f3 1-85
+factschema/fixturepack/schema/ci.trigger_edge.v1.schema.json
+  s_ff8a600f1fc93e::t_eba06b4ed94fef 1-49
+factschema/fixturepack/schema/ci.workflow_image_evidence.v1.schema.json
+  s_ff8a600f1fc93e::t_6650819155f5d5 1-72
+factschema/fixturepack/schema/code_dataflow_function.v1.schema.json
+  s_ff8a600f1fc93e::t_56aec51d678a73 1-89
+factschema/fixturepack/schema/code_dataflow_scanned.v1.schema.json
+  s_ff8a600f1fc93e::t_7eddf0c4aebdb6 1-21
+factschema/fixturepack/schema/code_function_source.v1.schema.json
+  s_ff8a600f1fc93e::t_a7e64bc2e75bf1 1-31
+factschema/fixturepack/schema/code_function_summary.v1.schema.json
+  s_ff8a600f1fc93e::t_02a292927b8973 1-93
+factschema/fixturepack/schema/code_interproc_evidence.v1.schema.json
+  s_ff8a600f1fc93e::t_5e84a597948676 1-82
+factschema/fixturepack/schema/code_taint_evidence.v1.schema.json
+  s_ff8a600f1fc93e::t_02c4923de831b9 1-99
+factschema/fixturepack/schema/codeowners.ownership.v1.schema.json
+  s_ff8a600f1fc93e::t_17c3f3f072c8f8 1-40
+factschema/fixturepack/schema/config_key_divergence.v1.schema.json
+  s_ff8a600f1fc93e::t_030d183ed516b4 1-43
+factschema/fixturepack/schema/documentation_claim_candidate.v1.schema.json
+  s_ff8a600f1fc93e::t_da4c66adca274f 1-186
+factschema/fixturepack/schema/documentation_document.v1.schema.json
+  s_ff8a600f1fc93e::t_576a940a9a2d3a 1-216
+factschema/fixturepack/schema/documentation_entity_mention.v1.schema.json
+  s_ff8a600f1fc93e::t_e0a2e800d58c8e 1-173
+factschema/fixturepack/schema/documentation_evidence_packet.v1.schema.json
+  s_ff8a600f1fc93e::t_81002fca55a575 1-55
+factschema/fixturepack/schema/documentation_finding.v1.schema.json
+  s_ff8a600f1fc93e::t_1af51de334915b 1-109
+factschema/fixturepack/schema/documentation_link.v1.schema.json
+  s_ff8a600f1fc93e::t_b94af992bd057c 1-56
+factschema/fixturepack/schema/documentation_section.v1.schema.json
+  s_ff8a600f1fc93e::t_a9b9617a22ca69 1-101
+factschema/fixturepack/schema/documentation_source.v1.schema.json
+  s_ff8a600f1fc93e::t_278cc57d91daab 1-170
+factschema/fixturepack/schema/ec2_instance_posture.v1.schema.json
+  s_ff8a600f1fc93e::t_e72f6eb43b2323 1-172
+factschema/fixturepack/schema/eks_irsa_annotation.v1.schema.json
+  s_ff8a600f1fc93e::t_7c6a270b673664 1-25
+factschema/fixturepack/schema/eks_pod_identity_association.v1.schema.json
+  s_ff8a600f1fc93e::t_fd66d37c7239f7 1-19
+factschema/fixturepack/schema/file.v1.schema.json
+  s_ff8a600f1fc93e::t_cc5bdce3f7bad3 1-47
+factschema/fixturepack/schema/gcp_cloud_relationship.v1.schema.json
+  s_ff8a600f1fc93e::t_e6e0c98e39db62 1-41
+factschema/fixturepack/schema/gcp_cloud_resource.v1.schema.json
+  s_ff8a600f1fc93e::t_c4d7818c786c71 1-58
+factschema/fixturepack/schema/gcp_collection_warning.v1.schema.json
+  s_ff8a600f1fc93e::t_e8f1d03dacdb5f 1-37
+factschema/fixturepack/schema/gcp_dns_record.v1.schema.json
+  s_ff8a600f1fc93e::t_b6392d76a452d5 1-56
+factschema/fixturepack/schema/gcp_iam_permission_policy.v1.schema.json
+  s_ff8a600f1fc93e::t_aae6c54602bac2 1-81
+factschema/fixturepack/schema/gcp_iam_policy_observation.v1.schema.json
+  s_ff8a600f1fc93e::t_82f048b19b0617 1-57
+factschema/fixturepack/schema/gcp_iam_principal.v1.schema.json
+  s_ff8a600f1fc93e::t_b783fd03bb7794 1-49
+factschema/fixturepack/schema/gcp_iam_trust_policy.v1.schema.json
+  s_ff8a600f1fc93e::t_f6442929d87f2c 1-93
+factschema/fixturepack/schema/gcp_image_reference.v1.schema.json
+  s_ff8a600f1fc93e::t_6359557ed0b7b8 1-49
+factschema/fixturepack/schema/gcp_tag_observation.v1.schema.json
+  s_ff8a600f1fc93e::t_3c48afb8d30d83 1-62
+factschema/fixturepack/schema/incident.lifecycle_event.v1.schema.json
+  s_ff8a600f1fc93e::t_6f8935618b4f4c 1-92
+factschema/fixturepack/schema/incident.record.v1.schema.json
+  s_ff8a600f1fc93e::t_6c8a32b430a267 1-250
+factschema/fixturepack/schema/incident_routing.applied_alert_route.v1.schema.json
+  s_ff8a600f1fc93e::t_ecab0797f413d6 1-141
+factschema/fixturepack/schema/incident_routing.applied_pagerduty_resource.v1.schema.json
+  s_ff8a600f1fc93e::t_9cbb1ad3c50fb2 1-195
+factschema/fixturepack/schema/incident_routing.coverage_warning.v1.schema.json
+  s_ff8a600f1fc93e::t_66b9d10119baef 1-123
+factschema/fixturepack/schema/incident_routing.observed_pagerduty_integration.v1.schema.json
+  s_ff8a600f1fc93e::t_638262c56c1c91 1-129
+factschema/fixturepack/schema/incident_routing.observed_pagerduty_service.v1.schema.json
+  s_ff8a600f1fc93e::t_e1ce4d8ebbc271 1-132
+factschema/fixturepack/schema/k8s_gcp_workload_identity_binding.v1.schema.json
+  s_ff8a600f1fc93e::t_f018aed79edae2 1-23
+factschema/fixturepack/schema/k8s_rbac_binding.v1.schema.json
+  s_ff8a600f1fc93e::t_6a03babca75c5d 1-127
+factschema/fixturepack/schema/k8s_rbac_role.v1.schema.json
+  s_ff8a600f1fc93e::t_1168c2462a8ac5 1-132
+factschema/fixturepack/schema/k8s_service_account.v1.schema.json
+  s_ff8a600f1fc93e::t_74623d732c6e05 1-15
+factschema/fixturepack/schema/k8s_service_account_token_posture.v1.schema.json
+  s_ff8a600f1fc93e::t_32130ee1625c0f 1-67
+factschema/fixturepack/schema/k8s_workload_identity_use.v1.schema.json
+  s_ff8a600f1fc93e::t_7028bdfb8400e7 1-27
+factschema/fixturepack/schema/kubernetes_live.namespace.v1.schema.json
+  s_ff8a600f1fc93e::t_b9259048db7b77 1-54
+factschema/fixturepack/schema/kubernetes_live.pod_template.v1.schema.json
+  s_ff8a600f1fc93e::t_b8d59a220c4c31 1-180
+factschema/fixturepack/schema/kubernetes_live.relationship.v1.schema.json
+  s_ff8a600f1fc93e::t_9e811b2a87c0ec 1-50
+factschema/fixturepack/schema/kubernetes_live.warning.v1.schema.json
+  s_ff8a600f1fc93e::t_ea4d7f53b7ae41 1-40
+factschema/fixturepack/schema/observability.applied_resource.v1.schema.json
+  s_ff8a600f1fc93e::t_4d65036e815e0b 1-219
+factschema/fixturepack/schema/observability.applied_sync_state.v1.schema.json
+  s_ff8a600f1fc93e::t_e9d877e6af53b3 1-219
+factschema/fixturepack/schema/observability.coverage_warning.v1.schema.json
+  s_ff8a600f1fc93e::t_f547c8a2971bfe 1-219
+factschema/fixturepack/schema/observability.declared_alert_rule.v1.schema.json
+  s_ff8a600f1fc93e::t_de7b93c1f474a2 1-219
+factschema/fixturepack/schema/observability.declared_dashboard.v1.schema.json
+  s_ff8a600f1fc93e::t_af434b4378ac03 1-219
+factschema/fixturepack/schema/observability.declared_datasource.v1.schema.json
+  s_ff8a600f1fc93e::t_448ccc649d6cb6 1-219
+factschema/fixturepack/schema/observability.declared_folder.v1.schema.json
+  s_ff8a600f1fc93e::t_051f671cb82961 1-219
+factschema/fixturepack/schema/observability.declared_log_route.v1.schema.json
+  s_ff8a600f1fc93e::t_49548fb756025f 1-219
+factschema/fixturepack/schema/observability.declared_metric_route.v1.schema.json
+  s_ff8a600f1fc93e::t_4f81d78ec6af50 1-219
+factschema/fixturepack/schema/observability.declared_metric_rule.v1.schema.json
+  s_ff8a600f1fc93e::t_03c397358823f1 1-219
+factschema/fixturepack/schema/observability.declared_scrape_config.v1.schema.json
+  s_ff8a600f1fc93e::t_8730a898fabb75 1-219
+factschema/fixturepack/schema/observability.declared_trace_route.v1.schema.json
+  s_ff8a600f1fc93e::t_738203101b7cc5 1-219
+factschema/fixturepack/schema/observability.observed_dashboard.v1.schema.json
+  s_ff8a600f1fc93e::t_96aaefd969e133 1-217
+factschema/fixturepack/schema/observability.observed_log_signal.v1.schema.json
+  s_ff8a600f1fc93e::t_6f07023fc75018 1-217
+factschema/fixturepack/schema/observability.observed_rule.v1.schema.json
+  s_ff8a600f1fc93e::t_55bdc61a6b896d 1-219
+factschema/fixturepack/schema/observability.observed_target.v1.schema.json
+  s_ff8a600f1fc93e::t_15627b7d739411 1-217
+factschema/fixturepack/schema/observability.observed_trace_signal.v1.schema.json
+  s_ff8a600f1fc93e::t_166942c091884f 1-217
+factschema/fixturepack/schema/observability.source_instance.v1.schema.json
+  s_ff8a600f1fc93e::t_f183cc0cc8b160 1-219
+factschema/fixturepack/schema/oci_registry.image_descriptor.v1.schema.json
+  s_ff8a600f1fc93e::t_8dea5633394151 1-49
+factschema/fixturepack/schema/oci_registry.image_index.v1.schema.json
+  s_ff8a600f1fc93e::t_e21de491c783c4 1-112
+factschema/fixturepack/schema/oci_registry.image_manifest.v1.schema.json
+  s_ff8a600f1fc93e::t_66d60bacaf4bc8 1-178
+factschema/fixturepack/schema/oci_registry.image_referrer.v1.schema.json
+  s_ff8a600f1fc93e::t_e2ab7c51f049c4 1-95
+factschema/fixturepack/schema/oci_registry.image_tag_observation.v1.schema.json
+  s_ff8a600f1fc93e::t_57fe43ebb6001e 1-80
+factschema/fixturepack/schema/oci_registry.repository.v1.schema.json
+  s_ff8a600f1fc93e::t_05f38f2a25cae8 1-60
+factschema/fixturepack/schema/oci_registry.warning.v1.schema.json
+  s_ff8a600f1fc93e::t_3aea5bf2ed55cc 1-84
+factschema/fixturepack/schema/package_registry.package.v1.schema.json
+  s_ff8a600f1fc93e::t_7ced6d95f7bcb0 1-102
+factschema/fixturepack/schema/package_registry.package_artifact.v1.schema.json
+  s_ff8a600f1fc93e::t_20b46e219ff770 1-104
+factschema/fixturepack/schema/package_registry.package_dependency.v1.schema.json
+  s_ff8a600f1fc93e::t_b8b45cdf1a2634 1-134
+factschema/fixturepack/schema/package_registry.package_version.v1.schema.json
+  s_ff8a600f1fc93e::t_cc2624ff4a563f 1-116
+factschema/fixturepack/schema/package_registry.registry_event.v1.schema.json
+  s_ff8a600f1fc93e::t_375409e915c86b 1-88
+factschema/fixturepack/schema/package_registry.repository_hosting.v1.schema.json
+  s_ff8a600f1fc93e::t_43429440e65b22 1-62
+factschema/fixturepack/schema/package_registry.source_hint.v1.schema.json
+  s_ff8a600f1fc93e::t_bc1a5090f2dba6 1-76
+factschema/fixturepack/schema/package_registry.vulnerability_hint.v1.schema.json
+  s_ff8a600f1fc93e::t_a62df3fba95be3 1-110
+factschema/fixturepack/schema/package_registry.warning.v1.schema.json
+  s_ff8a600f1fc93e::t_85b2298b4ee9d4 1-76
+factschema/fixturepack/schema/rds_instance_posture.v1.schema.json
+  s_ff8a600f1fc93e::t_73b817cf6168ce 1-147
+factschema/fixturepack/schema/reducer_aws_cloud_runtime_drift_finding.v1.schema.json
+  s_ff8a600f1fc93e::t_0885cc1abb5b80 1-123
+factschema/fixturepack/schema/reducer_code_drifted_finding.v1.schema.json
+  s_ff8a600f1fc93e::t_977167591c3dcd 1-161
+factschema/fixturepack/schema/reducer_multi_cloud_runtime_drift_finding.v1.schema.json
+  s_ff8a600f1fc93e::t_da4a89cf900131 1-131
+factschema/fixturepack/schema/reducer_package_consumption_correlation.v1.schema.json
+  s_ff8a600f1fc93e::t_86474b46eb89f4 1-258
+factschema/fixturepack/schema/reducer_package_ownership_correlation.v1.schema.json
+  s_ff8a600f1fc93e::t_5fbe330f7de26a 1-144
+factschema/fixturepack/schema/reducer_package_publication_correlation.v1.schema.json
+  s_ff8a600f1fc93e::t_79237594b3e800 1-168
+factschema/fixturepack/schema/reducer_supply_chain_impact_finding.v1.schema.json
+  s_ff8a600f1fc93e::t_2dc620cf17d1cb 1-319
+factschema/fixturepack/schema/reducer_terraform_config_state_drift_finding.v1.schema.json
+  s_ff8a600f1fc93e::t_62c02aa77ba70f 1-94
+factschema/fixturepack/schema/ref_overlay.branch_observation.v1.schema.json
+  s_ff8a600f1fc93e::t_2982daec9caab6 1-39
+factschema/fixturepack/schema/repository.v1.schema.json
+  s_ff8a600f1fc93e::t_7f527cb12f63b8 1-141
+factschema/fixturepack/schema/s3_bucket_posture.v1.schema.json
+  s_ff8a600f1fc93e::t_3bbe6b95290e3b 1-178
+factschema/fixturepack/schema/s3_external_principal_grant.v1.schema.json
+  s_ff8a600f1fc93e::t_36ccce878df5ff 1-116
+factschema/fixturepack/schema/sbom.component.v1.schema.json
+  s_ff8a600f1fc93e::t_fd15684719a916 1-204
+factschema/fixturepack/schema/sbom.dependency_relationship.v1.schema.json
+  s_ff8a600f1fc93e::t_13282c6ff5c496 1-39
+factschema/fixturepack/schema/sbom.document.v1.schema.json
+  s_ff8a600f1fc93e::t_0c2ed082314d45 1-135
+factschema/fixturepack/schema/sbom.external_reference.v1.schema.json
+  s_ff8a600f1fc93e::t_9d76a551be15bb 1-39
+factschema/fixturepack/schema/sbom.warning.v1.schema.json
+  s_ff8a600f1fc93e::t_9ff6e1e9f16708 1-63
+factschema/fixturepack/schema/scanner_worker.analysis.v1.schema.json
+  s_ff8a600f1fc93e::t_6900600e39cf6e 1-79
+factschema/fixturepack/schema/scanner_worker.warning.v1.schema.json
+  s_ff8a600f1fc93e::t_7ec1788e069115 1-81
+factschema/fixturepack/schema/secrets_iam_coverage_warning.v1.schema.json
+  s_ff8a600f1fc93e::t_b91f87853b053a 1-112
+factschema/fixturepack/schema/security_alert.repository_alert.v1.schema.json
+  s_ff8a600f1fc93e::t_b66ffbe2f5b990 1-252
+factschema/fixturepack/schema/semantic.code_hint.v1.schema.json
+  s_ff8a600f1fc93e::t_5e1bf0467f8b09 1-322
+factschema/fixturepack/schema/semantic.documentation_observation.v1.schema.json
+  s_ff8a600f1fc93e::t_618616c1c3592d 1-338
+factschema/fixturepack/schema/service_catalog.entity.v1.schema.json
+  s_ff8a600f1fc93e::t_c6a7666c556dcc 1-63
+factschema/fixturepack/schema/service_catalog.operational_link.v1.schema.json
+  s_ff8a600f1fc93e::t_7bebd61e7958ff 1-39
+factschema/fixturepack/schema/service_catalog.ownership.v1.schema.json
+  s_ff8a600f1fc93e::t_82c5721f5230cf 1-33
+factschema/fixturepack/schema/service_catalog.repository_link.v1.schema.json
+  s_ff8a600f1fc93e::t_73accf06be9913 1-81
+factschema/fixturepack/schema/submodule.pin.v1.schema.json
+  s_ff8a600f1fc93e::t_187011b9b31c09 1-43
+factschema/fixturepack/schema/terraform_state_candidate.v1.schema.json
+  s_ff8a600f1fc93e::t_2e7a0cc1149b1a 1-46
+factschema/fixturepack/schema/terraform_state_module.v1.schema.json
+  s_ff8a600f1fc93e::t_910819e8c062d0 1-21
+factschema/fixturepack/schema/terraform_state_output.v1.schema.json
+  s_ff8a600f1fc93e::t_0a601bb764668b 1-27
+factschema/fixturepack/schema/terraform_state_provider_binding.v1.schema.json
+  s_ff8a600f1fc93e::t_c0bc37cae6303a 1-49
+factschema/fixturepack/schema/terraform_state_resource.v1.schema.json
+  s_ff8a600f1fc93e::t_f564da3825c754 1-60
+factschema/fixturepack/schema/terraform_state_snapshot.v1.schema.json
+  s_ff8a600f1fc93e::t_707cd26a33e30d 1-57
+factschema/fixturepack/schema/terraform_state_tag_observation.v1.schema.json
+  s_ff8a600f1fc93e::t_99a8c0d02c8ed2 1-25
+factschema/fixturepack/schema/terraform_state_warning.v1.schema.json
+  s_ff8a600f1fc93e::t_579ecab4c75ec6 1-35
+factschema/fixturepack/schema/vault_acl_policy.v1.schema.json
+  s_ff8a600f1fc93e::t_2043c5ee59d748 1-48
+factschema/fixturepack/schema/vault_auth_mount.v1.schema.json
+  s_ff8a600f1fc93e::t_b3f2aee3ab61bc 1-77
+factschema/fixturepack/schema/vault_auth_role.v1.schema.json
+  s_ff8a600f1fc93e::t_3328019b53399e 1-45
+factschema/fixturepack/schema/vault_identity_alias.v1.schema.json
+  s_ff8a600f1fc93e::t_5a9fc41243de0a 1-57
+factschema/fixturepack/schema/vault_identity_entity.v1.schema.json
+  s_ff8a600f1fc93e::t_ea6e11177c2b3b 1-67
+factschema/fixturepack/schema/vault_kv_metadata.v1.schema.json
+  s_ff8a600f1fc93e::t_fe1e5b3bb1cc0f 1-25
+factschema/fixturepack/schema/vault_secret_engine_mount.v1.schema.json
+  s_ff8a600f1fc93e::t_4c285fdb3678a9 1-83
+factschema/fixturepack/schema/vulnerability.affected_package.v1.schema.json
+  s_ff8a600f1fc93e::t_dea115e57b7222 1-129
+factschema/fixturepack/schema/vulnerability.affected_product.v1.schema.json
+  s_ff8a600f1fc93e::t_c84ebe083eee1f 1-33
+factschema/fixturepack/schema/vulnerability.cve.v1.schema.json
+  s_ff8a600f1fc93e::t_64bad5f30036bd 1-63
+factschema/fixturepack/schema/vulnerability.epss_score.v1.schema.json
+  s_ff8a600f1fc93e::t_43476fc92636d8 1-33
+factschema/fixturepack/schema/vulnerability.go_call_reachability.v1.schema.json
+  s_ff8a600f1fc93e::t_d3ddbfb50a7836 1-91
+factschema/fixturepack/schema/vulnerability.go_module_evidence.v1.schema.json
+  s_ff8a600f1fc93e::t_c6d92037bd2ae3 1-53
+factschema/fixturepack/schema/vulnerability.known_exploited.v1.schema.json
+  s_ff8a600f1fc93e::t_2fe3237883f0a1 1-90
+factschema/fixturepack/schema/vulnerability.os_package.v1.schema.json
+  s_ff8a600f1fc93e::t_2326d00ba044b0 1-53
+factschema/fixturepack/schema/vulnerability.reference.v1.schema.json
+  s_ff8a600f1fc93e::t_db642c33b8e49b 1-48
+factschema/fixturepack/schema/vulnerability.source_snapshot.v1.schema.json
+  s_ff8a600f1fc93e::t_d2dca5c2740294 1-61
+factschema/fixturepack/schema/vulnerability.suppression.v1.schema.json
+  s_ff8a600f1fc93e::t_ea07a3d55b30a4 1-149
+factschema/fixturepack/schema/work_item.external_link.v1.schema.json
+  s_ff8a600f1fc93e::t_229225283b7a05 1-135
+factschema/fixturepack/schema/work_item.field_metadata.v1.schema.json
+  s_ff8a600f1fc93e::t_13778166e18ce3 1-117
+factschema/fixturepack/schema/work_item.issue_type_metadata.v1.schema.json
+  s_ff8a600f1fc93e::t_232b34275ac54a 1-115
+factschema/fixturepack/schema/work_item.metadata_warning.v1.schema.json
+  s_ff8a600f1fc93e::t_9113f36efe9277 1-59
+factschema/fixturepack/schema/work_item.project_metadata.v1.schema.json
+  s_ff8a600f1fc93e::t_17c85462a14e4e 1-123
+factschema/fixturepack/schema/work_item.record.v1.schema.json
+  s_ff8a600f1fc93e::t_c0792ea7d8ed45 1-173
+factschema/fixturepack/schema/work_item.status_metadata.v1.schema.json
+  s_ff8a600f1fc93e::t_86137f7820f92a 1-97
+factschema/fixturepack/schema/work_item.transition.v1.schema.json
+  s_ff8a600f1fc93e::t_18a5f9343f3b56 1-97
+factschema/fixturepack/schema/work_item.workflow_metadata.v1.schema.json
+  s_ff8a600f1fc93e::t_46de28b8db26c0 1-202
+factschema/fixturepack_drift_test.go
+  s_ff8a600f1fc93e::t_22af7230b43126 1-219
+factschema/gcp/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_943221008bdb0f 1-70
+factschema/gcp/v1/README.md
+  s_ff8a600f1fc93e::t_53a91cf01144c6 1-184
+factschema/gcp/v1/collection_warning.go
+  s_ff8a600f1fc93e::t_e37f99a6630518 1-39
+factschema/gcp/v1/dns_record.go
+  s_ff8a600f1fc93e::t_6fc5639b45aafc 1-51
+factschema/gcp/v1/doc.go
+  s_ff8a600f1fc93e::t_4daad443265025 1-51
+factschema/gcp/v1/iam_policy_observation.go
+  s_ff8a600f1fc93e::t_fe9801cd5089d5 1-65
+factschema/gcp/v1/image_reference.go
+  s_ff8a600f1fc93e::t_f2cc67fa39f5e0 1-32
+factschema/gcp/v1/relationship.go
+  s_ff8a600f1fc93e::t_9f1a1f0c681d35 1-140
+factschema/gcp/v1/resource.go
+  s_ff8a600f1fc93e::t_c20e06bcbdab59 1-184
+factschema/gcp/v1/tag_observation.go
+  s_ff8a600f1fc93e::t_46783c794bf21a 1-36
+factschema/go.mod
+  s_ff8a600f1fc93e::t_84a2b87dbf38ec 1-13
+factschema/go.sum
+  s_ff8a600f1fc93e::t_89072d466dfb19 1-21
+factschema/iam/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_a63d61e1f8a7d7 1-48
+factschema/iam/v1/README.md
+  s_ff8a600f1fc93e::t_7e3f1f85500c11 1-133
+factschema/iam/v1/doc.go
+  s_ff8a600f1fc93e::t_bdf9a09698c3fa 1-30
+factschema/iam/v1/permission.go
+  s_ff8a600f1fc93e::t_207d5680d978ad 1-102
+factschema/iam/v1/principal.go
+  s_ff8a600f1fc93e::t_485c77c5d80533 1-76
+factschema/iam/v1/resource_policy_permission.go
+  s_ff8a600f1fc93e::t_ef94ea487071b0 1-105
+factschema/incident/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_0762b5749a15cc 1-75
+factschema/incident/v1/README.md
+  s_ff8a600f1fc93e::t_99d7bea5061e8b 1-79
+factschema/incident/v1/doc.go
+  s_ff8a600f1fc93e::t_6c057743c6bbae 1-51
+factschema/incident/v1/incident_context.go
+  s_ff8a600f1fc93e::t_a2e76e3d272d08 1-213
+factschema/incident/v1/incident_routing.go
+  s_ff8a600f1fc93e::t_907ea32b00047f 1-270
+factschema/incident/v1/incident_routing_observed.go
+  s_ff8a600f1fc93e::t_3e6b3a9217266b 1-300
+factschema/internal/schemagen/cmd/main.go
+  s_ff8a600f1fc93e::t_5ad16f9bad698f 1-390
+factschema/internal/schemagen/doc.go
+  s_ff8a600f1fc93e::t_d0086ef6a680f1 1-9
+factschema/internal/schemagen/generate.go
+  s_ff8a600f1fc93e::t_6c9429c2bb1ee3 1-156
+factschema/internal/schemagen/generate_aws.go
+  s_ff8a600f1fc93e::t_e8a3619d095558 1-105
+factschema/internal/schemagen/generate_azure.go
+  s_ff8a600f1fc93e::t_5e78ec79425f8c 1-83
+factschema/internal/schemagen/generate_cicdrun.go
+  s_ff8a600f1fc93e::t_4deaa5928fa10d 1-75
+factschema/internal/schemagen/generate_codedataflow.go
+  s_ff8a600f1fc93e::t_e5d61bc562b253 1-68
+factschema/internal/schemagen/generate_codegraph.go
+  s_ff8a600f1fc93e::t_123e2ba8b2bf8b 1-27
+factschema/internal/schemagen/generate_codeowners.go
+  s_ff8a600f1fc93e::t_db44e3a7ab18d1 1-18
+factschema/internal/schemagen/generate_documentation.go
+  s_ff8a600f1fc93e::t_ddbd6cd189557a 1-92
+factschema/internal/schemagen/generate_gcp.go
+  s_ff8a600f1fc93e::t_1489834fb36f8a 1-77
+factschema/internal/schemagen/generate_iam.go
+  s_ff8a600f1fc93e::t_d610c5b5c8b575 1-36
+factschema/internal/schemagen/generate_incident.go
+  s_ff8a600f1fc93e::t_e44cc4878d1a9b 1-90
+factschema/internal/schemagen/generate_kuberneteslive.go
+  s_ff8a600f1fc93e::t_b8732a2420b58f 1-48
+factschema/internal/schemagen/generate_observability.go
+  s_ff8a600f1fc93e::t_faa5286bcfd9b5 1-170
+factschema/internal/schemagen/generate_ociregistry.go
+  s_ff8a600f1fc93e::t_8d1970165d626a 1-79
+factschema/internal/schemagen/generate_packageregistry.go
+  s_ff8a600f1fc93e::t_57859f7bc5dd39 1-98
+factschema/internal/schemagen/generate_reducerderived.go
+  s_ff8a600f1fc93e::t_2ae56208c84c38 1-92
+factschema/internal/schemagen/generate_ref_overlay.go
+  s_ff8a600f1fc93e::t_594254a8a28d0e 1-28
+factschema/internal/schemagen/generate_sbom.go
+  s_ff8a600f1fc93e::t_41f0f2798704c5 1-85
+factschema/internal/schemagen/generate_scannerworker.go
+  s_ff8a600f1fc93e::t_b05afdd4703375 1-28
+factschema/internal/schemagen/generate_secretsiam.go
+  s_ff8a600f1fc93e::t_bc89452a9830ab 1-258
+factschema/internal/schemagen/generate_securityalert.go
+  s_ff8a600f1fc93e::t_aae695644f30f0 1-18
+factschema/internal/schemagen/generate_semantic.go
+  s_ff8a600f1fc93e::t_c3963f8bd8ec1c 1-27
+factschema/internal/schemagen/generate_servicecatalog.go
+  s_ff8a600f1fc93e::t_caa274b38ff853 1-48
+factschema/internal/schemagen/generate_submodule.go
+  s_ff8a600f1fc93e::t_97a34299670f80 1-17
+factschema/internal/schemagen/generate_terraformstate.go
+  s_ff8a600f1fc93e::t_8cbcb129e245c3 1-88
+factschema/internal/schemagen/generate_vulnerability.go
+  s_ff8a600f1fc93e::t_78ba3ccba890f1 1-108
+factschema/internal/schemagen/generate_vulnerabilitysuppression.go
+  s_ff8a600f1fc93e::t_dff5b24e0eda3c 1-18
+factschema/internal/schemagen/generate_workitem.go
+  s_ff8a600f1fc93e::t_3f7959739ebff9 1-98
+factschema/kuberneteslive/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_e1a689b8f26f42 1-86
+factschema/kuberneteslive/v1/README.md
+  s_ff8a600f1fc93e::t_8dd12ea5fff1c9 1-141
+factschema/kuberneteslive/v1/doc.go
+  s_ff8a600f1fc93e::t_2aa1a3b8446f3f 1-36
+factschema/kuberneteslive/v1/namespace.go
+  s_ff8a600f1fc93e::t_7a416908224848 1-62
+factschema/kuberneteslive/v1/pod_template.go
+  s_ff8a600f1fc93e::t_522488a5ca2a70 1-160
+factschema/kuberneteslive/v1/relationship.go
+  s_ff8a600f1fc93e::t_c8f1d5c4e59df4 1-57
+factschema/kuberneteslive/v1/warning.go
+  s_ff8a600f1fc93e::t_977992bf5ba6ce 1-45
+factschema/observability/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_dc9ce18d8b269b 1-52
+factschema/observability/v1/README.md
+  s_ff8a600f1fc93e::t_9265b4527299fe 1-95
+factschema/observability/v1/applied.go
+  s_ff8a600f1fc93e::t_9e742d416a24c8 1-242
+factschema/observability/v1/declared_grafana.go
+  s_ff8a600f1fc93e::t_f356bbd279ed00 1-480
+factschema/observability/v1/declared_metrics.go
+  s_ff8a600f1fc93e::t_5915ff2c9f1faa 1-361
+factschema/observability/v1/declared_pipelines.go
+  s_ff8a600f1fc93e::t_43f7b8a04b3475 1-242
+factschema/observability/v1/doc.go
+  s_ff8a600f1fc93e::t_db0352f3b261aa 1-77
+factschema/observability/v1/observed.go
+  s_ff8a600f1fc93e::t_e8ec440e7f41b1 1-367
+factschema/observability/v1/observed_signals.go
+  s_ff8a600f1fc93e::t_c19681f8e8f059 1-248
+factschema/observability/v1/source.go
+  s_ff8a600f1fc93e::t_6b25ce6cf1c872 1-242
+factschema/ociregistry/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_111a81ddc78d08 1-75
+factschema/ociregistry/v1/README.md
+  s_ff8a600f1fc93e::t_5adbe82208cf27 1-139
+factschema/ociregistry/v1/descriptor.go
+  s_ff8a600f1fc93e::t_4552bd1ceb5f4e 1-43
+factschema/ociregistry/v1/doc.go
+  s_ff8a600f1fc93e::t_2d4ca273511cfe 1-64
+factschema/ociregistry/v1/image_descriptor.go
+  s_ff8a600f1fc93e::t_0195ead3ec116c 1-39
+factschema/ociregistry/v1/image_index.go
+  s_ff8a600f1fc93e::t_926ba658dfd6f0 1-48
+factschema/ociregistry/v1/image_manifest.go
+  s_ff8a600f1fc93e::t_0daebed7459dd5 1-72
+factschema/ociregistry/v1/image_referrer.go
+  s_ff8a600f1fc93e::t_74e50f89960370 1-66
+factschema/ociregistry/v1/repository.go
+  s_ff8a600f1fc93e::t_9fa4a9af655473 1-55
+factschema/ociregistry/v1/tag_observation.go
+  s_ff8a600f1fc93e::t_8bd5cc4ed868bb 1-66
+factschema/ociregistry/v1/warning.go
+  s_ff8a600f1fc93e::t_f967abbdb94662 1-120
+factschema/ociregistry/v1/warning_test.go
+  s_ff8a600f1fc93e::t_b7ddc0b6828790 1-38
+factschema/packageregistry/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_aea86e160f0183 1-103
+factschema/packageregistry/v1/README.md
+  s_ff8a600f1fc93e::t_dec860583bc6b4 1-138
+factschema/packageregistry/v1/deferred.go
+  s_ff8a600f1fc93e::t_c531c5083abf1a 1-244
+factschema/packageregistry/v1/deferred_events.go
+  s_ff8a600f1fc93e::t_2ea7fa374d6fcb 1-187
+factschema/packageregistry/v1/dependency.go
+  s_ff8a600f1fc93e::t_e0ead7968b2d9c 1-111
+factschema/packageregistry/v1/doc.go
+  s_ff8a600f1fc93e::t_d6d1b141ff5a90 1-123
+factschema/packageregistry/v1/package.go
+  s_ff8a600f1fc93e::t_4505e9ce4f9149 1-87
+factschema/packageregistry/v1/version.go
+  s_ff8a600f1fc93e::t_996f7041a9d680 1-103
+factschema/reducerderived/v1/doc.go
+  s_ff8a600f1fc93e::t_bf64b491fb7310 1-32
+factschema/reducerderived/v1/findings.go
+  s_ff8a600f1fc93e::t_f535a3746adb55 1-300
+factschema/reducerderived/v1/package_correlations.go
+  s_ff8a600f1fc93e::t_5d431d53df8c46 1-109
+factschema/ref_overlay/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_4ec3fd76d1f792 1-65
+factschema/ref_overlay/v1/README.md
+  s_ff8a600f1fc93e::t_bd94bb6ccad7af 1-137
+factschema/ref_overlay/v1/branch_observation.go
+  s_ff8a600f1fc93e::t_d28da129982a8d 1-89
+factschema/ref_overlay/v1/config_key_divergence.go
+  s_ff8a600f1fc93e::t_3363ed683140cf 1-115
+factschema/ref_overlay/v1/doc.go
+  s_ff8a600f1fc93e::t_9403ca558e5888 1-34
+factschema/ref_overlay/v1/ref_overlay_test.go
+  s_ff8a600f1fc93e::t_0a67708ecdb77f 1-131
+factschema/sbom/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_e6699ae2b16d46 1-63
+factschema/sbom/v1/README.md
+  s_ff8a600f1fc93e::t_1eae3810f9edba 1-150
+factschema/sbom/v1/attestation.go
+  s_ff8a600f1fc93e::t_08c846816ca598 1-195
+factschema/sbom/v1/doc.go
+  s_ff8a600f1fc93e::t_8d390b77c6da4f 1-45
+factschema/sbom/v1/document.go
+  s_ff8a600f1fc93e::t_09f1de060fa48f 1-342
+factschema/scannerworker/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_f17ba2e6d8ae78 1-19
+factschema/scannerworker/v1/README.md
+  s_ff8a600f1fc93e::t_aca767eb31d9b0 1-36
+factschema/scannerworker/v1/analysis.go
+  s_ff8a600f1fc93e::t_6b9a2e7e72a23c 1-33
+factschema/scannerworker/v1/doc.go
+  s_ff8a600f1fc93e::t_73652fa84fe332 1-6
+factschema/scannerworker/v1/warning.go
+  s_ff8a600f1fc93e::t_f16190e7fe1772 1-39
+factschema/schema/attestation.signature_verification.v1.schema.json
+  s_ff8a600f1fc93e::t_3c2e3a865a5aab 1-51
+factschema/schema/attestation.slsa_provenance.v1.schema.json
+  s_ff8a600f1fc93e::t_ee74b1e9d10d3d 1-84
+factschema/schema/attestation.statement.v1.schema.json
+  s_ff8a600f1fc93e::t_9381566f02c6cb 1-84
+factschema/schema/aws_dns_record.v1.schema.json
+  s_ff8a600f1fc93e::t_e44d544609ef6d 1-220
+factschema/schema/aws_iam_access_analyzer_finding.v1.schema.json
+  s_ff8a600f1fc93e::t_f1c6ac40110c2c 1-76
+factschema/schema/aws_iam_instance_profile.v1.schema.json
+  s_ff8a600f1fc93e::t_16346c043e5667 1-62
+factschema/schema/aws_iam_permission.v1.schema.json
+  s_ff8a600f1fc93e::t_7e245e96adc9d1 1-154
+factschema/schema/aws_iam_permission_boundary.v1.schema.json
+  s_ff8a600f1fc93e::t_c6d125b89f7eb1 1-51
+factschema/schema/aws_iam_permission_policy.v1.schema.json
+  s_ff8a600f1fc93e::t_18d472851004a7 1-145
+factschema/schema/aws_iam_policy_attachment.v1.schema.json
+  s_ff8a600f1fc93e::t_13a12cccb8d754 1-57
+factschema/schema/aws_iam_principal.v1.schema.json
+  s_ff8a600f1fc93e::t_6dbd0299e46c12 1-96
+factschema/schema/aws_iam_trust_policy.v1.schema.json
+  s_ff8a600f1fc93e::t_ae93df6ce8242b 1-112
+factschema/schema/aws_image_reference.v1.schema.json
+  s_ff8a600f1fc93e::t_428eaf19f7bbd1 1-95
+factschema/schema/aws_relationship.v1.schema.json
+  s_ff8a600f1fc93e::t_117ee591468901 1-49
+factschema/schema/aws_resource.v1.schema.json
+  s_ff8a600f1fc93e::t_f7fb3d245e7312 1-69
+factschema/schema/aws_resource_policy_permission.v1.schema.json
+  s_ff8a600f1fc93e::t_4bace40d247ef9 1-166
+factschema/schema/aws_security_group_rule.v1.schema.json
+  s_ff8a600f1fc93e::t_b33aa7d87ce778 1-108
+factschema/schema/aws_warning.v1.schema.json
+  s_ff8a600f1fc93e::t_0e51cb5cbfef20 1-53
+factschema/schema/azure_cloud_relationship.v1.schema.json
+  s_ff8a600f1fc93e::t_24245c8755a6cb 1-47
+factschema/schema/azure_cloud_resource.v1.schema.json
+  s_ff8a600f1fc93e::t_b9329a80a1d2bd 1-45
+factschema/schema/azure_collection_warning.v1.schema.json
+  s_ff8a600f1fc93e::t_4834c66e48f986 1-43
+factschema/schema/azure_dns_record.v1.schema.json
+  s_ff8a600f1fc93e::t_37a7812a09d049 1-68
+factschema/schema/azure_identity_observation.v1.schema.json
+  s_ff8a600f1fc93e::t_6619acc11771b4 1-75
+factschema/schema/azure_image_reference.v1.schema.json
+  s_ff8a600f1fc93e::t_7b4cb0cbb8d221 1-57
+factschema/schema/azure_resource_change.v1.schema.json
+  s_ff8a600f1fc93e::t_4e58afffd7770f 1-88
+factschema/schema/azure_tag_observation.v1.schema.json
+  s_ff8a600f1fc93e::t_02ab1b1864ef61 1-87
+factschema/schema/change.record.v1.schema.json
+  s_ff8a600f1fc93e::t_e523c0084b7519 1-109
+factschema/schema/ci.artifact.v1.schema.json
+  s_ff8a600f1fc93e::t_d81c9993a35141 1-94
+factschema/schema/ci.deployment_event.v1.schema.json
+  s_ff8a600f1fc93e::t_e35adf699fcb99 1-105
+factschema/schema/ci.environment_observation.v1.schema.json
+  s_ff8a600f1fc93e::t_1961ac600b857f 1-49
+factschema/schema/ci.run.v1.schema.json
+  s_ff8a600f1fc93e::t_b48af3ce544610 1-124
+factschema/schema/ci.step.v1.schema.json
+  s_ff8a600f1fc93e::t_28c7ac9a4be9b1 1-85
+factschema/schema/ci.trigger_edge.v1.schema.json
+  s_ff8a600f1fc93e::t_d549b64764d409 1-49
+factschema/schema/ci.workflow_image_evidence.v1.schema.json
+  s_ff8a600f1fc93e::t_4f5dff4491d849 1-72
+factschema/schema/code_dataflow_function.v1.schema.json
+  s_ff8a600f1fc93e::t_04fe8d3100b7e2 1-89
+factschema/schema/code_dataflow_scanned.v1.schema.json
+  s_ff8a600f1fc93e::t_863778a05a79cc 1-21
+factschema/schema/code_function_source.v1.schema.json
+  s_ff8a600f1fc93e::t_1b1e7ee7acccea 1-31
+factschema/schema/code_function_summary.v1.schema.json
+  s_ff8a600f1fc93e::t_ed914eb28f4df7 1-93
+factschema/schema/code_interproc_evidence.v1.schema.json
+  s_ff8a600f1fc93e::t_8eb189e5038d12 1-82
+factschema/schema/code_taint_evidence.v1.schema.json
+  s_ff8a600f1fc93e::t_e9586f2eea3862 1-99
+factschema/schema/codeowners.ownership.v1.schema.json
+  s_ff8a600f1fc93e::t_c26762617d9671 1-40
+factschema/schema/config_key_divergence.v1.schema.json
+  s_ff8a600f1fc93e::t_d19016dd0d4397 1-43
+factschema/schema/documentation_claim_candidate.v1.schema.json
+  s_ff8a600f1fc93e::t_fbd524d6d5f6d1 1-186
+factschema/schema/documentation_document.v1.schema.json
+  s_ff8a600f1fc93e::t_7006ce44325754 1-216
+factschema/schema/documentation_entity_mention.v1.schema.json
+  s_ff8a600f1fc93e::t_8e63d34d6f590f 1-173
+factschema/schema/documentation_evidence_packet.v1.schema.json
+  s_ff8a600f1fc93e::t_e7c4b1a81a730d 1-55
+factschema/schema/documentation_finding.v1.schema.json
+  s_ff8a600f1fc93e::t_30dc7a8d44d79c 1-109
+factschema/schema/documentation_link.v1.schema.json
+  s_ff8a600f1fc93e::t_497cf5739eed5b 1-56
+factschema/schema/documentation_section.v1.schema.json
+  s_ff8a600f1fc93e::t_9e8e8acec95ca7 1-101
+factschema/schema/documentation_source.v1.schema.json
+  s_ff8a600f1fc93e::t_05daaa6cb11ec9 1-170
+factschema/schema/ec2_instance_posture.v1.schema.json
+  s_ff8a600f1fc93e::t_4da013c3b9bb29 1-172
+factschema/schema/eks_irsa_annotation.v1.schema.json
+  s_ff8a600f1fc93e::t_4785c336e4f3a2 1-25
+factschema/schema/eks_pod_identity_association.v1.schema.json
+  s_ff8a600f1fc93e::t_c3b37cacf4a6ba 1-19
+factschema/schema/file.v1.schema.json
+  s_ff8a600f1fc93e::t_eedf3bbb503add 1-47
+factschema/schema/gcp_cloud_relationship.v1.schema.json
+  s_ff8a600f1fc93e::t_137245ebdce986 1-41
+factschema/schema/gcp_cloud_resource.v1.schema.json
+  s_ff8a600f1fc93e::t_999fd59834d5bc 1-58
+factschema/schema/gcp_collection_warning.v1.schema.json
+  s_ff8a600f1fc93e::t_657852d91ebafd 1-37
+factschema/schema/gcp_dns_record.v1.schema.json
+  s_ff8a600f1fc93e::t_662acf9c39f43d 1-56
+factschema/schema/gcp_iam_permission_policy.v1.schema.json
+  s_ff8a600f1fc93e::t_37045a8475de3c 1-81
+factschema/schema/gcp_iam_policy_observation.v1.schema.json
+  s_ff8a600f1fc93e::t_e05e49f198549a 1-57
+factschema/schema/gcp_iam_principal.v1.schema.json
+  s_ff8a600f1fc93e::t_7003e858d66fb3 1-49
+factschema/schema/gcp_iam_trust_policy.v1.schema.json
+  s_ff8a600f1fc93e::t_6e8031634de697 1-93
+factschema/schema/gcp_image_reference.v1.schema.json
+  s_ff8a600f1fc93e::t_802aba256a6ed8 1-49
+factschema/schema/gcp_tag_observation.v1.schema.json
+  s_ff8a600f1fc93e::t_9ac1fdbdf31c73 1-62
+factschema/schema/incident.lifecycle_event.v1.schema.json
+  s_ff8a600f1fc93e::t_a9e371213c44a3 1-92
+factschema/schema/incident.record.v1.schema.json
+  s_ff8a600f1fc93e::t_ffb6383f732a39 1-250
+factschema/schema/incident_routing.applied_alert_route.v1.schema.json
+  s_ff8a600f1fc93e::t_f74ab369c4b072 1-141
+factschema/schema/incident_routing.applied_pagerduty_resource.v1.schema.json
+  s_ff8a600f1fc93e::t_6079df0b4c5e25 1-195
+factschema/schema/incident_routing.coverage_warning.v1.schema.json
+  s_ff8a600f1fc93e::t_224f91895bea40 1-123
+factschema/schema/incident_routing.observed_pagerduty_integration.v1.schema.json
+  s_ff8a600f1fc93e::t_a5c5a7128871d1 1-129
+factschema/schema/incident_routing.observed_pagerduty_service.v1.schema.json
+  s_ff8a600f1fc93e::t_c378a973bb404b 1-132
+factschema/schema/k8s_gcp_workload_identity_binding.v1.schema.json
+  s_ff8a600f1fc93e::t_f074fd092978e3 1-23
+factschema/schema/k8s_rbac_binding.v1.schema.json
+  s_ff8a600f1fc93e::t_1011fe088e5f0d 1-127
+factschema/schema/k8s_rbac_role.v1.schema.json
+  s_ff8a600f1fc93e::t_bce89c4d58fd31 1-132
+factschema/schema/k8s_service_account.v1.schema.json
+  s_ff8a600f1fc93e::t_6fb854e76959cf 1-15
+factschema/schema/k8s_service_account_token_posture.v1.schema.json
+  s_ff8a600f1fc93e::t_8dfbf1c98f3807 1-67
+factschema/schema/k8s_workload_identity_use.v1.schema.json
+  s_ff8a600f1fc93e::t_08d1920500aaa1 1-27
+factschema/schema/kubernetes_live.namespace.v1.schema.json
+  s_ff8a600f1fc93e::t_1ab9dc8fb33634 1-54
+factschema/schema/kubernetes_live.pod_template.v1.schema.json
+  s_ff8a600f1fc93e::t_4ba49a6b22e3f1 1-180
+factschema/schema/kubernetes_live.relationship.v1.schema.json
+  s_ff8a600f1fc93e::t_271b602cd422f6 1-50
+factschema/schema/kubernetes_live.warning.v1.schema.json
+  s_ff8a600f1fc93e::t_b3b66fa0f968a7 1-40
+factschema/schema/observability.applied_resource.v1.schema.json
+  s_ff8a600f1fc93e::t_c205c3f4dc617a 1-219
+factschema/schema/observability.applied_sync_state.v1.schema.json
+  s_ff8a600f1fc93e::t_1948072351a077 1-219
+factschema/schema/observability.coverage_warning.v1.schema.json
+  s_ff8a600f1fc93e::t_96930732f794dc 1-219
+factschema/schema/observability.declared_alert_rule.v1.schema.json
+  s_ff8a600f1fc93e::t_4a1e564cdafd47 1-219
+factschema/schema/observability.declared_dashboard.v1.schema.json
+  s_ff8a600f1fc93e::t_936b4d93579593 1-219
+factschema/schema/observability.declared_datasource.v1.schema.json
+  s_ff8a600f1fc93e::t_d07dd95929b81a 1-219
+factschema/schema/observability.declared_folder.v1.schema.json
+  s_ff8a600f1fc93e::t_ef96fc71656df6 1-219
+factschema/schema/observability.declared_log_route.v1.schema.json
+  s_ff8a600f1fc93e::t_2046ea867b5053 1-219
+factschema/schema/observability.declared_metric_route.v1.schema.json
+  s_ff8a600f1fc93e::t_226cd188d6cb9c 1-219
+factschema/schema/observability.declared_metric_rule.v1.schema.json
+  s_ff8a600f1fc93e::t_2e0175cfb74f55 1-219
+factschema/schema/observability.declared_scrape_config.v1.schema.json
+  s_ff8a600f1fc93e::t_28c3d4741138ef 1-219
+factschema/schema/observability.declared_trace_route.v1.schema.json
+  s_ff8a600f1fc93e::t_39ef8fc0a5d80e 1-219
+factschema/schema/observability.observed_dashboard.v1.schema.json
+  s_ff8a600f1fc93e::t_030a6acddb96d0 1-217
+factschema/schema/observability.observed_log_signal.v1.schema.json
+  s_ff8a600f1fc93e::t_9536887d4e4981 1-217
+factschema/schema/observability.observed_rule.v1.schema.json
+  s_ff8a600f1fc93e::t_482459739359ac 1-219
+factschema/schema/observability.observed_target.v1.schema.json
+  s_ff8a600f1fc93e::t_52f8db19a2ff55 1-217
+factschema/schema/observability.observed_trace_signal.v1.schema.json
+  s_ff8a600f1fc93e::t_41798b8f9992f7 1-217
+factschema/schema/observability.source_instance.v1.schema.json
+  s_ff8a600f1fc93e::t_02e876c2e96122 1-219
+factschema/schema/oci_registry.image_descriptor.v1.schema.json
+  s_ff8a600f1fc93e::t_c886ff84970b0d 1-49
+factschema/schema/oci_registry.image_index.v1.schema.json
+  s_ff8a600f1fc93e::t_79ea0e92ce1dbc 1-112
+factschema/schema/oci_registry.image_manifest.v1.schema.json
+  s_ff8a600f1fc93e::t_2808d25edecaf5 1-178
+factschema/schema/oci_registry.image_referrer.v1.schema.json
+  s_ff8a600f1fc93e::t_8cdf2822107f53 1-95
+factschema/schema/oci_registry.image_tag_observation.v1.schema.json
+  s_ff8a600f1fc93e::t_ab585c998545b1 1-80
+factschema/schema/oci_registry.repository.v1.schema.json
+  s_ff8a600f1fc93e::t_665e02a330a7ff 1-60
+factschema/schema/oci_registry.warning.v1.schema.json
+  s_ff8a600f1fc93e::t_3428fd0afdde73 1-84
+factschema/schema/package_registry.package.v1.schema.json
+  s_ff8a600f1fc93e::t_478679c9c6a3fc 1-102
+factschema/schema/package_registry.package_artifact.v1.schema.json
+  s_ff8a600f1fc93e::t_8cab44019f8875 1-104
+factschema/schema/package_registry.package_dependency.v1.schema.json
+  s_ff8a600f1fc93e::t_41f342566a8cce 1-134
+factschema/schema/package_registry.package_version.v1.schema.json
+  s_ff8a600f1fc93e::t_de3bfc29fc4883 1-116
+factschema/schema/package_registry.registry_event.v1.schema.json
+  s_ff8a600f1fc93e::t_b80dae8fe791ba 1-88
+factschema/schema/package_registry.repository_hosting.v1.schema.json
+  s_ff8a600f1fc93e::t_68201d9ac26a32 1-62
+factschema/schema/package_registry.source_hint.v1.schema.json
+  s_ff8a600f1fc93e::t_ad7021a72fb70d 1-76
+factschema/schema/package_registry.vulnerability_hint.v1.schema.json
+  s_ff8a600f1fc93e::t_84f2821dff12d8 1-110
+factschema/schema/package_registry.warning.v1.schema.json
+  s_ff8a600f1fc93e::t_ece54792f8bea5 1-76
+factschema/schema/rds_instance_posture.v1.schema.json
+  s_ff8a600f1fc93e::t_739c28ba4c76fe 1-147
+factschema/schema/reducer_aws_cloud_runtime_drift_finding.v1.schema.json
+  s_ff8a600f1fc93e::t_16bf6d83323059 1-123
+factschema/schema/reducer_code_drifted_finding.v1.schema.json
+  s_ff8a600f1fc93e::t_5e0d21f64dbd70 1-161
+factschema/schema/reducer_multi_cloud_runtime_drift_finding.v1.schema.json
+  s_ff8a600f1fc93e::t_8109c62123b269 1-131
+factschema/schema/reducer_package_consumption_correlation.v1.schema.json
+  s_ff8a600f1fc93e::t_2347d50537413b 1-258
+factschema/schema/reducer_package_ownership_correlation.v1.schema.json
+  s_ff8a600f1fc93e::t_7c5ae7ad37487e 1-144
+factschema/schema/reducer_package_publication_correlation.v1.schema.json
+  s_ff8a600f1fc93e::t_c42f55052cffd3 1-168
+factschema/schema/reducer_supply_chain_impact_finding.v1.schema.json
+  s_ff8a600f1fc93e::t_17ddd4c46016ae 1-319
+factschema/schema/reducer_terraform_config_state_drift_finding.v1.schema.json
+  s_ff8a600f1fc93e::t_ee1cb0c05dadd0 1-94
+factschema/schema/ref_overlay.branch_observation.v1.schema.json
+  s_ff8a600f1fc93e::t_eed6a7994b1a44 1-39
+factschema/schema/repository.v1.schema.json
+  s_ff8a600f1fc93e::t_17b2464b09ac83 1-141
+factschema/schema/s3_bucket_posture.v1.schema.json
+  s_ff8a600f1fc93e::t_3ac3ee4588a04f 1-178
+factschema/schema/s3_external_principal_grant.v1.schema.json
+  s_ff8a600f1fc93e::t_c0fc3d0c4af5c3 1-116
+factschema/schema/sbom.component.v1.schema.json
+  s_ff8a600f1fc93e::t_64130f3cbef364 1-204
+factschema/schema/sbom.dependency_relationship.v1.schema.json
+  s_ff8a600f1fc93e::t_ac9fa933f72df6 1-39
+factschema/schema/sbom.document.v1.schema.json
+  s_ff8a600f1fc93e::t_2877ce3e2e99de 1-135
+factschema/schema/sbom.external_reference.v1.schema.json
+  s_ff8a600f1fc93e::t_e5ae98f4251e2c 1-39
+factschema/schema/sbom.warning.v1.schema.json
+  s_ff8a600f1fc93e::t_cbb4f213679e19 1-63
+factschema/schema/scanner_worker.analysis.v1.schema.json
+  s_ff8a600f1fc93e::t_92f63d17e9edab 1-79
+factschema/schema/scanner_worker.warning.v1.schema.json
+  s_ff8a600f1fc93e::t_27c34e1f5eefd4 1-81
+factschema/schema/secrets_iam_coverage_warning.v1.schema.json
+  s_ff8a600f1fc93e::t_acf1249ecb1d3b 1-112
+factschema/schema/security_alert.repository_alert.v1.schema.json
+  s_ff8a600f1fc93e::t_fdf8096902b0eb 1-252
+factschema/schema/semantic.code_hint.v1.schema.json
+  s_ff8a600f1fc93e::t_9af8fb15f72289 1-322
+factschema/schema/semantic.documentation_observation.v1.schema.json
+  s_ff8a600f1fc93e::t_5dcc8a63026d3c 1-338
+factschema/schema/service_catalog.entity.v1.schema.json
+  s_ff8a600f1fc93e::t_0696776b92be77 1-63
+factschema/schema/service_catalog.operational_link.v1.schema.json
+  s_ff8a600f1fc93e::t_c63a845d135ac4 1-39
+factschema/schema/service_catalog.ownership.v1.schema.json
+  s_ff8a600f1fc93e::t_222e2cae60b2b0 1-33
+factschema/schema/service_catalog.repository_link.v1.schema.json
+  s_ff8a600f1fc93e::t_98f5b2263d2a48 1-81
+factschema/schema/submodule.pin.v1.schema.json
+  s_ff8a600f1fc93e::t_515090af6e2777 1-43
+factschema/schema/terraform_state_candidate.v1.schema.json
+  s_ff8a600f1fc93e::t_31e17a19f32257 1-46
+factschema/schema/terraform_state_module.v1.schema.json
+  s_ff8a600f1fc93e::t_fbaf983a44fb12 1-21
+factschema/schema/terraform_state_output.v1.schema.json
+  s_ff8a600f1fc93e::t_138acc31f3f981 1-27
+factschema/schema/terraform_state_provider_binding.v1.schema.json
+  s_ff8a600f1fc93e::t_f1236c01e07eb9 1-49
+factschema/schema/terraform_state_resource.v1.schema.json
+  s_ff8a600f1fc93e::t_a340c22dfa0660 1-60
+factschema/schema/terraform_state_snapshot.v1.schema.json
+  s_ff8a600f1fc93e::t_b9934fc22e126a 1-57
+factschema/schema/terraform_state_tag_observation.v1.schema.json
+  s_ff8a600f1fc93e::t_3ef3c8fbd783db 1-25
+factschema/schema/terraform_state_warning.v1.schema.json
+  s_ff8a600f1fc93e::t_d7aa4fc9d24057 1-35
+factschema/schema/vault_acl_policy.v1.schema.json
+  s_ff8a600f1fc93e::t_f5e1e280319aee 1-48
+factschema/schema/vault_auth_mount.v1.schema.json
+  s_ff8a600f1fc93e::t_1c09602e4c0273 1-77
+factschema/schema/vault_auth_role.v1.schema.json
+  s_ff8a600f1fc93e::t_456c5191bf2934 1-45
+factschema/schema/vault_identity_alias.v1.schema.json
+  s_ff8a600f1fc93e::t_c7cc7b44d38647 1-57
+factschema/schema/vault_identity_entity.v1.schema.json
+  s_ff8a600f1fc93e::t_ebce9f84a038fb 1-67
+factschema/schema/vault_kv_metadata.v1.schema.json
+  s_ff8a600f1fc93e::t_26f6e74ad94c84 1-25
+factschema/schema/vault_secret_engine_mount.v1.schema.json
+  s_ff8a600f1fc93e::t_f3f7a1993f4b00 1-83
+factschema/schema/vulnerability.affected_package.v1.schema.json
+  s_ff8a600f1fc93e::t_f69e9595ab53e5 1-129
+factschema/schema/vulnerability.affected_product.v1.schema.json
+  s_ff8a600f1fc93e::t_a31a30abc275d5 1-33
+factschema/schema/vulnerability.cve.v1.schema.json
+  s_ff8a600f1fc93e::t_01effdcbbf814d 1-63
+factschema/schema/vulnerability.epss_score.v1.schema.json
+  s_ff8a600f1fc93e::t_5b59af48e4472a 1-33
+factschema/schema/vulnerability.go_call_reachability.v1.schema.json
+  s_ff8a600f1fc93e::t_b55476f572c022 1-91
+factschema/schema/vulnerability.go_module_evidence.v1.schema.json
+  s_ff8a600f1fc93e::t_8b75779c2788fd 1-53
+factschema/schema/vulnerability.known_exploited.v1.schema.json
+  s_ff8a600f1fc93e::t_b7600e9e3823be 1-90
+factschema/schema/vulnerability.os_package.v1.schema.json
+  s_ff8a600f1fc93e::t_7b43efbcf0dfe9 1-53
+factschema/schema/vulnerability.reference.v1.schema.json
+  s_ff8a600f1fc93e::t_f49cf3b38ea169 1-48
+factschema/schema/vulnerability.source_snapshot.v1.schema.json
+  s_ff8a600f1fc93e::t_ba8a5d0c0f883c 1-61
+factschema/schema/vulnerability.suppression.v1.schema.json
+  s_ff8a600f1fc93e::t_8cb1c838c5f955 1-149
+factschema/schema/work_item.external_link.v1.schema.json
+  s_ff8a600f1fc93e::t_0b5d51e7f7cc66 1-135
+factschema/schema/work_item.field_metadata.v1.schema.json
+  s_ff8a600f1fc93e::t_e27acde139b63c 1-117
+factschema/schema/work_item.issue_type_metadata.v1.schema.json
+  s_ff8a600f1fc93e::t_cc3debc0fcad98 1-115
+factschema/schema/work_item.metadata_warning.v1.schema.json
+  s_ff8a600f1fc93e::t_6b1c9498fcc797 1-59
+factschema/schema/work_item.project_metadata.v1.schema.json
+  s_ff8a600f1fc93e::t_51607ef4b43625 1-123
+factschema/schema/work_item.record.v1.schema.json
+  s_ff8a600f1fc93e::t_aebabb68990128 1-173
+factschema/schema/work_item.status_metadata.v1.schema.json
+  s_ff8a600f1fc93e::t_7bc97c9f5c8cf5 1-97
+factschema/schema/work_item.transition.v1.schema.json
+  s_ff8a600f1fc93e::t_550d48a974ac49 1-97
+factschema/schema/work_item.workflow_metadata.v1.schema.json
+  s_ff8a600f1fc93e::t_98cb46100f6fbe 1-202
+factschema/schema_bytes.go
+  s_ff8a600f1fc93e::t_b44262ba91ecf4 1-35
+factschema/schema_bytes_test.go
+  s_ff8a600f1fc93e::t_b72edf363c3ef1 1-46
+factschema/schema_gen_test.go
+  s_ff8a600f1fc93e::t_312f01a061fb03 1-466
+factschema/secretsiam/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_f272a714580e88 1-62
+factschema/secretsiam/v1/README.md
+  s_ff8a600f1fc93e::t_331555b7723a23 1-171
+factschema/secretsiam/v1/aws.go
+  s_ff8a600f1fc93e::t_553fba1fb5ba5a 1-124
+factschema/secretsiam/v1/doc.go
+  s_ff8a600f1fc93e::t_6057a4df8e7e3a 1-38
+factschema/secretsiam/v1/gcp.go
+  s_ff8a600f1fc93e::t_1e0bf07ca8a4c8 1-67
+factschema/secretsiam/v1/kubernetes.go
+  s_ff8a600f1fc93e::t_b1439b1bf64aee 1-144
+factschema/secretsiam/v1/source.go
+  s_ff8a600f1fc93e::t_d226252b2eff35 1-191
+factschema/secretsiam/v1/vault.go
+  s_ff8a600f1fc93e::t_45b628349aa077 1-137
+factschema/secretsiam_contract_test.go
+  s_ff8a600f1fc93e::t_b8deab0e28ca19 1-108
+factschema/securityalert/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_db399f9aa0e87e 1-72
+factschema/securityalert/v1/README.md
+  s_ff8a600f1fc93e::t_75a57d6596c144 1-79
+factschema/securityalert/v1/doc.go
+  s_ff8a600f1fc93e::t_9f946966342311 1-29
+factschema/securityalert/v1/repository_alert.go
+  s_ff8a600f1fc93e::t_b365c261ab81b4 1-201
+factschema/semantic/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_52623410308573 1-23
+factschema/semantic/v1/README.md
+  s_ff8a600f1fc93e::t_edf329aed3d057 1-13
+factschema/semantic/v1/doc.go
+  s_ff8a600f1fc93e::t_28ee50ce105175 1-6
+factschema/semantic/v1/semantic.go
+  s_ff8a600f1fc93e::t_201a7164c511d2 1-166
+factschema/servicecatalog/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_f38325f33dc9ff 1-93
+factschema/servicecatalog/v1/README.md
+  s_ff8a600f1fc93e::t_cfda338fd7d7e0 1-163
+factschema/servicecatalog/v1/doc.go
+  s_ff8a600f1fc93e::t_2bc6fb4759a066 1-50
+factschema/servicecatalog/v1/entity.go
+  s_ff8a600f1fc93e::t_e3350b403e9743 1-77
+factschema/servicecatalog/v1/operational_link.go
+  s_ff8a600f1fc93e::t_76f67b83c99ca4 1-48
+factschema/servicecatalog/v1/ownership.go
+  s_ff8a600f1fc93e::t_9133d4e519fd58 1-40
+factschema/servicecatalog/v1/repository_link.go
+  s_ff8a600f1fc93e::t_9723f90e546f18 1-89
+factschema/submodule/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_6974e57265c225 1-62
+factschema/submodule/v1/README.md
+  s_ff8a600f1fc93e::t_3a961114ef70d5 1-128
+factschema/submodule/v1/doc.go
+  s_ff8a600f1fc93e::t_46036bfe837238 1-38
+factschema/submodule/v1/pin.go
+  s_ff8a600f1fc93e::t_63adcc01ca0596 1-67
+factschema/terraformstate/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_cd6743b7af4c56 1-81
+factschema/terraformstate/v1/README.md
+  s_ff8a600f1fc93e::t_f0fde51117dd06 1-94
+factschema/terraformstate/v1/deferred.go
+  s_ff8a600f1fc93e::t_f38ba907503f90 1-132
+factschema/terraformstate/v1/doc.go
+  s_ff8a600f1fc93e::t_231f4e6b2955bd 1-72
+factschema/terraformstate/v1/observations.go
+  s_ff8a600f1fc93e::t_8b0563f24be641 1-101
+factschema/terraformstate/v1/snapshot.go
+  s_ff8a600f1fc93e::t_a496c9996049f9 1-121
+factschema/vulnerability/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_8d109ab8a48471 1-109
+factschema/vulnerability/v1/README.md
+  s_ff8a600f1fc93e::t_413f861c4c55a1 1-200
+factschema/vulnerability/v1/affected_package.go
+  s_ff8a600f1fc93e::t_318b44853ca40a 1-97
+factschema/vulnerability/v1/affected_product.go
+  s_ff8a600f1fc93e::t_23e2585c7b0e39 1-41
+factschema/vulnerability/v1/cve.go
+  s_ff8a600f1fc93e::t_da133715d18275 1-55
+factschema/vulnerability/v1/doc.go
+  s_ff8a600f1fc93e::t_06f3994e7f294e 1-74
+factschema/vulnerability/v1/epss_score.go
+  s_ff8a600f1fc93e::t_44eee190de4135 1-33
+factschema/vulnerability/v1/go_call_reachability.go
+  s_ff8a600f1fc93e::t_72c4dd9f12a350 1-75
+factschema/vulnerability/v1/go_module_evidence.go
+  s_ff8a600f1fc93e::t_769feaa6cbf74f 1-53
+factschema/vulnerability/v1/known_exploited.go
+  s_ff8a600f1fc93e::t_195a089ca08f4a 1-60
+factschema/vulnerability/v1/os_package.go
+  s_ff8a600f1fc93e::t_82163ce984108b 1-90
+factschema/vulnerability/v1/reference.go
+  s_ff8a600f1fc93e::t_48490f4cd82155 1-59
+factschema/vulnerability/v1/source_snapshot.go
+  s_ff8a600f1fc93e::t_ffa59524ed987b 1-72
+factschema/vulnerabilitysuppression/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_df9c683d16d6d2 1-11
+factschema/vulnerabilitysuppression/v1/README.md
+  s_ff8a600f1fc93e::t_141f9833075ce5 1-58
+factschema/vulnerabilitysuppression/v1/doc.go
+  s_ff8a600f1fc93e::t_709c7c31e258ca 1-9
+factschema/vulnerabilitysuppression/v1/suppression.go
+  s_ff8a600f1fc93e::t_9b71cd777bc21f 1-46
+factschema/w1b_contract_test.go
+  s_ff8a600f1fc93e::t_833a04ac6bf282 1-45
+factschema/w1e_encode_bench_test.go
+  s_ff8a600f1fc93e::t_61aaed3f31a899 1-124
+factschema/w1f_encode_bench_test.go
+  s_ff8a600f1fc93e::t_ed2b3d36be00ce 1-220
+factschema/workitem/v1/AGENTS.md
+  s_ff8a600f1fc93e::t_0d72bbc731f746 1-84
+factschema/workitem/v1/README.md
+  s_ff8a600f1fc93e::t_425ffe75c27f4c 1-132
+factschema/workitem/v1/doc.go
+  s_ff8a600f1fc93e::t_78ca4c70509fc4 1-69
+factschema/workitem/v1/work_item.go
+  s_ff8a600f1fc93e::t_258d96a1921561 1-284
+factschema/workitem/v1/work_item_metadata.go
+  s_ff8a600f1fc93e::t_998b2058375c41 1-490
+scripts/dev/bootstrap-hooks.sh
+  s_ff8a600f1fc93e::t_ae0c926f0bdf25 1-5
+scripts/dev/hooks/pre-commit
+  s_ff8a600f1fc93e::t_2677fb371a9fa8 1-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "18331c77fbb6ebce6b5511c59e4a452cc8713f25",
+  "prompts": {},
+  "sessions": {
+    "s_ff8a600f1fc93e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a16a06-8788-7df0-b732-4e9dcaee59ce",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
