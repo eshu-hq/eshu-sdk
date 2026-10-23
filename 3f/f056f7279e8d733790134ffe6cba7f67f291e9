@@ -1,0 +1,35 @@
+Makefile
+  s_ff8a600f1fc93e::t_47e47d09247a2a 18
+README.md
+  s_ff8a600f1fc93e::t_a06f298b3db272 3
+collector/CHANGELOG.md
+  s_ff8a600f1fc93e::t_2f95fce06a96be 3-8,12,16,19,32,36,83,115-116
+collector/conformance/README.md
+  s_ff8a600f1fc93e::t_4016ffe02b4a05 79,86
+docs/provenance.md
+  s_ff8a600f1fc93e::t_42fe822a222a3f 10
+factschema/AGENTS.md
+  s_ff8a600f1fc93e::t_acedcf1c0b753c 87
+factschema/CHANGELOG.md
+  s_ff8a600f1fc93e::t_67784a8fc224e5 3-8,12,17,20,41,45,91,130-132,136-138
+scripts/dev/bootstrap-hooks.sh
+  s_ff8a600f1fc93e::t_bf2af331f457d8 3-4
+scripts/dev/check-file-cap.sh
+  s_ff8a600f1fc93e::t_fb7991bcbd260a 1-29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3ff056f7279e8d733790134ffe6cba7f67f291e9",
+  "prompts": {},
+  "sessions": {
+    "s_ff8a600f1fc93e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a16a06-8788-7df0-b732-4e9dcaee59ce",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
