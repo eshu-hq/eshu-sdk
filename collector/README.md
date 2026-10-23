@@ -79,6 +79,7 @@ partial, retryable, terminal, duplicate, conflict, tombstone, and redaction
 cases. The package tests validate those fixtures against the public contract and
 assert the generated JSON Schema stays in lockstep with the checked-in artifact.
 
-No-Observability-Change: this SDK module has no runtime, network, queue, graph,
-or telemetry emission path. Host runtime telemetry is owned by later core
-adapter work.
+The SDK emits no telemetry. The command runner and generated commands execute
+on the collector runtime path; providers and hosts own operational metrics,
+traces, and logs. Safe command failure stages are described in
+[the command guide](../docs/command.md).
