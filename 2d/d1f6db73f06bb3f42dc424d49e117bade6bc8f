@@ -1,0 +1,29 @@
+.github/workflows/verify.yml
+  s_ff8a600f1fc93e::t_13f2367571f890 31
+Makefile
+  s_ff8a600f1fc93e::t_e806d37dff9369 15-18
+docs/provenance.md
+  s_ff8a600f1fc93e::t_857b4ebfd04c92 8
+factschema/fixturepack_drift_test.go
+  s_ff8a600f1fc93e::t_fd44eb1811de47 50
+factschema/internal/schemagen/cmd/main.go
+  s_ff8a600f1fc93e::t_2b092d0ca7e630 5-6
+factschema/schema_gen_test.go
+  s_ff8a600f1fc93e::t_e4c18f0739ba6d 225
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2dd1f6db73f06bb3f42dc424d49e117bade6bc8f",
+  "prompts": {},
+  "sessions": {
+    "s_ff8a600f1fc93e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a16a06-8788-7df0-b732-4e9dcaee59ce",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
