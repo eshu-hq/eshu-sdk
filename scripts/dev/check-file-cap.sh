@@ -17,7 +17,7 @@ cat "$tmp_dir/git-files" "$tmp_dir/rg-files" | LC_ALL=C sort -z -u > "$tmp_dir/f
 bad=0
 while IFS= read -r -d '' path; do
     [[ -f "$path" ]] || continue
-    if ! lines=$(awk 'END { print NR }' "$path"); then
+    if ! lines=$(awk 'END { print NR }' < "$path"); then
         printf 'file-cap: cannot read %q\n' "$path" >&2
         exit 1
     fi
