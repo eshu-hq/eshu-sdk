@@ -4,10 +4,12 @@
 package contracttest
 
 import (
+	"context"
 	"os"
 	"os/exec"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/eshu-hq/eshu-sdk/factschema"
 )
@@ -46,7 +48,9 @@ func TestAssertionFailureProcess(t *testing.T) {
 		{"valid", "", false},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			command := exec.Command(os.Args[0], "-test.run=^TestAssertionProbe$")
+			ctx, cancel := context.WithTimeout(t.Context(), 5*time.Second)
+			defer cancel()
+			command := exec.CommandContext(ctx, os.Args[0], "-test.run=^TestAssertionProbe$")
 			command.Env = append(os.Environ(), "CONTRACTTEST_PROBE="+tt.name)
 			output, err := command.CombinedOutput()
 			if tt.fail && err == nil {
