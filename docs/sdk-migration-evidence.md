@@ -16,8 +16,8 @@ they establish compatibility with an old core consumer.
 
 At this preparation review, the original modules' `v0.2.0` tags and public
 proxy resolution are proven by the command below. Eshu's
-[core SDK compatibility matrix](https://github.com/eshu-hq/eshu/blob/main/docs/public/extend/sdk-compatibility.md)
-still labels its `v0.2.0` row “Pending tag cut.” That row has not been updated
+[core SDK compatibility matrix at commit `50e556470fcddc99c953c7662ed4b0bc1995674e`](https://github.com/eshu-hq/eshu/blob/50e556470fcddc99c953c7662ed4b0bc1995674e/docs/public/extend/sdk-compatibility.md)
+labels its `v0.2.0` row “Pending tag cut.” That historical row is not updated
 here; a core consumer qualification must reconcile it with the verified tags
 and then supply its own compatibility evidence.
 
