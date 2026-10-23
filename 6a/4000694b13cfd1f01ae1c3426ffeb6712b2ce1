@@ -1,0 +1,19 @@
+.gocache-entrypoint-proof/collector/command/cooperative_proof_test.go
+  s_ff8a600f1fc93e::t_f158c7f25cc414 1-31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6a4000694b13cfd1f01ae1c3426ffeb6712b2ce1",
+  "prompts": {},
+  "sessions": {
+    "s_ff8a600f1fc93e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a16a06-8788-7df0-b732-4e9dcaee59ce",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
