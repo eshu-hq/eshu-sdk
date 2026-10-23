@@ -11,9 +11,18 @@ There is no root Go module. Each module is tested and versioned independently. N
 
 ## Source and scope
 
-The modules came from `sdk/go/collector` and `sdk/go/factschema` in Eshu. Go import paths and module declarations now use the proposed SDK paths. Schema and fixture bytes are unchanged. The inherited factschema tests were split below 500 lines; their public-decoder coverage remains explicit. See [provenance](docs/provenance.md) for the mapping and checks.
+The modules came from `sdk/go/collector` and `sdk/go/factschema` in Eshu. Go import paths and module declarations now use the proposed SDK paths. Inherited schema and fixture bytes are unchanged; the public request schema and fixture are added separately. The inherited factschema tests were split below 500 lines; their public-decoder coverage remains explicit. See [provenance](docs/provenance.md) for the mapping and checks.
 
-The reusable collector HTTP, TLS, and retry helpers are copied into `collector/transport` as a separate candidate slice. Core call sites, conformance orchestration, AWS parity, and entrypoint templates have not moved. This preparation does not grant support or release status to any new module path.
+The collector module also provides `transport` helpers, the public `Request`,
+a bounded `command.Run`, and a neutral `entrypoints` generator. The fact-schema
+module includes stable `identity` derivation and generic `contracttest`
+assertions. See [command behavior](docs/command.md) and
+[entrypoint generation](docs/entrypoints.md).
+
+Core call sites, full conformance orchestration, AWS scanner checks, and legacy
+hosted entrypoint templates remain in Eshu. The neutral generator gives
+collectors a stdio command without moving database or workflow ownership.
+This preparation does not grant support or release status to a new module path.
 
 ## Local checks
 

@@ -6,8 +6,8 @@ package collector
 import "errors"
 
 // Request is one core-owned claim and the contract/configuration given to a collector.
-// Config is opaque to the SDK. JSON-decoded numbers are json.Number, so handlers
-// should convert them explicitly rather than asserting float64.
+// Config is opaque to the SDK. The command.Run decoder preserves numbers as
+// json.Number; its handlers should convert explicitly rather than assert float64.
 type Request struct {
 	ProtocolVersion string         `json:"protocol_version"`
 	Claim           Claim          `json:"claim"`

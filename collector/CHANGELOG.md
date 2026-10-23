@@ -4,8 +4,8 @@ This file preserves the release history of the original in-tree
 `github.com/eshu-hq/eshu/sdk/go/collector` module in Eshu. The `[0.1.0]` and `[0.2.0]` entries and
 tags below belong to that original path and repository. The new
 `github.com/eshu-hq/eshu-sdk/collector` path has no published version,
-tag, or production support yet. `[Unreleased]` describes the inherited
-source snapshot, not an announced release of the new path.
+tag, or production support yet. `[Unreleased]` describes prepared source and API additions, not an announced
+release of the new path.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this module follows the versioning rule in
@@ -23,14 +23,22 @@ Future tags for the new module, after release approval, would use the Go subdire
 
 ### Added
 
+- Public `Request`, structural validation, and its JSON Schema promote the
+  existing host request shape without adding wire fields.
+- `command.Run` provides explicit protocol and byte budgets, exact JSON-number
+  configuration, deadline propagation, staged output and safe failure stages.
+- The neutral `entrypoints` generator and `collector-entrypoints-gen` CLI create
+  stdio commands around provider-owned handlers, with strict manifests and
+  contained write/check behavior. Legacy hosted core templates remain separate.
+
 - `ProtocolVersionV1Alpha2` (`collector-sdk/v1alpha2`): second collector
   extension wire contract, admitted only when explicitly configured;
   v1alpha1 default unchanged.
 
 ## [0.2.0] - 2026-09-16
 
-Historical additive post-`v0.1.0` changes in the original module only. Verified against tag
-`collector/v0.1.0`: no `collector-sdk/v1alpha1` wire-protocol change
+Historical additive post-`v0.1.0` changes in the original module only. Verified against upstream tag
+`sdk/go/collector/v0.1.0`: no `collector-sdk/v1alpha1` wire-protocol change
 and no removed or renamed exported Go identifier, so this stays a minor bump
 per the rule above. See
 [SDK Compatibility](https://github.com/eshu-hq/eshu/blob/eb62fa3056/docs/public/extend/sdk-compatibility.md) for the
@@ -80,7 +88,7 @@ version row for this release.
 
 ## [0.1.0] - 2026-07-06
 
-First tagged release of the original in-tree module (`collector/v0.1.0` at `92061fe39`, fetchable via
+First tagged release of the original in-tree module (`sdk/go/collector/v0.1.0` at `92061fe39`, fetchable via
 the Go module proxy). Content below is the module tree at that tag.
 
 ### Added

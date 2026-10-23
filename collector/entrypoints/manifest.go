@@ -103,7 +103,7 @@ func validateManifest(m Manifest) error {
 }
 
 func validImportPath(path string) bool {
-	if path == "" || path == "github.com/eshu-hq/eshu" || strings.HasPrefix(path, "github.com/eshu-hq/eshu/") || strings.ContainsAny(path, "\\\"'`@:;(){}[]") {
+	if path == "" || path == "github.com/eshu-hq/eshu" || path == "github.com/eshu-hq/eshu/go" || strings.HasPrefix(path, "github.com/eshu-hq/eshu/go/") || strings.ContainsAny(path, "\\\"'`@:;(){}[]") {
 		return false
 	}
 	if strings.IndexFunc(path, func(r rune) bool { return unicode.IsSpace(r) || unicode.IsControl(r) }) >= 0 {

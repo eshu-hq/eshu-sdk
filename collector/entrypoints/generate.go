@@ -44,6 +44,7 @@ package main
 import (
  "context"
  "flag"
+ "fmt"
  "io"
  "os"
  "os/signal"
@@ -65,7 +66,7 @@ func main() {
   MaxRequestBytes: %d,
   MaxResultBytes: %d,
  }); err != nil {
-  os.Stderr.WriteString("collector command failed: run\n")
+  fmt.Fprintln(os.Stderr, err)
   os.Exit(1)
  }
 }

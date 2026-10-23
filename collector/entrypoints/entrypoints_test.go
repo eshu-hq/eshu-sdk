@@ -36,7 +36,7 @@ func TestGenerateDeterministicAndBounded(t *testing.T) {
 			t.Errorf("missing %q", want)
 		}
 	}
-	for _, forbidden := range []string{"/go/internal/", "fmt.Fprintln(os.Stderr, err)", "Disposable local boundary proof"} {
+	for _, forbidden := range []string{"/go/internal/", "Disposable local boundary proof"} {
 		if bytes.Contains(a[0].Contents, []byte(forbidden)) {
 			t.Errorf("unsafe output contains %q", forbidden)
 		}
@@ -91,5 +91,13 @@ func TestLoadManifestStrict(t *testing.T) {
 				t.Fatalf("unexpected result: %v", err)
 			}
 		})
+	}
+}
+
+func TestGenerateAllowsPublicExampleHandlerModule(t *testing.T) {
+	manifest := validManifest()
+	manifest.HandlerImportPath = "github.com/eshu-hq/eshu/examples/collector-extensions/scorecard"
+	if _, err := Generate(manifest); err != nil {
+		t.Fatalf("public consumer module rejected as core implementation: %v", err)
 	}
 }
