@@ -30,6 +30,14 @@ The public surface includes:
   terminal outcomes.
 - `Contract`, `FactDeclaration`, `Validator`, and `ValidationReport` for
   fail-closed host validation.
+- `Request` and `RequestJSONSchema` for the core-owned command input.
+
+`Request.Validate()` checks known and matching request/contract protocols and
+the existing structural claim contract without consulting the clock. Opaque
+`Config` numbers decoded by the command runner are `json.Number`; handlers
+should convert them explicitly. The checked-in request schema and fixture are
+under `schema/` and `testdata/fixtures/`. See [command boundary](../docs/command.md)
+for byte budgets, deadline behavior, and host responsibilities.
 
 Collectors emit facts only. They do not write graph truth, mutate queues, run
 DDL, or import Eshu internals.

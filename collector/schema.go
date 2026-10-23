@@ -8,6 +8,7 @@ import "encoding/json"
 const (
 	schemaDraft2020 = "https://json-schema.org/draft/2020-12/schema"
 	schemaID        = "https://eshu.dev/schemas/collector-sdk/v1alpha1/result.schema.json"
+	requestSchemaID = "https://eshu.dev/schemas/collector-sdk/v1alpha1/request.schema.json"
 )
 
 // JSONSchema returns the collector-sdk/v1alpha1 result JSON Schema.
@@ -17,6 +18,64 @@ func JSONSchema() ([]byte, error) {
 		return nil, err
 	}
 	return append(raw, '\n'), nil
+}
+
+// RequestJSONSchema returns the public collector request JSON Schema.
+// It describes both known protocol versions without changing JSONSchema's
+// existing result artifact or wire protocol version.
+func RequestJSONSchema() ([]byte, error) {
+	raw, err := json.MarshalIndent(requestSchema(), "", "  ")
+	if err != nil {
+		return nil, err
+	}
+	return append(raw, '\n'), nil
+}
+
+func requestSchema() map[string]any {
+	return map[string]any{
+		"$schema":              schemaDraft2020,
+		"$id":                  requestSchemaID,
+		"title":                "Eshu Collector SDK Request",
+		"type":                 "object",
+		"additionalProperties": false,
+		"required":             []string{"protocol_version", "claim", "contract"},
+		"oneOf": []any{
+			map[string]any{"properties": map[string]any{
+				"protocol_version": map[string]any{"const": ProtocolVersionV1Alpha1},
+				"contract":         map[string]any{"properties": map[string]any{"protocol_version": map[string]any{"const": ProtocolVersionV1Alpha1}}},
+			}},
+			map[string]any{"properties": map[string]any{
+				"protocol_version": map[string]any{"const": ProtocolVersionV1Alpha2},
+				"contract":         map[string]any{"properties": map[string]any{"protocol_version": map[string]any{"const": ProtocolVersionV1Alpha2}}},
+			}},
+		},
+		"properties": map[string]any{
+			"protocol_version": map[string]any{"enum": []string{ProtocolVersionV1Alpha1, ProtocolVersionV1Alpha2}},
+			"claim":            ref("#/$defs/claim"),
+			"contract":         ref("#/$defs/contract"),
+			"config":           map[string]any{"type": []string{"object", "null"}},
+		},
+		"$defs": map[string]any{
+			"claim": claimSchema(),
+			"scope": scopeSchema(),
+			"contract": objectSchema(
+				[]string{"protocol_version"},
+				map[string]any{
+					"protocol_version": map[string]any{"enum": []string{ProtocolVersionV1Alpha1, ProtocolVersionV1Alpha2}},
+					"facts":            map[string]any{"type": []string{"array", "null"}, "items": ref("#/$defs/fact_declaration")},
+				},
+			),
+			"fact_declaration": objectSchema(
+				[]string{},
+				map[string]any{
+					"kind":              map[string]any{"type": "string"},
+					"schema_versions":   map[string]any{"type": []string{"array", "null"}, "items": map[string]any{"type": "string"}},
+					"source_confidence": map[string]any{"type": []string{"array", "null"}, "items": map[string]any{"type": "string"}},
+					"tombstone_allowed": map[string]any{"type": "boolean"},
+				},
+			),
+		},
+	}
 }
 
 func resultSchema() map[string]any {

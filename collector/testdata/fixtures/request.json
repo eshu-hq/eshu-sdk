@@ -1,0 +1,19 @@
+{
+  "protocol_version": "collector-sdk/v1alpha1",
+  "claim": {
+    "component_id": "component",
+    "instance_id": "instance",
+    "collector_kind": "example",
+    "source_system": "example",
+    "scope": {"id": "scope", "kind": "repository"},
+    "source_run_id": "run",
+    "generation_id": "generation",
+    "work_item_id": "work",
+    "fencing_token": "fence",
+    "attempt": 1,
+    "deadline": "2099-01-01T00:00:00Z",
+    "config_handle": "config"
+  },
+  "contract": {"protocol_version": "collector-sdk/v1alpha1", "facts": []},
+  "config": {"large_integer": 9007199254740993}
+}
