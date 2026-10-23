@@ -1,0 +1,27 @@
+collector/conformance/core_context_test.go
+  s_ff8a600f1fc93e::t_271701ebf37751 113-114,125-126
+  s_ff8a600f1fc93e::t_ec09fc1c9de669 18,193-201
+  s_ff8a600f1fc93e::t_8a6e497d467dfd 192
+  s_ff8a600f1fc93e::t_cd8b7b3a380648 127
+  s_ff8a600f1fc93e::t_c73b9de9abe956 202-204
+collector/conformance/core_context.go
+  s_ff8a600f1fc93e::t_271701ebf37751 167
+docs/conformance-grants.md
+  s_ff8a600f1fc93e::t_81ee0c58383eed 24-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1f1adf828da3aa103e44f9424ea42ef9db2df101",
+  "prompts": {},
+  "sessions": {
+    "s_ff8a600f1fc93e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a16a06-8788-7df0-b732-4e9dcaee59ce",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
