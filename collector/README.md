@@ -34,6 +34,12 @@ The public surface includes:
 Collectors emit facts only. They do not write graph truth, mutate queues, run
 DDL, or import Eshu internals.
 
+`transport/` is a separate, standard-library-only helper package for bounded
+HTTP requests, TLS trust, retry-status decisions, and safe provider failures.
+Its inherited `Version = "v0.1.0"` is an internal contract marker, not the
+version of this unreleased collector module. Core collector call sites have not
+migrated to this package.
+
 ## Validation
 
 `NewValidator(contract).ValidateResult(result)` rejects:

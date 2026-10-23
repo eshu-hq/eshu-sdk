@@ -13,7 +13,7 @@ There is no root Go module. Each module is tested and versioned independently. N
 
 The modules came from `sdk/go/collector` and `sdk/go/factschema` in Eshu. Go import paths and module declarations now use the proposed SDK paths. Schema and fixture bytes are unchanged. The inherited factschema tests were split below 500 lines; their public-decoder coverage remains explicit. See [provenance](docs/provenance.md) for the mapping and checks.
 
-The reusable collector HTTP, TLS, and retry helpers remain a separate future slice in `collector/transport`. Core conformance orchestration, AWS parity, and entrypoint templates have not moved. This preparation does not grant support or release status to any new module path.
+The reusable collector HTTP, TLS, and retry helpers are copied into `collector/transport` as a separate candidate slice. Core call sites, conformance orchestration, AWS parity, and entrypoint templates have not moved. This preparation does not grant support or release status to any new module path.
 
 ## Local checks
 
