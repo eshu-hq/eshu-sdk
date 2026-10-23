@@ -1,0 +1,51 @@
+docs/release.md
+  s_ff8a600f1fc93e::t_6ae14a0313bbef 12-15
+README.md
+  s_ff8a600f1fc93e::t_6ae14a0313bbef 16
+collector/README.md
+  s_ff8a600f1fc93e::t_6ae14a0313bbef 37-42
+collector/transport/AGENTS.md
+  s_ff8a600f1fc93e::t_6ae14a0313bbef 1-9
+docs/provenance.md
+  s_ff8a600f1fc93e::t_6ae14a0313bbef 9,14-19
+collector/transport/README.md
+  s_ff8a600f1fc93e::t_6ae14a0313bbef 1-28
+collector/transport/doc.go
+  s_ff8a600f1fc93e::t_ac4c9019fc1d5c 1-10
+collector/transport/endpoint_operation_test.go
+  s_ff8a600f1fc93e::t_b91e7624b86951 1-208
+collector/transport/failure.go
+  s_ff8a600f1fc93e::t_3295e170a94ef6 1-266
+collector/transport/failure_classification_test.go
+  s_ff8a600f1fc93e::t_60f537fe9c6a74 1-78
+collector/transport/http.go
+  s_ff8a600f1fc93e::t_f09e58d800b2fb 1-293
+collector/transport/sdk_test.go
+  s_ff8a600f1fc93e::t_3b35e9876f1079 1-270
+collector/transport/tls.go
+  s_ff8a600f1fc93e::t_19f9c86c05e9d3 1-155
+collector/transport/tls_test.go
+  s_ff8a600f1fc93e::t_16151715db7407 1-175
+collector/transport/transport.go
+  s_ff8a600f1fc93e::t_b502ff35a87b07 1-119
+collector/transport/transport_response_test.go
+  s_ff8a600f1fc93e::t_43c90283a7da39 1-77
+collector/transport/transport_test.go
+  s_ff8a600f1fc93e::t_a5af3682416f3f 1-89
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "89ca2910f663d2c3844b2cc167b382ede9e6e6d5",
+  "prompts": {},
+  "sessions": {
+    "s_ff8a600f1fc93e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a16a06-8788-7df0-b732-4e9dcaee59ce",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
