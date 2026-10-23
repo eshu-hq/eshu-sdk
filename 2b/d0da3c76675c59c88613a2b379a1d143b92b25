@@ -1,0 +1,52 @@
+collector/request.go
+  s_ff8a600f1fc93e::t_c61239625e52e3 1-28
+collector/command/run.go
+  s_ff8a600f1fc93e::t_c61239625e52e3 1-106
+collector/command/AGENTS.md
+  s_ff8a600f1fc93e::t_08144e7969b9ab 1-7
+collector/command/README.md
+  s_ff8a600f1fc93e::t_08144e7969b9ab 1-20
+collector/command/doc.go
+  s_ff8a600f1fc93e::t_08144e7969b9ab 1-6
+collector/testdata/fixtures/request.json
+  s_ff8a600f1fc93e::t_4d4dc404210973 1-19
+collector/request_test.go
+  s_ff8a600f1fc93e::t_391e1fee7693a4 7
+  s_ff8a600f1fc93e::t_4d4dc404210973 64-75
+  s_ff8a600f1fc93e::t_afd2ea4f7c035d 1-6,8-63
+  s_ff8a600f1fc93e::t_e458cff8183e91 76-83
+collector/command/run_test.go
+  s_ff8a600f1fc93e::t_e55c4ac600738e 126,130-131,141,163,171-173,178-179,198,223,227,234
+  s_ff8a600f1fc93e::t_0b29bd9df3177b 183-190
+  s_ff8a600f1fc93e::t_afd2ea4f7c035d 1-13,15-24,28-29,33-47,51-52,56,67-72,85,88-92,100,120,122-125,140,142-144,154-156,191-192,204-205,207-210,214-216,246-247
+  s_ff8a600f1fc93e::t_6d5e6fe2b6ea37 14,25-27,30-32,48-50,53-55,57-66,73-84,86-87,93-99,101-119,121,127-129,132-139,145-153,157-162,164-170,174-177,180-182,193-197,199-203,206,211-213,217-222,224-226,228-233,235-245
+  s_ff8a600f1fc93e::t_80b4ab2aa00e0f 248-265
+docs/command.md
+  s_ff8a600f1fc93e::t_08144e7969b9ab 1-28
+collector/schema.go
+  s_ff8a600f1fc93e::t_9e74f98cbb0ada 69
+  s_ff8a600f1fc93e::t_a776dea7b82b9d 11,23-35,40,52-53,57-61,63-64,66-68,70,74-79
+  s_ff8a600f1fc93e::t_8956099dd0d04f 62,73
+  s_ff8a600f1fc93e::t_4af8b6e95127ae 36-39,41-51,54-56,65,71-72
+  s_ff8a600f1fc93e::t_fefbb35aaf723e 80
+collector/README.md
+  s_ff8a600f1fc93e::t_08144e7969b9ab 33-40
+collector/schema/collector-request-v1alpha1.schema.json
+  s_ff8a600f1fc93e::t_ff270c122aa384 1-204
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2bd0da3c76675c59c88613a2b379a1d143b92b25",
+  "prompts": {},
+  "sessions": {
+    "s_ff8a600f1fc93e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a16a06-8788-7df0-b732-4e9dcaee59ce",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
