@@ -11,7 +11,7 @@ trap 'rm -rf "$tmp_dir"' EXIT
 # Ripgrep independently discovers hidden source files. Their union avoids an
 # ignore-rule census gap while keeping ignored build caches out of the scan.
 git ls-files --cached --others --exclude-standard -z > "$tmp_dir/git-files"
-rg --files --hidden -0 > "$tmp_dir/rg-files"
+rg --files --hidden --glob '!.git' -0 > "$tmp_dir/rg-files"
 cat "$tmp_dir/git-files" "$tmp_dir/rg-files" | LC_ALL=C sort -z -u > "$tmp_dir/files"
 
 bad=0
