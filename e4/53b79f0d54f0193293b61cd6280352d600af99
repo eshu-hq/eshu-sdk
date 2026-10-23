@@ -1,0 +1,31 @@
+factschema/contracttest/README.md
+  s_ff8a600f1fc93e::t_175c5836edaae5 1-23
+docs/contracttest-migration.md
+  s_ff8a600f1fc93e::t_175c5836edaae5 1-23
+factschema/contracttest/doc.go
+  s_ff8a600f1fc93e::t_175c5836edaae5 1-11
+factschema/contracttest/AGENTS.md
+  s_ff8a600f1fc93e::t_175c5836edaae5 1-9
+factschema/contracttest/assert.go
+  s_ff8a600f1fc93e::t_db1a5b42828758 1-86
+factschema/contracttest/assert_test.go
+  s_ff8a600f1fc93e::t_f998cb4dc659ab 1-39
+factschema/contracttest/semantics_test.go
+  s_ff8a600f1fc93e::t_699ad6e5b17127 1-91
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e453b79f0d54f0193293b61cd6280352d600af99",
+  "prompts": {},
+  "sessions": {
+    "s_ff8a600f1fc93e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a16a06-8788-7df0-b732-4e9dcaee59ce",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
