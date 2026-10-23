@@ -149,6 +149,9 @@ func (r Report) OK() bool {
 // Run executes one read-only collector conformance check. It never mutates
 // state, performs no I/O, and always returns a populated Report; callers
 // inspect Report.Status (or Report.OK) for the verdict.
+// Callers must keep Manifest, CoreFacts, ReservedFactKinds, Fixtures and
+// PayloadSchemas immutable until Run returns. Concurrent calls may share
+// immutable inputs.
 func Run(req Request) Report {
 	mode := normalizeMode(req.Mode)
 	report := Report{

@@ -44,3 +44,9 @@ release, deployed provider, or runtime permission proof.
 `Run` remains pure and performs no file or network I/O. It adds no telemetry,
 global state, locks, clock checks, or retry loop. Existing `Report`, `Finding`,
 `Summary`, finding codes, and JSON tags remain unchanged.
+
+Callers must not mutate `Manifest`, `CoreFacts`, `ReservedFactKinds`, `Fixtures`
+or `PayloadSchemas`, including nested maps and slices, until `Run` returns.
+The SDK reads these inputs directly and does not make a defensive copy.
+Concurrent calls may share immutable inputs; they do not make concurrent
+caller mutations safe.
