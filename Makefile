@@ -15,7 +15,7 @@ generate-check:
 	git diff --exit-code -- factschema/schema
 
 file-cap:
-	@rg --files collector factschema | xargs wc -l | awk '$$2 != "total" && $$1 >= 500 {print; bad=1} END {exit bad}'
+	@bash scripts/dev/check-file-cap.sh
 
 pre-push: test vet generate-check file-cap
 	git diff --check

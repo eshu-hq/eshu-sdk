@@ -1,18 +1,22 @@
 # Changelog
 
-All notable changes to `github.com/eshu-hq/eshu-sdk/collector` are documented
-in this file.
+This file preserves the release history of the original in-tree
+`github.com/eshu-hq/eshu/sdk/go/collector` module in Eshu. The `[0.1.0]` and `[0.2.0]` entries and
+tags below belong to that original path and repository. The new
+`github.com/eshu-hq/eshu-sdk/collector` path has no published version,
+tag, or production support yet. `[Unreleased]` describes the inherited
+source snapshot, not an announced release of the new path.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this module follows the versioning rule in
-[Contract System v1 §5](../../../docs/internal/design/contract-system-v1.md#5-versioning-and-compatibility-policy):
+[Contract System v1 §5](https://github.com/eshu-hq/eshu/blob/eb62fa3056/docs/internal/design/contract-system-v1.md#5-versioning-and-compatibility-policy):
 a breaking change to the `collector-sdk/v1alpha1` wire protocol or the public
 Go API is a major bump, an additive backward-compatible change is a minor
 bump, and a docs-only or internal change is a patch. See
-[SDK Compatibility](../../../docs/public/extend/sdk-compatibility.md) for how
+[SDK Compatibility](https://github.com/eshu-hq/eshu/blob/eb62fa3056/docs/public/extend/sdk-compatibility.md) for how
 this module version lines up with core Eshu releases and the wire protocol.
 
-Tags for this module use the Go subdirectory-module format:
+Future tags for the new module, after release approval, would use the Go subdirectory-module format:
 `collector/vX.Y.Z`.
 
 ## [Unreleased]
@@ -25,11 +29,11 @@ Tags for this module use the Go subdirectory-module format:
 
 ## [0.2.0] - 2026-09-16
 
-Additive post-`v0.1.0` changes only. Verified against tag
+Historical additive post-`v0.1.0` changes in the original module only. Verified against tag
 `collector/v0.1.0`: no `collector-sdk/v1alpha1` wire-protocol change
 and no removed or renamed exported Go identifier, so this stays a minor bump
 per the rule above. See
-[SDK Compatibility](../../../docs/public/extend/sdk-compatibility.md) for the
+[SDK Compatibility](https://github.com/eshu-hq/eshu/blob/eb62fa3056/docs/public/extend/sdk-compatibility.md) for the
 version row for this release.
 
 ### Added
@@ -76,7 +80,7 @@ version row for this release.
 
 ## [0.1.0] - 2026-07-06
 
-First tagged release (`collector/v0.1.0` at `92061fe39`, fetchable via
+First tagged release of the original in-tree module (`collector/v0.1.0` at `92061fe39`, fetchable via
 the Go module proxy). Content below is the module tree at that tag.
 
 ### Added
@@ -108,8 +112,8 @@ as needed (omit empty groups). When a maintainer cuts a release:
 1. Rename the top `[Unreleased]` section to `[X.Y.Z] - YYYY-MM-DD` using the
    version chosen per the breaking/additive/patch rule above.
 2. Add a fresh empty `## [Unreleased]` section above it.
-3. Tag the release commit `collector/vX.Y.Z` per
-   [`RELEASING.md`](../../../RELEASING.md).
+3. Follow the [release and cutover checklist](../docs/release.md) before
+   tagging a new module release with `collector/vX.Y.Z`.
 
 A wire-protocol-breaking change additionally needs a new protocol version
 (for example `collector-sdk/v1`) per Contract System v1 §5; do not reuse

@@ -1,19 +1,23 @@
 # Changelog
 
-All notable changes to `github.com/eshu-hq/eshu-sdk/factschema` are
-documented in this file.
+This file preserves the release history of the original in-tree
+`github.com/eshu-hq/eshu/sdk/go/factschema` module in Eshu. The `[0.1.0]`
+and `[0.2.0]` entries and tags below belong to that original path and
+repository. The new `github.com/eshu-hq/eshu-sdk/factschema` path has no
+published version, tag, or production support yet. `[Unreleased]` describes
+the inherited source snapshot, not an announced release of the new path.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Per-fact-kind payload schemas follow the breaking-change policy in
-[Contract System v1 §5](../../../docs/internal/design/contract-system-v1.md#5-versioning-and-compatibility-policy):
+[Contract System v1 §5](https://github.com/eshu-hq/eshu/blob/eb62fa3056/docs/internal/design/contract-system-v1.md#5-versioning-and-compatibility-policy):
 removing or renaming a field, narrowing a field's type, or changing a stable
 key's derivation is a major bump with a decode shim in the same change; an
 additive optional field is a minor bump; docs-only is a patch. The **module**
 version tracks the highest bump any fact kind needed in that release. See
-[SDK Compatibility](../../../docs/public/extend/sdk-compatibility.md) for how
+[SDK Compatibility](https://github.com/eshu-hq/eshu/blob/eb62fa3056/docs/public/extend/sdk-compatibility.md) for how
 this module version lines up with core Eshu releases and fixture-pack pins.
 
-Tags for this module use the Go subdirectory-module format:
+Future tags for the new module, after release approval, would use the Go subdirectory-module format:
 `factschema/vX.Y.Z`. The fixture pack
 (`factschema/fixturepack`) ships inside this module and has no separate
 version — pinning this module pins the fixture pack too.
@@ -34,11 +38,11 @@ version — pinning this module pins the fixture pack too.
 
 ## [0.2.0] - 2026-09-16
 
-Additive post-`v0.1.0` changes only — 46 new schemas, zero breaking schema
+Historical additive post-`v0.1.0` changes in the original module — 46 new schemas, zero breaking schema
 diffs against tag `factschema/v0.1.0`
 (`bash scripts/verify-factschema-diff.sh -base-ref factschema/v0.1.0`
 exits 0), so this stays a minor bump per the policy above. See
-[SDK Compatibility](../../../docs/public/extend/sdk-compatibility.md) for the
+[SDK Compatibility](https://github.com/eshu-hq/eshu/blob/eb62fa3056/docs/public/extend/sdk-compatibility.md) for the
 version row for this release.
 
 ### Added
@@ -84,7 +88,7 @@ version row for this release.
 
 ## [0.1.0] - 2026-07-06
 
-First tagged release (`factschema/v0.1.0` at `92061fe39`, fetchable via
+First tagged release of the original in-tree module (`factschema/v0.1.0` at `92061fe39`, fetchable via
 the Go module proxy; closes the scaffold started in #4567). Content below is
 the module tree at that tag: 130 generated schemas, zero breaking diffs since
 only the tag itself is the baseline.
@@ -123,12 +127,12 @@ contracts module external collectors pin against.
 
 When a maintainer cuts a release:
 
-1. Confirm the [schema-diff gate](../../../.github/workflows/factschema-diff.yml)
-   is green against the intended base ref — it is this module's `buf breaking`
-   equivalent and will catch an unbumped major before the tag is cut.
+1. Run generation, module tests, and a consumer schema compatibility review
+   against the intended release baseline. The new repository does not yet
+   carry the original Eshu schema-diff gate.
 2. Rename the top `[Unreleased]` section to `[X.Y.Z] - YYYY-MM-DD` using the
    highest-severity bump any fact kind in the release needed.
 3. Add a fresh empty `## [Unreleased]` section above it.
-4. Tag the release commit `factschema/vX.Y.Z` per
-   [`RELEASING.md`](../../../RELEASING.md). This is also the fixture-pack
-   version — no separate fixture-pack tag exists.
+4. Follow the [release and cutover checklist](../docs/release.md) before
+   tagging a new module release with `factschema/vX.Y.Z`. This would also
+   version the fixture pack; it has no separate tag.

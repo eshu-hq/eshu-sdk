@@ -1,6 +1,6 @@
 # Eshu Go SDK preparation
 
-This repository is a local preparation of two independent public Go modules copied from Eshu at commit `eb62fa3056f5ed3518bb5aa676bf2e3adc96c1d5`. It has not been published, tagged, or accepted by a production Eshu consumer.
+This repository is a local preparation of two independent public Go modules copied from Eshu at commit `eb62fa3056f5ed3518bb5aa676bf2e3adc96c1d5`. Neither proposed module path has been tagged, published as a Go module, or accepted by a production Eshu consumer.
 
 | Directory | Proposed module path | Tag prefix |
 | --- | --- | --- |

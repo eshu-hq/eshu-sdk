@@ -84,7 +84,7 @@ remain independent from Eshu internals, mirroring `collector`'s
   tags declare — there is no separate registration step), its
   `Decode<Kind>`/`Encode<Kind>` and `FactKind<Kind>` in the family's
   `decode_<family>.go`, a schemagen entry, a `schema/<kind>.v1.schema.json`
-  artifact, and a `payloadContracts` row (`decode_test.go`) so the drift tests
+  artifact, and a `payloadContracts` row (`decode_contracts_test.go`) so the drift tests
   cover it. `TestPayloadContractsCoverAllSchemas`,
   `TestDerivedKeySetsMatchGeneratedSchemas`, `TestPayloadStructShapeConvention`,
   `TestSchemasHaveNoDrift`, and the reducer-side

@@ -76,11 +76,11 @@ if !report.OK() {
 The harness leaves manifest YAML decoding to the caller so this module stays
 dependency-free; `Manifest` carries both `yaml` and `json` struct tags. A
 working out-of-tree example lives in
-`examples/collector-extensions/scorecard/conformance_harness_test.go`.
+the upstream Eshu `examples/collector-extensions/scorecard/conformance_harness_test.go`.
 
 ## Scope
 
 Fixture conformance proves package shape and SDK result validity. It does not
 prove hosted activation, graph truth, API/MCP readback, or production safety —
 those require the Compose and reducer/query proofs described in the
-[Collector Extraction Policy](../../../../docs/public/reference/collector-extraction-policy.md).
+[Collector Extraction Policy](https://github.com/eshu-hq/eshu/blob/eb62fa3056/docs/public/reference/collector-extraction-policy.md).
