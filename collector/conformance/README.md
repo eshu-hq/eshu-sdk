@@ -17,10 +17,11 @@ collector-sdk/v1alpha1 result fixtures:
 - **Config / manifest proof metadata** — identity, compatible-core range
   (comparator syntax is validated, not just presence), digest-pinned artifact,
   SDK protocol, and host adapter.
-- **Fact schema** — every emitted fact kind is namespaced and declares at least
-  one semantic schema version; fixtures only emit declared kinds/versions. When
-  `Request.ReservedFactKinds` is supplied (the in-tree host passes the core
-  fact-kind registry), a manifest that claims a host-owned kind fails closed.
+- **Fact schema** — optional emitted kinds are namespaced and every kind
+  declares at least one semantic schema version; fixtures only emit declared
+  kinds/versions. When `Request.ReservedFactKinds` is supplied, a manifest
+  claiming a host-owned kind fails closed unless a trusted `CoreFacts` snapshot
+  covers its declared versions and the fixture's exact collector/version tuple.
 - **Payload shape** — when `Request.PayloadSchemas` maps a fact kind to its JSON
   Schema, every fixture fact of that kind is validated against it and fails
   closed (`payload_schema_invalid`) on a missing required field, a wrong-typed
@@ -48,7 +49,11 @@ collector-sdk/v1alpha1 result fixtures:
 - **Status reporting and retry behavior** — status classes, partial/retryable
   states, and `retry_after_seconds` are validated per the SDK contract.
 - **Reducer consumer contract** — optional component facts may only declare the
-  `source_evidence_only:no_graph_truth` reducer phase today.
+  `source_evidence_only:no_graph_truth` reducer phase today. Reserved core facts
+  require every trusted phase and allow no extra phase other than source-only.
+
+See [trusted core fact context](../../docs/conformance-grants.md) for the
+context API, host responsibilities, and current proof limits.
 
 It fails closed (`status: failed`) on unversioned fact kinds, missing proof
 metadata, undeclared or unsafe fixtures, an unsupported mode, or when no fixture

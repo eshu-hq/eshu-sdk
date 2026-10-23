@@ -144,6 +144,10 @@ func (m Manifest) Contract() collector.Contract {
 // kinds. It mirrors the core manifest validation so an out-of-tree harness run
 // rejects the same shapes the in-tree host rejects.
 func (m Manifest) validateProofMetadata() error {
+	return m.validateProofMetadataWithCore(nil)
+}
+
+func (m Manifest) validateProofMetadataWithCore(core map[string]CoreFactAuthorization) error {
 	if strings.TrimSpace(m.APIVersion) != manifestAPIVersion {
 		return fmt.Errorf("apiVersion must be %q", manifestAPIVersion)
 	}
@@ -191,7 +195,14 @@ func (m Manifest) validateProofMetadata() error {
 		return fmt.Errorf("spec.emittedFacts must declare at least one fact kind")
 	}
 	for _, fact := range m.Spec.EmittedFacts {
-		if err := fact.validate(); err != nil {
+		var err error
+		if core == nil {
+			err = fact.validate()
+		} else {
+			_, authorized := core[fact.Kind]
+			err = fact.validateWithCore(authorized)
+		}
+		if err != nil {
 			return err
 		}
 	}
@@ -235,10 +246,14 @@ func (a Artifact) validate() error {
 }
 
 func (f FactFamily) validate() error {
+	return f.validateWithCore(false)
+}
+
+func (f FactFamily) validateWithCore(authorized bool) error {
 	if err := validateIdentifier("fact kind", f.Kind); err != nil {
 		return err
 	}
-	if !strings.Contains(strings.TrimSpace(f.Kind), ".") {
+	if !authorized && !strings.Contains(strings.TrimSpace(f.Kind), ".") {
 		return fmt.Errorf("fact kind %q must be namespaced with a collision-resistant prefix", f.Kind)
 	}
 	if err := validateOptionalPayloadSchemaRef(f.PayloadSchemaRef); err != nil {
