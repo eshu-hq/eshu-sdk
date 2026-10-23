@@ -1,0 +1,55 @@
+collector/conformance/conformance.go
+  s_ff8a600f1fc93e::t_5752bd07bc1fba 97
+collector/conformance/payload_schema.go
+  s_ff8a600f1fc93e::t_a6d0121343efdd 15
+collector/conformance/payload_schema_test.go
+  s_ff8a600f1fc93e::t_910f2723685293 26
+factschema/aws/v1/resource.go
+  s_ff8a600f1fc93e::t_a87486e2e31a83 55
+factschema/azure/v1/resource.go
+  s_ff8a600f1fc93e::t_b5c1cd205a4495 47
+factschema/codedataflow/v1/dataflow_function.go
+  s_ff8a600f1fc93e::t_1380f56762a5c7 65
+factschema/codedataflow/v1/doc.go
+  s_ff8a600f1fc93e::t_1532145e950720 42,56
+factschema/codegraph/v1/doc.go
+  s_ff8a600f1fc93e::t_e9481d27faf180 27
+factschema/codegraph/v1/file.go
+  s_ff8a600f1fc93e::t_672e57e6e27d47 60
+factschema/codegraph/v1/parsed_file_data.go
+  s_ff8a600f1fc93e::t_4dc02ea5e58de9 12
+factschema/codegraph/v1/parsed_file_data_imports.go
+  s_ff8a600f1fc93e::t_618276c5817662 16
+factschema/codegraph/v1/repository.go
+  s_ff8a600f1fc93e::t_ff4c9ef4e5d84d 80,88
+factschema/doc.go
+  s_ff8a600f1fc93e::t_a28a10aef2ffad 34
+factschema/fixturepack/doc.go
+  s_ff8a600f1fc93e::t_c754799fc7ff5e 12,21
+factschema/fixturepack/fixturepack.go
+  s_ff8a600f1fc93e::t_5db941905f010c 16
+factschema/internal/schemagen/doc.go
+  s_ff8a600f1fc93e::t_5ab4b46afa4a68 5
+factschema/ref_overlay/v1/config_key_divergence.go
+  s_ff8a600f1fc93e::t_35f9f104f79f86 74
+factschema/schema_bytes.go
+  s_ff8a600f1fc93e::t_81bdd91d14461f 12
+factschema/schema_bytes_test.go
+  s_ff8a600f1fc93e::t_e7fccc9111f7d1 18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9c922f651a81d005b1d81b6cbb0ddd98965904b0",
+  "prompts": {},
+  "sessions": {
+    "s_ff8a600f1fc93e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a16a06-8788-7df0-b732-4e9dcaee59ce",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
