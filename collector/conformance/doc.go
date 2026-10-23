@@ -29,6 +29,12 @@
 // that have already validated the SDK result contract and must not also apply
 // publication-only conformance checks.
 //
+// A trusted host may supply Request.CoreFacts as a per-run authorization
+// snapshot for reserved core fact kinds. The harness checks exact collector
+// kind and schema-version coverage, reducer phases, fixture identity, and
+// caller-supplied payload schemas. Core still owns grant evaluation, expiry,
+// revocation, registry compatibility, and the canonical phase mapping.
+//
 // The in-tree extension host re-exports this report contract so the same
 // verdict is produced inside and outside the Eshu monorepo.
 package conformance

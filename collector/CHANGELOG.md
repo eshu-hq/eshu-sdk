@@ -21,6 +21,15 @@ this module version lines up with core Eshu releases and the wire protocol.
 Future tags for the new module, after release approval, would use the Go subdirectory-module format:
 `collector/vX.Y.Z`.
 
+## [Unreleased]
+
+### Added
+
+- Optional trusted `conformance.Request.CoreFacts` binds a caller-evaluated
+  authorization snapshot to a manifest and exact collector/schema tuples.
+  Default source-only behavior and report bytes remain unchanged. This API is
+  not included in the prepared `v0.1.0-rc.1` source.
+
 ## [0.1.0-rc.1] - 2026-10-23
 
 Candidate source prepared for separate review, merge, CI, and tag approval.

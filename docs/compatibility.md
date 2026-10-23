@@ -58,3 +58,11 @@ from a candidate.
 The [migration evidence](sdk-migration-evidence.md) also records the original
 module tag origins and Go checksums. See [release and cutover](release.md) for
 the order of approval and qualification.
+
+## Unreleased conformance context
+
+The prepared `v0.1.0-rc.1` source does not include `Request.CoreFacts`. The
+[trusted conformance context](conformance-grants.md) is a later, unreleased
+API. Its presence on the development branch does not change the immutable
+candidate source or establish a qualified collector/core pair. Consumers need
+an exact version that includes it and matching caller/registry validation.

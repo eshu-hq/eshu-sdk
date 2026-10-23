@@ -40,8 +40,8 @@ const (
 	// FindingManifestInvalid means the manifest violated the proof-metadata
 	// contract: missing identity, unpinned artifact, or unversioned fact kinds.
 	FindingManifestInvalid FindingCode = "manifest_invalid"
-	// FindingMissingReducerConsumer means the manifest declares reducer truth
-	// phases that core does not consume for optional component facts yet.
+	// FindingMissingReducerConsumer means the manifest's reducer phases are
+	// unavailable for optional facts or differ from trusted core context.
 	FindingMissingReducerConsumer FindingCode = "missing_reducer_consumer"
 	// FindingFixtureRequired means the request did not include result fixtures.
 	FindingFixtureRequired FindingCode = "fixture_required"
@@ -56,9 +56,9 @@ const (
 	FindingPayloadSchemaInvalid FindingCode = "payload_schema_invalid"
 )
 
-// SourceEvidenceOnlyReducerPhase is the only reducer consumer phase optional
-// component facts may declare today: source evidence that is committed but not
-// promoted to canonical graph truth.
+// SourceEvidenceOnlyReducerPhase is the only phase admitted without trusted
+// CoreFacts coverage. It names source evidence committed without promotion to
+// canonical graph truth.
 const SourceEvidenceOnlyReducerPhase = "source_evidence_only:no_graph_truth"
 
 // Mode selects the conformance proof mode.
@@ -74,6 +74,10 @@ type FindingCode string
 // already-decoded SDK result fixtures. It performs no file or network I/O so it
 // is safe to call from out-of-tree package tests and from the in-tree host.
 type Request struct {
+	// CoreFacts is a trusted, caller-derived authorization snapshot for
+	// reserved core fact kinds. It cannot be decoded from manifest or fixture
+	// JSON/YAML and does not replace the host's live grant decision.
+	CoreFacts *CoreFactContext `json:"-" yaml:"-"`
 	// Manifest is the component package manifest under test.
 	Manifest Manifest
 	// Fixtures are decoded collector SDK results to validate against the
@@ -81,17 +85,15 @@ type Request struct {
 	Fixtures []collector.Result
 	// Mode selects the proof mode; empty defaults to ModeFixture.
 	Mode Mode
-	// ReservedFactKinds are fact kinds the host owns and a component may not
-	// claim. The in-tree host passes the core fact-kind registry; out-of-tree
-	// callers may leave it nil and rely on namespacing alone. A manifest that
-	// declares a reserved kind fails closed.
+	// ReservedFactKinds is the host's complete core fact-kind inventory.
+	// Without CoreFacts, a manifest claiming one of these kinds fails closed.
+	// With CoreFacts, each reserved declaration needs exact trusted coverage.
+	// The host must supply a complete inventory; the SDK cannot derive it.
 	ReservedFactKinds []string
 	// PayloadSchemas maps an emitted fixture fact kind to the JSON Schema its
 	// payloads must satisfy. The key is the exact fact-kind string the fixture
-	// emits, which for an out-of-tree collector is its own namespaced kind mapped
-	// to a core payload shape (for example "dev.acme.collector.resource" pointing
-	// at the aws_resource schema shape), because the bare core kinds are
-	// host-owned and reserved and cannot be emitted directly. The caller supplies
+	// emits. An optional namespaced kind may point to a core payload shape;
+	// a reserved kind requires trusted CoreFacts coverage. The caller supplies
 	// the schema bytes so this package performs no file I/O and takes no
 	// schema-library dependency; an out-of-tree collector reads the shape from
 	// the pinned factschema/fixturepack. A fixture fact whose kind has an
@@ -147,6 +149,9 @@ func (r Report) OK() bool {
 // Run executes one read-only collector conformance check. It never mutates
 // state, performs no I/O, and always returns a populated Report; callers
 // inspect Report.Status (or Report.OK) for the verdict.
+// Callers must keep Manifest, CoreFacts, ReservedFactKinds, Fixtures and
+// PayloadSchemas immutable until Run returns. Concurrent calls may share
+// immutable inputs.
 func Run(req Request) Report {
 	mode := normalizeMode(req.Mode)
 	report := Report{
@@ -162,21 +167,46 @@ func Run(req Request) Report {
 		return report
 	}
 
-	if err := req.Manifest.validateProofMetadata(); err != nil {
-		addBlockingFinding(&report, FindingManifestInvalid, err.Error(), -1)
+	var coverage map[string]CoreFactAuthorization
+	if req.CoreFacts != nil {
+		var err error
+		coverage, err = prepareCoreFacts(req)
+		if err != nil {
+			addBlockingFinding(&report, FindingManifestInvalid, err.Error(), -1)
+			return report
+		}
+	}
+	var metadataErr error
+	if req.CoreFacts == nil {
+		metadataErr = req.Manifest.validateProofMetadata()
+	} else {
+		metadataErr = req.Manifest.validateProofMetadataWithCore(coverage)
+	}
+	if metadataErr != nil {
+		addBlockingFinding(&report, FindingManifestInvalid, metadataErr.Error(), -1)
 		return report
 	}
 
-	if kind, ok := reservedFactKindClaim(req.Manifest, req.ReservedFactKinds); ok {
+	if kind, ok := reservedFactKindClaim(req.Manifest, req.ReservedFactKinds, coverage); ok {
 		addBlockingFinding(&report, FindingManifestInvalid, fmt.Sprintf("fact kind %q is host-owned and cannot be claimed by a component", kind), -1)
 		return report
 	}
 
-	addReducerConsumerFindings(&report, req.Manifest)
+	if req.CoreFacts == nil {
+		addReducerConsumerFindings(&report, req.Manifest)
+	} else {
+		addCorePhaseFindings(&report, req.Manifest, coverage)
+	}
 
 	if len(req.Fixtures) == 0 {
 		addBlockingFinding(&report, FindingFixtureRequired, "at least one collector SDK result fixture is required", -1)
 		return report
+	}
+	if req.CoreFacts != nil {
+		if err := requireCorePayloadSchemas(req, coverage); err != nil {
+			addBlockingFinding(&report, FindingPayloadSchemaInvalid, err.Error(), -1)
+			return report
+		}
 	}
 
 	if err := requireDeclaredPayloadSchemas(req.Manifest, req.PayloadSchemas); err != nil {
@@ -195,6 +225,13 @@ func Run(req Request) Report {
 
 	validator := collector.NewValidator(req.Manifest.Contract())
 	for index, fixture := range req.Fixtures {
+		if req.CoreFacts != nil {
+			if err := checkCoreFixture(req, coverage, fixture); err != nil {
+				report.Summary.FixtureCount++
+				addBlockingFinding(&report, FindingFixtureContractFailed, err.Error(), index)
+				continue
+			}
+		}
 		validateFixture(&report, validator, schemas, index, fixture)
 	}
 
@@ -260,7 +297,7 @@ func normalizeMode(mode Mode) Mode {
 // host-reserved (core-owned) fact kind, if any. It lets the in-tree host enforce
 // the same core-ownership boundary the component manifest path enforces, without
 // the dependency-free SDK module importing a core fact-kind registry.
-func reservedFactKindClaim(manifest Manifest, reserved []string) (string, bool) {
+func reservedFactKindClaim(manifest Manifest, reserved []string, coverage map[string]CoreFactAuthorization) (string, bool) {
 	if len(reserved) == 0 {
 		return "", false
 	}
@@ -270,6 +307,9 @@ func reservedFactKindClaim(manifest Manifest, reserved []string) (string, bool) 
 	}
 	for _, fact := range manifest.Spec.EmittedFacts {
 		if _, ok := reservedSet[strings.TrimSpace(fact.Kind)]; ok {
+			if _, allowed := coverage[fact.Kind]; allowed {
+				continue
+			}
 			return fact.Kind, true
 		}
 	}
