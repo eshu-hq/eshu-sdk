@@ -1,0 +1,23 @@
+collector/transport/failure.go
+  s_ff8a600f1fc93e::t_af2fb318af1926 15-16
+collector/transport/http.go
+  s_ff8a600f1fc93e::t_87d42a4a71aa98 100
+collector/transport/tls.go
+  s_ff8a600f1fc93e::t_ae68e34e5e5a52 30-31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "040687a902bdd63327ff1872271eaff15c51d7e0",
+  "prompts": {},
+  "sessions": {
+    "s_ff8a600f1fc93e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a16a06-8788-7df0-b732-4e9dcaee59ce",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
