@@ -29,5 +29,7 @@ jobs:
           cache-dependency-path: factschema/go.sum
       - name: Check generated schemas
         run: make generate-check
+      - name: Install file-cap dependency
+        run: sudo apt-get update && sudo apt-get install --yes ripgrep
       - name: Check file cap
         run: make file-cap
