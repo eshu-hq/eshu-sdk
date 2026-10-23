@@ -3,11 +3,12 @@
 This file preserves the release history of the original in-tree
 `github.com/eshu-hq/eshu/sdk/go/factschema` module in Eshu. The `[0.1.0]`
 and `[0.2.0]` entries and tags below belong to that original path and
-repository. The new `github.com/eshu-hq/eshu-sdk/factschema` path has no
-published version, tag, or production support yet. Its first candidate tag is
-planned as `factschema/v0.1.0-rc.1`, independently of the old path's `v0.2.0`
-line. `[Unreleased]` describes the inherited source snapshot, not an announced
-release of the new path. See the [compatibility policy](../docs/compatibility.md).
+repository. The new `github.com/eshu-hq/eshu-sdk/factschema` path starts an
+independent version line with the candidate entry below. The entry records
+source prepared for `factschema/v0.1.0-rc.1`; it does not assert that a tag
+has been published or that a production consumer supports it. Check Git and
+the Go proxy for current tag availability. See the
+[compatibility policy](../docs/compatibility.md).
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Per-fact-kind payload schemas follow the breaking-change policy in
@@ -24,10 +25,16 @@ Future tags for the new module, after release approval, would use the Go subdire
 (`factschema/fixturepack`) ships inside this module and has no separate
 version — pinning this module pins the fixture pack too.
 
-## [Unreleased]
+## [0.1.0-rc.1] - 2026-10-23
+
+Candidate source prepared for separate review, merge, CI, and tag approval.
+This entry belongs to the new module path, not the historical `v0.2.0` line.
 
 ### Added
 
+- `identity` provides stable fact identity derivation, and `contracttest`
+  provides generic contract assertions for out-of-tree consumers. Their core
+  adoption remains a separately validated step.
 - New `ref_overlay/v1` package with `Decode`/`Encode` seams, schemas, and
   fixture-pack entries for epic #5393 Phase 1 (contract only — no collector,
   reducer, or query consumer yet): `ref_overlay.branch_observation` (one

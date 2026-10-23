@@ -13,9 +13,10 @@ recorded in the module changelogs; they are not part of that source snapshot.
 The initial relocation proof counted 1,076 source files. All 730 non-Go schema and fixture data files were byte identical in the relocation specimen. The original and relocated suites discovered the same 46 collector and 144 factschema Test/Benchmark names. The two original factschema decoder switches bound the same 179 fact-kind and public-decoder pairs; the relocated test map preserves that set. These are pre-publication local proofs, not consumer or deployment evidence.
 
 The existing in-tree implementations remain active until consumer validation
-and cutover. The new paths have planned `v0.1.0-rc.1` candidate tags but no
-published tag. They are new module identities, distinct from the supported
-original paths at `v0.2.0`; see [compatibility](compatibility.md). Module
+and cutover. The new paths have source prepared for `v0.1.0-rc.1`; at this
+preparation, no candidate tag was cut. Check Git tags and the Go proxy for
+current availability. They are new module identities, distinct from the
+supported original paths at `v0.2.0`; see [compatibility](compatibility.md). Module
 READMEs describe inherited contracts and prepared additions. Canonical
 admission and graph ownership remain in Eshu.
 
