@@ -1,0 +1,118 @@
+Makefile
+  s_ff8a600f1fc93e::t_47e47d09247a2a 21
+  s_ff8a600f1fc93e::t_e806d37dff9369 15-18
+README.md
+  s_ff8a600f1fc93e::t_a06f298b3db272 3
+  s_ff8a600f1fc93e::t_6ae14a0313bbef 16
+collector/CHANGELOG.md
+  s_ff8a600f1fc93e::t_2f95fce06a96be 3-8,12,16,19,32,36,83,115-116
+collector/conformance/README.md
+  s_ff8a600f1fc93e::t_4016ffe02b4a05 79,86
+docs/provenance.md
+  s_ff8a600f1fc93e::t_42fe822a222a3f 11
+  s_ff8a600f1fc93e::t_857b4ebfd04c92 8
+  s_ff8a600f1fc93e::t_6ae14a0313bbef 9,14-19
+factschema/AGENTS.md
+  s_ff8a600f1fc93e::t_acedcf1c0b753c 87
+factschema/CHANGELOG.md
+  s_ff8a600f1fc93e::t_67784a8fc224e5 3-8,12,17,20,41,45,91,130-132,136-138
+scripts/dev/bootstrap-hooks.sh
+  s_ff8a600f1fc93e::t_bf2af331f457d8 3-4
+scripts/dev/check-file-cap.sh
+  s_ff8a600f1fc93e::t_fb7991bcbd260a 1-13,15-19,21-29
+  s_ff8a600f1fc93e::t_67fef9a2e87279 20
+  s_ff8a600f1fc93e::t_0507888f63b57c 14
+.github/workflows/verify.yml
+  s_ff8a600f1fc93e::t_13f2367571f890 31
+  s_ff8a600f1fc93e::t_7904e7f7f201f1 32-33
+factschema/fixturepack_drift_test.go
+  s_ff8a600f1fc93e::t_fd44eb1811de47 50
+factschema/internal/schemagen/cmd/main.go
+  s_ff8a600f1fc93e::t_2b092d0ca7e630 5-6
+factschema/schema_gen_test.go
+  s_ff8a600f1fc93e::t_e4c18f0739ba6d 225
+collector/conformance/conformance.go
+  s_ff8a600f1fc93e::t_5752bd07bc1fba 97
+collector/conformance/payload_schema.go
+  s_ff8a600f1fc93e::t_a6d0121343efdd 15
+collector/conformance/payload_schema_test.go
+  s_ff8a600f1fc93e::t_910f2723685293 26
+factschema/aws/v1/resource.go
+  s_ff8a600f1fc93e::t_a87486e2e31a83 55
+factschema/azure/v1/resource.go
+  s_ff8a600f1fc93e::t_b5c1cd205a4495 47
+factschema/codedataflow/v1/dataflow_function.go
+  s_ff8a600f1fc93e::t_1380f56762a5c7 65
+factschema/codedataflow/v1/doc.go
+  s_ff8a600f1fc93e::t_1532145e950720 42,56
+factschema/codegraph/v1/doc.go
+  s_ff8a600f1fc93e::t_e9481d27faf180 27
+factschema/codegraph/v1/file.go
+  s_ff8a600f1fc93e::t_672e57e6e27d47 60
+factschema/codegraph/v1/parsed_file_data.go
+  s_ff8a600f1fc93e::t_4dc02ea5e58de9 12
+factschema/codegraph/v1/parsed_file_data_imports.go
+  s_ff8a600f1fc93e::t_618276c5817662 16
+factschema/codegraph/v1/repository.go
+  s_ff8a600f1fc93e::t_ff4c9ef4e5d84d 80,88
+factschema/doc.go
+  s_ff8a600f1fc93e::t_a28a10aef2ffad 34
+factschema/fixturepack/doc.go
+  s_ff8a600f1fc93e::t_c754799fc7ff5e 12,21
+factschema/fixturepack/fixturepack.go
+  s_ff8a600f1fc93e::t_5db941905f010c 16
+factschema/internal/schemagen/doc.go
+  s_ff8a600f1fc93e::t_5ab4b46afa4a68 5
+factschema/ref_overlay/v1/config_key_divergence.go
+  s_ff8a600f1fc93e::t_35f9f104f79f86 74
+factschema/schema_bytes.go
+  s_ff8a600f1fc93e::t_81bdd91d14461f 12
+factschema/schema_bytes_test.go
+  s_ff8a600f1fc93e::t_e7fccc9111f7d1 18
+docs/release.md
+  s_ff8a600f1fc93e::t_6ae14a0313bbef 12-15
+collector/README.md
+  s_ff8a600f1fc93e::t_6ae14a0313bbef 37-42
+collector/transport/AGENTS.md
+  s_ff8a600f1fc93e::t_6ae14a0313bbef 1-9
+collector/transport/README.md
+  s_ff8a600f1fc93e::t_6ae14a0313bbef 1-28
+collector/transport/doc.go
+  s_ff8a600f1fc93e::t_ac4c9019fc1d5c 1-10
+collector/transport/endpoint_operation_test.go
+  s_ff8a600f1fc93e::t_b91e7624b86951 1-208
+collector/transport/failure.go
+  s_ff8a600f1fc93e::t_3295e170a94ef6 1-266
+collector/transport/failure_classification_test.go
+  s_ff8a600f1fc93e::t_60f537fe9c6a74 1-78
+collector/transport/http.go
+  s_ff8a600f1fc93e::t_f09e58d800b2fb 1-293
+collector/transport/sdk_test.go
+  s_ff8a600f1fc93e::t_3b35e9876f1079 1-270
+collector/transport/tls.go
+  s_ff8a600f1fc93e::t_19f9c86c05e9d3 1-155
+collector/transport/tls_test.go
+  s_ff8a600f1fc93e::t_16151715db7407 1-175
+collector/transport/transport.go
+  s_ff8a600f1fc93e::t_b502ff35a87b07 1-119
+collector/transport/transport_response_test.go
+  s_ff8a600f1fc93e::t_43c90283a7da39 1-77
+collector/transport/transport_test.go
+  s_ff8a600f1fc93e::t_a5af3682416f3f 1-89
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4f97a426e9723f37a00222211386ee6e682b0420",
+  "prompts": {},
+  "sessions": {
+    "s_ff8a600f1fc93e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a16a06-8788-7df0-b732-4e9dcaee59ce",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
