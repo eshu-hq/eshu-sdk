@@ -1,0 +1,204 @@
+{
+  "$defs": {
+    "claim": {
+      "additionalProperties": false,
+      "properties": {
+        "attempt": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "collector_kind": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "component_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "config_handle": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "deadline": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "fencing_token": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "generation_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "instance_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "source_run_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "source_system": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "work_item_id": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "component_id",
+        "instance_id",
+        "collector_kind",
+        "source_system",
+        "scope",
+        "source_run_id",
+        "generation_id",
+        "work_item_id",
+        "fencing_token",
+        "attempt",
+        "deadline",
+        "config_handle"
+      ],
+      "type": "object"
+    },
+    "contract": {
+      "additionalProperties": false,
+      "properties": {
+        "facts": {
+          "items": {
+            "$ref": "#/$defs/fact_declaration"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "protocol_version": {
+          "enum": [
+            "collector-sdk/v1alpha1",
+            "collector-sdk/v1alpha2"
+          ]
+        }
+      },
+      "required": [
+        "protocol_version"
+      ],
+      "type": "object"
+    },
+    "fact_declaration": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "schema_versions": {
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "source_confidence": {
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "tombstone_allowed": {
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "type": "object"
+    },
+    "scope": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://eshu.dev/schemas/collector-sdk/v1alpha1/request.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "oneOf": [
+    {
+      "properties": {
+        "contract": {
+          "properties": {
+            "protocol_version": {
+              "const": "collector-sdk/v1alpha1"
+            }
+          }
+        },
+        "protocol_version": {
+          "const": "collector-sdk/v1alpha1"
+        }
+      }
+    },
+    {
+      "properties": {
+        "contract": {
+          "properties": {
+            "protocol_version": {
+              "const": "collector-sdk/v1alpha2"
+            }
+          }
+        },
+        "protocol_version": {
+          "const": "collector-sdk/v1alpha2"
+        }
+      }
+    }
+  ],
+  "properties": {
+    "claim": {
+      "$ref": "#/$defs/claim"
+    },
+    "config": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "contract": {
+      "$ref": "#/$defs/contract"
+    },
+    "protocol_version": {
+      "enum": [
+        "collector-sdk/v1alpha1",
+        "collector-sdk/v1alpha2"
+      ]
+    }
+  },
+  "required": [
+    "protocol_version",
+    "claim",
+    "contract"
+  ],
+  "title": "Eshu Collector SDK Request",
+  "type": "object"
+}

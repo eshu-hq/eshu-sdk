@@ -30,6 +30,14 @@ The public surface includes:
   terminal outcomes.
 - `Contract`, `FactDeclaration`, `Validator`, and `ValidationReport` for
   fail-closed host validation.
+- `Request` and `RequestJSONSchema` for the core-owned command input.
+
+`Request.Validate()` checks known and matching request/contract protocols and
+the existing structural claim contract without consulting the clock. Opaque
+`Config` numbers decoded by the command runner are `json.Number`; handlers
+should convert them explicitly. The checked-in request schema and fixture are
+under `schema/` and `testdata/fixtures/`. See [command boundary](../docs/command.md)
+for byte budgets, deadline behavior, and host responsibilities.
 
 Collectors emit facts only. They do not write graph truth, mutate queues, run
 DDL, or import Eshu internals.
@@ -71,6 +79,7 @@ partial, retryable, terminal, duplicate, conflict, tombstone, and redaction
 cases. The package tests validate those fixtures against the public contract and
 assert the generated JSON Schema stays in lockstep with the checked-in artifact.
 
-No-Observability-Change: this SDK module has no runtime, network, queue, graph,
-or telemetry emission path. Host runtime telemetry is owned by later core
-adapter work.
+The SDK emits no telemetry. The command runner and generated commands execute
+on the collector runtime path; providers and hosts own operational metrics,
+traces, and logs. Safe command failure stages are described in
+[the command guide](../docs/command.md).
