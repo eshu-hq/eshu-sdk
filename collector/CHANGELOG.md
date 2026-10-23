@@ -4,8 +4,10 @@ This file preserves the release history of the original in-tree
 `github.com/eshu-hq/eshu/sdk/go/collector` module in Eshu. The `[0.1.0]` and `[0.2.0]` entries and
 tags below belong to that original path and repository. The new
 `github.com/eshu-hq/eshu-sdk/collector` path has no published version,
-tag, or production support yet. `[Unreleased]` describes prepared source and API additions, not an announced
-release of the new path.
+tag, or production support yet. Its first candidate tag is planned as
+`collector/v0.1.0-rc.1`, independently of the old path's `v0.2.0` line.
+`[Unreleased]` describes prepared source and API additions, not an announced
+release of the new path. See the [compatibility policy](../docs/compatibility.md).
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this module follows the versioning rule in
@@ -25,11 +27,16 @@ Future tags for the new module, after release approval, would use the Go subdire
 
 - Public `Request`, structural validation, and its JSON Schema promote the
   existing host request shape without adding wire fields.
+- Optional `TrustedDeletion` is an explicit collector attestation; core still
+  decides whether deletion is admitted. It is part of the planned candidate.
 - `command.Run` provides explicit protocol and byte budgets, exact JSON-number
   configuration, deadline propagation, staged output and safe failure stages.
 - The neutral `entrypoints` generator and `collector-entrypoints-gen` CLI create
   stdio commands around provider-owned handlers, with strict manifests and
   contained write/check behavior. Legacy hosted core templates remain separate.
+- Current transport and conformance tooling are included. Grant-aware
+  conformance is required to qualify a reserved-kind collector; it does not
+  limit candidate availability for other consumers.
 
 - `ProtocolVersionV1Alpha2` (`collector-sdk/v1alpha2`): second collector
   extension wire contract, admitted only when explicitly configured;
