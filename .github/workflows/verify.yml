@@ -1,0 +1,33 @@
+name: verify
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  modules:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        module: [collector, factschema]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: ${{ matrix.module }}/go.mod
+          cache-dependency-path: ${{ matrix.module }}/go.sum
+      - name: Test
+        run: cd ${{ matrix.module }} && GOWORK=off go test ./... -count=1
+      - name: Vet
+        run: cd ${{ matrix.module }} && GOWORK=off go vet ./...
+  generated-and-shape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: factschema/go.mod
+          cache-dependency-path: factschema/go.sum
+      - name: Check generated schemas
+        run: cd factschema && GOWORK=off go generate ./... && git diff --exit-code -- schema
+      - name: Check file cap
+        run: make file-cap

@@ -1,0 +1,154 @@
+{
+  "$id": "https://eshu.dev/schemas/factschema/iam/v1/permission.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "account_id": {
+      "type": "string"
+    },
+    "actions": {
+      "items": {
+        "type": "string"
+      },
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "assume_principals": {
+      "items": {
+        "type": "string"
+      },
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "collector_instance_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "condition_keys": {
+      "items": {
+        "type": "string"
+      },
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "condition_operator_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "condition_operators": {
+      "items": {
+        "type": "string"
+      },
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "effect": {
+      "type": "string"
+    },
+    "has_conditions": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "is_wildcard_action": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "is_wildcard_resource": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "not_actions": {
+      "items": {
+        "type": "string"
+      },
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "not_resources": {
+      "items": {
+        "type": "string"
+      },
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "policy_arn": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "policy_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "policy_source": {
+      "type": "string"
+    },
+    "principal_arn": {
+      "type": "string"
+    },
+    "principal_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "region": {
+      "type": "string"
+    },
+    "resources": {
+      "items": {
+        "type": "string"
+      },
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "service_kind": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "statement_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "account_id",
+    "region",
+    "principal_arn",
+    "effect",
+    "policy_source"
+  ],
+  "title": "Eshu aws_iam_permission Payload (schema version 1)",
+  "type": "object"
+}

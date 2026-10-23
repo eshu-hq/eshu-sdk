@@ -1,0 +1,367 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025-2026 eshu-hq
+
+package factschema
+
+import (
+	"fmt"
+	"reflect"
+	"sync"
+)
+
+// attributesField is the struct field name the polymorphic Resource and
+// Relationship structs use for their untyped service/verb pass-through. Only a
+// map[string]any field explicitly excluded from normal JSON encoding with
+// `json:"-"` is a remainder field. A normally tagged field such as
+// `json:"attributes,omitempty"` owns that one payload key like any other named
+// field.
+const attributesField = "Attributes"
+
+// decodeMapInto assigns the payload map's values onto the fields of the struct
+// pointed to by out, using each field's json tag, WITHOUT a JSON
+// marshal/unmarshal round trip. It is the hot-path replacement for the previous
+// json.Marshal(map)+json.Unmarshal(struct) decode, which serialized every fact
+// twice and dominated the reducer join-index and node-projection benchmarks
+// (No-Regression Evidence in the reducer package docs).
+//
+// The reducer's payload map comes from a Postgres JSONB unmarshal, so its value
+// types are exactly the encoding/json defaults: string, float64 for numbers,
+// bool, []any, map[string]any, and nil. decodeMapInto coerces those into the
+// struct's field types directly for the common shapes (string, *string, []string,
+// *bool, *int32, map[string]any) and falls back to a per-value json round trip
+// only for a structurally complex field (a *map[string]string, or a slice of
+// structs such as []BlockDevice) — which are small and rare, so the bounded
+// fallback keeps the hot identity path serialization-free.
+//
+// A field named Attributes with a map[string]any type and an exact `json:"-"`
+// tag receives every remaining payload key, replacing the custom UnmarshalJSON
+// the polymorphic structs used for the pass-through. out must be a non-nil
+// pointer to a struct.
+//
+// decodeMapInto is the default entry point (full Attributes remainder), used by
+// decodeAndValidate for callers passing no option and by the nested-struct
+// recursion below. decodeMapIntoWith carries a decodeConfig for the opt-in
+// named-field-only path (WithoutAttributesRemainder, issue #4865).
+func decodeMapInto(payload map[string]any, out any) error {
+	return decodeMapIntoWith(payload, out, decodeConfig{})
+}
+
+// decodeMapIntoWith is decodeMapInto parameterized by a decodeConfig. Named
+// fields are assigned identically for every config; cfg.skipAttributesRemainder
+// only governs whether the Attributes pass-through remainder map is rebuilt.
+// When it is set, a struct that declares an Attributes field is left with that
+// field at its zero value (nil) — the named-field-only fast path that skips the
+// allocate-then-discard remainder rebuild for callers that never read
+// .Attributes.
+func decodeMapIntoWith(payload map[string]any, out any, cfg decodeConfig) error {
+	rv := reflect.ValueOf(out)
+	if rv.Kind() != reflect.Pointer || rv.IsNil() {
+		return fmt.Errorf("factschema: decode target must be a non-nil pointer, got %T", out)
+	}
+	sv := rv.Elem()
+	if sv.Kind() != reflect.Struct {
+		return fmt.Errorf("factschema: decode target must point to a struct, got %s", sv.Kind())
+	}
+
+	plan := structPlanFor(sv.Type())
+
+	for _, f := range plan.fields {
+		raw, present := payload[f.jsonName]
+		if !present || raw == nil {
+			continue
+		}
+		if err := assignField(sv.Field(f.index), raw); err != nil {
+			return fmt.Errorf("factschema: field %q: %w", f.jsonName, err)
+		}
+	}
+
+	if !cfg.skipAttributesRemainder && plan.attributesIndex >= 0 {
+		remainder := map[string]any{}
+		for key, value := range payload {
+			if _, isKnown := plan.known[key]; isKnown {
+				continue
+			}
+			remainder[key] = value
+		}
+		if len(remainder) > 0 {
+			sv.Field(plan.attributesIndex).Set(reflect.ValueOf(remainder))
+		}
+	}
+	return nil
+}
+
+// plannedField records one json-tagged struct field: the payload key it maps
+// from and its struct field index.
+type plannedField struct {
+	jsonName string
+	index    int
+}
+
+// structPlan is the once-computed decode plan for a struct type: its
+// json-tagged fields, the set of payload keys they own (so the Attributes
+// pass-through captures only the remainder), and the index of the Attributes
+// map field explicitly marked `json:"-"` (or -1). Caching it keeps
+// decodeMapInto off the per-fact reflection walk that dominated the hot-path
+// allocations.
+type structPlan struct {
+	fields          []plannedField
+	known           map[string]struct{}
+	attributesIndex int
+}
+
+var structPlanCache sync.Map // reflect.Type -> *structPlan
+
+// structPlanFor returns the cached decode plan for a struct type, building it on
+// first use. The plan is immutable after construction and safe for concurrent
+// reads by parallel reducer workers.
+func structPlanFor(t reflect.Type) *structPlan {
+	if cached, ok := structPlanCache.Load(t); ok {
+		return cached.(*structPlan)
+	}
+	plan := &structPlan{
+		known:           make(map[string]struct{}, t.NumField()),
+		attributesIndex: -1,
+	}
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		if field.PkgPath != "" {
+			continue // unexported field: never serialized
+		}
+		if isAttributesRemainderField(field) {
+			plan.attributesIndex = i
+			continue
+		}
+		jsonName, _, skip := parseJSONTag(field.Tag.Get("json"), field.Name)
+		if skip {
+			continue
+		}
+		plan.known[jsonName] = struct{}{}
+		plan.fields = append(plan.fields, plannedField{jsonName: jsonName, index: i})
+	}
+	actual, _ := structPlanCache.LoadOrStore(t, plan)
+	return actual.(*structPlan)
+}
+
+// isAttributesRemainderField reports whether field opts into the polymorphic
+// pass-through convention. The JSON exclusion is the distinguishing contract:
+// a field named Attributes with its own normal JSON tag is a fully typed named
+// field and must never capture unrelated payload keys.
+func isAttributesRemainderField(field reflect.StructField) bool {
+	return field.Name == attributesField &&
+		field.Type == reflect.TypeFor[map[string]any]() &&
+		field.Tag.Get("json") == "-"
+}
+
+// assignField coerces one JSONB-native value onto one struct field, mirroring
+// encoding/json's default map decoding for the shapes the fact-payload structs
+// use. It handles string, *string, []string, *bool, *int, *int32, *float64,
+// map[string]string, and map[string]any directly, and json-round-trips a
+// single value for any other type (the rare *map[string]string / []struct
+// fields) so correctness is never sacrificed for the fast path.
+func assignField(field reflect.Value, raw any) error {
+	switch field.Kind() {
+	case reflect.String:
+		s, ok := raw.(string)
+		if !ok {
+			return fmt.Errorf("want string, got %T", raw)
+		}
+		field.SetString(s)
+		return nil
+
+	case reflect.Int:
+		// Plain-int fast path (for example codegraphv1.SCIPFunctionCall's
+		// CallerLine/CalleeLine/RefLine and DockerfileStage's LineNumber/
+		// StageIndex, issue #4750 S1): a direct coercion mirroring the *int
+		// pointer case below and the Int64 case above, instead of falling
+		// through to the default branch's jsonRoundTripValue marshal/unmarshal
+		// fallback. Go ints and a JSONB float64 both coerce through
+		// jsonNumberToInt. reflect.Int and reflect.Int64 are distinct kinds, so
+		// a plain `int` field never matched the Int64 case and previously took
+		// the slow round trip.
+		n, err := jsonNumberToInt(raw)
+		if err != nil {
+			return err
+		}
+		field.SetInt(int64(n))
+		return nil
+
+	case reflect.Int64:
+		n, err := jsonNumberToInt64(raw)
+		if err != nil {
+			return err
+		}
+		field.SetInt(n)
+		return nil
+
+	case reflect.Float64:
+		n, err := jsonNumberToFloat64(raw)
+		if err != nil {
+			return err
+		}
+		field.SetFloat(n)
+		return nil
+
+	case reflect.Bool:
+		b, ok := raw.(bool)
+		if !ok {
+			return fmt.Errorf("want bool, got %T", raw)
+		}
+		field.SetBool(b)
+		return nil
+
+	case reflect.Pointer:
+		switch field.Type().Elem().Kind() {
+		case reflect.String:
+			s, ok := raw.(string)
+			if !ok {
+				return fmt.Errorf("want string, got %T", raw)
+			}
+			field.Set(reflect.ValueOf(&s))
+			return nil
+		case reflect.Bool:
+			b, ok := raw.(bool)
+			if !ok {
+				return fmt.Errorf("want bool, got %T", raw)
+			}
+			field.Set(reflect.ValueOf(&b))
+			return nil
+		case reflect.Int:
+			// *int fast path (for example secretsiam/v1's VaultACLPolicyRule.
+			// PathDepth and VaultKVMetadata.PathDepth): a direct type-switch
+			// coercion, mirroring the Int32/Int64/Float64 pointer cases below,
+			// instead of falling through to the default branch's
+			// jsonRoundTripValue marshal/unmarshal fallback -- the same gap
+			// class the map[string]string (Wave 4b) and float64 (Wave 4c)
+			// fast paths closed for their own first-occurrence field shapes.
+			n, err := jsonNumberToInt(raw)
+			if err != nil {
+				return err
+			}
+			field.Set(reflect.ValueOf(&n))
+			return nil
+		case reflect.Int32:
+			n, err := jsonNumberToInt32(raw)
+			if err != nil {
+				return err
+			}
+			field.Set(reflect.ValueOf(&n))
+			return nil
+		case reflect.Int64:
+			n, err := jsonNumberToInt64(raw)
+			if err != nil {
+				return err
+			}
+			field.Set(reflect.ValueOf(&n))
+			return nil
+		case reflect.Float64:
+			// *float64 fast path (for example vulnerability.cve's optional
+			// CVSSScore): a direct type-switch coercion, mirroring the Int32/
+			// Int64 pointer cases above, instead of falling through to the
+			// default branch's jsonRoundTripValue marshal/unmarshal fallback.
+			n, err := jsonNumberToFloat64(raw)
+			if err != nil {
+				return err
+			}
+			field.Set(reflect.ValueOf(&n))
+			return nil
+		case reflect.Map:
+			if field.Type().Elem() == reflect.TypeOf(map[string]string{}) {
+				m, ok := anyToStringMap(raw)
+				if !ok {
+					return jsonRoundTripValue(field, raw)
+				}
+				field.Set(reflect.ValueOf(&m))
+				return nil
+			}
+			return jsonRoundTripValue(field, raw)
+		case reflect.Struct:
+			// A pointer to a nested payload struct (for example ImageManifest's
+			// *Descriptor config) decodes through the same marshal-free
+			// decodeMapInto recursion, so a single nested object never triggers a
+			// json round trip. Already-typed (non-map) values fall back so a
+			// caller passing the concrete struct still decodes correctly.
+			m, ok := asObjectMap(raw)
+			if !ok {
+				return jsonRoundTripValue(field, raw)
+			}
+			nested := reflect.New(field.Type().Elem())
+			if err := decodeMapInto(m, nested.Interface()); err != nil {
+				return err
+			}
+			field.Set(nested)
+			return nil
+		default:
+			return jsonRoundTripValue(field, raw)
+		}
+
+	case reflect.Slice:
+		switch field.Type().Elem().Kind() {
+		case reflect.String:
+			strs, err := anyToStringSlice(raw)
+			if err != nil {
+				return err
+			}
+			field.Set(reflect.ValueOf(strs))
+			return nil
+		case reflect.Struct:
+			// A slice of nested payload structs (for example ImageManifest's
+			// []Descriptor layers, ImageIndex's []Descriptor manifests, or
+			// awsv1.EC2InstancePosture's []BlockDevice) decodes element-by-element
+			// through decodeMapInto when every element is an object map, so a
+			// many-element list stays off the json round-trip path. A slice whose
+			// elements are not object maps (an already-typed []Struct, or a scalar
+			// element) falls back to the json round trip so correctness is never
+			// sacrificed for the fast path.
+			if err, handled := assignStructSlice(field, raw); handled {
+				return err
+			}
+			return jsonRoundTripValue(field, raw)
+		case reflect.Map:
+			// A slice of map[string]string (for example securityalertv1.
+			// RepositoryAlert.CWEs — a list of {cwe_id, name} objects — or
+			// gcpv1.IAMPolicyObservation.Members) takes a fast
+			// type-assert/coerce path per element rather than the
+			// marshal/unmarshal fallback the default branch would use. This
+			// mirrors the map[string]string map fast path below and is the same
+			// gap class the map[string]string (Wave 4b) and float64 (Wave 4c)
+			// fast paths closed for their own first-occurrence field shapes: the
+			// first []map[string]string field decoded through this seam otherwise
+			// round-tripped every element through encoding/json.
+			if field.Type().Elem() == reflect.TypeOf(map[string]string{}) {
+				if s, ok := anyToStringMapSlice(raw); ok {
+					field.Set(reflect.ValueOf(s))
+					return nil
+				}
+			}
+			return jsonRoundTripValue(field, raw)
+		default:
+			return jsonRoundTripValue(field, raw)
+		}
+
+	case reflect.Map:
+		// A named map[string]any field takes the value as-is when it is already
+		// the right map shape. Polymorphic Attributes remainder fields are handled
+		// by the caller and never enter this branch.
+		if m, ok := raw.(map[string]any); ok && field.Type() == reflect.TypeOf(map[string]any{}) {
+			field.Set(reflect.ValueOf(m))
+			return nil
+		}
+		// A map[string]string field (for example a pod-template label selector, a
+		// descriptor's annotations, or a manifest's config_labels) takes a fast
+		// type-assert/coerce path rather than the marshal/unmarshal fallback:
+		// measured 15x faster on the same shape (Benchmark No-Regression Evidence,
+		// kubernetes_live wave), with identical output for every value the JSONB
+		// decode path can produce (a string-valued map[string]any, or an
+		// already-typed map[string]string).
+		if field.Type() == reflect.TypeOf(map[string]string{}) {
+			if m, ok := anyToStringMap(raw); ok {
+				field.Set(reflect.ValueOf(m))
+				return nil
+			}
+		}
+		return jsonRoundTripValue(field, raw)
+
+	default:
+		return jsonRoundTripValue(field, raw)
+	}
+}

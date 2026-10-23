@@ -1,0 +1,300 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025-2026 eshu-hq
+
+package v1
+
+// SupplyChainImpactFinding is the schema-version-1 payload for
+// "reducer_supply_chain_impact_finding". It captures the reducer's durable
+// vulnerability impact decision and the evidence anchors API/MCP read surfaces
+// use to explain that decision.
+type SupplyChainImpactFinding struct {
+	ReducerDomain         string           `json:"reducer_domain"`
+	IntentID              string           `json:"intent_id"`
+	ScopeID               string           `json:"scope_id"`
+	GenerationID          string           `json:"generation_id"`
+	SourceSystem          string           `json:"source_system"`
+	Cause                 string           `json:"cause"`
+	FindingID             string           `json:"finding_id"`
+	CVEID                 string           `json:"cve_id"`
+	AdvisoryID            string           `json:"advisory_id"`
+	PackageID             string           `json:"package_id"`
+	Ecosystem             string           `json:"ecosystem"`
+	PackageName           string           `json:"package_name"`
+	PURL                  string           `json:"purl"`
+	ProductCriteria       string           `json:"product_criteria"`
+	MatchCriteriaID       string           `json:"match_criteria_id"`
+	ObservedVersion       string           `json:"observed_version"`
+	RequestedRange        string           `json:"requested_range"`
+	FixedVersion          string           `json:"fixed_version"`
+	VulnerableRange       string           `json:"vulnerable_range"`
+	MatchReason           string           `json:"match_reason"`
+	ImpactStatus          string           `json:"impact_status"`
+	Confidence            string           `json:"confidence"`
+	CVSSScore             float64          `json:"cvss_score"`
+	AdvisoryPublishedAt   string           `json:"advisory_published_at"`
+	AdvisoryUpdatedAt     string           `json:"advisory_updated_at"`
+	EPSSProbability       string           `json:"epss_probability"`
+	EPSSPercentile        string           `json:"epss_percentile"`
+	KnownExploited        bool             `json:"known_exploited"`
+	PriorityReason        string           `json:"priority_reason"`
+	PriorityScore         int              `json:"priority_score"`
+	PriorityBucket        string           `json:"priority_bucket"`
+	PriorityReasonCodes   []string         `json:"priority_reason_codes"`
+	PriorityContributions []map[string]any `json:"priority_contributions"`
+	RuntimeReachability   string           `json:"runtime_reachability"`
+	RepositoryID          string           `json:"repository_id"`
+	SubjectDigest         string           `json:"subject_digest"`
+	ImageRef              string           `json:"image_ref"`
+	DependencyScope       string           `json:"dependency_scope"`
+	WorkloadIDs           []string         `json:"workload_ids"`
+	DeploymentIDs         []string         `json:"deployment_ids"`
+	ServiceIDs            []string         `json:"service_ids"`
+	Environments          []string         `json:"environments"`
+	// EnvironmentEvidence records, per environment name in Environments,
+	// whether the strongest deployment evidence observed for that
+	// environment was "deploy_event" or "declared" (issue #5426).
+	EnvironmentEvidence map[string]string `json:"environment_evidence,omitempty"`
+	// CIDeclaredArtifactDigest and CIDeclaredImageRef carry the matched
+	// cicd_run_correlation deployment's OWN declared artifact identity
+	// (issue #5469), persisted only when that deployment matched through a
+	// strong artifact-identity branch (digest or image-ref equality), never
+	// the weak repository+environment+operational-anchor branch. Absent when
+	// no strong-branch CI/CD deployment evidence exists.
+	CIDeclaredArtifactDigest *string        `json:"ci_declared_artifact_digest,omitempty"`
+	CIDeclaredImageRef       *string        `json:"ci_declared_image_ref,omitempty"`
+	CatalogEntityRefs        []string       `json:"catalog_entity_refs"`
+	CatalogOwnerRefs         []string       `json:"catalog_owner_refs"`
+	DetectionProfile         string         `json:"detection_profile"`
+	MissingEvidence          []string       `json:"missing_evidence"`
+	EvidencePath             []string       `json:"evidence_path"`
+	EvidenceFactIDs          []string       `json:"evidence_fact_ids"`
+	CanonicalWrites          int            `json:"canonical_writes"`
+	SourceLayers             []string       `json:"source_layers"`
+	DependencyPath           []string       `json:"dependency_path,omitempty"`
+	DependencyDepth          *int           `json:"dependency_depth,omitempty"`
+	DirectDependency         *bool          `json:"direct_dependency,omitempty"`
+	Reachability             map[string]any `json:"reachability,omitempty"`
+	Provenance               map[string]any `json:"provenance,omitempty"`
+	Suppression              map[string]any `json:"suppression,omitempty"`
+	SuppressionState         *string        `json:"suppression_state,omitempty"`
+	Remediation              map[string]any `json:"remediation,omitempty"`
+}
+
+// AWSCloudRuntimeDriftFinding is the schema-version-1 payload for
+// "reducer_aws_cloud_runtime_drift_finding". It is the AWS-specific reducer
+// read model for cloud-only, state-only, ambiguous, and unknown resources.
+type AWSCloudRuntimeDriftFinding struct {
+	ReducerDomain                string           `json:"reducer_domain"`
+	IntentID                     string           `json:"intent_id"`
+	ScopeID                      string           `json:"scope_id"`
+	GenerationID                 string           `json:"generation_id"`
+	SourceSystem                 string           `json:"source_system"`
+	Cause                        string           `json:"cause"`
+	CanonicalID                  string           `json:"canonical_id"`
+	CandidateID                  string           `json:"candidate_id"`
+	CandidateKind                string           `json:"candidate_kind"`
+	ARN                          string           `json:"arn"`
+	FindingKind                  string           `json:"finding_kind"`
+	ManagementStatus             string           `json:"management_status"`
+	Confidence                   float64          `json:"confidence"`
+	CandidateState               string           `json:"candidate_state"`
+	MatchedTerraformStateAddress string           `json:"matched_terraform_state_address"`
+	MissingEvidence              []string         `json:"missing_evidence"`
+	WarningFlags                 []string         `json:"warning_flags"`
+	RecommendedAction            string           `json:"recommended_action"`
+	Evidence                     []map[string]any `json:"evidence"`
+	OrphanedResources            int              `json:"orphaned_resources"`
+	UnmanagedResources           int              `json:"unmanaged_resources"`
+	AmbiguousResources           int              `json:"ambiguous_resources"`
+	UnknownResources             int              `json:"unknown_resources"`
+	PublicationFactKind          string           `json:"publication_fact_kind"`
+	SourceLayers                 []string         `json:"source_layers"`
+}
+
+// TerraformConfigStateDriftFinding is the schema-version-1 payload for
+// "reducer_terraform_config_state_drift_finding" (issue #5442, extended by
+// #5594 and #5572). It carries four distinct row shapes distinguished by
+// Outcome:
+//
+//   - Outcome "exact": one row per drifted Terraform resource address whose
+//     config-side address resolved unambiguously, the durable form of the
+//     per-candidate telemetry the reducer already emits. Address and
+//     DriftKind are populated; AmbiguousOwnerCandidates is empty.
+//   - Outcome "derived": one row per drifted Terraform resource address
+//     whose config-side Address depended on an unresolved module-prefix
+//     fallback (issue #5572) — a Terraform-Registry-shorthand
+//     misclassification of a genuinely local module source, or a local
+//     module chain deeper than the resolver's depth bound. Address and
+//     DriftKind are populated exactly like "exact"; the difference is
+//     confidence, not shape. Evidence carries a
+//     "terraform_module_resolution_confidence" atom whose value names the
+//     specific reason ("external_registry" or "depth_exceeded") so an
+//     operator debugging a spurious finding can tell the two causes apart
+//     without a second outcome value per cause. See
+//     go/internal/correlation/drift/tfconfigstate/doc.go and
+//     go/internal/storage/postgres/tfstate/drift_evidence_module_confidence.go.
+//   - Outcome "ambiguous": one row per rejected state-snapshot scope where
+//     backend-owner resolution found more than one candidate config repo
+//     (tfstatebackend.ErrAmbiguousBackendOwner). Address and DriftKind are
+//     empty — no per-address classification ran because no single anchor was
+//     resolved — and AmbiguousOwnerCandidates carries every competing owner's
+//     identity so the finding stays provenance-only (no repo is picked).
+//   - Outcome "unresolved": one row per rejected state-snapshot scope where
+//     backend-owner resolution found ZERO candidate config repos
+//     (tfstatebackend.ErrNoConfigRepoOwnsBackend) — no Eshu-tracked repo
+//     declares this backend at all. Address and DriftKind are empty, and
+//     AmbiguousOwnerCandidates is empty too: unlike the ambiguous case there
+//     is no competing evidence to record, only the absence of any owner.
+//     Added by issue #5594 so a caller reading this scope's findings can tell
+//     "evaluated, no drift" (zero rows) apart from "ownership never resolved
+//     at all" (this one row) — both looked identical before.
+//
+// "stale" is not emitted by this version: see
+// go/internal/correlation/drift/tfconfigstate/doc.go for why it is
+// unreachable with the evidence this handler has today.
+//
+// Schema version: adding "derived" (#5572) widened this closed label set
+// and narrowed what "exact" asserts, without a payload-schema major bump.
+// That is a deliberate owner decision, recorded here so it is not
+// re-litigated: the change is a CORRECTION, not a redefinition. Findings
+// whose config-side address came from a module-prefix heuristic were
+// already being labelled "exact" wrongly -- #5572 exists precisely because
+// that label was a lie on those rows -- so the implementation was brought
+// in line with what "exact" was always meant to assert, rather than the
+// meaning being changed out from under a reader.
+//
+// The contract-system policy's "change meaning implies major" rule
+// (docs/internal/design/contract-system-v1.md) targets the external
+// collector-to-core payload boundary. This kind is reducer_derived_findings:
+// written by Eshu's reducer and read by Eshu's own query and MCP layers, so
+// it does not cross that boundary. The generated JSON Schema carries no enum
+// on "outcome", so no schema-derived validator rejects the new value, and the
+// read surface (POST /api/v0/terraform/config-state-drift/findings) is v0,
+// explicitly pre-stable. A consumer that treated "exact" as "every classified
+// per-address finding" should read {"exact","derived"} for that meaning.
+type TerraformConfigStateDriftFinding struct {
+	ReducerDomain string `json:"reducer_domain"`
+	IntentID      string `json:"intent_id"`
+	ScopeID       string `json:"scope_id"`
+	GenerationID  string `json:"generation_id"`
+	SourceSystem  string `json:"source_system"`
+	Cause         string `json:"cause"`
+	CanonicalID   string `json:"canonical_id"`
+	CandidateID   string `json:"candidate_id"`
+	CandidateKind string `json:"candidate_kind"`
+	// Outcome is the closed join-confidence label: "exact", "derived",
+	// "ambiguous", or "unresolved".
+	Outcome string `json:"outcome"`
+	// Address is the Terraform resource address (e.g.
+	// "module.app.aws_instance.web"). Populated for "exact" and "derived";
+	// empty for an "ambiguous" or "unresolved" row.
+	Address string `json:"address"`
+	// DriftKind is one of the five tfconfigstate.DriftKind values. Populated
+	// for "exact" and "derived"; empty for an "ambiguous" or "unresolved" row.
+	DriftKind string `json:"drift_kind"`
+	// BackendKind and LocatorHash identify the Terraform state backend the
+	// finding was joined against (state_snapshot:<backend_kind>:<locator_hash>
+	// scope shape).
+	BackendKind string  `json:"backend_kind"`
+	LocatorHash string  `json:"locator_hash"`
+	Confidence  float64 `json:"confidence"`
+	// AmbiguousOwnerCandidates carries the competing config-repo identities
+	// for an "ambiguous" row (repo_id, scope_id, commit_id per candidate).
+	// Always empty for an "exact" or "unresolved" row -- an unresolved row has
+	// no competing owners to record, only the absence of any owner.
+	AmbiguousOwnerCandidates []map[string]any `json:"ambiguous_owner_candidates,omitempty"`
+	Evidence                 []map[string]any `json:"evidence"`
+	SourceLayers             []string         `json:"source_layers"`
+}
+
+// CodeDriftedMember is one function in a drifted pair. StartLine/EndLine
+// are the member's body ranges from content_entities: the pair differs
+// somewhere within these function-granularity ranges (shingle sets prove
+// overlap below identity but cannot localize lines without source, which the
+// grouping path must never read).
+type CodeDriftedMember struct {
+	EntityID     string `json:"entity_id"`
+	EntityName   string `json:"entity_name"`
+	EntityType   string `json:"entity_type"`
+	RelativePath string `json:"relative_path"`
+	Language     string `json:"language"`
+	StartLine    int    `json:"start_line"`
+	EndLine      int    `json:"end_line"`
+	// TokenCount is the member body size in lexer tokens, used as the
+	// fingerprint token floor for drift candidacy. It is an integer size
+	// metric, never a secret, so it is allowlisted in
+	// collector.redactionSafePayloadKeys despite tripping the
+	// token-substring heuristic.
+	TokenCount int `json:"token_count"`
+}
+
+// CodeDriftedFinding is the schema-version-1 payload for
+// "reducer_code_drifted_finding" (epic #6833, child #6837). One row per
+// admitted drifted pair: two function bodies whose renamed 5-shingle sets
+// verify at Jaccard >= DriftedSimilarityThreshold (0.7) but share no
+// equality fingerprint, so neither the exact nor the renamed read surface
+// claims them. TruthLevel is always "derived"; Suppressions carries the
+// per-rule counts evaluated before the write (a suppressed pair is counted,
+// never silently dropped).
+type CodeDriftedFinding struct {
+	ReducerDomain string `json:"reducer_domain"`
+	IntentID      string `json:"intent_id"`
+	ScopeID       string `json:"scope_id"`
+	GenerationID  string `json:"generation_id"`
+	SourceSystem  string `json:"source_system"`
+	Cause         string `json:"cause"`
+	FindingID     string `json:"finding_id"`
+	RepoID        string `json:"repo_id"`
+	// Similarity is the exact Jaccard over the pair's shingle sets;
+	// Threshold records the ship bound the pair admitted under.
+	Similarity float64 `json:"similarity"`
+	Threshold  float64 `json:"threshold"`
+	// SharedBands is the count of LSH bands the pair shares: the candidate
+	// evidence that nominated this pair for verification.
+	SharedBands int               `json:"shared_bands"`
+	MemberA     CodeDriftedMember `json:"member_a"`
+	MemberB     CodeDriftedMember `json:"member_b"`
+	TruthLevel  string            `json:"truth_level"`
+	// Suppressions carries per-rule suppression counts evaluated before
+	// this write, in the sibling reducer_Suppression map shape
+	// (map[string]any, omitempty): a written finding's pair survived every
+	// rule, so the key is usually absent and the read path reports its own
+	// per-rule maps. Counts encode as JSON numbers; readers convert from
+	// float64.
+	Suppressions map[string]any   `json:"suppressions,omitempty"`
+	Evidence     []map[string]any `json:"evidence"`
+	SourceLayers []string         `json:"source_layers"`
+}
+
+// MultiCloudRuntimeDriftFinding is the schema-version-1 payload for
+// "reducer_multi_cloud_runtime_drift_finding". It is the provider-neutral
+// runtime drift read model keyed by canonical cloud_resource_uid.
+type MultiCloudRuntimeDriftFinding struct {
+	ReducerDomain                string           `json:"reducer_domain"`
+	IntentID                     string           `json:"intent_id"`
+	ScopeID                      string           `json:"scope_id"`
+	GenerationID                 string           `json:"generation_id"`
+	SourceSystem                 string           `json:"source_system"`
+	Cause                        string           `json:"cause"`
+	CanonicalID                  string           `json:"canonical_id"`
+	CandidateID                  string           `json:"candidate_id"`
+	CandidateKind                string           `json:"candidate_kind"`
+	CloudResourceUID             string           `json:"cloud_resource_uid"`
+	Provider                     string           `json:"provider"`
+	RawIdentity                  string           `json:"raw_identity"`
+	FindingKind                  string           `json:"finding_kind"`
+	ManagementStatus             string           `json:"management_status"`
+	Confidence                   float64          `json:"confidence"`
+	CandidateState               string           `json:"candidate_state"`
+	MatchedTerraformStateAddress string           `json:"matched_terraform_state_address"`
+	MissingEvidence              []string         `json:"missing_evidence"`
+	WarningFlags                 []string         `json:"warning_flags"`
+	RecommendedAction            string           `json:"recommended_action"`
+	Evidence                     []map[string]any `json:"evidence"`
+	OrphanedResources            int              `json:"orphaned_resources"`
+	UnmanagedResources           int              `json:"unmanaged_resources"`
+	AmbiguousResources           int              `json:"ambiguous_resources"`
+	UnknownResources             int              `json:"unknown_resources"`
+	PublicationFactKind          string           `json:"publication_fact_kind"`
+	SourceLayers                 []string         `json:"source_layers"`
+}

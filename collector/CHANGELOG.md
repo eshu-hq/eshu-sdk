@@ -1,0 +1,116 @@
+# Changelog
+
+All notable changes to `github.com/eshu-hq/eshu-sdk/collector` are documented
+in this file.
+
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this module follows the versioning rule in
+[Contract System v1 §5](../../../docs/internal/design/contract-system-v1.md#5-versioning-and-compatibility-policy):
+a breaking change to the `collector-sdk/v1alpha1` wire protocol or the public
+Go API is a major bump, an additive backward-compatible change is a minor
+bump, and a docs-only or internal change is a patch. See
+[SDK Compatibility](../../../docs/public/extend/sdk-compatibility.md) for how
+this module version lines up with core Eshu releases and the wire protocol.
+
+Tags for this module use the Go subdirectory-module format:
+`collector/vX.Y.Z`.
+
+## [Unreleased]
+
+### Added
+
+- `ProtocolVersionV1Alpha2` (`collector-sdk/v1alpha2`): second collector
+  extension wire contract, admitted only when explicitly configured;
+  v1alpha1 default unchanged.
+
+## [0.2.0] - 2026-09-16
+
+Additive post-`v0.1.0` changes only. Verified against tag
+`collector/v0.1.0`: no `collector-sdk/v1alpha1` wire-protocol change
+and no removed or renamed exported Go identifier, so this stays a minor bump
+per the rule above. See
+[SDK Compatibility](../../../docs/public/extend/sdk-compatibility.md) for the
+version row for this release.
+
+### Added
+
+- `payloadSchemaRef` on conformance manifest fact families, letting a
+  namespaced component fact declare the fixture-pack payload schema shape the
+  host and CI should validate before publication or activation.
+- `IsSensitiveKeyName` and `ValidateShareSafeKeys` — thin, behavior-preserving
+  exports over the fail-closed sensitive-key-name predicate and recursive walk
+  `validatePayloadKeys` already applies to `Fact.Payload`
+  (`collector/validation.go`). They let a caller outside a collector
+  (for example `go/internal/reportbundle`'s wrong-answer report bundle) reuse
+  the exact same redaction/validation rule instead of duplicating or drifting
+  from it.
+- Payload-enum conformance coverage (`conformance/payload_enum_test.go`) plus
+  conformance benches and a credential canary test, locking the
+  fail-closed redaction and validation behavior external collectors rely on.
+- Regression test locking the unsupported-protocol rejection:
+  `ValidateResult` fails a result carrying an unknown, blank, or
+  whitespace-only `protocol_version` with the error
+  `protocol_version %q is unsupported`, naming the offending value (#6708).
+
+### Changed
+
+- Core Eshu now generates the host-side adapter from `collector.Fact` into the
+  durable fact envelope. This does not change the `collector-sdk/v1alpha1` wire
+  protocol or the public Go API.
+- `ValidateResult` now refuses a `source_ref.uri` whose credential hides in an
+  opaque URL body. `url.Parse` only surfaces userinfo after `//`, so
+  `svc:SECRET@host/x` — the shape an operator produces by omitting `https://`
+  — parsed with `User == nil` and passed "must not contain credentials".
+  The validator re-parses the authority spelling when the opaque body has an
+  `@` ahead of its first `/` and lets net/url decide; purls and other
+  slash-first opaque bodies stay accepted. Validation errors for unparseable
+  URIs no longer repeat the URI value, which can carry the credential into
+  collector logs — and that promise now covers the error net/url NESTS inside
+  its envelope too, where `invalid port ":secret" after host` quoted the exact
+  bytes an operator leaves in port position (`svc:user@host:SECRET/x`). The
+  nested reason is classified into fixed text instead of wrapped verbatim,
+  failing closed to a generic reason for message shapes the classifier does
+  not know. No wire-protocol or Go API change.
+- Go directive `1.26.0` → `1.26.5` (toolchain floor only; no language or
+  library break for consumers).
+
+## [0.1.0] - 2026-07-06
+
+First tagged release (`collector/v0.1.0` at `92061fe39`, fetchable via
+the Go module proxy). Content below is the module tree at that tag.
+
+### Added
+
+- `Claim`, `Scope`, and `Generation` types describing a core-owned work item
+  handed to an out-of-tree collector.
+- `Fact`, `SourceRef`, and `Redaction` types for source evidence records.
+- `Status` and `Result` types for `complete`, `unchanged`, `partial`,
+  `retryable`, and `terminal` collector outcomes.
+- `Contract`, `FactDeclaration`, `Validator`, and `ValidationReport` for
+  fail-closed host-side validation via `NewValidator(contract).ValidateResult`.
+- `collector-sdk/v1alpha1` wire protocol, published as
+  `schema/collector-sdk-v1alpha1.schema.json`.
+- `conformance` subpackage (`collector/conformance`) — the public,
+  importable conformance harness (`conformance.Run`) an out-of-tree collector
+  runs in its own CI, including payload-shape validation against
+  `factschema` schemas via `conformance.Request.PayloadSchemas`.
+- `schema/cassette-format.v1.schema.json` — a generated mirror of the host's
+  replay cassette envelope contract, so credential-free replay fixtures can be
+  validated offline against the same schema the host enforces.
+
+## Convention for future entries
+
+Add a new `## [Unreleased]` entry at the top of this file for every
+merge-worthy user-facing change to this module, grouped under `### Added`,
+`### Changed`, `### Deprecated`, `### Removed`, `### Fixed`, or `### Security`
+as needed (omit empty groups). When a maintainer cuts a release:
+
+1. Rename the top `[Unreleased]` section to `[X.Y.Z] - YYYY-MM-DD` using the
+   version chosen per the breaking/additive/patch rule above.
+2. Add a fresh empty `## [Unreleased]` section above it.
+3. Tag the release commit `collector/vX.Y.Z` per
+   [`RELEASING.md`](../../../RELEASING.md).
+
+A wire-protocol-breaking change additionally needs a new protocol version
+(for example `collector-sdk/v1`) per Contract System v1 §5; do not reuse
+`v1alpha1` for an incompatible wire shape.

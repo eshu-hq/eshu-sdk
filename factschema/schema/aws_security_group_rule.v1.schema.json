@@ -1,0 +1,108 @@
+{
+  "$id": "https://eshu.dev/schemas/factschema/aws/v1/security_group_rule.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "account_id": {
+      "type": "string"
+    },
+    "collector_instance_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "correlation_anchors": {
+      "items": {
+        "type": "string"
+      },
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "direction": {
+      "type": "string"
+    },
+    "from_port": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_id": {
+      "type": "string"
+    },
+    "group_owner_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ip_protocol": {
+      "type": "string"
+    },
+    "is_all_ports": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "is_all_protocols": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "is_internet": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "region": {
+      "type": "string"
+    },
+    "rule_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "service_kind": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_kind": {
+      "type": "string"
+    },
+    "source_value": {
+      "type": "string"
+    },
+    "to_port": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "account_id",
+    "region",
+    "group_id",
+    "direction",
+    "ip_protocol",
+    "source_kind",
+    "source_value"
+  ],
+  "title": "Eshu aws_security_group_rule Payload (schema version 1)",
+  "type": "object"
+}
