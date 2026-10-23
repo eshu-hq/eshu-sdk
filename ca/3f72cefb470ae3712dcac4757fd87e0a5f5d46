@@ -1,0 +1,46 @@
+docs/compatibility.md
+  s_ff8a600f1fc93e::t_2e575e2faca2e6 1-2,8,10-13,15-19,21-34,38-40,42,44-57
+  s_ff8a600f1fc93e::t_b8dc46f5659b8c 35-37,58-60
+  s_ff8a600f1fc93e::t_d86ad361db0639 3-7,9,14,20,41,43
+factschema/CHANGELOG.md
+  s_ff8a600f1fc93e::t_5cb8e9e7c798e9 47-50
+  s_ff8a600f1fc93e::t_6e67399a2c923a 35-37
+  s_ff8a600f1fc93e::t_92bcd46be6413d 6-11,28-31
+collector/CHANGELOG.md
+  s_ff8a600f1fc93e::t_5cb8e9e7c798e9 33,40-42
+  s_ff8a600f1fc93e::t_92bcd46be6413d 6-10,24-27,34
+docs/release.md
+  s_ff8a600f1fc93e::t_2e575e2faca2e6 18-19,21-22,24-26,28-29,36-38
+  s_ff8a600f1fc93e::t_d6b5d6e294a971 17,20,23,27,32,35
+  s_ff8a600f1fc93e::t_d86ad361db0639 3-8,12-16
+docs/provenance.md
+  s_ff8a600f1fc93e::t_afaf373d9d3cf7 3-5,15,20-21
+  s_ff8a600f1fc93e::t_2e575e2faca2e6 41-42,47-50
+  s_ff8a600f1fc93e::t_b8dc46f5659b8c 43-46
+  s_ff8a600f1fc93e::t_6e67399a2c923a 19
+  s_ff8a600f1fc93e::t_d86ad361db0639 16-18
+docs/sdk-migration-evidence.md
+  s_ff8a600f1fc93e::t_d6b5d6e294a971 17-18,21-23
+  s_ff8a600f1fc93e::t_68d3a295e300fa 34-35,39-40,45-52,57-60,71-81,86-89,92-94
+  s_ff8a600f1fc93e::t_e47bf746c77c2a 61-66
+  s_ff8a600f1fc93e::t_badd71640bf37e 1-16,24-33,36-38,41-44,53-56,67-70,82-85,90-91,95-125
+  s_ff8a600f1fc93e::t_c8d671304ceb90 19-20
+README.md
+  s_ff8a600f1fc93e::t_d86ad361db0639 3,10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ca3f72cefb470ae3712dcac4757fd87e0a5f5d46",
+  "prompts": {},
+  "sessions": {
+    "s_ff8a600f1fc93e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a16a06-8788-7df0-b732-4e9dcaee59ce",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
