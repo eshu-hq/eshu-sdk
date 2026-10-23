@@ -1,0 +1,30 @@
+docs/compatibility.md
+  s_ff8a600f1fc93e::t_2e575e2faca2e6 1-59
+README.md
+  s_ff8a600f1fc93e::t_5cb8e9e7c798e9 10
+factschema/CHANGELOG.md
+  s_ff8a600f1fc93e::t_5cb8e9e7c798e9 7-10,40-43
+collector/CHANGELOG.md
+  s_ff8a600f1fc93e::t_5cb8e9e7c798e9 7-10,30-31,37-39
+docs/release.md
+  s_ff8a600f1fc93e::t_2e575e2faca2e6 3-7,11-20,22-23,30-32
+docs/provenance.md
+  s_ff8a600f1fc93e::t_afaf373d9d3cf7 3-5,15-20
+  s_ff8a600f1fc93e::t_2e575e2faca2e6 40-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c15e7ed9d5abe6df3683f03693eb46f4d189cf4d",
+  "prompts": {},
+  "sessions": {
+    "s_ff8a600f1fc93e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a16a06-8788-7df0-b732-4e9dcaee59ce",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
