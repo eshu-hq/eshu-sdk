@@ -7,7 +7,7 @@ This repository is a local preparation of two independent public Go modules copi
 | `collector/` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/vX.Y.Z` |
 | `factschema/` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/vX.Y.Z` |
 
-There is no root Go module. Each module is tested and versioned independently. No release version has been selected. The original in-tree modules and existing immutable tags remain in place until consumer tests and production cutover pass.
+There is no root Go module. Each module is tested and versioned independently. The first candidate tags are planned as `collector/v0.1.0-rc.1` and `factschema/v0.1.0-rc.1`; neither is published. The original in-tree modules and existing immutable tags remain in place until consumer tests and production cutover pass. See the [compatibility policy](docs/compatibility.md) for the old/new paths and acceptance states.
 
 ## Source and scope
 

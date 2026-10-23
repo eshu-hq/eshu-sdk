@@ -4,8 +4,10 @@ This file preserves the release history of the original in-tree
 `github.com/eshu-hq/eshu/sdk/go/factschema` module in Eshu. The `[0.1.0]`
 and `[0.2.0]` entries and tags below belong to that original path and
 repository. The new `github.com/eshu-hq/eshu-sdk/factschema` path has no
-published version, tag, or production support yet. `[Unreleased]` describes
-the inherited source snapshot, not an announced release of the new path.
+published version, tag, or production support yet. Its first candidate tag is
+planned as `factschema/v0.1.0-rc.1`, independently of the old path's `v0.2.0`
+line. `[Unreleased]` describes the inherited source snapshot, not an announced
+release of the new path. See the [compatibility policy](../docs/compatibility.md).
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Per-fact-kind payload schemas follow the breaking-change policy in
@@ -35,6 +37,10 @@ version — pinning this module pins the fixture pack too.
 - `codegraph/v1` `Import` gains three optional booleans, `type_only`, `deferred`
   and `inferred` (json tags of the same names, `omitempty`). A parser sets one
   only when it is true. An additive optional field is a minor change.
+- Compared with the supported old `factschema@v0.2.0`, this source contains
+  three added schemas, no removed schemas, and four existing schemas with
+  optional nullable fields added. The count changes from 176 to 179; it does
+  not establish acceptance by an old core consumer.
 
 ## [0.2.0] - 2026-09-16
 

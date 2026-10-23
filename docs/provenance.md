@@ -1,6 +1,8 @@
 # Source provenance
 
-The source is Eshu commit `eb62fa3056f5ed3518bb5aa676bf2e3adc96c1d5`.
+The initial relocation source is Eshu commit
+`eb62fa3056f5ed3518bb5aa676bf2e3adc96c1d5`. Later SDK additions are
+recorded in the module changelogs; they are not part of that source snapshot.
 
 | Source directory | Destination | Permitted source transformation |
 | --- | --- | --- |
@@ -10,7 +12,12 @@ The source is Eshu commit `eb62fa3056f5ed3518bb5aa676bf2e3adc96c1d5`.
 
 The initial relocation proof counted 1,076 source files. All 730 non-Go schema and fixture data files were byte identical in the relocation specimen. The original and relocated suites discovered the same 46 collector and 144 factschema Test/Benchmark names. The two original factschema decoder switches bound the same 179 fact-kind and public-decoder pairs; the relocated test map preserves that set. These are pre-publication local proofs, not consumer or deployment evidence.
 
-The existing in-tree implementations remain active until consumer validation and cutover. No version or tag is assigned here. Module-specific README files describe inherited contracts and prepared additions. Canonical admission and graph ownership remain in Eshu.
+The existing in-tree implementations remain active until consumer validation
+and cutover. The new paths have planned `v0.1.0-rc.1` candidate tags but no
+published tag. They are new module identities, distinct from the supported
+original paths at `v0.2.0`; see [compatibility](compatibility.md). Module
+READMEs describe inherited contracts and prepared additions. Canonical
+admission and graph ownership remain in Eshu.
 
 The transport extraction copies five production Go files and six test files.
 The four non-documentation production files and all six tests preserve the
@@ -30,3 +37,13 @@ The identity and generic fact-contract helpers record their pinned sources and
 later core-adoption requirements in [identity migration](identity-migration.md)
 and [contract-test migration](contracttest-migration.md). Temporary overlap does
 not permit permanently independent canonical implementations.
+
+The supported old modules resolve through the Go proxy at exact `v0.2.0`
+versions (`sdk-supported-old-modules-proxy.json`). Against that old factschema
+version, the current source has 176 to 179 schemas: three additions, no
+removals, and four optional nullable field additions
+(`sdk-old-new-schema-census.json`, `sdk-old-new-schema-diff.json`). This is a
+source comparison, not a qualified core/SDK pair or a deployed result. The
+release decision packet will bind any candidate tag to its final reviewed,
+merged source commit and green CI; this provenance note does not preselect
+that changing commit SHA.
