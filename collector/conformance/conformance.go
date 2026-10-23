@@ -56,9 +56,9 @@ const (
 	FindingPayloadSchemaInvalid FindingCode = "payload_schema_invalid"
 )
 
-// SourceEvidenceOnlyReducerPhase is the only reducer consumer phase optional
-// component facts may declare today: source evidence that is committed but not
-// promoted to canonical graph truth.
+// SourceEvidenceOnlyReducerPhase is the only phase admitted without trusted
+// CoreFacts coverage. It names source evidence committed without promotion to
+// canonical graph truth.
 const SourceEvidenceOnlyReducerPhase = "source_evidence_only:no_graph_truth"
 
 // Mode selects the conformance proof mode.
