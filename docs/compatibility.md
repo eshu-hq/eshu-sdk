@@ -11,7 +11,7 @@ not qualify a core consumer or establish a deployed pair.
 | Existing supported module | New module identity | Available first candidate | Other published candidate | Preferred next candidate |
 | --- | --- | --- | --- | --- |
 | `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.1.0-rc.1` | `collector/v0.2.0-rc.1` | `collector/v0.1.0-rc.2` (prepared) |
-| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.1` | `factschema/v0.1.0-rc.2` | `factschema/v0.1.0-rc.2` (published; fresh proxy proof pending) |
+| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.1` | `factschema/v0.1.0-rc.2` | `factschema/v0.1.0-rc.2` (published; proxy verified) |
 
 The old and new import paths name different Go types. The new `v0.1.0`
 line is a new module identity, not a continuation of the old path's `v0.2.0`
@@ -54,7 +54,7 @@ merges and exact-source CI passes.
 
 | State | Evidence required | Current recorded status |
 | --- | --- | --- |
-| Candidate available | Merged core path mapping, exact reviewed and merged source commit, green CI on that commit, separate tag approval, immutable directory-prefixed tags, and fresh proxy resolution | First RC1s, collector `v0.2.0-rc.1`, and factschema `v0.1.0-rc.2` tagged; fresh proxy proof for the later tags pending. Collector `v0.1.0-rc.2` prepared, not published |
+| Candidate available | Merged core path mapping, exact reviewed and merged source commit, green CI on that commit, separate tag approval, immutable directory-prefixed tags, and fresh proxy resolution | First RC1s, collector `v0.2.0-rc.1`, and factschema `v0.1.0-rc.2` tagged; fresh proxy proof for collector `v0.2.0-rc.1` pending; factschema `v0.1.0-rc.2` proxy verified. Collector `v0.1.0-rc.2` prepared, not published |
 | Qualified consumer/core pair | Exact candidate pins, contract and runtime gates for that consumer and core version, including grant-aware conformance for reserved kinds | Not qualified |
 | Deployed accepted pair | Matching deployment, reducer, graph, API/MCP, retry, operator, and rollback evidence | Not accepted |
 
@@ -69,6 +69,8 @@ successful build. Never retarget a published tag, including a prerelease. If
 release needs separate evidence and approval; it does not follow automatically
 from a candidate.
 
+The [factschema RC2 public-consumer proof](evidence/factschema-v0.1.0-rc.2.md)
+records its exact tag origin, checksums, and typed-decoder smoke check.
 The [migration evidence](sdk-migration-evidence.md) also records the original
 module tag origins and Go checksums. See [release and cutover](release.md) for
 the order of approval and qualification.

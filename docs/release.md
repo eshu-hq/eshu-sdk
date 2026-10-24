@@ -7,7 +7,9 @@ numeric-decoder tags are also published and immutable. The owner selected
 `collector/v0.1.0-rc.2` as the preferred next collector candidate on the
 initial prerelease line; that tag is prepared, not published. The published
 collector `v0.2.0-rc.1` is a historical candidate, not the preferred pin.
-Check Git tags and fresh proxy origins before acting on availability;
+The [factschema RC2 public-consumer proof](evidence/factschema-v0.1.0-rc.2.md)
+records its proxy origin and checksum. Check the collector historical tag
+separately before acting on its availability;
 qualification and deployed acceptance remain separate. See the [compatibility policy](compatibility.md).
 
 1. Confirm an independently reviewed mapping of inherited schemas, fixtures,

@@ -29,8 +29,8 @@ version — pinning this module pins the fixture pack too.
 ## [0.1.0-rc.2] - 2026-10-24
 
 Published candidate from the reviewed source commit also used by collector
-`v0.2.0-rc.1`. Fresh public-proxy resolution for this tag remains to be
-recorded. Publication does not qualify a consumer/core pair.
+`v0.2.0-rc.1`. Fresh public-proxy resolution and a typed-decoder smoke check are
+recorded in [candidate evidence](../docs/evidence/factschema-v0.1.0-rc.2.md). Publication does not qualify a consumer/core pair.
 
 ### Fixed
 
