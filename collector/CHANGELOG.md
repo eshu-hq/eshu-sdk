@@ -23,6 +23,11 @@ Future tags for the new module, after release approval, would use the Go subdire
 
 ## [Unreleased]
 
+### Added
+
+- `redact` provides deployment-keyed legacy-compatible HMAC-SHA256 markers
+  for sensitive string and byte values, with normalized classification labels.
+
 ## [0.1.0-rc.1] - 2026-10-23
 
 Candidate source prepared for separate review, merge, CI, and tag approval.
