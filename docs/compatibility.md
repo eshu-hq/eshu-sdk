@@ -4,13 +4,15 @@ The repository contains two independent Go module identities. Both first
 `v0.1.0-rc.1` candidates are available: their immutable tags and fresh public
 proxy downloads resolve to the source prepared in [SDK PR #9](https://github.com/eshu-hq/eshu-sdk/pull/9).
 The factschema `v0.1.0-rc.2` and collector `v0.2.0-rc.1` tags are also
-published. The preferred next collector candidate is `v0.1.0-rc.2`; its
-metadata is prepared here, but its tag is not yet published. Availability does
-not qualify a core consumer or establish a deployed pair.
+published. The preferred collector candidate on the initial `v0.1.0` line is
+`collector/v0.1.0-rc.2`. Its source contents and publication requirements are
+documented here; verify current availability from the exact Git tag and
+public-proxy origin. Availability does not qualify a core consumer or establish
+a deployed pair.
 
-| Existing supported module | New module identity | Available first candidate | Other published candidate | Preferred next candidate |
+| Existing supported module | New module identity | Available first candidate | Other published candidate | Preferred candidate |
 | --- | --- | --- | --- | --- |
-| `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.1.0-rc.1` | `collector/v0.2.0-rc.1` | `collector/v0.1.0-rc.2` (prepared) |
+| `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.1.0-rc.1` | `collector/v0.2.0-rc.1` | `collector/v0.1.0-rc.2` |
 | `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.1` | `factschema/v0.1.0-rc.2` | `factschema/v0.1.0-rc.2` (published; proxy verified) |
 
 The old and new import paths name different Go types. The new `v0.1.0`
@@ -47,12 +49,17 @@ repairs number-preserving typed decoding from
 [SDK PR #11](https://github.com/eshu-hq/eshu-sdk/pull/11), including exact
 integral decimal/exponent values and nested integer lists. Schemas, fixtures
 and wire protocols are unchanged by these two changes. The preferred collector
-`v0.1.0-rc.2` tag still requires separate approval after reviewed metadata
-merges and exact-source CI passes.
+`v0.1.0-rc.2` publication requires reviewed and merged metadata, green
+exact-source CI, a merged core compatibility mapping, and separate tag approval.
 
 ## Acceptance states
 
-| State | Evidence required | Current recorded status |
+The recorded status below is a historical snapshot from 2026-10-24, before
+collector `v0.1.0-rc.2` publication. Later publication and qualification require
+their own evidence; verify the exact Git tag and public-proxy origin for current
+availability.
+
+| State | Evidence required | Recorded snapshot |
 | --- | --- | --- |
 | Candidate available | Merged core path mapping, exact reviewed and merged source commit, green CI on that commit, separate tag approval, immutable directory-prefixed tags, and fresh proxy resolution | First RC1s, collector `v0.2.0-rc.1`, and factschema `v0.1.0-rc.2` tagged; fresh proxy proof for collector `v0.2.0-rc.1` pending; factschema `v0.1.0-rc.2` proxy verified. Collector `v0.1.0-rc.2` prepared, not published |
 | Qualified consumer/core pair | Exact candidate pins, contract and runtime gates for that consumer and core version, including grant-aware conformance for reserved kinds | Not qualified |
