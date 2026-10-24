@@ -1,0 +1,25 @@
+factschema/fixturepack/payloads/azure_tag_observation.invalid.json
+  s_ff8a600f1fc93e::t_092643c8003742 5
+factschema/azure_tag_fixture_test.go
+  s_ff8a600f1fc93e::t_e1f3fd63b988a5 14-33
+factschema/fixturepack/README.md
+  s_ff8a600f1fc93e::t_88323b4bf57867 25
+factschema/CHANGELOG.md
+  s_ff8a600f1fc93e::t_88323b4bf57867 31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "962abe92bcd2e9702e5fdcc1d926599fa14bbb55",
+  "prompts": {},
+  "sessions": {
+    "s_ff8a600f1fc93e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a16a06-8788-7df0-b732-4e9dcaee59ce",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
