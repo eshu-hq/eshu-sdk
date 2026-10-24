@@ -1,6 +1,6 @@
 # SDK repository agent rules
 
-Read this file and the scoped `AGENTS.md` in each module or family before editing. The repository is a local preparation; no module path is published or production accepted yet.
+Read this file and the scoped `AGENTS.md` in each module or family before editing. This repository contains two independently versioned Go modules. Check the [compatibility policy](docs/compatibility.md) for current candidate availability and required qualification and deployment evidence; candidate publication alone does not establish consumer or production acceptance.
 
 - Work on a named branch in an isolated worktree. Check `pwd` before writing and `git symbolic-ref -q HEAD` before committing.
 - Use `rg` for text searches and `rg --files` for file discovery. Keep every tracked file under 500 lines. Do not add AI attribution.
