@@ -8,7 +8,7 @@ import (
 	"errors"
 )
 
-// validateKubernetesPostureField admits only the three producer-owned posture
+// validateKubernetesPostureField admits only the producer-owned posture
 // fields at the root of their version-1 facts. It checks key safety, leaving
 // integer and other payload semantics to an optional payload schema.
 func validateKubernetesPostureField(value any, key, kind, schema string) (bool, error) {
