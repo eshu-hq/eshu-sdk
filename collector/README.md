@@ -65,7 +65,16 @@ migrated to this package.
 - source references outside the claimed scope/generation/fact key;
 - credential-bearing or host-local source URIs;
 - payload keys that look like credentials and were not redacted before emission;
+- duplicate decoded JSON member names in a native payload's canonical
+  representation, including identical duplicates and escaped equivalent names;
 - conflicting duplicates for the same fact kind and stable key.
+
+Native payloads with custom JSON marshaling are checked against their serialized
+JSON, including member-name uniqueness at every object depth. The caller must
+provide deterministic serialization and keep the result stable from validation
+through subsequent host use. `ValidationReport` does not freeze or copy the
+payload; concurrent mutation or stateful marshalers can change what is later
+emitted.
 
 For `azure_tag_observation` schema `1.0.0` only, the root
 `tag_value_fingerprints` object may retain source tag names, including names
