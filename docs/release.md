@@ -14,9 +14,12 @@ qualification, and deployed acceptance are separate states. See the
    The standalone SDK mapping alone does not satisfy that core prerequisite.
 2. Confirm the separately reviewed versioned candidate preparation has a
    `0.1.0-rc.1` entry in each new-path changelog and accurate source/status
-   wording. The policy and path mapping alone were not taggable; this source
-   preparation is not tag approval. Do not claim a tag is published before it
-   exists; Git tags and public proxy resolution are authoritative.
+   wording. The first collector candidate includes the trusted
+   `conformance.Request.CoreFacts` API; the earlier prepared source without it
+   was superseded before any candidate tag. The factschema API is unchanged by
+   this expansion. The policy and path mapping alone were not taggable; this
+   source preparation is not tag approval. Do not claim a tag is published
+   before it exists; Git tags and public proxy resolution are authoritative.
 3. Run standalone module CI. Bind the decision packet and separate tag approval
    to the exact reviewed and merged source commit with green CI. Do not hardcode
    a source SHA in these docs, because a docs edit changes the commit.
@@ -28,8 +31,10 @@ qualification, and deployed acceptance are separate states. See the
    tag origin SHA, and a successful build. Candidate availability alone does
    not establish a qualified consumer or production compatibility.
 6. Migrate consumers to exact published versions and run their contract and
-   runtime gates. Grant-aware conformance blocks reserved-kind collector
-   qualification. Reuse the existing core envelope adapter; retire duplicate
+   runtime gates. The caller must derive fresh, authoritative grant coverage,
+   expiry/revocation, scope, version, reducer phases, and payload schemas for
+   `CoreFacts`; the SDK cannot qualify a reserved-kind collector on its own.
+   Reuse the existing core envelope adapter; retire duplicate
    generic helpers and identity derivation only at their documented adoption
    steps.
 7. Validate the designated deployment and rehearse rollback without overlapping

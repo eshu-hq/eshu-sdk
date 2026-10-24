@@ -23,13 +23,6 @@ Future tags for the new module, after release approval, would use the Go subdire
 
 ## [Unreleased]
 
-### Added
-
-- Optional trusted `conformance.Request.CoreFacts` binds a caller-evaluated
-  authorization snapshot to a manifest and exact collector/schema tuples.
-  Default source-only behavior and report bytes remain unchanged. This API is
-  not included in the prepared `v0.1.0-rc.1` source.
-
 ## [0.1.0-rc.1] - 2026-10-23
 
 Candidate source prepared for separate review, merge, CI, and tag approval.
@@ -46,10 +39,15 @@ This entry belongs to the new module path, not the historical `v0.2.0` line.
 - The neutral `entrypoints` generator and `collector-entrypoints-gen` CLI create
   stdio commands around provider-owned handlers, with strict manifests and
   contained write/check behavior. Legacy hosted core templates remain separate.
-- Current transport and conformance tooling are included. Grant-aware
-  conformance is required to qualify a reserved-kind collector; it does not
-  limit candidate availability for other consumers.
-
+- Current transport and conformance tooling are included. Optional trusted
+  `conformance.Request.CoreFacts` binds a caller-evaluated authorization
+  snapshot to manifest identity, reserved kinds, exact collector/schema tuples,
+  reducer phases, and payload schemas. Nil context keeps source-only behavior
+  and report bytes; JSON/YAML request decoding and the wire protocol are
+  unchanged. Adding this exported struct field can break external unkeyed
+  `Request` literals; keyed literals remain source compatible. The caller
+  supplies authoritative grants, expiry/revocation, scope, version, phase,
+  and schema evidence. This API does not itself qualify a collector.
 - `ProtocolVersionV1Alpha2` (`collector-sdk/v1alpha2`): second collector
   extension wire contract, admitted only when explicitly configured;
   v1alpha1 default unchanged.

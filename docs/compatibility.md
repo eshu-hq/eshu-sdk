@@ -23,11 +23,12 @@ The candidate includes the current collector contracts and tooling: transport,
 conformance, public `Request`, bounded `command.Run`, neutral entrypoint
 generation, and the optional `TrustedDeletion` attestation field. It includes
 the current factschema typed contracts, schemas, fixture pack, identity helper,
-and generic contract assertions. The unimplemented CoreFacts API is excluded.
-Core still owns grant decisions, admission, graph truth, queues, leases, and
-durable state. A grant-aware conformance result is required before a reserved
-fact kind can qualify a collector; this does not narrow availability of the
-candidate modules for other consumer tests.
+and generic contract assertions. The collector candidate also includes the
+optional `conformance.Request.CoreFacts` context for trusted, exact-tuple
+coverage of reserved kinds. Core still owns grant decisions, admission, graph
+truth, queues, leases, and durable state. A grant-aware conformance result is
+required before a reserved fact kind can qualify a collector; candidate
+availability alone does not qualify that collector.
 
 The comparison against the supported old `factschema@v0.2.0` has 176 old
 schemas and 179 current schemas: three added, none removed, and four existing
@@ -59,10 +60,21 @@ The [migration evidence](sdk-migration-evidence.md) also records the original
 module tag origins and Go checksums. See [release and cutover](release.md) for
 the order of approval and qualification.
 
-## Unreleased conformance context
+## Trusted conformance context in the candidate
 
-The prepared `v0.1.0-rc.1` source does not include `Request.CoreFacts`. The
-[trusted conformance context](conformance-grants.md) is a later, unreleased
-API. Its presence on the development branch does not change the immutable
-candidate source or establish a qualified collector/core pair. Consumers need
-an exact version that includes it and matching caller/registry validation.
+The expanded first collector candidate includes
+[`conformance.Request.CoreFacts`](conformance-grants.md). This optional Go API
+binds a caller-evaluated grant snapshot to the manifest's component identity,
+reserved kinds, exact collector and schema-version emission tuples, reducer
+phases, and payload schema references. Nil context keeps the prior source-only
+behavior and report bytes. The field is excluded from JSON and YAML decoding;
+it does not change the collector wire protocol or report schema. Adding a field
+to the exported `Request` struct can break external unkeyed composite literals;
+callers using keyed literals are unaffected by the new field.
+
+The caller must supply a complete reserved-kind inventory and authoritative,
+fresh grant, expiry, revocation, scope, version, phase, and schema evidence.
+It must keep all request inputs immutable while `Run` executes. The SDK checks
+structural coverage and fixture tuples but does not load grants, assign core
+phases, or authorize a live emission. Neither this candidate source nor an
+eventual tag establishes a qualified collector/core or deployed pair.
