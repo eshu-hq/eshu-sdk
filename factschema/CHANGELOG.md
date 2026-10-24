@@ -29,6 +29,10 @@ version — pinning this module pins the fixture pack too.
 
 ### Fixed
 
+- Nested integer slices accept exact integral `json.Number` decimal and
+  exponent values, retain legacy mixed-member conversion and report bounded
+  invalid-input errors.
+
 - Typed payload decoding now accepts number-preserving `json.Number` input.
   Integer fields preserve integral decimal and exponent values exactly and
   reject fractional or out-of-range values. Float fields accept finite values,
