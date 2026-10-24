@@ -25,6 +25,20 @@ Future tags for the new module, after release approval, would use the Go subdire
 (`factschema/fixturepack`) ships inside this module and has no separate
 version — pinning this module pins the fixture pack too.
 
+## [Unreleased]
+
+### Fixed
+
+- Nested integer slices accept exact integral `json.Number` decimal and
+  exponent values, retain legacy mixed-member conversion and report bounded
+  invalid-input errors.
+
+- Typed payload decoding now accepts number-preserving `json.Number` input.
+  Integer fields preserve integral decimal and exponent values exactly and
+  reject fractional or out-of-range values. Float fields accept finite values,
+  including fractions, with float64 rounding. Malformed tokens and float64
+  overflow fail as `input_invalid`. Schemas and fixture payloads are unchanged.
+
 ## [0.1.0-rc.1] - 2026-10-23
 
 Candidate source prepared for separate review, merge, CI, and tag approval.
