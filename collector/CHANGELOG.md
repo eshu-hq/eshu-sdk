@@ -4,8 +4,8 @@ This file preserves the release history of the original in-tree
 `github.com/eshu-hq/eshu/sdk/go/collector` module in Eshu. The `[0.1.0]` and `[0.2.0]` entries and
 tags below belong to that original path and repository. The new
 `github.com/eshu-hq/eshu-sdk/collector` path starts an independent version
-line. Candidate entries record source preparation; they do not
-assert tag publication or production consumer support. Check Git tags and
+line. Candidate entries describe source changes; tag publication and
+production consumer support are separate states. Check Git tags and
 the Go proxy for current availability. See the
 [compatibility policy](../docs/compatibility.md).
 
@@ -14,19 +14,30 @@ and this module follows the versioning rule in
 [Contract System v1 §5](https://github.com/eshu-hq/eshu/blob/eb62fa3056/docs/internal/design/contract-system-v1.md#5-versioning-and-compatibility-policy):
 a breaking change to the `collector-sdk/v1alpha1` wire protocol or the public
 Go API is a major bump, an additive backward-compatible change is a minor
-bump, and a docs-only or internal change is a patch. See
+bump, and a docs-only or internal change is a patch for stable releases.
+The preferred prerelease line remains `v0.1.0` until stable qualification;
+its next collector candidate is `v0.1.0-rc.2`. See
 [SDK Compatibility](https://github.com/eshu-hq/eshu/blob/eb62fa3056/docs/public/extend/sdk-compatibility.md) for how
 this module version lines up with core Eshu releases and the wire protocol.
 
-Future tags for the new module, after release approval, would use the Go subdirectory-module format:
+Tags for the new module use the Go subdirectory-module format after separate release approval:
 `collector/vX.Y.Z`.
 
 ## [Unreleased]
 
+## [0.1.0-rc.2] - Unreleased
+
+Preferred next candidate on the initial `v0.1.0` line. This source includes
+the neutral `marker` API already present in the published
+`collector/v0.2.0-rc.1` candidate. Review, merge, CI, separate tag approval,
+and fresh proxy resolution remain before this tag can be called available.
+Neither candidate establishes a qualified consumer/core pair.
+
 ## [0.2.0-rc.1] - 2026-10-24
 
-Candidate source prepared for independent review, merge, CI and tag approval.
-This entry does not claim publication or a qualified consumer/core pair.
+Published historical candidate. The owner subsequently chose the `v0.1.0`
+prerelease line for the preferred next candidate; this immutable tag remains
+available but is not the preferred pin or a qualified consumer/core pair.
 
 ### Added
 

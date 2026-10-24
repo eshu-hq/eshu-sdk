@@ -4,8 +4,8 @@ This file preserves the release history of the original in-tree
 `github.com/eshu-hq/eshu/sdk/go/factschema` module in Eshu. The `[0.1.0]`
 and `[0.2.0]` entries and tags below belong to that original path and
 repository. The new `github.com/eshu-hq/eshu-sdk/factschema` path starts an
-independent version line. Candidate entries record source preparation; they do not
-assert tag publication or production consumer support. Check Git tags and
+independent version line. Candidate entries describe source changes; tag
+publication and production consumer support are separate states. Check Git tags and
 the Go proxy for current availability. See the
 [compatibility policy](../docs/compatibility.md).
 
@@ -19,7 +19,7 @@ version tracks the highest bump any fact kind needed in that release. See
 [SDK Compatibility](https://github.com/eshu-hq/eshu/blob/eb62fa3056/docs/public/extend/sdk-compatibility.md) for how
 this module version lines up with core Eshu releases and fixture-pack pins.
 
-Future tags for the new module, after release approval, would use the Go subdirectory-module format:
+Tags for the new module use the Go subdirectory-module format after separate release approval:
 `factschema/vX.Y.Z`. The fixture pack
 (`factschema/fixturepack`) ships inside this module and has no separate
 version — pinning this module pins the fixture pack too.
@@ -28,8 +28,9 @@ version — pinning this module pins the fixture pack too.
 
 ## [0.1.0-rc.2] - 2026-10-24
 
-Candidate source prepared for independent review, merge, CI and tag approval.
-This entry does not claim publication or a qualified consumer/core pair.
+Published candidate from the reviewed source commit also used by collector
+`v0.2.0-rc.1`. Fresh public-proxy resolution for this tag remains to be
+recorded. Publication does not qualify a consumer/core pair.
 
 ### Fixed
 
