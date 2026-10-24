@@ -1,15 +1,15 @@
 # SDK module compatibility and candidate status
 
-The new repository contains two independent Go module identities. Source for
-their first candidates is prepared as `v0.1.0-rc.1`. At preparation time, no
-candidate tag had been published; check Git tags and the Go proxy for current
-availability. A candidate tag makes bytes available for testing; it does not
+The repository contains two independent Go module identities. Both first
+`v0.1.0-rc.1` candidates are available: their immutable tags and fresh public
+proxy downloads resolve to the source prepared in [SDK PR #9](https://github.com/eshu-hq/eshu-sdk/pull/9).
+The next candidates below are source preparation only. Availability does not
 qualify a core consumer or establish a deployed pair.
 
-| Existing published module | Existing version | New module identity | Prepared first candidate |
+| Existing supported module | New module identity | Available first candidate | Prepared next candidate |
 | --- | --- | --- | --- |
-| `github.com/eshu-hq/eshu/sdk/go/collector` | `v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.1.0-rc.1` |
-| `github.com/eshu-hq/eshu/sdk/go/factschema` | `v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.1` |
+| `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.1.0-rc.1` | `collector/v0.2.0-rc.1` |
+| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.1` | `factschema/v0.1.0-rc.2` |
 
 The old and new import paths name different Go types. The new `v0.1.0`
 line is a new module identity, not a continuation of the old path's `v0.2.0`
@@ -17,7 +17,7 @@ line or a drop-in replacement. Both modules require Go `1.26.5` or newer.
 The old `v0.2.0` paths, their source, and their support and security policy
 remain in place until consumer and deployed acceptance authorize a cutover.
 
-## Scope of the prepared candidate
+## Scope of the candidates
 
 The candidate includes the current collector contracts and tooling: transport,
 conformance, public `Request`, bounded `command.Run`, neutral entrypoint
@@ -37,11 +37,20 @@ comparison, not proof that old core accepts new SDK output. The
 [migration evidence](sdk-migration-evidence.md) records the source counts,
 per-file changes, and commands to reproduce them.
 
+The next collector candidate adds the neutral `marker` package from
+[SDK PR #10](https://github.com/eshu-hq/eshu-sdk/pull/10), an additive Go API
+change on the independent `v0.2.0` candidate line. The next factschema candidate
+repairs number-preserving typed decoding from
+[SDK PR #11](https://github.com/eshu-hq/eshu-sdk/pull/11), including exact
+integral decimal/exponent values and nested integer lists. Schemas, fixtures
+and wire protocols are unchanged by these two changes. Both next tags require
+separate approval after reviewed metadata merges and exact-source CI passes.
+
 ## Acceptance states
 
-| State | Evidence required | Status at source preparation |
+| State | Evidence required | Current recorded status |
 | --- | --- | --- |
-| Candidate available | Merged core path mapping, exact reviewed and merged source commit, green CI on that commit, separate tag approval, immutable directory-prefixed tags, and fresh proxy resolution | Source prepared; publication requires live Git/proxy checks |
+| Candidate available | Merged core path mapping, exact reviewed and merged source commit, green CI on that commit, separate tag approval, immutable directory-prefixed tags, and fresh proxy resolution | First RC1s available; next candidates prepared, not published |
 | Qualified consumer/core pair | Exact candidate pins, contract and runtime gates for that consumer and core version, including grant-aware conformance for reserved kinds | Not qualified |
 | Deployed accepted pair | Matching deployment, reducer, graph, API/MCP, retry, operator, and rollback evidence | Not accepted |
 
