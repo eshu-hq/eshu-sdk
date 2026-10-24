@@ -30,7 +30,8 @@ type Key struct {
 
 // NewKey constructs a redaction key from deployment-scoped secret material.
 //
-// The material is copied. Blank key material is rejected because unkeyed
+// The material is copied; callers must keep it stable until NewKey returns.
+// Blank key material is rejected because unkeyed
 // redaction markers are vulnerable to offline guessing for low-entropy values.
 func NewKey(material []byte) (Key, error) {
 	if len(strings.TrimSpace(string(material))) == 0 {
@@ -73,7 +74,8 @@ func String(raw string, reason string, source string, key Key) Value {
 // Bytes turns sensitive bytes into a deterministic marker.
 //
 // The marker digest includes the raw bytes, normalized reason, and normalized
-// source. Only the digest is returned; raw bytes are not retained.
+// source. Only the digest is returned; raw bytes are not retained. Callers must
+// keep raw stable until Bytes returns.
 func Bytes(raw []byte, reason string, source string, key Key) Value {
 	normalizedReason := normalizeContext(reason)
 	normalizedSource := normalizeContext(source)

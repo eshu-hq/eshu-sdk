@@ -7,6 +7,9 @@ be shared by concurrent calls. The returned `Value` contains only the marker
 and classification labels; callers must never put raw secrets in the labels.
 The package does not log or emit telemetry.
 
+Callers must keep `NewKey` material and `Bytes` raw input stable for the
+duration of each call. Constructed keys are immutable and safe to share.
+
 The zero `Key` preserves legacy marker behavior but is not suitable for
 protecting sensitive inputs. Construct a key with `NewKey` and reject `IsZero`
 before source acquisition in production collectors. `String` and `Bytes` retain
