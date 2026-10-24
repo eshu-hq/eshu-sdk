@@ -67,6 +67,14 @@ migrated to this package.
 - payload keys that look like credentials and were not redacted before emission;
 - conflicting duplicates for the same fact kind and stable key.
 
+For `azure_tag_observation` schema `1.0.0` only, the root
+`tag_value_fingerprints` object may retain source tag names, including names
+such as `api_key`. Every value must be a `redacted:hmac-sha256:` marker with
+exactly 64 lowercase hexadecimal digits. Null and malformed values fail
+validation. This exception does not apply to nested objects, other fact kinds,
+other schema versions, or the context-free `ValidateShareSafeKeys` check.
+Native Go payloads and JSON-decoded payloads receive the same validation.
+
 When a component manifest declares `payloadSchemaRef`, the in-tree host and
 `eshu component conform` additionally validate that fact's payload against the
 referenced `factschema/fixturepack` schema before publication or hosted

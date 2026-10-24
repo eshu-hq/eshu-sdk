@@ -26,6 +26,13 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
+### Fixed
+
+- The `azure_tag_observation` valid and invalid examples now carry a deterministic
+  synthetic HMAC-SHA256 fingerprint in place of a placeholder. The payload
+  schema and typed decode contract are unchanged. The source correction is
+  prepared for a separately reviewed `v0.1.0-rc.3` candidate, not a release.
+
 ## [0.1.0-rc.2] - 2026-10-24
 
 Published candidate from the reviewed source commit also used by collector
