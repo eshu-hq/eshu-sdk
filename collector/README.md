@@ -75,6 +75,24 @@ validation. This exception does not apply to nested objects, other fact kinds,
 other schema versions, or the context-free `ValidateShareSafeKeys` check.
 Native Go payloads and JSON-decoded payloads receive the same validation.
 
+For Kubernetes posture facts at schema `1.0.0`, the validator admits only these
+exact root fields through the sensitive-key check:
+
+| Fact kind | Root field | Key-safe JSON value |
+| --- | --- | --- |
+| `k8s_service_account`, `k8s_service_account_token_posture` | `secret_ref_count`, `image_pull_secret_ref_count` | Number or null |
+| Same two kinds | `automount_token` | `"true"`, `"false"`, `"unknown"`, or null |
+| `k8s_workload_identity_use` | `projected_service_account_token` | Boolean |
+
+These fields remain optional. This is key-safety admission, not payload-schema
+validation: signed, unsigned, fractional, negative, exponent, and large JSON
+numbers pass this check after successful JSON serialization. A configured
+payload schema separately decides whether a count is an integer. The exception
+does not apply to other kinds, schema versions, nested keys, or the context-free
+`IsSensitiveKeyName` and `ValidateShareSafeKeys` helpers. Native aliases,
+pointers, typed nil values, and custom marshalers are checked against their
+canonical JSON representation.
+
 When a component manifest declares `payloadSchemaRef`, the in-tree host and
 `eshu component conform` additionally validate that fact's payload against the
 referenced `factschema/fixturepack` schema before publication or hosted

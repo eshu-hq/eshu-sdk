@@ -44,6 +44,14 @@ func walkFactPayload(value any, path, kind, schema string, depth int) error {
 				}
 				continue
 			}
+			if depth == 0 {
+				if handled, err := validateKubernetesPostureField(child, key, kind, schema); handled {
+					if err != nil {
+						return fmt.Errorf("%s: %w", childPath, err)
+					}
+					continue
+				}
+			}
 			if err := rejectSensitivePayloadKey(key, childPath); err != nil {
 				return err
 			}
