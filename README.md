@@ -1,13 +1,13 @@
 # Eshu Go SDK preparation
 
-This repository prepares two independent public Go modules initially copied from Eshu at commit `eb62fa3056f5ed3518bb5aa676bf2e3adc96c1d5`. Source for their first release candidates is prepared; this source preparation does not establish tag publication or acceptance by a production Eshu consumer. Check Git tags and the Go proxy for current availability.
+This repository prepares two independent public Go modules initially copied from Eshu at commit `eb62fa3056f5ed3518bb5aa676bf2e3adc96c1d5`. The first release candidates and the subsequent `collector/v0.2.0-rc.1` and `factschema/v0.1.0-rc.2` tags have been published. The preferred next collector candidate is `collector/v0.1.0-rc.2`, still awaiting review, merge, CI, and separate tag approval. Candidate publication does not establish acceptance by a production Eshu consumer. Check Git tags and the Go proxy for current availability.
 
-| Directory | Proposed module path | Tag prefix |
+| Directory | Module path | Tag prefix |
 | --- | --- | --- |
 | `collector/` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/vX.Y.Z` |
 | `factschema/` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/vX.Y.Z` |
 
-There is no root Go module. Each module is tested and versioned independently. Their first candidate source is prepared for `collector/v0.1.0-rc.1` and `factschema/v0.1.0-rc.1`. The original in-tree modules and existing immutable tags remain in place until consumer tests and production cutover pass. See the [compatibility policy](docs/compatibility.md) for the old/new paths and acceptance states.
+There is no root Go module. Each module is tested and versioned independently. Their first candidate tags are `collector/v0.1.0-rc.1` and `factschema/v0.1.0-rc.1`. The original in-tree modules and existing immutable tags remain in place until consumer tests and production cutover pass. See the [compatibility policy](docs/compatibility.md) for the old/new paths and acceptance states.
 
 ## Source and scope
 
@@ -22,7 +22,7 @@ assertions. See [command behavior](docs/command.md) and
 Core call sites, full conformance orchestration, AWS scanner checks, and legacy
 hosted entrypoint templates remain in Eshu. The neutral generator gives
 collectors a stdio command without moving database or workflow ownership.
-This preparation does not grant support or release status to a new module path.
+Published candidates do not grant production support to a new module path.
 
 ## Local checks
 

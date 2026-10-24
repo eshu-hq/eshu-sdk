@@ -3,13 +3,15 @@
 The repository contains two independent Go module identities. Both first
 `v0.1.0-rc.1` candidates are available: their immutable tags and fresh public
 proxy downloads resolve to the source prepared in [SDK PR #9](https://github.com/eshu-hq/eshu-sdk/pull/9).
-The next candidates below are source preparation only. Availability does not
-qualify a core consumer or establish a deployed pair.
+The factschema `v0.1.0-rc.2` and collector `v0.2.0-rc.1` tags are also
+published. The preferred next collector candidate is `v0.1.0-rc.2`; its
+metadata is prepared here, but its tag is not yet published. Availability does
+not qualify a core consumer or establish a deployed pair.
 
-| Existing supported module | New module identity | Available first candidate | Prepared next candidate |
-| --- | --- | --- | --- |
-| `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.1.0-rc.1` | `collector/v0.2.0-rc.1` |
-| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.1` | `factschema/v0.1.0-rc.2` |
+| Existing supported module | New module identity | Available first candidate | Other published candidate | Preferred next candidate |
+| --- | --- | --- | --- | --- |
+| `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.1.0-rc.1` | `collector/v0.2.0-rc.1` | `collector/v0.1.0-rc.2` (prepared) |
+| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.1` | `factschema/v0.1.0-rc.2` | `factschema/v0.1.0-rc.2` (published; proxy verified) |
 
 The old and new import paths name different Go types. The new `v0.1.0`
 line is a new module identity, not a continuation of the old path's `v0.2.0`
@@ -37,20 +39,22 @@ comparison, not proof that old core accepts new SDK output. The
 [migration evidence](sdk-migration-evidence.md) records the source counts,
 per-file changes, and commands to reproduce them.
 
-The next collector candidate adds the neutral `marker` package from
+The preferred collector `v0.1.0-rc.2` candidate includes the neutral `marker` package from
 [SDK PR #10](https://github.com/eshu-hq/eshu-sdk/pull/10), an additive Go API
-change on the independent `v0.2.0` candidate line. The next factschema candidate
+change. The immutable collector `v0.2.0-rc.1` tag already includes it, but is
+a historical candidate rather than the preferred pin. Factschema `v0.1.0-rc.2`
 repairs number-preserving typed decoding from
 [SDK PR #11](https://github.com/eshu-hq/eshu-sdk/pull/11), including exact
 integral decimal/exponent values and nested integer lists. Schemas, fixtures
-and wire protocols are unchanged by these two changes. Both next tags require
-separate approval after reviewed metadata merges and exact-source CI passes.
+and wire protocols are unchanged by these two changes. The preferred collector
+`v0.1.0-rc.2` tag still requires separate approval after reviewed metadata
+merges and exact-source CI passes.
 
 ## Acceptance states
 
 | State | Evidence required | Current recorded status |
 | --- | --- | --- |
-| Candidate available | Merged core path mapping, exact reviewed and merged source commit, green CI on that commit, separate tag approval, immutable directory-prefixed tags, and fresh proxy resolution | First RC1s available; next candidates prepared, not published |
+| Candidate available | Merged core path mapping, exact reviewed and merged source commit, green CI on that commit, separate tag approval, immutable directory-prefixed tags, and fresh proxy resolution | First RC1s, collector `v0.2.0-rc.1`, and factschema `v0.1.0-rc.2` tagged; fresh proxy proof for collector `v0.2.0-rc.1` pending; factschema `v0.1.0-rc.2` proxy verified. Collector `v0.1.0-rc.2` prepared, not published |
 | Qualified consumer/core pair | Exact candidate pins, contract and runtime gates for that consumer and core version, including grant-aware conformance for reserved kinds | Not qualified |
 | Deployed accepted pair | Matching deployment, reducer, graph, API/MCP, retry, operator, and rollback evidence | Not accepted |
 
@@ -65,6 +69,8 @@ successful build. Never retarget a published tag, including a prerelease. If
 release needs separate evidence and approval; it does not follow automatically
 from a candidate.
 
+The [factschema RC2 public-consumer proof](evidence/factschema-v0.1.0-rc.2.md)
+records its exact tag origin, checksums, and typed-decoder smoke check.
 The [migration evidence](sdk-migration-evidence.md) also records the original
 module tag origins and Go checksums. See [release and cutover](release.md) for
 the order of approval and qualification.
