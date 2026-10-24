@@ -25,6 +25,15 @@ Tags for the new module use the Go subdirectory-module format after separate rel
 
 ## [Unreleased]
 
+### Fixed
+
+- Fact validation admits original tag names only in the root fingerprint map
+  of `azure_tag_observation` schema `1.0.0`, and requires every value to be a
+  complete HMAC-SHA256 redaction marker. Native and JSON-decoded payloads
+  reject credential-shaped keys everywhere else. This source correction is
+  prepared for a separately reviewed `v0.1.0-rc.3` candidate; it is not a tag
+  or a qualified core/collector pair.
+
 ## [0.1.0-rc.2] - 2026-10-24
 
 Preferred collector candidate on the initial `v0.1.0` line. This source includes
