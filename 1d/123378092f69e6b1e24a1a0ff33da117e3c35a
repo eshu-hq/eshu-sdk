@@ -1,0 +1,27 @@
+collector/kubernetes_posture_validation_test.go
+  s_ff8a600f1fc93e::t_1fcbd87e41b0a5 1-6,8-13,16-58,60-68,71-75,77-78,80-86,88,90,92-95,97-109,127-132,138-140
+  s_ff8a600f1fc93e::t_ec9f9909504d7a 7,14-15,69-70,79,89,110-126
+  s_ff8a600f1fc93e::t_e8bc04b849c198 59,76,87,91,96,133-137
+collector/kubernetes_posture_validation.go
+  s_ff8a600f1fc93e::t_7bef9779a4cf83 1-74
+collector/README.md
+  s_ff8a600f1fc93e::t_8d9d118de8710c 78-95
+collector/payload_validation.go
+  s_ff8a600f1fc93e::t_7bef9779a4cf83 47-54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1d123378092f69e6b1e24a1a0ff33da117e3c35a",
+  "prompts": {},
+  "sessions": {
+    "s_ff8a600f1fc93e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a16a06-8788-7df0-b732-4e9dcaee59ce",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
