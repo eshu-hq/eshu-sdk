@@ -29,10 +29,11 @@ version — pinning this module pins the fixture pack too.
 
 ### Fixed
 
-- Typed payload decoding now accepts number-preserving `json.Number` input,
-  including exact integral decimal and exponent forms. Invalid, fractional,
-  and out-of-range numeric tokens fail as `input_invalid` without changing
-  schemas or fixture payloads.
+- Typed payload decoding now accepts number-preserving `json.Number` input.
+  Integer fields preserve integral decimal and exponent values exactly and
+  reject fractional or out-of-range values. Float fields accept finite values,
+  including fractions, with float64 rounding. Malformed tokens and float64
+  overflow fail as `input_invalid`. Schemas and fixture payloads are unchanged.
 
 ## [0.1.0-rc.1] - 2026-10-23
 
