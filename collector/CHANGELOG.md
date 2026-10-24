@@ -25,13 +25,16 @@ Tags for the new module use the Go subdirectory-module format after separate rel
 
 ## [Unreleased]
 
-## [0.1.0-rc.2] - Unreleased
+## [0.1.0-rc.2] - 2026-10-24
 
-Preferred next candidate on the initial `v0.1.0` line. This source includes
+Preferred collector candidate on the initial `v0.1.0` line. This source includes
 the neutral `marker` API already present in the published
-`collector/v0.2.0-rc.1` candidate. Review, merge, CI, separate tag approval,
-and fresh proxy resolution remain before this tag can be called available.
-Neither candidate establishes a qualified consumer/core pair.
+`collector/v0.2.0-rc.1` candidate.
+
+Publication requires reviewed and merged release metadata, green CI on
+the exact source commit, a merged core compatibility mapping, and
+separate tag approval. Candidate availability requires fresh public-proxy
+resolution. Neither publication nor availability qualifies a consumer/core pair.
 
 ## [0.2.0-rc.1] - 2026-10-24
 

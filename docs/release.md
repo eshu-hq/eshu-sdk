@@ -4,9 +4,11 @@ Both first `v0.1.0-rc.1` module candidates are available through immutable
 directory-prefixed tags and verified fresh public-proxy downloads from the
 source in [SDK PR #9](https://github.com/eshu-hq/eshu-sdk/pull/9). The later `collector/v0.2.0-rc.1` marker and `factschema/v0.1.0-rc.2`
 numeric-decoder tags are also published and immutable. The owner selected
-`collector/v0.1.0-rc.2` as the preferred next collector candidate on the
-initial prerelease line; that tag is prepared, not published. The published
-collector `v0.2.0-rc.1` is a historical candidate, not the preferred pin.
+`collector/v0.1.0-rc.2` as the preferred collector candidate on the initial
+prerelease line. The checklist below defines its publication and qualification
+requirements. Verify current publication from the exact Git tag and
+public-proxy origin. The published collector `v0.2.0-rc.1` remains a historical
+candidate.
 The [factschema RC2 public-consumer proof](evidence/factschema-v0.1.0-rc.2.md)
 records its proxy origin and checksum. Check the collector historical tag
 separately before acting on its availability;

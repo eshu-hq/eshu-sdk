@@ -24,5 +24,6 @@ and did not change module resolution or verification.
 
 This proves public candidate resolution and one typed numeric decoder path.
 It does not qualify a collector/core pair, provider behavior, or a deployment.
-The preferred `collector/v0.1.0-rc.2` candidate remains untagged; the
-historical `collector/v0.2.0-rc.1` tag has separate proxy verification pending.
+At the time of this factschema verification, the preferred
+`collector/v0.1.0-rc.2` candidate was untagged, and separate proxy verification
+for historical `collector/v0.2.0-rc.1` had not been recorded.

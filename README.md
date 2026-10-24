@@ -1,6 +1,15 @@
 # Eshu Go SDK preparation
 
-This repository prepares two independent public Go modules initially copied from Eshu at commit `eb62fa3056f5ed3518bb5aa676bf2e3adc96c1d5`. The first release candidates and the subsequent `collector/v0.2.0-rc.1` and `factschema/v0.1.0-rc.2` tags have been published. The preferred next collector candidate is `collector/v0.1.0-rc.2`, still awaiting review, merge, CI, and separate tag approval. Candidate publication does not establish acceptance by a production Eshu consumer. Check Git tags and the Go proxy for current availability.
+This repository prepares two independent public Go modules initially copied
+from Eshu at commit `eb62fa3056f5ed3518bb5aa676bf2e3adc96c1d5`. The
+first release candidates and the subsequent `collector/v0.2.0-rc.1` and
+`factschema/v0.1.0-rc.2` tags have been published.
+
+The preferred collector candidate on the initial `v0.1.0` line is
+`collector/v0.1.0-rc.2`. Its source contents and publication requirements are
+documented here; current availability must be verified from the exact Git tag
+and public-proxy origin. Candidate publication does not establish acceptance
+by a production Eshu consumer.
 
 | Directory | Module path | Tag prefix |
 | --- | --- | --- |
