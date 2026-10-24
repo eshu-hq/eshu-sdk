@@ -25,6 +25,15 @@ Future tags for the new module, after release approval, would use the Go subdire
 (`factschema/fixturepack`) ships inside this module and has no separate
 version — pinning this module pins the fixture pack too.
 
+## [Unreleased]
+
+### Fixed
+
+- Typed payload decoding now accepts number-preserving `json.Number` input,
+  including exact integral decimal and exponent forms. Invalid, fractional,
+  and out-of-range numeric tokens fail as `input_invalid` without changing
+  schemas or fixture payloads.
+
 ## [0.1.0-rc.1] - 2026-10-23
 
 Candidate source prepared for separate review, merge, CI, and tag approval.
