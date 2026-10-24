@@ -37,7 +37,7 @@ Neither candidate establishes a qualified consumer/core pair.
 
 Published historical candidate. The owner subsequently chose the `v0.1.0`
 prerelease line for the preferred next candidate; this immutable tag remains
-available but is not the preferred pin or a qualified consumer/core pair.
+published but is not the preferred pin or a qualified consumer/core pair.
 
 ### Added
 
