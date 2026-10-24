@@ -5,10 +5,12 @@ directory-prefixed tags and verified fresh public-proxy downloads from the
 source in [SDK PR #9](https://github.com/eshu-hq/eshu-sdk/pull/9). The later `collector/v0.2.0-rc.1` marker and `factschema/v0.1.0-rc.2`
 numeric-decoder tags are also published and immutable. The owner selected
 `collector/v0.1.0-rc.2` as the preferred collector candidate on the initial
-prerelease line. The checklist below defines its publication and qualification
-requirements. Verify current publication from the exact Git tag and
-public-proxy origin. The published collector `v0.2.0-rc.1` remains a historical
-candidate.
+prerelease line; its tag is published. The next prepared candidates are
+`collector/v0.1.0-rc.3` and `factschema/v0.1.0-rc.3`. Neither RC3 candidate is
+published by this source preparation. The checklist below governs their
+publication and later qualification. Verify availability from each exact Git
+tag and public-proxy origin. The published collector `v0.2.0-rc.1` remains a
+historical candidate.
 The [factschema RC2 public-consumer proof](evidence/factschema-v0.1.0-rc.2.md)
 records its proxy origin and checksum. Check the collector historical tag
 separately before acting on its availability;
@@ -16,12 +18,17 @@ qualification and deployed acceptance remain separate. See the [compatibility po
 
 1. Confirm an independently reviewed mapping of inherited schemas, fixtures,
    public APIs and decoder bindings, and review all new SDK behavior. Before
-   the preferred next collector tag, confirm the path mapping in the core
+   either RC3 tag, confirm the path mapping in the core
    [SDK compatibility matrix](https://github.com/eshu-hq/eshu/blob/main/docs/public/extend/sdk-compatibility.md).
    The standalone SDK mapping alone does not satisfy that core prerequisite.
 2. Confirm separately reviewed versioned metadata for each intended tag and
-   its core compatibility-mapping row. The collector changelog prepares
-   `0.1.0-rc.2`; the factschema changelog records its published `0.1.0-rc.2`.
+   its core compatibility-mapping row. The changelogs prepare
+   `collector/v0.1.0-rc.3` for scoped Azure tag and Kubernetes posture
+   validation plus the native custom-JSON duplicate-member guard, and
+   `factschema/v0.1.0-rc.3` for the corrected Azure tag observation fixtures.
+   The guard does not freeze a caller's payload; serialization must stay stable
+   through subsequent use. The factschema schema, typed decoder, and collector
+   wire protocol are unchanged by these RC3 source corrections.
    Preserve the first candidates and the published historical collector
    `0.2.0-rc.1` entry. The optional
    trusted `conformance.Request.CoreFacts` API remains part of collector RC1;
@@ -30,11 +37,12 @@ qualification and deployed acceptance remain separate. See the [compatibility po
 3. Run standalone module CI. Bind the decision packet and separate tag approval
    to the exact reviewed and merged source commit with green CI. Do not hardcode
    a source SHA in these docs, because a docs edit changes the commit.
-4. Tag the preferred collector `collector/v0.1.0-rc.2` only after that
-   approval. The factschema `factschema/v0.1.0-rc.2` tag is already published;
-   verify its exact origin rather than republishing it. Preserve all published
-   tags, including both first RC1s and collector `v0.2.0-rc.1`. Never retarget
-   a published tag.
+4. After separate approval, tag the reviewed and merged release commit with
+   `collector/v0.1.0-rc.3` and `factschema/v0.1.0-rc.3` as independently
+   versioned modules. Confirm the intended commit immediately before each tag;
+   do not substitute this preparation branch's SHA. Preserve all published
+   tags, including both first RC1s, collector `v0.1.0-rc.2` and
+   `v0.2.0-rc.1`, and factschema `v0.1.0-rc.2`. Never retarget a published tag.
 5. From a fresh external consumer, resolve each exact candidate version with
    `GOWORK=off`, no `replace`, and no `@latest`. Record proxy checksums, the
    tag origin SHA, and a successful build. Candidate availability alone does

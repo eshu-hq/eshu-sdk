@@ -16,7 +16,7 @@ a breaking change to the `collector-sdk/v1alpha1` wire protocol or the public
 Go API is a major bump, an additive backward-compatible change is a minor
 bump, and a docs-only or internal change is a patch for stable releases.
 The preferred prerelease line remains `v0.1.0` until stable qualification;
-its next collector candidate is `v0.1.0-rc.2`. See
+its next prepared collector candidate is `v0.1.0-rc.3`. See
 [SDK Compatibility](https://github.com/eshu-hq/eshu/blob/eb62fa3056/docs/public/extend/sdk-compatibility.md) for how
 this module version lines up with core Eshu releases and the wire protocol.
 
@@ -24,6 +24,16 @@ Tags for the new module use the Go subdirectory-module format after separate rel
 `collector/vX.Y.Z`.
 
 ## [Unreleased]
+
+## [0.1.0-rc.3] - Prepared (unpublished)
+
+This candidate source includes the strict native JSON duplicate-member guard
+and the Azure tag and Kubernetes posture validation corrections below. The
+guard does not freeze the caller's payload; custom serialization must remain
+stable through subsequent use. Publication requires separate review, merge,
+CI, tag approval, and public-proxy verification. It does not qualify a core
+consumer or deployed pair. The preferred published candidate remains
+`v0.1.0-rc.2`.
 
 ### Fixed
 
@@ -37,14 +47,11 @@ Tags for the new module use the Go subdirectory-module format after separate rel
   and `automount_token` as `"true"`, `"false"`, `"unknown"`, or null.
   `k8s_workload_identity_use` allows `projected_service_account_token` only as
   a boolean. Generic sensitive-key checks remain strict; payload schemas
-  separately own integer validity. Candidate publication and consumer
-  qualification remain separate.
+  separately own integer validity.
 - Fact validation admits original tag names only in the root fingerprint map
   of `azure_tag_observation` schema `1.0.0`, and requires every value to be a
   complete HMAC-SHA256 redaction marker. Native and JSON-decoded payloads
-  reject credential-shaped keys everywhere else. This source correction is
-  prepared for a separately reviewed `v0.1.0-rc.3` candidate; it is not a tag
-  or a qualified core/collector pair.
+  reject credential-shaped keys everywhere else.
 
 ## [0.1.0-rc.2] - 2026-10-24
 
@@ -52,10 +59,8 @@ Preferred collector candidate on the initial `v0.1.0` line. This source includes
 the neutral `marker` API already present in the published
 `collector/v0.2.0-rc.1` candidate.
 
-Publication requires reviewed and merged release metadata, green CI on
-the exact source commit, a merged core compatibility mapping, and
-separate tag approval. Candidate availability requires fresh public-proxy
-resolution. Neither publication nor availability qualifies a consumer/core pair.
+The tag is published. Verify its public-proxy origin before use; publication
+alone does not qualify a consumer/core pair.
 
 ## [0.2.0-rc.1] - 2026-10-24
 
