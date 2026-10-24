@@ -1,6 +1,6 @@
 # Redaction markers
 
-`redact` builds the legacy HMAC-SHA256 marker from a deployment-scoped key,
+`marker` builds the legacy HMAC-SHA256 marker from a deployment-scoped key,
 normalized reason and source labels, and raw bytes. `String` and `Bytes` have
 the same digest for the same bytes. The key is copied on construction and may
 be shared by concurrent calls. The returned `Value` contains only the marker

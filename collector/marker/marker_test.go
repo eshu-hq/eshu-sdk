@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2025-2026 eshu-hq
 
-package redact_test
+package marker_test
 
 import (
 	"bytes"
@@ -10,11 +10,11 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/eshu-hq/eshu-sdk/collector/redact"
+	"github.com/eshu-hq/eshu-sdk/collector/marker"
 )
 
 func TestLegacyMarkerVectors(t *testing.T) {
-	key, err := redact.NewKey([]byte("proof-marker-key"))
+	key, err := marker.NewKey([]byte("proof-marker-key"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -30,11 +30,11 @@ func TestLegacyMarkerVectors(t *testing.T) {
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			want := redact.Value{Marker: redact.MarkerPrefix + tc.digest, Reason: tc.wantReason, Source: tc.wantSource}
-			if got := redact.String(tc.raw, tc.reason, tc.source, key); got != want {
+			want := marker.Value{Marker: marker.Prefix + tc.digest, Reason: tc.wantReason, Source: tc.wantSource}
+			if got := marker.String(tc.raw, tc.reason, tc.source, key); got != want {
 				t.Fatalf("String() = %+v, want %+v", got, want)
 			}
-			if got := redact.Bytes([]byte(tc.raw), tc.reason, tc.source, key); got != want {
+			if got := marker.Bytes([]byte(tc.raw), tc.reason, tc.source, key); got != want {
 				t.Fatalf("Bytes() = %+v, want %+v", got, want)
 			}
 		})
@@ -42,26 +42,26 @@ func TestLegacyMarkerVectors(t *testing.T) {
 }
 
 func TestBinaryNilAndZeroKey(t *testing.T) {
-	key, err := redact.NewKey([]byte("proof-marker-key"))
+	key, err := marker.NewKey([]byte("proof-marker-key"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	wantBinary := redact.Value{Marker: redact.MarkerPrefix + "c66857e1b6bba57033fd9f09fecee0ca029b189c905f4b31e7daf5f7e54b9b7d", Reason: "sensitive", Source: "azure.fixture"}
-	if got := redact.Bytes([]byte{0xff, 0xfe, 0}, "sensitive", "azure.fixture", key); got != wantBinary {
+	wantBinary := marker.Value{Marker: marker.Prefix + "c66857e1b6bba57033fd9f09fecee0ca029b189c905f4b31e7daf5f7e54b9b7d", Reason: "sensitive", Source: "azure.fixture"}
+	if got := marker.Bytes([]byte{0xff, 0xfe, 0}, "sensitive", "azure.fixture", key); got != wantBinary {
 		t.Fatalf("binary = %+v, want %+v", got, wantBinary)
 	}
-	wantEmpty := redact.Value{Marker: redact.MarkerPrefix + "313878f0a67dabf15c7e427a2554197cb0cf088de3efe51eac7fa243e1657d31", Reason: "sensitive", Source: "azure.fixture"}
+	wantEmpty := marker.Value{Marker: marker.Prefix + "313878f0a67dabf15c7e427a2554197cb0cf088de3efe51eac7fa243e1657d31", Reason: "sensitive", Source: "azure.fixture"}
 	for _, raw := range [][]byte{nil, {}} {
-		if got := redact.Bytes(raw, "sensitive", "azure.fixture", key); got != wantEmpty {
+		if got := marker.Bytes(raw, "sensitive", "azure.fixture", key); got != wantEmpty {
 			t.Fatalf("empty = %+v, want %+v", got, wantEmpty)
 		}
 	}
-	var zero redact.Key
+	var zero marker.Key
 	if !zero.IsZero() {
 		t.Fatal("zero Key must report zero")
 	}
-	wantZero := redact.Value{Marker: redact.MarkerPrefix + "7f449dbf6096322daa61b48cc97fba26722970a9e6d820f6a674150870467e3b", Reason: "sensitive", Source: "azure.fixture"}
-	if got := redact.String("value", "sensitive", "azure.fixture", zero); got != wantZero {
+	wantZero := marker.Value{Marker: marker.Prefix + "7f449dbf6096322daa61b48cc97fba26722970a9e6d820f6a674150870467e3b", Reason: "sensitive", Source: "azure.fixture"}
+	if got := marker.String("value", "sensitive", "azure.fixture", zero); got != wantZero {
 		t.Fatalf("zero-key marker = %+v, want %+v", got, wantZero)
 	}
 	encoded, err := json.Marshal(wantZero)
@@ -75,20 +75,20 @@ func TestBinaryNilAndZeroKey(t *testing.T) {
 
 func TestKeyValidationAndCopy(t *testing.T) {
 	for _, material := range [][]byte{nil, {}, []byte(" \t\n")} {
-		if key, err := redact.NewKey(material); err == nil || !key.IsZero() {
+		if key, err := marker.NewKey(material); err == nil || !key.IsZero() {
 			t.Fatalf("NewKey(%q) = (%v, %v), want zero and error", material, key.IsZero(), err)
 		}
 	}
 	material := []byte(" key ")
-	key, err := redact.NewKey(material)
+	key, err := marker.NewKey(material)
 	if err != nil || key.IsZero() {
 		t.Fatalf("NewKey = (%v, %v)", key.IsZero(), err)
 	}
-	want := redact.Value{Marker: redact.MarkerPrefix + "55f5a00951ed473393689679c1de80975a908eaef2c0ca553884ec4a5ce03205", Reason: "sensitive", Source: "azure.fixture"}
+	want := marker.Value{Marker: marker.Prefix + "55f5a00951ed473393689679c1de80975a908eaef2c0ca553884ec4a5ce03205", Reason: "sensitive", Source: "azure.fixture"}
 	raw := []byte("value")
 	before := bytes.Clone(raw)
 	material[0] = 'x'
-	if got := redact.Bytes(raw, "sensitive", "azure.fixture", key); got != want {
+	if got := marker.Bytes(raw, "sensitive", "azure.fixture", key); got != want {
 		t.Fatalf("copied key bytes marker = %+v, want %+v", got, want)
 	}
 	if !reflect.DeepEqual(raw, before) {
@@ -97,17 +97,17 @@ func TestKeyValidationAndCopy(t *testing.T) {
 }
 
 func TestKeySharedAcrossCalls(t *testing.T) {
-	key, err := redact.NewKey([]byte("proof-marker-key"))
+	key, err := marker.NewKey([]byte("proof-marker-key"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := redact.String("raw-secret", "sensitive", "azure.fixture", key)
+	want := marker.String("raw-secret", "sensitive", "azure.fixture", key)
 	var wg sync.WaitGroup
 	for i := 0; i < 16; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			if got := redact.String("raw-secret", "sensitive", "azure.fixture", key); got != want {
+			if got := marker.String("raw-secret", "sensitive", "azure.fixture", key); got != want {
 				t.Errorf("shared key marker = %+v, want %+v", got, want)
 			}
 		}()

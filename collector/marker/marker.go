@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2025-2026 eshu-hq
 
-// Package redact constructs compatible keyed markers for collector source evidence.
-package redact
+// Package marker constructs compatible keyed markers for collector source evidence.
+package marker
 
 import (
 	"crypto/hmac"
@@ -13,10 +13,10 @@ import (
 	"strings"
 )
 
-// MarkerPrefix identifies the persisted marker format.
+// Prefix identifies the persisted marker format.
 const (
-	MarkerPrefix = "redacted:hmac-sha256:"
-	unknown      = "unknown"
+	Prefix  = "redacted:hmac-sha256:"
+	unknown = "unknown"
 )
 
 // Key is deployment-scoped secret material used to produce redaction markers.
@@ -92,7 +92,7 @@ func marker(raw []byte, reason string, source string, key Key) string {
 	writeField(sum, []byte(reason))
 	writeField(sum, []byte(source))
 	writeField(sum, raw)
-	return MarkerPrefix + hex.EncodeToString(sum.Sum(nil))
+	return Prefix + hex.EncodeToString(sum.Sum(nil))
 }
 
 func normalizeContext(value string) string {
