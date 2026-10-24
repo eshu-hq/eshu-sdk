@@ -4,10 +4,10 @@ This file preserves the release history of the original in-tree
 `github.com/eshu-hq/eshu/sdk/go/collector` module in Eshu. The `[0.1.0]` and `[0.2.0]` entries and
 tags below belong to that original path and repository. The new
 `github.com/eshu-hq/eshu-sdk/collector` path starts an independent version
-line with the candidate entry below. The entry records source prepared for
-`collector/v0.1.0-rc.1`; it does not assert that a tag has been published or
-that a production consumer supports it. Check Git and the Go proxy for current
-tag availability. See the [compatibility policy](../docs/compatibility.md).
+line. Candidate entries record source preparation; they do not
+assert tag publication or production consumer support. Check Git tags and
+the Go proxy for current availability. See the
+[compatibility policy](../docs/compatibility.md).
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this module follows the versioning rule in
@@ -22,6 +22,11 @@ Future tags for the new module, after release approval, would use the Go subdire
 `collector/vX.Y.Z`.
 
 ## [Unreleased]
+
+## [0.2.0-rc.1] - 2026-10-24
+
+Candidate source prepared for independent review, merge, CI and tag approval.
+This entry does not claim publication or a qualified consumer/core pair.
 
 ### Added
 
