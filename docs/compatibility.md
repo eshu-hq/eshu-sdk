@@ -52,11 +52,14 @@ integral decimal/exponent values and nested integer lists. Schemas, fixtures
 and wire protocols are unchanged by these two earlier changes.
 
 The prepared collector RC3 source validates Azure tag fingerprint markers and
-scoped Kubernetes posture fields. The prepared factschema RC3 source replaces
+scoped Kubernetes posture fields. It also rejects duplicate decoded member
+names in native custom JSON before an earlier value can be overwritten. The
+guard leaves the caller's payload unchanged, so custom serialization must stay
+stable through subsequent use. The prepared factschema RC3 source replaces
 placeholder Azure tag observation examples with synthetic HMAC-SHA256 markers;
 its schema and typed decoder are unchanged. Both RC3 candidates require
-reviewed and merged metadata, green
-exact-source CI, a merged core compatibility mapping, and separate tag approval.
+reviewed and merged metadata, green exact-source CI, a merged core
+compatibility mapping, and separate tag approval.
 
 ## Acceptance states
 

@@ -24,8 +24,10 @@ qualification and deployed acceptance remain separate. See the [compatibility po
 2. Confirm separately reviewed versioned metadata for each intended tag and
    its core compatibility-mapping row. The changelogs prepare
    `collector/v0.1.0-rc.3` for scoped Azure tag and Kubernetes posture
-   validation and `factschema/v0.1.0-rc.3` for the corrected Azure tag
-   observation fixtures. The factschema schema, typed decoder, and collector
+   validation plus the native custom-JSON duplicate-member guard, and
+   `factschema/v0.1.0-rc.3` for the corrected Azure tag observation fixtures.
+   The guard does not freeze a caller's payload; serialization must stay stable
+   through subsequent use. The factschema schema, typed decoder, and collector
    wire protocol are unchanged by these RC3 source corrections.
    Preserve the first candidates and the published historical collector
    `0.2.0-rc.1` entry. The optional

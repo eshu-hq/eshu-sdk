@@ -27,10 +27,13 @@ Tags for the new module use the Go subdirectory-module format after separate rel
 
 ## [0.1.0-rc.3] - Prepared (unpublished)
 
-This candidate source includes the Azure tag and Kubernetes posture validation
-corrections below. Publication requires separate review, merge, CI, tag
-approval, and public-proxy verification. It does not qualify a core consumer or
-deployed pair. The preferred published candidate remains `v0.1.0-rc.2`.
+This candidate source includes the strict native JSON duplicate-member guard
+and the Azure tag and Kubernetes posture validation corrections below. The
+guard does not freeze the caller's payload; custom serialization must remain
+stable through subsequent use. Publication requires separate review, merge,
+CI, tag approval, and public-proxy verification. It does not qualify a core
+consumer or deployed pair. The preferred published candidate remains
+`v0.1.0-rc.2`.
 
 ### Fixed
 
