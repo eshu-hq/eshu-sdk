@@ -22,7 +22,7 @@ shapes the target reducer release consumes.
 - `payloads/<kind>.invalid.json` — one payload per kind that omits a
   schema-required field, to exercise the fail-closed path.
 
-The valid `azure_tag_observation` example uses a synthetic keyed marker for
+The valid and invalid `azure_tag_observation` examples use a synthetic keyed marker for
 the tag `env`: HMAC-SHA256 over raw value `prod`, reason `azure_tag_value`, and
 source `azure_tag:env`, with test key
 `azure-tag-observation-test-key-material`. This fixture demonstrates payload
