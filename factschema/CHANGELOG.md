@@ -26,12 +26,18 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
+## [0.1.0-rc.3] - Prepared (unpublished)
+
+This candidate source updates the fixture pack without changing the payload
+schema or typed decoder. Publication requires separate review, merge, CI, tag
+approval, and public-proxy verification. It does not qualify a core consumer or
+deployed pair; `v0.1.0-rc.2` remains the published candidate.
+
 ### Fixed
 
 - The `azure_tag_observation` valid and invalid examples now carry a deterministic
   synthetic HMAC-SHA256 fingerprint in place of a placeholder. The payload
-  schema and typed decode contract are unchanged. The source correction is
-  prepared for a separately reviewed `v0.1.0-rc.3` candidate, not a release.
+  schema and typed decode contract are unchanged.
 
 ## [0.1.0-rc.2] - 2026-10-24
 
