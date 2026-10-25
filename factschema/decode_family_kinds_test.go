@@ -183,6 +183,7 @@ var allDecodedKinds = []string{
 	FactKindCodeownersOwnership,
 	FactKindRefOverlayBranchObservation,
 	FactKindConfigKeyDivergence,
+	FactKindRuntimeDeclarationVersion,
 }
 
 // TestDecodeEachKind_MissingEachRequiredFieldDeadLetters proves, for every

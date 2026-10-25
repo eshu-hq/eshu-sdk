@@ -26,6 +26,16 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
+### Added
+
+- New `runtimedeclaration/v1` package with `DecodeRuntimeDeclarationVersion` and
+  `EncodeRuntimeDeclarationVersion` seams, a schema, and fixture-pack entries
+  for `runtime_declaration.version` (issue #8815): one runtime version a
+  repository declares in one file, with nine required fields, nullable version
+  parts and range bounds, and a closed `spec_kind` set (`exact`, `partial`,
+  `range`, `alias`, `unresolved`) that readers decode tolerantly. A new kind is
+  an additive minor change; the schema drift locks report the schema as new.
+
 ## [0.1.0-rc.3] - Prepared (unpublished)
 
 This candidate source updates the fixture pack without changing the payload

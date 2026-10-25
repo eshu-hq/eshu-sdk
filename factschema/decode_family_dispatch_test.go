@@ -143,6 +143,7 @@ var decoderByKind = map[string]func(Envelope) error{
 	FactKindReducerSupplyChainImpactFinding:             decodeError(DecodeReducerSupplyChainImpactFinding),
 	FactKindReducerTerraformConfigStateDriftFinding:     decodeError(DecodeReducerTerraformConfigStateDriftFinding),
 	FactKindRefOverlayBranchObservation:                 decodeError(DecodeRefOverlayBranchObservation),
+	FactKindRuntimeDeclarationVersion:                   decodeError(DecodeRuntimeDeclarationVersion),
 	FactKindS3BucketPosture:                             decodeError(DecodeS3BucketPosture),
 	FactKindS3ExternalPrincipalGrant:                    decodeError(DecodeS3ExternalPrincipalGrant),
 	FactKindSBOMComponent:                               decodeError(DecodeSBOMComponent),
