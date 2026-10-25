@@ -20,6 +20,7 @@ import (
 	packageregistryv1 "github.com/eshu-hq/eshu-sdk/factschema/packageregistry/v1"
 	reducerderivedv1 "github.com/eshu-hq/eshu-sdk/factschema/reducerderived/v1"
 	refOverlayV1 "github.com/eshu-hq/eshu-sdk/factschema/ref_overlay/v1"
+	runtimedeclarationv1 "github.com/eshu-hq/eshu-sdk/factschema/runtimedeclaration/v1"
 	sbomv1 "github.com/eshu-hq/eshu-sdk/factschema/sbom/v1"
 	scannerworkerv1 "github.com/eshu-hq/eshu-sdk/factschema/scannerworker/v1"
 	secretsiamv1 "github.com/eshu-hq/eshu-sdk/factschema/secretsiam/v1"
@@ -222,6 +223,7 @@ var payloadContracts = []struct {
 	{FactKindCodeownersOwnership, "codeowners.ownership.v1.schema.json", reflect.TypeOf(codeownersv1.Ownership{})},
 	{FactKindRefOverlayBranchObservation, "ref_overlay.branch_observation.v1.schema.json", reflect.TypeOf(refOverlayV1.BranchObservation{})},
 	{FactKindConfigKeyDivergence, "config_key_divergence.v1.schema.json", reflect.TypeOf(refOverlayV1.ConfigKeyDivergence{})},
+	{FactKindRuntimeDeclarationVersion, "runtime_declaration.version.v1.schema.json", reflect.TypeOf(runtimedeclarationv1.Version{})},
 }
 
 // TestPayloadContractsCoverAllSchemas fails if the payloadContracts registry
