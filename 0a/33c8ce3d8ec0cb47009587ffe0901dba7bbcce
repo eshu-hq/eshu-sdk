@@ -1,0 +1,48 @@
+factschema/CHANGELOG.md
+  h_78a442cba0b3e6 29-38
+factschema/decode_contracts_test.go
+  h_78a442cba0b3e6 23,226
+factschema/decode_family_dispatch_test.go
+  h_78a442cba0b3e6 146
+factschema/decode_family_kinds_test.go
+  h_78a442cba0b3e6 186
+factschema/decode_runtime_declaration.go
+  h_78a442cba0b3e6 1-28
+factschema/decode_runtime_declaration_test.go
+  h_78a442cba0b3e6 1-192
+factschema/fact_kinds_runtime_declaration.go
+  h_78a442cba0b3e6 1-12
+factschema/fixturepack/payloads/runtime_declaration.version.invalid.json
+  h_78a442cba0b3e6 1-10
+factschema/fixturepack/payloads/runtime_declaration.version.valid.json
+  h_78a442cba0b3e6 1-14
+factschema/fixturepack/schema/runtime_declaration.version.v1.schema.json
+  h_78a442cba0b3e6 1-119
+factschema/internal/schemagen/cmd/main.go
+  h_78a442cba0b3e6 324-328
+factschema/internal/schemagen/generate_runtime_declaration.go
+  h_78a442cba0b3e6 1-20
+factschema/runtimedeclaration/v1/AGENTS.md
+  h_78a442cba0b3e6 1-41
+factschema/runtimedeclaration/v1/README.md
+  h_78a442cba0b3e6 1-94
+factschema/runtimedeclaration/v1/doc.go
+  h_78a442cba0b3e6 1-33
+factschema/runtimedeclaration/v1/version.go
+  h_78a442cba0b3e6 1-123
+factschema/schema/runtime_declaration.version.v1.schema.json
+  h_78a442cba0b3e6 1-119
+factschema/schema_gen_test.go
+  h_78a442cba0b3e6 178,371
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0a33c8ce3d8ec0cb47009587ffe0901dba7bbcce",
+  "prompts": {},
+  "humans": {
+    "h_78a442cba0b3e6": {
+      "author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
