@@ -36,6 +36,13 @@ version — pinning this module pins the fixture pack too.
   `range`, `alias`, `unresolved`) that readers decode tolerantly. A new kind is
   an additive minor change; the schema drift locks report the schema as new.
 
+- New optional `dependency_resolution_state` on `PackageConsumptionCorrelation`
+  (`reducer_package_consumption_correlation`, core issue #8988): the state the
+  manifest parser gave the row (`resolved`, `partial`, or `unresolved`). An
+  additive optional field is a minor change; facts written before the field keep
+  the text fallback. Schema regenerated via `go run ./internal/schemagen/cmd`
+  and mirrored into the fixture pack.
+
 ## [0.1.0-rc.3] - Prepared (unpublished)
 
 This candidate source updates the fixture pack without changing the payload
