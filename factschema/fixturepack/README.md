@@ -21,8 +21,8 @@ shapes the target reducer release consumes.
 - `payloads/<kind>.valid.json` — one schema-valid example payload per kind.
 - `payloads/<kind>.invalid.json` — one payload per kind that omits a
   schema-required field, to exercise the fail-closed path.
-- `nvd_paging_golden.json` — two synthetic NVD response pages and the exact
-  source-snapshot/CVE fact payloads expected from their complete collection.
+- `payloads/nvd_paging_golden.json` — two synthetic NVD response pages and the exact
+  source-snapshot/CVE fact kinds, stable keys and payloads expected from their complete collection.
   The in-tree and extracted NVD providers can pin this one versioned fixture
   for input-to-payload proof.
 

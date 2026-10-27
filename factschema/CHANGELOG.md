@@ -26,10 +26,18 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
-## [0.1.0-rc.6] - Prepared (unpublished)
+## [0.1.0-rc.7] - Prepared (unpublished)
 
-This candidate adds one optional EPSS payload field. Publication, exact
-consumer qualification, and deployed acceptance remain separate checks.
+### Added
+
+- A shared synthetic two-page NVD input-to-payload golden in `fixturepack`,
+  including exact source-snapshot and CVE fact kinds, stable keys, and payloads
+  for core #9225 and its extracted collector. No wire schema changes.
+
+## [0.1.0-rc.6] - 2026-10-26
+
+This immutable candidate adds one optional EPSS payload field. Exact consumer
+qualification and deployed acceptance remain separate checks.
 
 ### Added
 

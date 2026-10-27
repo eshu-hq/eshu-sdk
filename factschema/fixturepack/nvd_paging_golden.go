@@ -5,11 +5,11 @@ package fixturepack
 
 import _ "embed"
 
-//go:embed nvd_paging_golden.json
+//go:embed payloads/nvd_paging_golden.json
 var nvdPagingGolden []byte
 
 // NVDPagingGolden returns the shared synthetic two-page NVD input and exact
-// expected fact payloads. The extracted collector and core can use these bytes
+// expected fact kinds, stable keys and payloads. The extracted collector and core can use these bytes
 // to catch incomplete pagination and payload drift.
 func NVDPagingGolden() []byte {
 	return append([]byte(nil), nvdPagingGolden...)
