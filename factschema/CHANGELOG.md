@@ -26,29 +26,43 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
+## [0.1.0-rc.6] - Prepared (unpublished)
+
+This candidate adds one optional EPSS payload field. Publication, exact
+consumer qualification, and deployed acceptance remain separate checks.
+
+### Added
+
+- Optional `model_version` on `vulnerability.epss_score` (core #9226). The
+  typed codec preserves a source-supplied string, permits absence, and rejects
+  a non-string value. Canonical and fixture-pack schemas are regenerated in
+  lockstep. FIRST API rows do not supply this field.
+
+## [0.1.0-rc.5] - 2026-10-25
+
+### Added
+
+- Optional `dependency_resolution_state` on `PackageConsumptionCorrelation`
+  (`reducer_package_consumption_correlation`, core #8988): the state the
+  manifest parser gave the row (`resolved`, `partial`, or `unresolved`). Facts
+  written before the field keep the text fallback. The schema and fixture-pack
+  copy were regenerated in lockstep.
+
+## [0.1.0-rc.4] - 2026-10-25
+
 ### Added
 
 - New `runtimedeclaration/v1` package with `DecodeRuntimeDeclarationVersion` and
   `EncodeRuntimeDeclarationVersion` seams, a schema, and fixture-pack entries
-  for `runtime_declaration.version` (issue #8815): one runtime version a
+  for `runtime_declaration.version` (core #8815): one runtime version a
   repository declares in one file, with nine required fields, nullable version
   parts and range bounds, and a closed `spec_kind` set (`exact`, `partial`,
-  `range`, `alias`, `unresolved`) that readers decode tolerantly. A new kind is
-  an additive minor change; the schema drift locks report the schema as new.
+  `range`, `alias`, `unresolved`) that readers decode tolerantly.
 
-- New optional `dependency_resolution_state` on `PackageConsumptionCorrelation`
-  (`reducer_package_consumption_correlation`, core issue #8988): the state the
-  manifest parser gave the row (`resolved`, `partial`, or `unresolved`). An
-  additive optional field is a minor change; facts written before the field keep
-  the text fallback. Schema regenerated via `go run ./internal/schemagen/cmd`
-  and mirrored into the fixture pack.
+## [0.1.0-rc.3] - 2026-10-25
 
-## [0.1.0-rc.3] - Prepared (unpublished)
-
-This candidate source updates the fixture pack without changing the payload
-schema or typed decoder. Publication requires separate review, merge, CI, tag
-approval, and public-proxy verification. It does not qualify a core consumer or
-deployed pair; `v0.1.0-rc.2` remains the published candidate.
+This candidate updated the fixture pack without changing the payload schema or
+typed decoder. Its Git tag exists; consumer and deployed acceptance are separate.
 
 ### Fixed
 

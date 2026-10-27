@@ -1,5 +1,32 @@
 # Release and cutover checklist
 
+## Current factschema RC6 preparation
+
+Git tags in this checkout reach `collector/v0.1.0-rc.3` and
+`factschema/v0.1.0-rc.5`. This branch prepares
+`factschema/v0.1.0-rc.6` for optional EPSS `model_version` preservation
+(core #9226). RC6 is not yet tagged, proxy-verified, qualified in Eshu, or
+deployed. FIRST API rows do not supply a model version; the reducer can retain
+one only when an observation provides it.
+
+Before RC6 publication, review the typed EPSS field, canonical and fixture
+schemas, tests, changelog, and merged core compatibility mapping. Run the standalone
+factschema tests, vet, generation drift, and hosted CI on the exact SDK head.
+Merge the reviewed source, then obtain a separate release ruling against the
+concrete merged commit before creating the immutable
+`factschema/v0.1.0-rc.6` tag. Verify the tag through a fresh external
+`GOWORK=off` public-proxy consumer with no `replace` or `@latest`. Only then
+pin Eshu to the exact version and run its reducer, query, schema, golden,
+performance, and deployment proof. Candidate publication alone is not
+consumer or production acceptance.
+
+## Historical RC3 preparation
+
+The checklist below records the earlier RC3 preparation and cutover plan. Its
+candidate-status statements predate the published RC3, RC4, and RC5 Git tags;
+use the current section above for RC6 actions and recheck exact tag and proxy
+state before any release act.
+
 Both first `v0.1.0-rc.1` module candidates are available through immutable
 directory-prefixed tags and verified fresh public-proxy downloads from the
 source in [SDK PR #9](https://github.com/eshu-hq/eshu-sdk/pull/9). The later `collector/v0.2.0-rc.1` marker and `factschema/v0.1.0-rc.2`

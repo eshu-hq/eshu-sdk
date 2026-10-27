@@ -44,6 +44,11 @@ The migration is incremental, family by family (Contract System v1 §7,
   provider-dismissal producers. Identity, source, justification, author,
   authorship time, and the compound suppression scope are required.
 
+The `vulnerability.epss_score` contract may carry optional `model_version`
+from a source that supplies one. The FIRST API does not supply it. The
+fact-schema codec validates its string shape. Selection among observations
+belongs to the consumer; this module preserves each observation as supplied.
+
 ## Compatibility
 
 - Go module path: `github.com/eshu-hq/eshu-sdk/factschema`
