@@ -1,20 +1,16 @@
 # SDK module compatibility and candidate status
 
-The repository contains two independent Go module identities. Both first
-`v0.1.0-rc.1` candidates are available: their immutable tags and fresh public
-proxy downloads resolve to the source prepared in [SDK PR #9](https://github.com/eshu-hq/eshu-sdk/pull/9).
-The factschema `v0.1.0-rc.2` and collector `v0.2.0-rc.1` tags are also
-published. The preferred collector candidate on the initial `v0.1.0` line is
-the tagged `collector/v0.1.0-rc.2`. The next prepared candidates are
-`collector/v0.1.0-rc.3` and `factschema/v0.1.0-rc.3`; neither is published by
-this metadata change. Verify candidate availability from each exact Git tag
-and public-proxy origin. Availability does not qualify a core consumer or
-establish a deployed pair.
+The repository contains two independent Go module identities. The exact Git
+refs available in this checkout include collector `v0.1.0-rc.3` and factschema
+`v0.1.0-rc.5`; earlier candidate tags remain immutable. This branch prepares
+factschema `v0.1.0-rc.6` with optional EPSS model-version preservation but
+does not publish its tag or qualify an Eshu consumer. Recheck tag origin and
+fresh public-proxy resolution before claiming candidate availability.
 
-| Existing supported module | New module identity | Available first candidate | Other published candidate | Preferred candidate | Prepared next candidate (unpublished) |
-| --- | --- | --- | --- | --- | --- |
-| `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.1.0-rc.1` | `collector/v0.2.0-rc.1` | `collector/v0.1.0-rc.2` (tagged) | `collector/v0.1.0-rc.3` |
-| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.1` | `factschema/v0.1.0-rc.2` | `factschema/v0.1.0-rc.2` (published; proxy verified) | `factschema/v0.1.0-rc.3` |
+| Existing supported module | New module identity | Latest checked Git tag | Prepared next candidate |
+| --- | --- | --- | --- |
+| `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.1.0-rc.3` | none in this change |
+| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.5` | `factschema/v0.1.0-rc.6` (unpublished) |
 
 The old and new import paths name different Go types. The new `v0.1.0`
 line is a new module identity, not a continuation of the old path's `v0.2.0`
@@ -51,28 +47,23 @@ repairs number-preserving typed decoding from
 integral decimal/exponent values and nested integer lists. Schemas, fixtures
 and wire protocols are unchanged by these two earlier changes.
 
-The prepared collector RC3 source validates Azure tag fingerprint markers and
-scoped Kubernetes posture fields. It also rejects duplicate decoded member
-names in native custom JSON before an earlier value can be overwritten. The
-guard leaves the caller's payload unchanged, so custom serialization must stay
-stable through subsequent use. The prepared factschema RC3 source replaces
-placeholder Azure tag observation examples with synthetic HMAC-SHA256 markers;
-its schema and typed decoder are unchanged. Both RC3 candidates require
-reviewed and merged metadata, green exact-source CI, a merged core
-compatibility mapping, and separate tag approval.
+The collector RC3, factschema RC4, and factschema RC5 source changes have
+separate immutable Git tags. This RC6 preparation adds only the optional EPSS
+`model_version` field to the factschema payload contract. FIRST API score rows
+do not provide it, so consumer proof must test conditional retention without
+claiming live source acquisition.
 
 ## Acceptance states
 
-The recorded status below is a source-preparation snapshot from 2026-10-24,
-before either RC3 publication. Later publication and qualification require
-their own evidence; verify the exact Git tag and public-proxy origin for current
-availability.
+The recorded status below is a source-preparation snapshot from 2026-10-27.
+Git tag presence was checked locally; fresh public-proxy proof for RC4, RC5,
+and the future RC6 remains NOT_CHECKED here.
 
 | State | Evidence required | Recorded snapshot |
 | --- | --- | --- |
-| Candidate available | Merged core path mapping, exact reviewed and merged source commit, green CI on that commit, separate tag approval, immutable directory-prefixed tags, and fresh proxy resolution | First RC1s, collector `v0.2.0-rc.1` and `v0.1.0-rc.2`, and factschema `v0.1.0-rc.2` tagged; fresh proxy proof for the collector tags is not recorded here; factschema `v0.1.0-rc.2` proxy verified. Both RC3 candidates are prepared, not published |
-| Qualified consumer/core pair | Exact candidate pins, contract and runtime gates for that consumer and core version, including grant-aware conformance for reserved kinds | Not qualified |
-| Deployed accepted pair | Matching deployment, reducer, graph, API/MCP, retry, operator, and rollback evidence | Not accepted |
+| Candidate available | Merged core compatibility mapping, exact reviewed and merged source commit, green CI, separate tag approval, immutable directory-prefixed tag, and fresh proxy resolution | Factschema RC5 and collector RC3 Git tags exist; RC6 is prepared, not tagged or proxy-verified |
+| Qualified consumer/core pair | Exact candidate pin plus contract and runtime gates for that consumer and core version | RC6 consumer NOT_CHECKED |
+| Deployed accepted pair | Matching deployment, reducer, graph, API/MCP, retry, operator, and rollback evidence | RC6 deployment NOT_CHECKED |
 
 Use exact versions in consumer `go.mod` files; do not use `@latest`, a workspace,
 or a `replace` directive as release evidence. Before a tag, bind approval to

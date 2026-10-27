@@ -28,6 +28,10 @@
 // zero-value struct — the accuracy backstop this design exists to add
 // beneath the existing envelope-level schema-version admission gate.
 //
+// The vulnerability.epss_score payload can carry an optional, source-supplied
+// model_version. Its score_date remains optional for legacy facts; selection
+// and date validation belong to the reducer.
+//
 // SchemaBytes embeds schema/*.json directly in this package and returns the
 // raw bytes for one fact kind, so a caller (for example a runtime
 // conformance test outside this module) can load a committed schema without
