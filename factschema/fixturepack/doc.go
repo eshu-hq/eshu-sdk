@@ -32,5 +32,7 @@
 // SchemaFor for the accessors, and README.md for the versioning and
 // cut procedure.
 // NVDPagingGolden supplies one synthetic two-page source input and exact
-// expected fact kinds, stable keys and payloads that the in-tree and extracted NVD providers can pin.
+// expected provider fact kinds, stable keys and full payload maps. The maps
+// carry producer metadata beyond this module's typed CVE and source-snapshot
+// fields; the per-kind valid/invalid examples remain the schema-shape fixtures.
 package fixturepack

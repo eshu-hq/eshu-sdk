@@ -26,6 +26,12 @@ shapes the target reducer release consumes.
   The in-tree and extracted NVD providers can pin this one versioned fixture
   for input-to-payload proof.
 
+The NVD golden records the **full provider fact payload maps**, including
+producer metadata outside the narrower typed factschema CVE and source-snapshot
+structs. It is separate from the per-kind schema-valid/invalid examples. The
+pack test decodes the SDK-known fields through the typed seam; each provider
+must separately compare its complete emitted payload and stable key.
+
 The valid and invalid `azure_tag_observation` examples use a synthetic keyed marker for
 the tag `env`: HMAC-SHA256 over raw value `prod`, reason `azure_tag_value`, and
 source `azure_tag:env`, with test key
