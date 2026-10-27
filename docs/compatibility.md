@@ -2,15 +2,15 @@
 
 The repository contains two independent Go module identities. The exact Git
 refs available in this checkout include collector `v0.1.0-rc.3` and factschema
-`v0.1.0-rc.5`; earlier candidate tags remain immutable. This branch prepares
-factschema `v0.1.0-rc.6` with optional EPSS model-version preservation but
+`v0.1.0-rc.6`; earlier candidate tags remain immutable. This branch prepares
+factschema `v0.1.0-rc.7` with a shared NVD paging fixture and accessor but
 does not publish its tag or qualify an Eshu consumer. Recheck tag origin and
 fresh public-proxy resolution before claiming candidate availability.
 
 | Existing supported module | New module identity | Latest checked Git tag | Prepared next candidate |
 | --- | --- | --- | --- |
 | `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.1.0-rc.3` | none in this change |
-| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.5` | `factschema/v0.1.0-rc.6` (unpublished) |
+| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.6` | `factschema/v0.1.0-rc.7` (unpublished) |
 
 The old and new import paths name different Go types. The new `v0.1.0`
 line is a new module identity, not a continuation of the old path's `v0.2.0`
@@ -47,23 +47,23 @@ repairs number-preserving typed decoding from
 integral decimal/exponent values and nested integer lists. Schemas, fixtures
 and wire protocols are unchanged by these two earlier changes.
 
-The collector RC3, factschema RC4, and factschema RC5 source changes have
-separate immutable Git tags. This RC6 preparation adds only the optional EPSS
-`model_version` field to the factschema payload contract. FIRST API score rows
-do not provide it, so consumer proof must test conditional retention without
-claiming live source acquisition.
+The collector RC3 and factschema RC4 through RC6 source changes have
+separate immutable Git tags. RC6 adds the optional EPSS `model_version` field;
+FIRST API rows do not supply it. RC7 prepares the synthetic NVD paging golden
+without changing a wire schema. Core and extracted consumers must prove the
+same pinned fixture bytes, payloads, stable keys, and two-page traversal.
 
 ## Acceptance states
 
 The recorded status below is a source-preparation snapshot from 2026-10-27.
-Git tag presence was checked locally; fresh public-proxy proof for RC4, RC5,
-and the future RC6 remains NOT_CHECKED here.
+Git tag presence was checked locally through RC6. Fresh public-proxy proof
+for RC6 and the future RC7 remains NOT_CHECKED here.
 
 | State | Evidence required | Recorded snapshot |
 | --- | --- | --- |
-| Candidate available | Merged core compatibility mapping, exact reviewed and merged source commit, green CI, separate tag approval, immutable directory-prefixed tag, and fresh proxy resolution | Factschema RC5 and collector RC3 Git tags exist; RC6 is prepared, not tagged or proxy-verified |
-| Qualified consumer/core pair | Exact candidate pin plus contract and runtime gates for that consumer and core version | RC6 consumer NOT_CHECKED |
-| Deployed accepted pair | Matching deployment, reducer, graph, API/MCP, retry, operator, and rollback evidence | RC6 deployment NOT_CHECKED |
+| Candidate available | Merged core compatibility mapping, exact reviewed and merged source commit, green CI, separate tag approval, immutable directory-prefixed tag, and fresh proxy resolution | Factschema RC6 and collector RC3 Git tags exist; RC7 is prepared, not tagged or proxy-verified |
+| Qualified consumer/core pair | Exact candidate pin plus contract and runtime gates for that consumer and core version | RC7 consumer NOT_CHECKED |
+| Deployed accepted pair | Matching deployment, reducer, graph, API/MCP, retry, operator, and rollback evidence | RC7 deployment NOT_CHECKED |
 
 Use exact versions in consumer `go.mod` files; do not use `@latest`, a workspace,
 or a `replace` directive as release evidence. Before a tag, bind approval to

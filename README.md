@@ -3,8 +3,8 @@
 This repository prepares two independent public Go modules initially copied
 from Eshu at commit `eb62fa3056f5ed3518bb5aa676bf2e3adc96c1d5`. The
 checked Git tags reach `collector/v0.1.0-rc.3` and
-`factschema/v0.1.0-rc.5`. This branch prepares an optional EPSS field for a
-separately reviewed factschema RC6 publication. Check each candidate's tag and
+`factschema/v0.1.0-rc.6`. This branch prepares an NVD paging golden
+fixture and accessor for a separately reviewed factschema RC7 publication. Check each candidate's tag and
 fresh public-proxy origin before use. Publication alone does not establish
 acceptance by a production Eshu consumer.
 

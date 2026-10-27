@@ -21,6 +21,16 @@ shapes the target reducer release consumes.
 - `payloads/<kind>.valid.json` — one schema-valid example payload per kind.
 - `payloads/<kind>.invalid.json` — one payload per kind that omits a
   schema-required field, to exercise the fail-closed path.
+- `payloads/nvd_paging_golden.json` — two synthetic NVD response pages and the exact
+  source-snapshot/CVE fact kinds, stable keys and payloads expected from their complete collection.
+  The in-tree and extracted NVD providers can pin this one versioned fixture
+  for input-to-payload proof.
+
+The NVD golden records the **full provider fact payload maps**, including
+producer metadata outside the narrower typed factschema CVE and source-snapshot
+structs. It is separate from the per-kind schema-valid/invalid examples. The
+pack test decodes the SDK-known fields through the typed seam; each provider
+must separately compare its complete emitted payload and stable key.
 
 The valid and invalid `azure_tag_observation` examples use a synthetic keyed marker for
 the tag `env`: HMAC-SHA256 over raw value `prod`, reason `azure_tag_value`, and
@@ -36,6 +46,7 @@ valid, ok := fixturepack.ValidPayload("aws_resource")   // map[string]any
 invalid, ok := fixturepack.InvalidPayload("aws_resource")
 all := fixturepack.Schemas()  // map[string]json.RawMessage, keyed by fact kind
 kinds := fixturepack.Kinds()  // sorted fact-kind list
+golden := fixturepack.NVDPagingGolden() // copied JSON bytes for the NVD paging fixture
 ```
 
 ## How a collector uses it
