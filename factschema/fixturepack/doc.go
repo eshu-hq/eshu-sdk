@@ -31,4 +31,6 @@
 // conformance.Request.PayloadSchemas. See ExampleValidPayloads and
 // SchemaFor for the accessors, and README.md for the versioning and
 // cut procedure.
+// NVDPagingGolden supplies one synthetic two-page source input and exact
+// expected fact payloads that the in-tree and extracted NVD providers can pin.
 package fixturepack
