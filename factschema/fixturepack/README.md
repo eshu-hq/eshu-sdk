@@ -23,7 +23,7 @@ shapes the target reducer release consumes.
   schema-required field, to exercise the fail-closed path.
 - `payloads/nvd_paging_golden.json` — two synthetic NVD response pages and the exact
   source-snapshot/CVE fact kinds, stable keys and payloads expected from their complete collection.
-  The in-tree and extracted NVD providers can pin this one versioned fixture
+  The Eshu core and extracted NVD providers can pin this one versioned fixture
   for input-to-payload proof.
 
 The NVD golden records the **full provider fact payload maps**, including

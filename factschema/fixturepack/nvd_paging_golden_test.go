@@ -4,6 +4,7 @@
 package fixturepack
 
 import (
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -37,6 +38,7 @@ func TestNVDPagingGoldenRejectsSeededCorruption(t *testing.T) {
 		"snapshot count":        {`"result_count": 2`, `"result_count": 999`},
 		"missing advisory":      {`"advisory_id": "CVE-2026-0001",`, ``},
 		"stable key":            {`"stable_fact_key": "9b02f30b90e787bb50a014746e88b3857cbe5345e8c9abf3380d19da4084a35b"`, `"stable_fact_key": "0000000000000000000000000000000000000000000000000000000000000000"`},
+		"producer metadata":     {`"severity_label": ""`, `"severity_label": "CRITICAL"`},
 	}
 	for name, replacement := range cases {
 		t.Run(name, func(t *testing.T) {
@@ -50,6 +52,8 @@ func TestNVDPagingGoldenRejectsSeededCorruption(t *testing.T) {
 		})
 	}
 }
+
+const nvdPagingGoldenSHA256 = "bd1d347f1e89d27ad66c9014162d337bc9b7fa890a0abc5222314cf961e324fa"
 
 func validateNVDPagingGolden(raw []byte) error {
 	var golden struct {
@@ -112,6 +116,9 @@ func validateNVDPagingGolden(raw []byte) error {
 		if _, err := factschema.DecodeVulnerabilityCVE(env); err != nil {
 			return fmt.Errorf("decode CVE contract: %w", err)
 		}
+	}
+	if digest := fmt.Sprintf("%x", sha256.Sum256(raw)); digest != nvdPagingGoldenSHA256 {
+		return fmt.Errorf("NVD paging golden bytes changed: got SHA-256 %s", digest)
 	}
 	return nil
 }
