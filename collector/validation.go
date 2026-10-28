@@ -40,7 +40,31 @@ var redactionSafePayloadKeys = map[string]struct{}{
 	// env.ValueFrom.SecretKeyRef != nil while env.Value and every referenced
 	// value stay unread (names only). A bool cannot carry a credential, so
 	// the substring "secret" is a false positive here (eshu-hq/eshu#9327).
+	// The carve-out is value-bound: only JSON booleans (or null, which
+	// carries no value) are admitted; any other type under this name keeps
+	// failing closed. See redactionSafeValue.
 	"env_from_secret": {},
+}
+
+// redactionSafeValue reports whether value falls inside an allowlisted key's
+// carve-out. Most allowlisted keys are redaction-safe fingerprints that admit
+// any value shape; env_from_secret admits only JSON booleans (or null),
+// because any other type under that sensitive-looking name could be a real
+// credential and must keep failing closed. Keys outside the allowlist are
+// never safe, so the generic heuristic still rejects them by name alone.
+func redactionSafeValue(key string, value any) bool {
+	if _, safe := redactionSafePayloadKeys[key]; !safe {
+		return false
+	}
+	if key != "env_from_secret" {
+		return true
+	}
+	switch value.(type) {
+	case bool, nil:
+		return true
+	default:
+		return false
+	}
 }
 
 // Validator validates extension results against the host-declared contract.
@@ -383,7 +407,7 @@ func validatePayloadKeys(prefix string, value any) error {
 			if prefix != "" {
 				path = prefix + "." + key
 			}
-			if _, safe := redactionSafePayloadKeys[key]; !safe && sensitiveQueryPattern.MatchString(key) {
+			if sensitiveQueryPattern.MatchString(key) && !redactionSafeValue(key, child) {
 				return fmt.Errorf("sensitive-looking key %q must be redacted before emission", path)
 			}
 			if err := validatePayloadKeys(path, child); err != nil {

@@ -71,16 +71,13 @@ family: `PodTemplate`, `PodTemplateContainer`, `Relationship`, `Warning`, and
   `envelope.go`'s `ContainerSummary` comment).
 - `PodTemplateContainer.EnvFromSecret` is a redaction-safe BOOLEAN existence
   flag (it reports only that a container references secret-backed env, never a
-  value), and the real in-tree collector emits it. But the `env_from_secret`
-  key name matches the `collector` conformance redaction scanner's
-  `secret` substring heuristic (`validation.go` `sensitiveQueryPattern`), which
-  cannot distinguish a safe existence flag from a secret value. The in-tree
-  collector builds `facts.Envelope` directly and never runs that SDK scanner,
-  so it emits the key fine; but the fixture-pack conformance test
-  (`TestFixturePackPayloadsAgreeWithConformance`) DOES run the scanner against
-  every fixture. The `kubernetes_live.pod_template.valid.json` fixture
-  therefore deliberately OMITS `env_from_secret` from its example container —
-  the field stays optional in the struct and its decode is covered by the
-  round-trip tests. Do not add `env_from_secret` back to the fixture without
-  first resolving the scanner false-positive (tracked as a follow-up); it
-  would re-red the conformance gate.
+  value), and the real in-tree collector emits it. The `env_from_secret` key
+  name used to trip the `collector` conformance redaction scanner's `secret`
+  substring heuristic (`validation.go` `sensitiveQueryPattern`), which could
+  not distinguish a safe existence flag from a secret value. That
+  false-positive is now resolved: `env_from_secret` is an exact-name
+  `redactionSafePayloadKeys` entry whose carve-out is value-bound to JSON
+  booleans (or null) — see `redactionSafeValue` — so the
+  `kubernetes_live.pod_template.valid.json` fixture carries the field again
+  and the fixture-pack conformance test (`TestFixturePackPayloadsAgreeWithConformance`)
+  exercises the previously-omitted field on every run.

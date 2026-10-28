@@ -89,6 +89,40 @@ func TestValidatePayloadKeysAllowsEnvFromSecretBool(t *testing.T) {
 	if err := validatePayload(payload); err != nil {
 		t.Fatalf("validatePayload(%+v) error = %v, want nil (env_from_secret is an allowlisted redaction-safe bool)", payload, err)
 	}
+
+	// Pin the same acceptance at the gates that ship: the live fact path
+	// (validateFactPayload, exercised here with the kubernetes_live
+	// pod_template kind that carries this field) and the sharing surface
+	// (ValidateShareSafeKeys). A future divergence between the walks would
+	// fail here instead of shipping a gate that rejects honest bools.
+	fact := Fact{Kind: "kubernetes_live.pod_template", SchemaVersion: "1.0.0", Payload: payload}
+	if err := validateFactPayload(fact); err != nil {
+		t.Fatalf("validateFactPayload(kubernetes_live.pod_template with env_from_secret=false) error = %v, want nil", err)
+	}
+	if err := ValidateShareSafeKeys(payload); err != nil {
+		t.Fatalf("ValidateShareSafeKeys(env_from_secret=false) error = %v, want nil", err)
+	}
+
+	// The carve-out is value-bound: a credential string under the same key
+	// must keep failing closed through every gate, including share-safe.
+	evil := map[string]any{
+		"containers": []any{
+			map[string]any{
+				"name":            "api",
+				"env_from_secret": "shhh",
+			},
+		},
+	}
+	if err := validatePayload(evil); err == nil {
+		t.Fatal("validatePayload(env_from_secret=\"shhh\") error = nil, want a sensitive-key rejection")
+	}
+	evilFact := Fact{Kind: "kubernetes_live.pod_template", SchemaVersion: "1.0.0", Payload: evil}
+	if err := validateFactPayload(evilFact); err == nil {
+		t.Fatal("validateFactPayload(env_from_secret=\"shhh\") error = nil, want a sensitive-key rejection")
+	}
+	if err := ValidateShareSafeKeys(evil); err == nil {
+		t.Fatal("ValidateShareSafeKeys(env_from_secret=\"shhh\") error = nil, want a sensitive-key rejection")
+	}
 }
 
 // TestValidatePayloadKeysAllowlistDoesNotWeakenGenericDetection proves the

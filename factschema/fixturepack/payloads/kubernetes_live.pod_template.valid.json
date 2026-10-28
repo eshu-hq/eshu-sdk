@@ -9,6 +9,7 @@
   "containers": [
     {
       "name": "checkout",
+      "env_from_secret": false,
       "image": "registry.example.com/checkout@sha256:0000000000000000000000000000000000000000000000000000000000000001",
       "init": false,
       "ports": [8080],
