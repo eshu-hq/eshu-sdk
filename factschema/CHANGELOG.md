@@ -32,6 +32,20 @@ version — pinning this module pins the fixture pack too.
   collector module; govulncheck already reported no reachable advisories for
   this module, with no language or library break for consumers).
 
+## [0.1.0-rc.8] - 2026-10-28
+
+This tag is published and proxy-verified; it does not qualify a core consumer
+or deployed pair.
+
+### Added
+
+- The `terraformstate` config-vs-state drift attribute allowlist as Go API
+  (`DriftAttributeAllowlist`, `DriftAllowlistFor`,
+  `DriftAllowlistResourceTypes` in `terraformstate/v1`, PR #50), ported from
+  `eshu` `sdk/go/factschema/terraformstate/v1`. Fail-closed: unlisted
+  resource types emit no attributes. No payload schema, fixture-pack, or
+  stable-key change.
+
 ## [0.1.0-rc.7] - 2026-10-27
 
 This tag is published and proxy-verified; it does not qualify a core consumer
