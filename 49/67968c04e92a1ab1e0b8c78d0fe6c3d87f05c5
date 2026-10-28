@@ -1,0 +1,14 @@
+collector/marker/marker.go
+  h_78a442cba0b3e6 116-117
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4967968c04e92a1ab1e0b8c78d0fe6c3d87f05c5",
+  "prompts": {},
+  "humans": {
+    "h_78a442cba0b3e6": {
+      "author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
