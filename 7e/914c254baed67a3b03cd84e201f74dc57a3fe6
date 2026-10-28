@@ -1,0 +1,14 @@
+collector/marker/probe39_red_test.go
+  h_78a442cba0b3e6 1-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7e914c254baed67a3b03cd84e201f74dc57a3fe6",
+  "prompts": {},
+  "humans": {
+    "h_78a442cba0b3e6": {
+      "author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
