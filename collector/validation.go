@@ -34,6 +34,13 @@ var redactionSafePayloadKeys = map[string]struct{}{
 	// token_count is an integer body-size metric (lexer tokens), not a
 	// credential; see reducerderived/v1.CodeDriftedMember.TokenCount.
 	"token_count": {},
+	// env_from_secret is a boolean recording only WHETHER a container's env
+	// references secrets, never any value: the kubernetes_live.pod_template
+	// containers[].env_from_secret field is set from
+	// env.ValueFrom.SecretKeyRef != nil while env.Value and every referenced
+	// value stay unread (names only). A bool cannot carry a credential, so
+	// the substring "secret" is a false positive here (eshu-hq/eshu#9327).
+	"env_from_secret": {},
 }
 
 // Validator validates extension results against the host-declared contract.
