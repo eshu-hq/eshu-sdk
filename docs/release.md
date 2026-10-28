@@ -1,23 +1,28 @@
 # Release and cutover checklist
 
-## Current RC4/RC7 state
+## Current RC4/RC8 state
 
 Git tags in this checkout reach `collector/v0.1.0-rc.4` and
-`factschema/v0.1.0-rc.7`. RC7 carries the shared NVD paging input-to-payload
-golden (core #9225); RC4 carries the `env_from_secret` allowlist fix (issue
-#26, PR #28) on top of the RC3 validation corrections. Both tags match their
-`origin` refs and resolve, download, and build through the public Go proxy
-from a fresh external `GOWORK=off` consumer with no `replace` or `@latest`.
+`factschema/v0.1.0-rc.8`. RC8 publishes the `terraformstate` drift attribute
+allowlist as Go API only (PR #50) with no payload schema or fixture change;
+RC7 carries the shared NVD paging input-to-payload golden (core #9225); RC4
+carries the `env_from_secret` allowlist fix (issue #26, PR #28) on top of the
+RC3 validation corrections. All three tags match their `origin` refs and
+resolve, download, and build through the public Go proxy from fresh
+external `GOWORK=off` consumers with no `replace` or `@latest`: the RC4/RC7
+proof records one scratch consumer pinning `collector v0.1.0-rc.4` plus
+`factschema v0.1.0-rc.7`, and the RC8 proof records a second scratch
+consumer pinning `factschema v0.1.0-rc.8`.
 Consumer qualification and deployed acceptance remain separate: the pinned
 satellite still runs collector RC3 plus factschema RC6, and no core pair has
-run its contract and runtime gates against RC4/RC7. Candidate publication
+run its contract and runtime gates against RC4/RC8. Candidate publication
 alone is not consumer or production acceptance.
 
 ## Historical RC3 preparation
 
 The checklist below records the earlier RC3 preparation and cutover plan. Its
 candidate-status statements predate the published RC3 through RC6 Git tags;
-use the current section above for RC7 actions and recheck exact tag and proxy
+use the current section above for RC8 actions and recheck exact tag and proxy
 state before any release act.
 
 Both first `v0.1.0-rc.1` module candidates are available through immutable
