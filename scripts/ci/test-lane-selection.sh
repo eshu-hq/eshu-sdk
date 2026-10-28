@@ -33,6 +33,7 @@ classify_file() {
   local go_factschema=false fixture_factschema=false
   local workflows=false shell=false shared=false misc=false known=false
   eval "$CASE_BLOCKS" >/dev/null 2>&1
+  : "$known" # set by the eval'd classifier blocks; referenced to keep SC2034 green
   printf 'go_collector=%s fixture_collector=%s go_factschema=%s fixture_factschema=%s workflows=%s shell=%s shared=%s misc=%s\n' \
     "$go_collector" "$fixture_collector" "$go_factschema" "$fixture_factschema" \
     "$workflows" "$shell" "$shared" "$misc"
@@ -82,14 +83,12 @@ docs_line="$(grep -n 'docs/\*' "$CI_YML" | head -1 | cut -d: -f1)"
   || fail "agent-instruction case missing or after docs-skip (agent=$agent_line docs=$docs_line)"
 
 # --- 3. Go changes select gosec; gosec stays advisory with SARIF. ---
-for lane in gosec; do
-  cond="$(lane_if "$lane")"
-  case "$cond" in
-    *"go_collector == 'true'"*"go_factschema == 'true'"*)
-      pass "gosec selects on Go changes" ;;
-    *) fail "gosec gate misses Go outputs: $cond" ;;
-  esac
-done
+cond="$(lane_if "gosec")"
+case "$cond" in
+  *"go_collector == 'true'"*"go_factschema == 'true'"*)
+    pass "gosec selects on Go changes" ;;
+  *) fail "gosec gate misses Go outputs: $cond" ;;
+esac
 grep -q '|| true' "$CI_YML" && pass "gosec keeps non-blocking semantics" || fail "gosec lost || true"
 grep -q 'upload-artifact' "$CI_YML" && pass "gosec keeps SARIF artifact upload" || fail "gosec lost artifact upload"
 
