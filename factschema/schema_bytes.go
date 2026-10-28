@@ -6,8 +6,8 @@ package factschema
 import "embed"
 
 // schemaFS embeds every generated JSON Schema this module checks in under
-// schema/. The embed directive lives directly in this package because
-// go:embed can only reach files at or below its own package directory;
+// schema/. The embed directive lives directly in this package because the
+// directive can only reach files at or below its own package directory;
 // schema/ is a direct child of factschema, so no duplicate copy is needed
 // here (contrast factschema/fixturepack, which embeds its own copy of
 // schema/ because fixturepack cannot reach the sibling directory).

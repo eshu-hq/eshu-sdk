@@ -10,9 +10,11 @@ import (
 	"testing"
 )
 
-type postureJSON string
-type postureCountAlias int
-type postureStateAlias string
+type (
+	postureJSON       string
+	postureCountAlias int
+	postureStateAlias string
+)
 
 func (v postureJSON) MarshalJSON() ([]byte, error) { return []byte(v), nil }
 

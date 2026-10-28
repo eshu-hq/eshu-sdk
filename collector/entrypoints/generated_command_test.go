@@ -9,13 +9,14 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"github.com/eshu-hq/eshu-sdk/collector"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/eshu-hq/eshu-sdk/collector"
 )
 
 func TestGeneratedCommandContract(t *testing.T) {
@@ -30,7 +31,7 @@ func TestGeneratedCommandContract(t *testing.T) {
 	}
 	dir := t.TempDir()
 	mainPath := filepath.Join(dir, "main.go")
-	if err := os.WriteFile(mainPath, files[0].Contents, 0600); err != nil {
+	if err := os.WriteFile(mainPath, files[0].Contents, 0o600); err != nil {
 		t.Fatal(err)
 	}
 	binary := filepath.Join(dir, "collector")

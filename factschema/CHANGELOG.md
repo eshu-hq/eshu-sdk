@@ -26,7 +26,16 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
-## [0.1.0-rc.7] - Prepared (unpublished)
+### Changed
+
+- Go directive `1.26.5` → `1.26.10` (toolchain floor only, aligned with the
+  collector module; govulncheck already reported no reachable advisories for
+  this module, with no language or library break for consumers).
+
+## [0.1.0-rc.7] - 2026-10-27
+
+This tag is published and proxy-verified; it does not qualify a core consumer
+or deployed pair.
 
 ### Added
 

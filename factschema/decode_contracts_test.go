@@ -4,6 +4,8 @@
 package factschema
 
 import (
+	"reflect"
+
 	awsv1 "github.com/eshu-hq/eshu-sdk/factschema/aws/v1"
 	azurev1 "github.com/eshu-hq/eshu-sdk/factschema/azure/v1"
 	cicdrunv1 "github.com/eshu-hq/eshu-sdk/factschema/cicdrun/v1"
@@ -32,7 +34,6 @@ import (
 	vulnerabilityv1 "github.com/eshu-hq/eshu-sdk/factschema/vulnerability/v1"
 	vulnerabilitysuppressionv1 "github.com/eshu-hq/eshu-sdk/factschema/vulnerabilitysuppression/v1"
 	workitemv1 "github.com/eshu-hq/eshu-sdk/factschema/workitem/v1"
-	"reflect"
 )
 
 var payloadContracts = []struct {

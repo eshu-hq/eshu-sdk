@@ -1,24 +1,17 @@
 # Release and cutover checklist
 
-## Current factschema RC7 preparation
+## Current RC4/RC7 state
 
-Git tags in this checkout reach `collector/v0.1.0-rc.3` and
-`factschema/v0.1.0-rc.6`. RC6 is an immutable tag for optional EPSS
-`model_version` preservation (core #9226); fresh public-proxy and consumer
-qualification proof remain separate. This branch prepares
-`factschema/v0.1.0-rc.7` for the shared NVD paging input-to-payload golden
-(core #9225). RC7 is not tagged, proxy-verified, qualified in Eshu, or deployed.
-
-Before RC7 publication, review its two-page fixture, exact payloads and stable
-keys, canonical in-tree byte parity, accessor, tests, changelog, and merged core
-compatibility mapping. Run the standalone factschema tests, vet, generation
-drift, and hosted CI on the exact SDK head. Merge the reviewed source, then
-obtain a separate release ruling against the concrete merged commit before
-creating the immutable `factschema/v0.1.0-rc.7` tag. Verify the tag through a
-fresh external `GOWORK=off` public-proxy consumer with no `replace` or
-`@latest`. Only then pin the extracted and core providers to the exact version
-and run their input-to-payload, contract, golden, performance and deployment
-proof. Candidate publication alone is not consumer or production acceptance.
+Git tags in this checkout reach `collector/v0.1.0-rc.4` and
+`factschema/v0.1.0-rc.7`. RC7 carries the shared NVD paging input-to-payload
+golden (core #9225); RC4 carries the `env_from_secret` allowlist fix (issue
+#26, PR #28) on top of the RC3 validation corrections. Both tags match their
+`origin` refs and resolve, download, and build through the public Go proxy
+from a fresh external `GOWORK=off` consumer with no `replace` or `@latest`.
+Consumer qualification and deployed acceptance remain separate: the pinned
+satellite still runs collector RC3 plus factschema RC6, and no core pair has
+run its contract and runtime gates against RC4/RC7. Candidate publication
+alone is not consumer or production acceptance.
 
 ## Historical RC3 preparation
 

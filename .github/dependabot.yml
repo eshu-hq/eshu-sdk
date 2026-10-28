@@ -1,0 +1,21 @@
+# Dependabot proposes dependency bumps weekly (epic #27): both Go modules
+# plus GitHub Actions. SDK bumps in collectors stay acceptance-gated by each
+# collector's conformance tests; a Dependabot PR here still needs the full
+# lane set green before merge.
+version: 2
+updates:
+  - package-ecosystem: "gomod"
+    directory: "/collector"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+  - package-ecosystem: "gomod"
+    directory: "/factschema"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"

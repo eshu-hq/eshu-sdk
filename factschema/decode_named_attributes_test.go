@@ -169,7 +169,11 @@ func TestAttributesRemainderRequiresExactJSONExclusion(t *testing.T) {
 	t.Parallel()
 
 	type literalDashAttributes struct {
-		Attributes map[string]any `json:"-,omitempty"`
+		// The dash-omitempty tag is the point of this test: it names the
+		// field "-" (encoding/json marshals it as {"-":...}), proving only
+		// the exact tag `json:"-"` opts into remainder capture. The
+		// suggested `'-'` spelling would rename the field instead.
+		Attributes map[string]any `json:"-,omitempty"` //nolint:staticcheck // intentional literal-dash name, see above
 	}
 
 	want := map[string]any{"provider_specific_key": "value"}
