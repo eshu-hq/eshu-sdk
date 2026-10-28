@@ -46,7 +46,7 @@ repairs number-preserving typed decoding from
 integral decimal/exponent values and nested integer lists. Schemas, fixtures
 and wire protocols are unchanged by these two earlier changes.
 
-The collector RC3 and RC4 and factschema RC4 through RC7 source changes have
+The collector RC3 and RC4 and factschema RC4 through RC8 source changes have
 separate immutable Git tags. RC6 adds the optional EPSS `model_version` field;
 FIRST API rows do not supply it. RC7 adds the synthetic NVD paging golden
 without changing a wire schema. RC8 publishes the `terraformstate` drift
@@ -63,8 +63,10 @@ The recorded status below is a snapshot from 2026-10-28. Tag origin was
 checked against `origin` (`collector/v0.1.0-rc.4` and
 `factschema/v0.1.0-rc.8` match locally), and both tags resolve, download,
 and build through the public Go proxy with `GOWORK=off` and no `replace`
-directive (a scratch consumer pins `collector v0.1.0-rc.4` plus `factschema
-v0.1.0-rc.8`, runs `go mod tidy`, builds, vets, and runs).
+directive (the RC4/RC7 proof records a scratch consumer pinning
+`collector v0.1.0-rc.4` plus `factschema v0.1.0-rc.7` through tidy, build,
+vet, and run, and the RC8 proof records a scratch consumer pinning
+`factschema v0.1.0-rc.8` through the same steps).
 
 | State | Evidence required | Recorded snapshot |
 | --- | --- | --- |

@@ -19,7 +19,7 @@ alone is not consumer or production acceptance.
 
 The checklist below records the earlier RC3 preparation and cutover plan. Its
 candidate-status statements predate the published RC3 through RC6 Git tags;
-use the current section above for RC7 actions and recheck exact tag and proxy
+use the current section above for RC8 actions and recheck exact tag and proxy
 state before any release act.
 
 Both first `v0.1.0-rc.1` module candidates are available through immutable
