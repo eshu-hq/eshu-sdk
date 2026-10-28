@@ -60,6 +60,7 @@ shellcheck:
 # org reusable, and this workflow carries no classifier left to test.
 shape:
 	bash scripts/ci/test-coverage-floor.sh
+	bash scripts/ci/test-floors-sync.sh
 
 actionlint:
 	actionlint -no-color .github/workflows/*.yml
