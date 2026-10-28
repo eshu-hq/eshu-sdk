@@ -32,6 +32,25 @@ version — pinning this module pins the fixture pack too.
   collector module; govulncheck already reported no reachable advisories for
   this module, with no language or library break for consumers).
 
+## [0.1.0-rc.10] - Prepared (unpublished)
+
+This candidate source is not tagged. Publishing it needs a separate release
+ruling against the merged commit and the owner's tag approval.
+
+### Added
+
+- `vulnerability.source_snapshot` gains an optional `coverage_descriptor` for
+  NVD: a versioned, normalized record of the explicit CVE set (trimmed, upper
+  case, deduplicated, sorted), query mode and window, configured endpoint set,
+  and endpoint actually used. Older snapshots remain valid source observations
+  but cannot certify zero advisory coverage. Optional `collector_instance_id`
+  and `result_count` fields now declare fields the core SQL readiness reader
+  already uses. Additive optional fields are a minor change: `required` stays
+  `source` and `complete`, and no stable key changes. Ported from core
+  eshu-hq/eshu#9435 (core eshu-hq/eshu#9227); the canonical schema and the
+  fixture-pack copy were regenerated in lockstep and match the core in-tree
+  schema byte for byte.
+
 ## [0.1.0-rc.8] - 2026-10-28
 
 This tag is published and proxy-verified; it does not qualify a core consumer
