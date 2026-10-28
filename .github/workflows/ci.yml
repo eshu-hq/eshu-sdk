@@ -1,20 +1,36 @@
-# SDK per-module CI gates (epic #27).
+# SDK per-module CI gates (epic #27), driven by the org reusable (#39).
 #
-# Lanes: lint/test/race per module, generate-check (factschema behavioral
-# gate), shell, govulncheck, gosec (SARIF advisory), consumer-compat (k8s-live
-# satellite against the candidate SDK), actionlint, and the skip-aware
-# ci-complete aggregator, which is the ONLY required context on main.
+# Lane bodies live in the pinned reusable
+# eshu-hq/.github/.github/workflows/go-multi-module-ci.yml. This file only
+# passes the SDK's module matrix, coverage floors, and repo hooks, then keeps
+# a local ci-complete aggregator so the required context on main is unchanged
+# (ruleset 26010900 still requires exactly ci-complete).
 #
-# Tool pins: golangci-lint v2.12.2 (org pin), gofumpt via its vendored
-# formatter, gosec v2.27.1 (org pin, advisory SARIF signal on PRs, never
-# blocking), govulncheck v1.9.0 (exact pin; the vuln DB refreshes on the
-# weekly schedule run — documented exception to a floating ref, re-pinned
-# monthly or when the DB warns), actionlint v1.7.12 (tarball sha256-checked),
-# setup-go from each module's go.mod (Go 1.26.10).
-# All actions are SHA-pinned; Dependabot proposes bumps weekly.
-#
+# Reusable pin: eshu-hq/.github @ 79dd01d7719645485e2e8e07e8075ccba8c518b5
+# (merged via upstream PR #6, which follows PR #2; no tag exists yet, tags
+# are maintainer-controlled — verify before advancing).
 # Satellite pin for consumer-compat (verify before advancing):
 # eshu-hq/eshu-collector-kubernetes-live @ 2ec5ade94f2ccee4401e6c7767b1b5bc4347469d
+#
+# Lane-name mapping: GitHub forbids dynamic job IDs, so per-module lanes
+# surface as display names (lint (collector)) instead of the old literal IDs
+# (lint-collector). Branch protection keys only on ci-complete, and no other
+# consumer (ruleset, docs, Dependabot) keys on literal lane names, so nothing
+# else breaks.
+#
+# Deliberate deviations from the inline lanes:
+# - shell no longer selects on .github/workflows edits. That trigger existed
+#   to run test-lane-selection.sh, which tested the inline classifier that is
+#   gone (script retired with this move). shellcheck still runs on **/*.sh
+#   and fail-closed misc inputs; workflow edits are covered by actionlint plus
+#   the full lane set the reusable selects on workflows=true.
+# - Coverage floors are enforced inline by the reusable race lanes (floors
+#   passed below). scripts/ci/check-coverage.sh stays for `make race` local
+#   parity, and its test still runs via `make shape` / `make ci`. The two
+#   implementations are kept in sync by scripts/ci/test-floors-sync.sh,
+#   which fails when the workflow input drifts from the Makefile defaults.
+#   All three guard tests (floor, floors-sync, wrapper-inputs) also run in
+#   CI in the `shape` job below, so a gutted helper cannot go green.
 
 name: ci
 
@@ -33,349 +49,75 @@ concurrency:
 permissions:
   contents: read
 
-env:
-  SATELLITE_REF: 2ec5ade94f2ccee4401e6c7767b1b5bc4347469d
-  COVERAGE_FLOOR_COLLECTOR: "85.0"
-  COVERAGE_FLOOR_FACTSCHEMA: "48.3"
-
 jobs:
-  changes:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    outputs:
-      go_collector: ${{ steps.filter.outputs.go_collector }}
-      fixture_collector: ${{ steps.filter.outputs.fixture_collector }}
-      go_factschema: ${{ steps.filter.outputs.go_factschema }}
-      fixture_factschema: ${{ steps.filter.outputs.fixture_factschema }}
-      workflows: ${{ steps.filter.outputs.workflows }}
-      shell: ${{ steps.filter.outputs.shell }}
-      shared: ${{ steps.filter.outputs.shared }}
-      misc: ${{ steps.filter.outputs.misc }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0
-      - id: filter
-        env:
-          BASE_REF: ${{ github.base_ref }}
-          EVENT: ${{ github.event_name }}
-        run: |
-          set -euo pipefail
-          go_collector=false; fixture_collector=false
-          go_factschema=false; fixture_factschema=false
-          workflows=false; shell=false; shared=false; misc=false
-          if [ "$EVENT" != "pull_request" ]; then
-            # Push, schedule, and dispatch runs prove every lane (fail closed).
-            go_collector=true; fixture_collector=true
-            go_factschema=true; fixture_factschema=true
-            workflows=true; shell=true; shared=true
-          else
-            git fetch --depth 1 origin "$BASE_REF"
-            while IFS= read -r f; do
-              [ -n "$f" ] || continue
-              known=false
-              # Agent-instruction files govern how future edits are made, so
-              # they select the shared lane; pure prose keeps the docs skip.
-              case "$f" in *AGENTS.md|*CLAUDE.md|*CONTRIBUTING.md) shared=true; known=true ;; esac
-              case "$f" in docs/*|*.md|LICENSE*) known=true ;; esac
-              case "$f" in
-                collector/*.go|collector/go.mod|collector/go.sum|collector/.golangci.yml)
-                  go_collector=true; known=true ;;
-              esac
-              case "$f" in
-                collector/testdata/*|collector/schema/*)
-                  fixture_collector=true; known=true ;;
-              esac
-              case "$f" in
-                factschema/*.go|factschema/go.mod|factschema/go.sum|factschema/.golangci.yml)
-                  go_factschema=true; known=true ;;
-              esac
-              case "$f" in
-                factschema/schema/*|factschema/fixturepack/*|factschema/testdata/*)
-                  fixture_factschema=true; known=true ;;
-              esac
-              case "$f" in .github/workflows/*) workflows=true; known=true ;; esac
-              case "$f" in *.sh) shell=true; known=true ;; esac
-              case "$f" in
-                Makefile|scripts/*|go.work*|.github/*|*.yml|*.yaml)
-                  shared=true; known=true ;;
-              esac
-              # Anything unrecognized runs every lane (fail closed).
-              [ "$known" = true ] || misc=true
-            done < <(git diff --name-only "origin/$BASE_REF...HEAD" --)
-          fi
-          {
-            echo "go_collector=$go_collector"
-            echo "fixture_collector=$fixture_collector"
-            echo "go_factschema=$go_factschema"
-            echo "fixture_factschema=$fixture_factschema"
-            echo "workflows=$workflows"
-            echo "shell=$shell"
-            echo "shared=$shared"
-            echo "misc=$misc"
-          } >> "$GITHUB_OUTPUT"
-
-  lint-collector:
-    needs: changes
-    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.go_collector == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.misc == 'true' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
-        with:
-          go-version-file: collector/go.mod
-          cache-dependency-path: collector/go.sum
-      - name: Vet
-        run: cd collector && GOWORK=off go vet ./...
-      - name: Install golangci-lint (pinned v2.12.2)
-        run: GOWORK=off go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.12.2
-      - name: Lint
-        run: cd collector && GOWORK=off golangci-lint run ./...
-      - name: gofumpt diff (vendored formatter, must be empty)
-        run: |
-          cd collector
-          GOWORK=off golangci-lint fmt --diff ./... > /tmp/sdk-fmt-collector.diff
-          if [ -s /tmp/sdk-fmt-collector.diff ]; then cat /tmp/sdk-fmt-collector.diff; echo 'gofumpt: files need formatting' >&2; exit 1; fi
-      - name: Tidy diff
-        run: bash scripts/ci/tidy-check.sh collector
-      - name: Install file-cap dependency
-        run: sudo apt-get update && sudo apt-get install --yes ripgrep
-      - name: File cap (whole-tree census)
-        run: make file-cap
-
-  test-collector:
-    needs: changes
-    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.go_collector == 'true' || needs.changes.outputs.fixture_collector == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.misc == 'true' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
-        with:
-          go-version-file: collector/go.mod
-          cache-dependency-path: collector/go.sum
-      - name: Build
-        run: cd collector && GOWORK=off go build ./...
-      - name: Test
-        run: cd collector && GOWORK=off go test ./... -count=1
-
-  race-collector:
-    needs: changes
-    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.go_collector == 'true' || needs.changes.outputs.fixture_collector == 'true' || needs.changes.outputs.fixture_factschema == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.misc == 'true' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
-        with:
-          go-version-file: collector/go.mod
-          cache-dependency-path: collector/go.sum
-      - name: Race
-        run: cd collector && GOWORK=off go test -race ./... -count=1 -coverprofile=coverage.out
-      - name: Upload coverprofile
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: coverage-collector
-          path: collector/coverage.out
-      - name: Coverage floor
-        run: cd collector && bash ../scripts/ci/check-coverage.sh coverage.out "$COVERAGE_FLOOR_COLLECTOR"
-
-  lint-factschema:
-    needs: changes
-    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.go_factschema == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.misc == 'true' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
-        with:
-          go-version-file: factschema/go.mod
-          cache-dependency-path: factschema/go.sum
-      - name: Vet
-        run: cd factschema && GOWORK=off go vet ./...
-      - name: Install golangci-lint (pinned v2.12.2)
-        run: GOWORK=off go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.12.2
-      - name: Lint
-        run: cd factschema && GOWORK=off golangci-lint run ./...
-      - name: gofumpt diff (vendored formatter, must be empty)
-        run: |
-          cd factschema
-          GOWORK=off golangci-lint fmt --diff ./... > /tmp/sdk-fmt-factschema.diff
-          if [ -s /tmp/sdk-fmt-factschema.diff ]; then cat /tmp/sdk-fmt-factschema.diff; echo 'gofumpt: files need formatting' >&2; exit 1; fi
-      - name: Tidy diff
-        run: bash scripts/ci/tidy-check.sh factschema
-      - name: Install file-cap dependency
-        run: sudo apt-get update && sudo apt-get install --yes ripgrep
-      - name: File cap (whole-tree census)
-        run: make file-cap
-
-  test-factschema:
-    needs: changes
-    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.go_factschema == 'true' || needs.changes.outputs.fixture_factschema == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.misc == 'true' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
-        with:
-          go-version-file: factschema/go.mod
-          cache-dependency-path: factschema/go.sum
-      - name: Build
-        run: cd factschema && GOWORK=off go build ./...
-      - name: Test
-        run: cd factschema && GOWORK=off go test ./... -count=1
-
-  race-factschema:
-    needs: changes
-    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.go_factschema == 'true' || needs.changes.outputs.fixture_collector == 'true' || needs.changes.outputs.fixture_factschema == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.misc == 'true' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
-        with:
-          go-version-file: factschema/go.mod
-          cache-dependency-path: factschema/go.sum
-      - name: Race
-        run: cd factschema && GOWORK=off go test -race ./... -count=1 -coverprofile=coverage.out
-      - name: Upload coverprofile
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: coverage-factschema
-          path: factschema/coverage.out
-      - name: Coverage floor
-        run: cd factschema && bash ../scripts/ci/check-coverage.sh coverage.out "$COVERAGE_FLOOR_FACTSCHEMA"
-
-  generate-check:
-    needs: changes
-    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.go_factschema == 'true' || needs.changes.outputs.fixture_factschema == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.misc == 'true' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
-        with:
-          go-version-file: factschema/go.mod
-          cache-dependency-path: factschema/go.sum
-      # Behavioral gate: committed generated schemas must match the generator.
-      - name: Check generated schemas
-        run: make generate-check
-
-  shell:
-    needs: changes
-    # workflows=true: this lane executes the lane-selection shape test that
-    # guards ci.yml itself, so workflow edits must select it (issue #34).
-    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.shell == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.misc == 'true' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: shellcheck every tracked shell script
-        run: git ls-files '*.sh' | xargs shellcheck --severity=warning
-      # Shape tests for the CI scripts themselves: they must run in CI so a
-      # gutted gate helper cannot go green by being skipped (issue #34).
-      - name: Coverage floor gate test
-        run: bash scripts/ci/test-coverage-floor.sh
-      - name: Lane selection shape test
-        run: bash scripts/ci/test-lane-selection.sh
-
-  govulncheck:
-    needs: changes
-    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.go_collector == 'true' || needs.changes.outputs.go_factschema == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.misc == 'true' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    strategy:
-      matrix:
-        module: [collector, factschema]
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
-        with:
-          go-version-file: ${{ matrix.module }}/go.mod
-          cache-dependency-path: ${{ matrix.module }}/go.sum
-      - name: Install govulncheck (pinned v1.9.0; DB refreshes on the weekly schedule run)
-        run: GOWORK=off go install golang.org/x/vuln/cmd/govulncheck@v1.9.0
-      - name: Scan
-        run: cd ${{ matrix.module }} && GOWORK=off govulncheck ./...
-
-  gosec:
-    needs: changes
-    # Advisory signal on PRs: selects on Go changes, always green, SARIF kept.
-    if: ${{ (github.event_name != 'pull_request' && github.event_name != 'push') || needs.changes.outputs.go_collector == 'true' || needs.changes.outputs.go_factschema == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.misc == 'true' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+  gates:
+    # Caller-job permissions pass to the called workflow: actions:write lives
+    # here (artifact uploads inside the reusable) and not on ci-complete.
     permissions:
       contents: read
       actions: write
-    strategy:
-      matrix:
-        module: [collector, factschema]
+    uses: eshu-hq/.github/.github/workflows/go-multi-module-ci.yml@79dd01d7719645485e2e8e07e8075ccba8c518b5
+    with:
+      modules: '["collector", "factschema"]'
+      coverage-floors: '{"collector": 85.0, "factschema": 48.3}'
+      fixture-subpaths: 'testdata,schema,fixturepack'
+      generate-check-modules: '["factschema"]'
+      generate-check-command: 'make generate-check'
+      generate-check-go-module: 'factschema'
+      satellite-repository: 'eshu-hq/eshu-collector-kubernetes-live'
+      satellite-ref: '2ec5ade94f2ccee4401e6c7767b1b5bc4347469d'
+      primary-module: 'collector'
+      # consumer-compat-command left at its default, which shells out to the
+      # caller's scripts/ci/consumer-compat.sh against the satellite above.
+      # tidy-check-command keeps the snapshot semantics: a PR that legitimately
+      # edits go.mod must not fail its own diff (the reusable inline default
+      # of `go mod tidy -diff` plus `git diff` would).
+      tidy-check-command: 'bash scripts/ci/tidy-check.sh {0}'
+      # Whole-tree census (Go and non-Go prose alike); runs once per lint
+      # module and is idempotent. Extra format args are ignored.
+      file-cap-command: 'make file-cap'
+      file-cap-deps-command: 'sudo apt-get update && sudo apt-get install --yes ripgrep'
+
+  # Guard tests run in CI (not only via local `make shape`), so a gutted
+  # helper cannot go green by being skipped.
+  shape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          go-version-file: ${{ matrix.module }}/go.mod
-          cache-dependency-path: ${{ matrix.module }}/go.sum
-      # Advisory until the backlog is triaged and measured: always green,
-      # SARIF plus log kept as artifacts for the triage that promotes it.
-      - name: Install gosec (pinned v2.27.1, org pin)
-        run: GOWORK=off go install github.com/securego/gosec/v2/cmd/gosec@v2.27.1
-      - name: Scan to SARIF
-        run: cd ${{ matrix.module }} && GOWORK=off gosec -fmt sarif -out "../gosec-${{ matrix.module }}.sarif" ./... > "../gosec-${{ matrix.module }}.log" 2>&1 || true
-      - name: Upload SARIF
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: gosec-${{ matrix.module }}
-          path: |
-            gosec-${{ matrix.module }}.sarif
-            gosec-${{ matrix.module }}.log
-
-  consumer-compat:
-    needs: changes
-    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.go_collector == 'true' || needs.changes.outputs.go_factschema == 'true' || needs.changes.outputs.fixture_collector == 'true' || needs.changes.outputs.fixture_factschema == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.misc == 'true' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: eshu-hq/eshu-collector-kubernetes-live
-          ref: ${{ env.SATELLITE_REF }}
-          path: satellite
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
-        with:
-          go-version-file: collector/go.mod
-          cache-dependency-path: collector/go.sum
-      - name: Satellite suite against the candidate SDK
-        run: bash scripts/ci/consumer-compat.sh "$GITHUB_WORKSPACE/satellite" "$GITHUB_WORKSPACE"
-
-  actionlint:
-    needs: changes
-    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.misc == 'true' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Install actionlint (pinned v1.7.12, sha256-checked)
+          go-version-file: 'collector/go.mod'
+      - name: Coverage gate shape tests
         run: |
-          curl -sSL https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz -o /tmp/sdk-actionlint.tar.gz
-          echo '8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  /tmp/sdk-actionlint.tar.gz' | sha256sum -c -
-          tar -xzf /tmp/sdk-actionlint.tar.gz -C /tmp actionlint
-      - name: Lint workflows
-        run: /tmp/actionlint -no-color .github/workflows/*.yml
+          bash scripts/ci/test-coverage-floor.sh
+          bash scripts/ci/test-floors-sync.sh
+          bash scripts/ci/test-wrapper-inputs.sh
 
   ci-complete:
     if: always()
-    needs: [changes, lint-collector, test-collector, race-collector, lint-factschema, test-factschema, race-factschema, generate-check, shell, govulncheck, gosec, consumer-compat, actionlint]
+    needs: [gates, shape]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Aggregate lane results (skipped lanes succeed)
+      - name: Aggregate (gates carry every lane, shape carries the guards)
         run: |
           printf '%s\n' '${{ toJSON(needs) }}'
-          if printf '%s' '${{ toJSON(needs) }}' | grep -Eq '"result": "(failure|cancelled)"'; then
-            echo 'ci-complete: a lane failed or was cancelled' >&2
-            exit 1
+          fail=0
+          # Skip-aware like the retired aggregator: only failure/cancelled
+          # fail; a skipped gates result (nothing selected) still succeeds.
+          case '${{ needs.gates.result }}' in
+            failure|cancelled)
+              echo 'ci-complete: the reusable gates failed or were cancelled' >&2
+              fail=1
+              ;;
+          esac
+          # Guards must actually run: shape succeeds, never skips unnoticed.
+          if [ '${{ needs.shape.result }}' != 'success' ]; then
+            echo 'ci-complete: shape guards failed or were skipped' >&2
+            fail=1
           fi
-          echo 'ci-complete: every lane succeeded or legitimately skipped'
+          if [ "$fail" -eq 0 ]; then
+            echo 'ci-complete: every selected lane succeeded or legitimately skipped'
+          fi
+          exit "$fail"
