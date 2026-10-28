@@ -1,35 +1,34 @@
 # Release and cutover checklist
 
-## Current RC4/RC8 state
+## Current RC4/RC10 state
 
 Git tags in this checkout reach `collector/v0.1.0-rc.4` and
-`factschema/v0.1.0-rc.8`. RC8 publishes the `terraformstate` drift attribute
-allowlist as Go API only (PR #50) with no payload schema or fixture change;
-RC7 carries the shared NVD paging input-to-payload golden (core #9225); RC4
-carries the `env_from_secret` allowlist fix (issue #26, PR #28) on top of the
-RC3 validation corrections. All three tags match their `origin` refs and
-resolve, download, and build through the public Go proxy from fresh
-external `GOWORK=off` consumers with no `replace` or `@latest`: the RC4/RC7
-proof records one scratch consumer pinning `collector v0.1.0-rc.4` plus
-`factschema v0.1.0-rc.7`, and the RC8 proof records a second scratch
-consumer pinning `factschema v0.1.0-rc.8`.
+`factschema/v0.1.0-rc.10`. RC10 adds the optional NVD `coverage_descriptor`,
+`collector_instance_id`, and `result_count` fields to
+`vulnerability.source_snapshot` (core eshu-hq/eshu#9227, PR #60) with no
+stable-key change; RC9 unexports the `terraformstate` drift allowlist table
+(PR #53); RC8 publishes that allowlist as Go API only (PR #50) with no payload
+schema or fixture change; RC7 carries the shared NVD paging input-to-payload
+golden (core #9225); RC4 carries the `env_from_secret` allowlist fix (issue
+#26, PR #28) on top of the RC3 validation corrections. These tags match their
+`origin` refs and are listed by the public Go proxy. Fresh external
+`GOWORK=off` consumers with no `replace` or `@latest` resolved, downloaded,
+and built three of them: the RC4/RC7 proof records one scratch consumer
+pinning `collector v0.1.0-rc.4` plus `factschema v0.1.0-rc.7`, the RC8 proof
+records a second consumer pinning `factschema v0.1.0-rc.8`, and the RC10 proof
+records consumers pinning `factschema v0.1.0-rc.10`. RC9 has no recorded
+consumer proof.
 Consumer qualification and deployed acceptance remain separate: the pinned
-satellite still runs collector RC3 plus factschema RC6, and no core pair has
-run its contract and runtime gates against RC4/RC8. Candidate publication
-alone is not consumer or production acceptance.
-
-Prepared next candidate: `factschema/v0.1.0-rc.10` (unpublished). It adds the
-optional NVD source-snapshot coverage fields from core eshu-hq/eshu#9227 with
-no stable-key change. Merge the reviewed source, then obtain a separate
-release ruling against the concrete merged commit and the owner's tag approval
-before creating the tag. Verify it through a fresh external `GOWORK=off`
-public-proxy consumer before Eshu pins it.
+satellite still runs collector RC3 plus factschema RC6, core `main` still pins
+factschema RC7, and core PR eshu-hq/eshu#9435 carries the RC10 pin. No core
+pair has run its contract and runtime gates against RC4/RC10. Candidate
+publication alone is not consumer or production acceptance.
 
 ## Historical RC3 preparation
 
 The checklist below records the earlier RC3 preparation and cutover plan. Its
 candidate-status statements predate the published RC3 through RC6 Git tags;
-use the current section above for RC8 actions and recheck exact tag and proxy
+use the current section above for RC10 actions and recheck exact tag and proxy
 state before any release act.
 
 Both first `v0.1.0-rc.1` module candidates are available through immutable
