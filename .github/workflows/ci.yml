@@ -6,8 +6,11 @@
 # ci-complete aggregator, which is the ONLY required context on main.
 #
 # Tool pins: golangci-lint v2.12.2 (org pin), gofumpt via its vendored
-# formatter, gosec v2.27.1 (org pin), govulncheck @latest (org pin, fresh DB),
-# actionlint v1.7.12, setup-go from each module's go.mod (Go 1.26.10).
+# formatter, gosec v2.27.1 (org pin, advisory SARIF signal on PRs, never
+# blocking), govulncheck v1.9.0 (exact pin; the vuln DB refreshes on the
+# weekly schedule run — documented exception to a floating ref, re-pinned
+# monthly or when the DB warns), actionlint v1.7.12 (tarball sha256-checked),
+# setup-go from each module's go.mod (Go 1.26.10).
 # All actions are SHA-pinned; Dependabot proposes bumps weekly.
 #
 # Satellite pin for consumer-compat (verify before advancing):
@@ -71,6 +74,9 @@ jobs:
             while IFS= read -r f; do
               [ -n "$f" ] || continue
               known=false
+              # Agent-instruction files govern how future edits are made, so
+              # they select the shared lane; pure prose keeps the docs skip.
+              case "$f" in *AGENTS.md|*CLAUDE.md|*CONTRIBUTING.md) shared=true; known=true ;; esac
               case "$f" in docs/*|*.md|LICENSE*) known=true ;; esac
               case "$f" in
                 collector/*.go|collector/go.mod|collector/go.sum|collector/.golangci.yml)
@@ -156,12 +162,9 @@ jobs:
 
   race-collector:
     needs: changes
-    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.go_collector == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.misc == 'true' }}
+    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.go_collector == 'true' || needs.changes.outputs.fixture_collector == 'true' || needs.changes.outputs.fixture_factschema == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.misc == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    permissions:
-      contents: read
-      actions: write
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
@@ -225,12 +228,9 @@ jobs:
 
   race-factschema:
     needs: changes
-    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.go_factschema == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.misc == 'true' }}
+    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.go_factschema == 'true' || needs.changes.outputs.fixture_collector == 'true' || needs.changes.outputs.fixture_factschema == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.misc == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    permissions:
-      contents: read
-      actions: write
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
@@ -286,14 +286,15 @@ jobs:
         with:
           go-version-file: ${{ matrix.module }}/go.mod
           cache-dependency-path: ${{ matrix.module }}/go.sum
-      - name: Install govulncheck (@latest, org pin for a fresh DB)
-        run: GOWORK=off go install golang.org/x/vuln/cmd/govulncheck@latest
+      - name: Install govulncheck (pinned v1.9.0; DB refreshes on the weekly schedule run)
+        run: GOWORK=off go install golang.org/x/vuln/cmd/govulncheck@v1.9.0
       - name: Scan
         run: cd ${{ matrix.module }} && GOWORK=off govulncheck ./...
 
   gosec:
     needs: changes
-    if: ${{ (github.event_name != 'pull_request' && github.event_name != 'push') || needs.changes.outputs.misc == 'true' }}
+    # Advisory signal on PRs: selects on Go changes, always green, SARIF kept.
+    if: ${{ (github.event_name != 'pull_request' && github.event_name != 'push') || needs.changes.outputs.go_collector == 'true' || needs.changes.outputs.go_factschema == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.misc == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -324,7 +325,7 @@ jobs:
 
   consumer-compat:
     needs: changes
-    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.go_collector == 'true' || needs.changes.outputs.go_factschema == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.misc == 'true' }}
+    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.go_collector == 'true' || needs.changes.outputs.go_factschema == 'true' || needs.changes.outputs.fixture_collector == 'true' || needs.changes.outputs.fixture_factschema == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.shared == 'true' || needs.changes.outputs.misc == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -348,9 +349,10 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-      - name: Install actionlint (pinned v1.7.12)
+      - name: Install actionlint (pinned v1.7.12, sha256-checked)
         run: |
           curl -sSL https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz -o /tmp/sdk-actionlint.tar.gz
+          echo '8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  /tmp/sdk-actionlint.tar.gz' | sha256sum -c -
           tar -xzf /tmp/sdk-actionlint.tar.gz -C /tmp actionlint
       - name: Lint workflows
         run: /tmp/actionlint -no-color .github/workflows/*.yml
