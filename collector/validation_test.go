@@ -63,6 +63,68 @@ func TestValidatePayloadKeysAllowsRedactionSafeJoinKeyFields(t *testing.T) {
 	}
 }
 
+// TestValidatePayloadKeysAllowsEnvFromSecretBool proves the allowlist
+// carve-out for the kubernetes_live.pod_template containers.env_from_secret
+// field: a JSON boolean recording only WHETHER container env references
+// secrets — never a value — passes validatePayload instead of being rejected
+// as if it were an unredacted secret. Before this allowlist existed, the
+// field was rejected with `sensitive-looking key
+// "containers.env_from_secret" must be redacted before emission`, a false
+// positive on the substring "secret" that terminally failed every
+// extracted-collector claim (eshu-hq/eshu#9327, blocking #8859). The bool
+// cannot carry a credential: the in-tree baseline carries it as false on all
+// 1224 pod_template facts, and the satellite adapter sets it from
+// env.ValueFrom.SecretKeyRef != nil without ever reading env.Value.
+func TestValidatePayloadKeysAllowsEnvFromSecretBool(t *testing.T) {
+	t.Parallel()
+
+	payload := map[string]any{
+		"containers": []any{
+			map[string]any{
+				"name":            "api",
+				"env_from_secret": false,
+			},
+		},
+	}
+	if err := validatePayload(payload); err != nil {
+		t.Fatalf("validatePayload(%+v) error = %v, want nil (env_from_secret is an allowlisted redaction-safe bool)", payload, err)
+	}
+
+	// Pin the same acceptance at the gates that ship: the live fact path
+	// (validateFactPayload, exercised here with the kubernetes_live
+	// pod_template kind that carries this field) and the sharing surface
+	// (ValidateShareSafeKeys). A future divergence between the walks would
+	// fail here instead of shipping a gate that rejects honest bools.
+	fact := Fact{Kind: "kubernetes_live.pod_template", SchemaVersion: "1.0.0", Payload: payload}
+	if err := validateFactPayload(fact); err != nil {
+		t.Fatalf("validateFactPayload(kubernetes_live.pod_template with env_from_secret=false) error = %v, want nil", err)
+	}
+	if err := ValidateShareSafeKeys(payload); err != nil {
+		t.Fatalf("ValidateShareSafeKeys(env_from_secret=false) error = %v, want nil", err)
+	}
+
+	// The carve-out is value-bound: a credential string under the same key
+	// must keep failing closed through every gate, including share-safe.
+	evil := map[string]any{
+		"containers": []any{
+			map[string]any{
+				"name":            "api",
+				"env_from_secret": "shhh",
+			},
+		},
+	}
+	if err := validatePayload(evil); err == nil {
+		t.Fatal("validatePayload(env_from_secret=\"shhh\") error = nil, want a sensitive-key rejection")
+	}
+	evilFact := Fact{Kind: "kubernetes_live.pod_template", SchemaVersion: "1.0.0", Payload: evil}
+	if err := validateFactPayload(evilFact); err == nil {
+		t.Fatal("validateFactPayload(env_from_secret=\"shhh\") error = nil, want a sensitive-key rejection")
+	}
+	if err := ValidateShareSafeKeys(evil); err == nil {
+		t.Fatal("ValidateShareSafeKeys(env_from_secret=\"shhh\") error = nil, want a sensitive-key rejection")
+	}
+}
+
 // TestValidatePayloadKeysAllowlistDoesNotWeakenGenericDetection proves the
 // allowlist is scoped to exact field names, not a broadening of the regex
 // itself: a genuinely sensitive-looking field that happens to share the

@@ -49,7 +49,7 @@ func walkFactPayload(value any, path, kind, schema string, depth int) error {
 					continue
 				}
 			}
-			if err := rejectSensitivePayloadKey(key, childPath); err != nil {
+			if err := rejectSensitivePayloadKey(key, child, childPath); err != nil {
 				return err
 			}
 			if err := walkFactPayload(child, childPath, kind, schema, depth+1); err != nil {
@@ -57,8 +57,8 @@ func walkFactPayload(value any, path, kind, schema string, depth int) error {
 			}
 		}
 	case map[string]string:
-		for key := range typed {
-			if err := rejectSensitivePayloadKey(key, payloadKeyPath(path, key)); err != nil {
+		for key, val := range typed {
+			if err := rejectSensitivePayloadKey(key, val, payloadKeyPath(path, key)); err != nil {
 				return err
 			}
 		}
@@ -122,8 +122,12 @@ func validAzureTagMarker(value string) bool {
 	return true
 }
 
-func rejectSensitivePayloadKey(key, path string) error {
-	if _, safe := redactionSafePayloadKeys[key]; !safe && sensitiveQueryPattern.MatchString(key) {
+// rejectSensitivePayloadKey fails closed on sensitive-looking keys unless the
+// value falls inside the key's allowlist carve-out (see redactionSafeValue):
+// env_from_secret admits only JSON booleans (or null), so a credential
+// string under that name is still rejected here and in validatePayloadKeys.
+func rejectSensitivePayloadKey(key string, value any, path string) error {
+	if sensitiveQueryPattern.MatchString(key) && !redactionSafeValue(key, value) {
 		return fmt.Errorf("sensitive-looking key %q must be redacted before emission", path)
 	}
 	return nil

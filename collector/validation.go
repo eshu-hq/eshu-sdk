@@ -34,6 +34,30 @@ var redactionSafePayloadKeys = map[string]struct{}{
 	// token_count is an integer body-size metric (lexer tokens), not a
 	// credential; see reducerderived/v1.CodeDriftedMember.TokenCount.
 	"token_count": {},
+	// env_from_secret is a bool recording only WHETHER container env references
+	// secrets (SecretKeyRef != nil; values never read), so "secret" is a
+	// false positive (eshu-hq/eshu#9327). Value-bound to JSON bool/null;
+	// see redactionSafeValue.
+	"env_from_secret": {},
+}
+
+// redactionSafeValue reports whether value falls inside an allowlisted key's
+// carve-out. Most allowlisted keys admit any value; env_from_secret admits
+// only JSON booleans (or null) — any other type there could be a credential.
+// Non-allowlisted keys are never safe.
+func redactionSafeValue(key string, value any) bool {
+	if _, safe := redactionSafePayloadKeys[key]; !safe {
+		return false
+	}
+	if key != "env_from_secret" {
+		return true
+	}
+	switch value.(type) {
+	case bool, nil:
+		return true
+	default:
+		return false
+	}
 }
 
 // Validator validates extension results against the host-declared contract.
@@ -376,7 +400,7 @@ func validatePayloadKeys(prefix string, value any) error {
 			if prefix != "" {
 				path = prefix + "." + key
 			}
-			if _, safe := redactionSafePayloadKeys[key]; !safe && sensitiveQueryPattern.MatchString(key) {
+			if sensitiveQueryPattern.MatchString(key) && !redactionSafeValue(key, child) {
 				return fmt.Errorf("sensitive-looking key %q must be redacted before emission", path)
 			}
 			if err := validatePayloadKeys(path, child); err != nil {
