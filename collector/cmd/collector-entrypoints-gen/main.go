@@ -40,7 +40,7 @@ func run(args []string) error {
 	if err != nil {
 		return err
 	}
-	defer rootHandle.Close()
+	defer func() { _ = rootHandle.Close() }()
 	set, err := entrypoints.LoadManifestFile(*manifestPath)
 	if err != nil {
 		return err
@@ -65,13 +65,13 @@ func run(args []string) error {
 				}
 				continue
 			}
-			if err := rootHandle.MkdirAll(filepath.Dir(path), 0755); err != nil {
+			if err := rootHandle.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 				return err
 			}
 			if err := rejectSymlinkPath(rootHandle, path); err != nil {
 				return err
 			}
-			if err := rootHandle.WriteFile(path, file.Contents, 0644); err != nil {
+			if err := rootHandle.WriteFile(path, file.Contents, 0o644); err != nil {
 				return err
 			}
 		}
@@ -100,7 +100,7 @@ func rejectSymlinkPath(root *os.Root, target string) error {
 
 func main() {
 	if err := run(os.Args[1:]); err != nil {
-		os.Stderr.WriteString("collector entrypoint generation failed\n")
+		_, _ = os.Stderr.WriteString("collector entrypoint generation failed\n")
 		os.Exit(1)
 	}
 }

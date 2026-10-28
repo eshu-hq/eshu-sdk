@@ -1,0 +1,33 @@
+# Factschema module golangci-lint configuration.
+#
+# Pinned to golangci-lint v2.12.2, the Eshu org pin (see
+# eshu-hq/eshu docs/public/reference/golangci-lint-config.md). CI installs
+# exactly this version; when bumping the binary, bump this comment in
+# lockstep. Linter set is the org gate contract for SDK modules (epic #27):
+# govet, staticcheck, ineffassign, unused, errcheck, with gofumpt as the
+# formatter. The epic's "gosimple" names the S1xxx simplification family,
+# which golangci-lint v2 folds into staticcheck (there is no separate
+# gosimple linter; `help linters` confirms it, and the org go/.golangci.yml
+# enables the same five). Full-module run, no --new-from-rev, no baselines.
+# Any exclusion added here must cite an open issue; today there are none.
+version: "2"
+
+linters:
+  # Explicit opt-in so the set stays grep-able from this file. `default:
+  # none` keeps a vendor default from silently adding an unsigned-off linter.
+  default: none
+  enable:
+    - govet
+    - staticcheck
+    - ineffassign
+    - unused
+    - errcheck
+
+formatters:
+  enable:
+    - gofumpt
+  settings:
+    gofumpt:
+      # Match the rules gofumpt ships by default; extra-rules stays off
+      # until a tracked sweep opts in.
+      extra-rules: false

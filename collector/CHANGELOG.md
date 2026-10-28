@@ -16,7 +16,7 @@ a breaking change to the `collector-sdk/v1alpha1` wire protocol or the public
 Go API is a major bump, an additive backward-compatible change is a minor
 bump, and a docs-only or internal change is a patch for stable releases.
 The preferred prerelease line remains `v0.1.0` until stable qualification;
-its next prepared collector candidate is `v0.1.0-rc.3`. See
+its latest published collector candidate is `v0.1.0-rc.4`. See
 [SDK Compatibility](https://github.com/eshu-hq/eshu/blob/eb62fa3056/docs/public/extend/sdk-compatibility.md) for how
 this module version lines up with core Eshu releases and the wire protocol.
 
@@ -25,15 +25,36 @@ Tags for the new module use the Go subdirectory-module format after separate rel
 
 ## [Unreleased]
 
-## [0.1.0-rc.3] - Prepared (unpublished)
+### Changed
 
-This candidate source includes the strict native JSON duplicate-member guard
-and the Azure tag and Kubernetes posture validation corrections below. The
-guard does not freeze the caller's payload; custom serialization must remain
-stable through subsequent use. Publication requires separate review, merge,
-CI, tag approval, and public-proxy verification. It does not qualify a core
-consumer or deployed pair. The preferred published candidate remains
-`v0.1.0-rc.2`.
+- Go directive `1.26.5` → `1.26.10` (toolchain floor only; clears the 11
+  standard-library advisories govulncheck reports as reachable from this
+  module at the old floor — `GO-2026-6809`, `GO-2026-6617`, `GO-2026-6613`,
+  `GO-2026-6612`, `GO-2026-6611`, `GO-2026-6610`, `GO-2026-6608`,
+  `GO-2026-6607`, `GO-2026-6605`, `GO-2026-6604`, `GO-2026-6603` —
+  with no language or library break for consumers).
+
+## [0.1.0-rc.4] - 2026-10-27
+
+This tag is published and proxy-verified; it does not qualify a core consumer
+or deployed pair. It carries the RC3 source below plus the `env_from_secret`
+allowlist fix.
+
+### Fixed
+
+- Payload validation admits the redaction-safe `env_from_secret` boolean on
+  `kubernetes_live.pod_template` containers (issue #26, PR #28): the flag
+  records only whether a container references secret-backed env and never
+  carries a value. Non-boolean values under that key are still rejected, and
+  the pod template valid fixture now carries the key.
+
+## [0.1.0-rc.3] - 2026-10-25
+
+This tag is published and proxy-verified; it does not qualify a core consumer
+or deployed pair. This candidate source includes the strict native JSON
+duplicate-member guard and the Azure tag and Kubernetes posture validation
+corrections below. The guard does not freeze the caller's payload; custom
+serialization must remain stable through subsequent use.
 
 ### Fixed
 
