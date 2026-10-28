@@ -1,8 +1,9 @@
 GO ?= go
 
-# Coverage floors enforced by the race lanes in CI (see COVERAGE_FLOOR_* in
-# .github/workflows/ci.yml). Floors start at the measured baselines and only
-# rise; neither module closes below 90% per epic #27.
+# Coverage floors enforced by the race lanes in CI (see coverage-floors in
+# .github/workflows/ci.yml) and by `make race` below. Floors start at the
+# measured baselines and only rise; neither module closes below 90% per
+# epic #27. Keep the Makefile defaults in sync with the workflow inputs.
 COVERAGE_FLOOR_COLLECTOR ?= 85.0
 COVERAGE_FLOOR_FACTSCHEMA ?= 48.3
 
@@ -53,11 +54,12 @@ govulncheck:
 shellcheck:
 	git ls-files '*.sh' | xargs shellcheck --severity=warning
 
-# Shape tests for the CI scripts themselves: they run in the CI shell lane
-# so a gutted gate helper cannot go green by being skipped (issue #34).
+# Shape test for the coverage gate helper: it runs in `make ci` so a gutted
+# helper cannot go green by being skipped (issue #34). The lane-selection
+# shape test is retired with #39: the classifier it pinned now lives in the
+# org reusable, and this workflow carries no classifier left to test.
 shape:
 	bash scripts/ci/test-coverage-floor.sh
-	bash scripts/ci/test-lane-selection.sh
 
 actionlint:
 	actionlint -no-color .github/workflows/*.yml
