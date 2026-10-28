@@ -75,6 +75,14 @@ else
   pass "single-arg usage fails"
 fi
 
+# --- Malformed profile (no parseable total line) fails. ---
+printf 'mode: set\n' > "$WORK/malformed.out"
+if bash "$SCRIPT" "$WORK/malformed.out" 10.0 >/dev/null 2>&1; then
+  fail "malformed coverprofile should fail"
+else
+  pass "malformed coverprofile fails"
+fi
+
 if [ "$failures" -gt 0 ]; then
   printf '%d coverage-floor assertion(s) failed\n' "$failures" >&2
   exit 1
