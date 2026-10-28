@@ -83,6 +83,8 @@ from a candidate.
 
 The [factschema RC2 public-consumer proof](evidence/factschema-v0.1.0-rc.2.md)
 records its exact tag origin, checksums, and typed-decoder smoke check.
+The [collector RC4 plus factschema RC7 public-consumer proof](evidence/collector-v0.1.0-rc.4-factschema-v0.1.0-rc.7.md)
+records the pair's tag-origin match, proxy checksums, and scratch-consumer build.
 The [migration evidence](sdk-migration-evidence.md) also records the original
 module tag origins and Go checksums. See [release and cutover](release.md) for
 the order of approval and qualification.
