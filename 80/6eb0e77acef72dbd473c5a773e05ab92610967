@@ -1,0 +1,16 @@
+docs/compatibility.md
+  h_78a442cba0b3e6 86-87
+docs/evidence/collector-v0.1.0-rc.4-factschema-v0.1.0-rc.7.md
+  h_78a442cba0b3e6 1-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "806eb0e77acef72dbd473c5a773e05ab92610967",
+  "prompts": {},
+  "humans": {
+    "h_78a442cba0b3e6": {
+      "author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
