@@ -1,0 +1,16 @@
+docs/compatibility.md
+  h_78a442cba0b3e6 49,66-69
+docs/release.md
+  h_78a442cba0b3e6 22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e7a7b7903e6a8c9b2a46988bf5cab0f48755d738",
+  "prompts": {},
+  "humans": {
+    "h_78a442cba0b3e6": {
+      "author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
