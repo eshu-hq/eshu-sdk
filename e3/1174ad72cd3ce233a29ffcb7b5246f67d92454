@@ -1,0 +1,20 @@
+docs/compatibility.md
+  h_78a442cba0b3e6 5,12,52-54,64,67,71-73,90-91
+docs/evidence/factschema-v0.1.0-rc.8.md
+  h_78a442cba0b3e6 1-28
+docs/release.md
+  h_78a442cba0b3e6 3,6-12,15
+factschema/CHANGELOG.md
+  h_78a442cba0b3e6 35-48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e31174ad72cd3ce233a29ffcb7b5246f67d92454",
+  "prompts": {},
+  "humans": {
+    "h_78a442cba0b3e6": {
+      "author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
