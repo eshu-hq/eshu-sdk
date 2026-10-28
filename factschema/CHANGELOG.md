@@ -26,16 +26,11 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
-### Changed
+## [0.1.0-rc.10] - 2026-10-28
 
-- Go directive `1.26.5` → `1.26.10` (toolchain floor only, aligned with the
-  collector module; govulncheck already reported no reachable advisories for
-  this module, with no language or library break for consumers).
-
-## [0.1.0-rc.10] - Prepared (unpublished)
-
-This candidate source is not tagged. Publishing it needs a separate release
-ruling against the merged commit and the owner's tag approval.
+This tag is published and proxy-verified; it does not qualify a core consumer
+or deployed pair. See the
+[RC10 public-consumer proof](../docs/evidence/factschema-v0.1.0-rc.10.md).
 
 ### Added
 
@@ -51,6 +46,23 @@ ruling against the merged commit and the owner's tag approval.
   fixture-pack copy were regenerated in lockstep and match the core in-tree
   schema byte for byte.
 
+## [0.1.0-rc.9] - 2026-10-28
+
+This tag is published on the Go proxy. It shipped without its own changelog
+section; this entry is reconstructed from the `factschema/v0.1.0-rc.8` to
+`factschema/v0.1.0-rc.9` diff (PR #53). No proxy-proof evidence note was
+recorded for it.
+
+### Changed
+
+- **Go API break:** the `terraformstate/v1` drift allowlist table is no longer
+  exported. `DriftAttributeAllowlist` became the unexported
+  `driftAttributeAllowlist`; read it through `DriftAllowlistFor` (which returns
+  a copy) and `DriftAllowlistResourceTypes`. A caller that referenced the RC8
+  variable directly no longer compiles. The doc comment now states the host
+  and satellite consumers in future tense, since neither delegates to it yet.
+  No payload schema, fixture-pack, or stable-key change.
+
 ## [0.1.0-rc.8] - 2026-10-28
 
 This tag is published and proxy-verified; it does not qualify a core consumer
@@ -64,6 +76,13 @@ or deployed pair.
   `eshu` `sdk/go/factschema/terraformstate/v1`. Fail-closed: unlisted
   resource types emit no attributes. No payload schema, fixture-pack, or
   stable-key change.
+
+### Changed
+
+- Go directive `1.26.5` → `1.26.10` (toolchain floor only, aligned with the
+  collector module; govulncheck already reported no reachable advisories for
+  this module, with no language or library break for consumers). RC7 and
+  earlier tags declare `go 1.26.5`; RC8 is the first with `go 1.26.10`.
 
 ## [0.1.0-rc.7] - 2026-10-27
 
