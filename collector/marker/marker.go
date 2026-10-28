@@ -113,3 +113,5 @@ func writeField(writer fieldWriter, value []byte) {
 	_, _ = writer.Write(length[:])
 	_, _ = writer.Write(value)
 }
+
+// probe-39: collector-only skip-matrix probe (throwaway, do not merge).
