@@ -34,24 +34,17 @@ var redactionSafePayloadKeys = map[string]struct{}{
 	// token_count is an integer body-size metric (lexer tokens), not a
 	// credential; see reducerderived/v1.CodeDriftedMember.TokenCount.
 	"token_count": {},
-	// env_from_secret is a boolean recording only WHETHER a container's env
-	// references secrets, never any value: the kubernetes_live.pod_template
-	// containers[].env_from_secret field is set from
-	// env.ValueFrom.SecretKeyRef != nil while env.Value and every referenced
-	// value stay unread (names only). A bool cannot carry a credential, so
-	// the substring "secret" is a false positive here (eshu-hq/eshu#9327).
-	// The carve-out is value-bound: only JSON booleans (or null, which
-	// carries no value) are admitted; any other type under this name keeps
-	// failing closed. See redactionSafeValue.
+	// env_from_secret is a bool recording only WHETHER container env references
+	// secrets (SecretKeyRef != nil; values never read), so "secret" is a
+	// false positive (eshu-hq/eshu#9327). Value-bound to JSON bool/null;
+	// see redactionSafeValue.
 	"env_from_secret": {},
 }
 
 // redactionSafeValue reports whether value falls inside an allowlisted key's
-// carve-out. Most allowlisted keys are redaction-safe fingerprints that admit
-// any value shape; env_from_secret admits only JSON booleans (or null),
-// because any other type under that sensitive-looking name could be a real
-// credential and must keep failing closed. Keys outside the allowlist are
-// never safe, so the generic heuristic still rejects them by name alone.
+// carve-out. Most allowlisted keys admit any value; env_from_secret admits
+// only JSON booleans (or null) — any other type there could be a credential.
+// Non-allowlisted keys are never safe.
 func redactionSafeValue(key string, value any) bool {
 	if _, safe := redactionSafePayloadKeys[key]; !safe {
 		return false
