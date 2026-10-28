@@ -27,9 +27,10 @@
 # - Coverage floors are enforced inline by the reusable race lanes (floors
 #   passed below). scripts/ci/check-coverage.sh stays for `make race` local
 #   parity, and its test still runs via `make shape` / `make ci`. The two
-#   implementations are kept in sync by scripts/ci/test-floors-sync.sh
-#   (also via `make shape`), which fails when the workflow input drifts
-#   from the Makefile defaults.
+#   implementations are kept in sync by scripts/ci/test-floors-sync.sh,
+#   which fails when the workflow input drifts from the Makefile defaults.
+#   All three guard tests (floor, floors-sync, wrapper-inputs) also run in
+#   CI in the `shape` job below, so a gutted helper cannot go green.
 
 name: ci
 
@@ -77,17 +78,46 @@ jobs:
       file-cap-command: 'make file-cap'
       file-cap-deps-command: 'sudo apt-get update && sudo apt-get install --yes ripgrep'
 
+  # Guard tests run in CI (not only via local `make shape`), so a gutted
+  # helper cannot go green by being skipped.
+  shape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: 'collector/go.mod'
+      - name: Coverage gate shape tests
+        run: |
+          bash scripts/ci/test-coverage-floor.sh
+          bash scripts/ci/test-floors-sync.sh
+          bash scripts/ci/test-wrapper-inputs.sh
+
   ci-complete:
     if: always()
-    needs: [gates]
+    needs: [gates, shape]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Aggregate (gates carry every lane; skipped lanes succeed)
+      - name: Aggregate (gates carry every lane, shape carries the guards)
         run: |
           printf '%s\n' '${{ toJSON(needs) }}'
-          if [ '${{ needs.gates.result }}' != 'success' ]; then
-            echo 'ci-complete: the reusable gates failed or were cancelled' >&2
-            exit 1
+          fail=0
+          # Skip-aware like the retired aggregator: only failure/cancelled
+          # fail; a skipped gates result (nothing selected) still succeeds.
+          case '${{ needs.gates.result }}' in
+            failure|cancelled)
+              echo 'ci-complete: the reusable gates failed or were cancelled' >&2
+              fail=1
+              ;;
+          esac
+          # Guards must actually run: shape succeeds, never skips unnoticed.
+          if [ '${{ needs.shape.result }}' != 'success' ]; then
+            echo 'ci-complete: shape guards failed or were skipped' >&2
+            fail=1
           fi
-          echo 'ci-complete: every selected lane succeeded or legitimately skipped'
+          if [ "$fail" -eq 0 ]; then
+            echo 'ci-complete: every selected lane succeeded or legitimately skipped'
+          fi
+          exit "$fail"

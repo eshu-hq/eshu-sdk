@@ -54,13 +54,15 @@ govulncheck:
 shellcheck:
 	git ls-files '*.sh' | xargs shellcheck --severity=warning
 
-# Shape test for the coverage gate helper: it runs in `make ci` so a gutted
-# helper cannot go green by being skipped (issue #34). The lane-selection
-# shape test is retired with #39: the classifier it pinned now lives in the
-# org reusable, and this workflow carries no classifier left to test.
+# Shape tests for the coverage gate helper and the wrapper contract: they
+# run in `make ci` and in the CI `shape` job, so a gutted helper cannot go
+# green by being skipped (issue #34). The lane-selection shape test is
+# retired with #39: the classifier it pinned now lives in the org reusable,
+# and this workflow carries no classifier left to test.
 shape:
 	bash scripts/ci/test-coverage-floor.sh
 	bash scripts/ci/test-floors-sync.sh
+	bash scripts/ci/test-wrapper-inputs.sh
 
 actionlint:
 	actionlint -no-color .github/workflows/*.yml
