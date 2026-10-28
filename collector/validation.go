@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+// Skip-matrix probe comment (throwaway): collector-only Go change.
 // Copyright (c) 2025-2026 eshu-hq
 
 package collector
