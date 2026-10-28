@@ -264,13 +264,21 @@ jobs:
 
   shell:
     needs: changes
-    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.shell == 'true' || needs.changes.outputs.misc == 'true' }}
+    # workflows=true: this lane executes the lane-selection shape test that
+    # guards ci.yml itself, so workflow edits must select it (issue #34).
+    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.shell == 'true' || needs.changes.outputs.workflows == 'true' || needs.changes.outputs.misc == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: shellcheck every tracked shell script
         run: git ls-files '*.sh' | xargs shellcheck --severity=warning
+      # Shape tests for the CI scripts themselves: they must run in CI so a
+      # gutted gate helper cannot go green by being skipped (issue #34).
+      - name: Coverage floor gate test
+        run: bash scripts/ci/test-coverage-floor.sh
+      - name: Lane selection shape test
+        run: bash scripts/ci/test-lane-selection.sh
 
   govulncheck:
     needs: changes

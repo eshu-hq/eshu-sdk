@@ -75,13 +75,30 @@ else
   pass "single-arg usage fails"
 fi
 
-# --- Malformed profile (no parseable total line) fails. ---
-printf 'mode: set\n' > "$WORK/malformed.out"
-if bash "$SCRIPT" "$WORK/malformed.out" 10.0 >/dev/null 2>&1; then
-  fail "malformed coverprofile should fail"
+# --- Header-only profile totals 0.0% and fails the floor. ---
+printf 'mode: set\n' > "$WORK/header-only.out"
+if bash "$SCRIPT" "$WORK/header-only.out" 10.0 >/dev/null 2>&1; then
+  fail "header-only coverprofile should fail"
 else
-  pass "malformed coverprofile fails"
+  pass "header-only coverprofile fails the floor"
 fi
+
+# --- Garbage content fails (go tool cover rejects it, exit 2). ---
+printf 'not a coverprofile\n' > "$WORK/garbage.out"
+if bash "$SCRIPT" "$WORK/garbage.out" 10.0 >/dev/null 2>&1; then
+  fail "garbage coverprofile should fail"
+else
+  pass "garbage coverprofile fails"
+fi
+
+# --- Non-numeric and empty floors fail closed (exit 2). ---
+for floor in abc '' '1.2.3' '.5' '5.'; do
+  if bash "$SCRIPT" "$WORK/synthetic.out" "$floor" >/dev/null 2>&1; then
+    fail "floor '$floor' should fail closed"
+  else
+    pass "floor '$floor' fails closed"
+  fi
+done
 
 if [ "$failures" -gt 0 ]; then
   printf '%d coverage-floor assertion(s) failed\n' "$failures" >&2
