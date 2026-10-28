@@ -174,7 +174,7 @@ jobs:
       - name: Race
         run: cd collector && GOWORK=off go test -race ./... -count=1 -coverprofile=coverage.out
       - name: Upload coverprofile
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: coverage-collector
           path: collector/coverage.out
@@ -240,7 +240,7 @@ jobs:
       - name: Race
         run: cd factschema && GOWORK=off go test -race ./... -count=1 -coverprofile=coverage.out
       - name: Upload coverprofile
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: coverage-factschema
           path: factschema/coverage.out
@@ -316,7 +316,7 @@ jobs:
       - name: Scan to SARIF
         run: cd ${{ matrix.module }} && GOWORK=off gosec -fmt sarif -out "../gosec-${{ matrix.module }}.sarif" ./... > "../gosec-${{ matrix.module }}.log" 2>&1 || true
       - name: Upload SARIF
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: gosec-${{ matrix.module }}
           path: |
