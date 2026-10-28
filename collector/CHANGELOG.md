@@ -25,6 +25,16 @@ Tags for the new module use the Go subdirectory-module format after separate rel
 
 ## [Unreleased]
 
+### Fixed
+
+- Payload validation admits the redaction-safe Vault auth-role metadata keys
+  `token_ttl_seconds` (integer TTL duration), `token_policy_count` (integer
+  policy count), and `token_policy_name_fingerprints` (HMAC redaction
+  markers, never raw names) on `vault_auth_role` facts
+  (eshu-hq/eshu#8869): the substring heuristic rejected the first key and
+  the fail-closed walk would reject the other two, ending collection with
+  `invalid_result` and zero emitted facts.
+
 ### Changed
 
 - Go directive `1.26.5` → `1.26.10` (toolchain floor only; clears the 11
