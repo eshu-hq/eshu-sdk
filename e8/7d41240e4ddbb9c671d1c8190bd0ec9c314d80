@@ -1,0 +1,14 @@
+scripts/ci/test-coverage-floor.sh
+  h_78a442cba0b3e6 78-85
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e87d41240e4ddbb9c671d1c8190bd0ec9c314d80",
+  "prompts": {},
+  "humans": {
+    "h_78a442cba0b3e6": {
+      "author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
