@@ -5,10 +5,11 @@ package factschema
 
 import (
 	"errors"
-	awsv1 "github.com/eshu-hq/eshu-sdk/factschema/aws/v1"
 	"reflect"
 	"testing"
 	"time"
+
+	awsv1 "github.com/eshu-hq/eshu-sdk/factschema/aws/v1"
 )
 
 func testEnvelope(payload map[string]any) Envelope {

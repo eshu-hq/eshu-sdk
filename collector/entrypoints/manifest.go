@@ -42,7 +42,7 @@ func LoadManifestFile(path string) (ManifestSet, error) {
 	if err != nil {
 		return ManifestSet{}, fmt.Errorf("open manifest: %w", err)
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 	decoder := yaml.NewDecoder(file)
 	decoder.KnownFields(true)
 	var set ManifestSet
@@ -102,6 +102,17 @@ func validateManifest(m Manifest) error {
 	return nil
 }
 
+// isImportPathChar reports whether char may appear in one path segment of a
+// handler import path: ASCII letters and digits plus the unreserved marks
+// "._-~". Anything else (including whitespace, control characters, and the
+// shell-meaningful set rejected above) keeps the manifest invalid.
+func isImportPathChar(char rune) bool {
+	return char >= 'a' && char <= 'z' ||
+		char >= 'A' && char <= 'Z' ||
+		char >= '0' && char <= '9' ||
+		strings.ContainsRune("._-~", char)
+}
+
 func validImportPath(path string) bool {
 	if path == "" || path == "github.com/eshu-hq/eshu" || path == "github.com/eshu-hq/eshu/go" || strings.HasPrefix(path, "github.com/eshu-hq/eshu/go/") || strings.ContainsAny(path, "\\\"'`@:;(){}[]") {
 		return false
@@ -114,7 +125,7 @@ func validImportPath(path string) bool {
 			return false
 		}
 		for _, char := range segment {
-			if !(char >= 'a' && char <= 'z' || char >= 'A' && char <= 'Z' || char >= '0' && char <= '9' || strings.ContainsRune("._-~", char)) {
+			if !isImportPathChar(char) {
 				return false
 			}
 		}

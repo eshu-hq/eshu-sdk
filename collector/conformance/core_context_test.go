@@ -14,8 +14,10 @@ import (
 	"github.com/eshu-hq/eshu-sdk/collector/conformance"
 )
 
-const syntheticPhase = "proof.synthetic:context" // Mechanism token, not a core registry phase.
-const opaqueSyntheticPhase = "proof_phase_v2"    // Mechanism token, not a core registry phase.
+const (
+	syntheticPhase       = "proof.synthetic:context" // Mechanism token, not a core registry phase.
+	opaqueSyntheticPhase = "proof_phase_v2"          // Mechanism token, not a core registry phase.
+)
 
 func coreContextRequest() conformance.Request {
 	manifest := validManifest()

@@ -1,2 +1,5 @@
 .gocache-*/
 .gotmp-*/
+coverage.out
+gosec-*.sarif
+gosec-*.log
