@@ -2,14 +2,14 @@
 
 The repository contains two independent Go module identities. The exact Git
 refs available in this checkout include collector `v0.1.0-rc.4` and factschema
-`v0.1.0-rc.7`; earlier candidate tags remain immutable. Neither tag qualifies
+`v0.1.0-rc.8`; earlier candidate tags remain immutable. Neither tag qualifies
 an Eshu consumer on its own: recheck tag origin and fresh public-proxy
 resolution before claiming candidate availability.
 
 | Existing supported module | New module identity | Latest checked Git tag | Prepared next candidate |
 | --- | --- | --- | --- |
 | `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.1.0-rc.4` | none in this change |
-| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.7` | none in this change |
+| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.8` | none in this change |
 
 The old and new import paths name different Go types. The new `v0.1.0`
 line is a new module identity, not a continuation of the old path's `v0.2.0`
@@ -49,7 +49,9 @@ and wire protocols are unchanged by these two earlier changes.
 The collector RC3 and RC4 and factschema RC4 through RC7 source changes have
 separate immutable Git tags. RC6 adds the optional EPSS `model_version` field;
 FIRST API rows do not supply it. RC7 adds the synthetic NVD paging golden
-without changing a wire schema. Collector RC4 allowlists the redaction-safe
+without changing a wire schema. RC8 publishes the `terraformstate` drift
+attribute allowlist as Go API only, with no payload schema or fixture change.
+Collector RC4 allowlists the redaction-safe
 `env_from_secret` boolean on `kubernetes_live.pod_template` payloads
 ([SDK PR #28](https://github.com/eshu-hq/eshu-sdk/pull/28), issue #26). Core
 and extracted consumers must prove the same pinned fixture bytes, payloads,
@@ -59,16 +61,16 @@ stable keys, and two-page traversal.
 
 The recorded status below is a snapshot from 2026-10-28. Tag origin was
 checked against `origin` (`collector/v0.1.0-rc.4` and
-`factschema/v0.1.0-rc.7` match locally), and both tags resolve, download,
+`factschema/v0.1.0-rc.8` match locally), and both tags resolve, download,
 and build through the public Go proxy with `GOWORK=off` and no `replace`
 directive (a scratch consumer pins `collector v0.1.0-rc.4` plus `factschema
-v0.1.0-rc.7`, runs `go mod tidy`, and passes `go test ./...`).
+v0.1.0-rc.8`, runs `go mod tidy`, builds, vets, and runs).
 
 | State | Evidence required | Recorded snapshot |
 | --- | --- | --- |
-| Candidate available | Merged core compatibility mapping, exact reviewed and merged source commit, green CI, separate tag approval, immutable directory-prefixed tag, and fresh proxy resolution | Collector RC4 and factschema RC7 Git tags exist and are proxy-verified as above |
-| Qualified consumer/core pair | Exact candidate pin plus contract and runtime gates for that consumer and core version | RC7 consumer NOT_CHECKED: `eshu-collector-kubernetes-live` still pins collector RC3 plus factschema RC6 and its `StillBlocked` pin records the pre-fix expectation |
-| Deployed accepted pair | Matching deployment, reducer, graph, API/MCP, retry, operator, and rollback evidence | RC7 deployment NOT_CHECKED |
+| Candidate available | Merged core compatibility mapping, exact reviewed and merged source commit, green CI, separate tag approval, immutable directory-prefixed tag, and fresh proxy resolution | Collector RC4 and factschema RC8 Git tags exist and are proxy-verified as above |
+| Qualified consumer/core pair | Exact candidate pin plus contract and runtime gates for that consumer and core version | RC8 consumer NOT_CHECKED: `eshu-collector-kubernetes-live` still pins collector RC3 plus factschema RC6 and its `StillBlocked` pin records the pre-fix expectation |
+| Deployed accepted pair | Matching deployment, reducer, graph, API/MCP, retry, operator, and rollback evidence | RC8 deployment NOT_CHECKED |
 
 Use exact versions in consumer `go.mod` files; do not use `@latest`, a workspace,
 or a `replace` directive as release evidence. Before a tag, bind approval to
@@ -85,6 +87,8 @@ The [factschema RC2 public-consumer proof](evidence/factschema-v0.1.0-rc.2.md)
 records its exact tag origin, checksums, and typed-decoder smoke check.
 The [collector RC4 plus factschema RC7 public-consumer proof](evidence/collector-v0.1.0-rc.4-factschema-v0.1.0-rc.7.md)
 records the pair's tag-origin match, proxy checksums, and scratch-consumer build.
+The [factschema RC8 public-consumer proof](evidence/factschema-v0.1.0-rc.8.md)
+records the RC8 tag-origin match, proxy checksums, and scratch-consumer build.
 The [migration evidence](sdk-migration-evidence.md) also records the original
 module tag origins and Go checksums. See [release and cutover](release.md) for
 the order of approval and qualification.

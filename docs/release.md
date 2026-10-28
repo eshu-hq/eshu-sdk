@@ -1,16 +1,18 @@
 # Release and cutover checklist
 
-## Current RC4/RC7 state
+## Current RC4/RC8 state
 
 Git tags in this checkout reach `collector/v0.1.0-rc.4` and
-`factschema/v0.1.0-rc.7`. RC7 carries the shared NVD paging input-to-payload
-golden (core #9225); RC4 carries the `env_from_secret` allowlist fix (issue
-#26, PR #28) on top of the RC3 validation corrections. Both tags match their
-`origin` refs and resolve, download, and build through the public Go proxy
-from a fresh external `GOWORK=off` consumer with no `replace` or `@latest`.
+`factschema/v0.1.0-rc.8`. RC8 publishes the `terraformstate` drift attribute
+allowlist as Go API only (PR #50) with no payload schema or fixture change;
+RC7 carries the shared NVD paging input-to-payload golden (core #9225); RC4
+carries the `env_from_secret` allowlist fix (issue #26, PR #28) on top of the
+RC3 validation corrections. All three tags match their `origin` refs and
+resolve, download, and build through the public Go proxy from a fresh
+external `GOWORK=off` consumer with no `replace` or `@latest`.
 Consumer qualification and deployed acceptance remain separate: the pinned
 satellite still runs collector RC3 plus factschema RC6, and no core pair has
-run its contract and runtime gates against RC4/RC7. Candidate publication
+run its contract and runtime gates against RC4/RC8. Candidate publication
 alone is not consumer or production acceptance.
 
 ## Historical RC3 preparation
