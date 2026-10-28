@@ -6,7 +6,7 @@ GO ?= go
 COVERAGE_FLOOR_COLLECTOR ?= 85.0
 COVERAGE_FLOOR_FACTSCHEMA ?= 48.3
 
-.PHONY: build test vet lint tidy-check generate-check file-cap race coverage govulncheck shellcheck actionlint gosec ci pre-push
+.PHONY: build test vet lint tidy-check generate-check file-cap race coverage govulncheck shellcheck shape actionlint gosec ci pre-push
 
 build:
 	cd collector && GOWORK=off $(GO) build ./...
@@ -53,6 +53,12 @@ govulncheck:
 shellcheck:
 	git ls-files '*.sh' | xargs shellcheck --severity=warning
 
+# Shape tests for the CI scripts themselves: they run in the CI shell lane
+# so a gutted gate helper cannot go green by being skipped (issue #34).
+shape:
+	bash scripts/ci/test-coverage-floor.sh
+	bash scripts/ci/test-lane-selection.sh
+
 actionlint:
 	actionlint -no-color .github/workflows/*.yml
 
@@ -65,7 +71,7 @@ gosec:
 
 # Full local parity with the CI lanes (minus the satellite consumer-compat
 # run, which needs network clones; run scripts/ci/consumer-compat.sh for it).
-ci: build test vet lint tidy-check generate-check file-cap race govulncheck shellcheck actionlint gosec
+ci: build test vet lint tidy-check generate-check file-cap race govulncheck shellcheck shape actionlint gosec
 	git diff --check
 
 pre-push: build test vet lint tidy-check generate-check file-cap
