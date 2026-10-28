@@ -6,11 +6,15 @@ package collector
 import "testing"
 
 // TestIsSensitiveKeyNameAgreesWithValidatePayloadKeys proves the exported
-// IsSensitiveKeyName predicate is the SAME rule validatePayloadKeys applies at
-// validation.go:284, not a reimplementation that can drift from it. Every case
-// here is duplicated against validatePayload so a future edit to the
-// unexported walk and a future edit to the exported wrapper cannot silently
-// diverge without failing this test.
+// IsSensitiveKeyName predicate matches the name half of the rule
+// validatePayloadKeys applies, not a reimplementation that can drift from it.
+// Every case here is duplicated against validatePayload so a future edit to
+// the unexported walk and a future edit to the exported wrapper cannot
+// silently diverge without failing this test. One deliberate divergence
+// remains: env_from_secret is value-bound in the walks (bool/null admitted,
+// other types rejected; see redactionSafeValue) while the name predicate
+// stays key-only per its documented no-value-context contract, so it still
+// reports that key as non-sensitive.
 func TestIsSensitiveKeyNameAgreesWithValidatePayloadKeys(t *testing.T) {
 	t.Parallel()
 
