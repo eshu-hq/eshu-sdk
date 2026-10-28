@@ -9,7 +9,7 @@ resolution before claiming candidate availability.
 | Existing supported module | New module identity | Latest checked Git tag | Prepared next candidate |
 | --- | --- | --- | --- |
 | `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.1.0-rc.4` | none in this change |
-| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.8` | none in this change |
+| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.8` | `factschema/v0.1.0-rc.10` (unpublished) |
 
 The old and new import paths name different Go types. The new `v0.1.0`
 line is a new module identity, not a continuation of the old path's `v0.2.0`
@@ -51,6 +51,11 @@ separate immutable Git tags. RC6 adds the optional EPSS `model_version` field;
 FIRST API rows do not supply it. RC7 adds the synthetic NVD paging golden
 without changing a wire schema. RC8 publishes the `terraformstate` drift
 attribute allowlist as Go API only, with no payload schema or fixture change.
+Prepared next candidate: `factschema/v0.1.0-rc.10` (unpublished). It adds the
+optional NVD `coverage_descriptor`, `collector_instance_id`, and `result_count`
+fields to `vulnerability.source_snapshot` (core eshu-hq/eshu#9227), an additive
+minor schema change. It is not tagged; its tag needs a separate release ruling
+and approval.
 Collector RC4 allowlists the redaction-safe
 `env_from_secret` boolean on `kubernetes_live.pod_template` payloads
 ([SDK PR #28](https://github.com/eshu-hq/eshu-sdk/pull/28), issue #26). Core

@@ -18,6 +18,13 @@ satellite still runs collector RC3 plus factschema RC6, and no core pair has
 run its contract and runtime gates against RC4/RC8. Candidate publication
 alone is not consumer or production acceptance.
 
+Prepared next candidate: `factschema/v0.1.0-rc.10` (unpublished). It adds the
+optional NVD source-snapshot coverage fields from core eshu-hq/eshu#9227 with
+no stable-key change. Merge the reviewed source, then obtain a separate
+release ruling against the concrete merged commit and the owner's tag approval
+before creating the tag. Verify it through a fresh external `GOWORK=off`
+public-proxy consumer before Eshu pins it.
+
 ## Historical RC3 preparation
 
 The checklist below records the earlier RC3 preparation and cutover plan. Its
