@@ -34,21 +34,23 @@ func TestCoverageSchemaRequiresReportForPublishingStates(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, tc := range []struct {
-		name           string
-		state          ResultState
-		removeCoverage bool
-		valid          bool
+		name            string
+		state           ResultState
+		removeCoverage  bool
+		valid           bool
+		trustedDeletion bool
 	}{
-		{"partial with coverage", ResultPartial, false, true},
-		{"complete with coverage", ResultComplete, false, true},
-		{"partial missing coverage", ResultPartial, true, false},
-		{"complete missing coverage", ResultComplete, true, false},
-		{"retryable without coverage", ResultRetryable, true, true},
-		{"retryable with coverage", ResultRetryable, false, false},
-		{"terminal without coverage", ResultTerminal, true, true},
-		{"terminal with coverage", ResultTerminal, false, false},
-		{"unchanged without coverage", ResultUnchanged, true, true},
-		{"unchanged with coverage", ResultUnchanged, false, false},
+		{"partial with coverage", ResultPartial, false, true, false},
+		{"trusted deletion", ResultPartial, false, false, true},
+		{"complete with coverage", ResultComplete, false, true, false},
+		{"partial missing coverage", ResultPartial, true, false, false},
+		{"complete missing coverage", ResultComplete, true, false, false},
+		{"retryable without coverage", ResultRetryable, true, true, false},
+		{"retryable with coverage", ResultRetryable, false, false, false},
+		{"terminal without coverage", ResultTerminal, true, true, false},
+		{"terminal with coverage", ResultTerminal, false, false, false},
+		{"unchanged without coverage", ResultUnchanged, true, true, false},
+		{"unchanged with coverage", ResultUnchanged, false, false, false},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			var result map[string]any
@@ -58,6 +60,9 @@ func TestCoverageSchemaRequiresReportForPublishingStates(t *testing.T) {
 			result["state"] = string(tc.state)
 			if tc.removeCoverage {
 				delete(result, "coverage")
+			}
+			if tc.trustedDeletion {
+				result["generation"].(map[string]any)["trusted_deletion"] = true
 			}
 			err := schema.Validate(result)
 			if (err == nil) != tc.valid {

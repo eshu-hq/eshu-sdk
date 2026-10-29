@@ -28,7 +28,7 @@ func (r Request) Validate() error {
 		return err
 	}
 	if r.ProtocolVersion == ProtocolVersionV1Alpha3 {
-		if _, err := validateCoverageContract(r.Contract.Coverage); err != nil {
+		if err := validateCoverageContract(r.Contract.Coverage); err != nil {
 			return err
 		}
 		if r.Contract.Coverage.Scope.ComponentID != r.Claim.ComponentID {

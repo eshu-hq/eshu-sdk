@@ -98,21 +98,28 @@
     "coverage_contract": {
       "additionalProperties": false,
       "properties": {
+        "max_resources": {
+          "maximum": 10000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "root": {
+          "enum": [
+            "aws_ec2_resources",
+            "aws_lambda_functions",
+            "aws_eks_clusters",
+            "aws_s3_buckets",
+            "aws_required_service"
+          ]
+        },
         "scope": {
           "$ref": "#/$defs/coverage_scope"
-        },
-        "sets": {
-          "items": {
-            "$ref": "#/$defs/ownership_set"
-          },
-          "maxItems": 10000,
-          "minItems": 1,
-          "type": "array"
         }
       },
       "required": [
         "scope",
-        "sets"
+        "root",
+        "max_resources"
       ],
       "type": "object"
     },
@@ -190,7 +197,6 @@
       "properties": {
         "collection": {
           "enum": [
-            "aws_service",
             "aws_ec2_core",
             "aws_ec2_security_group_rules",
             "aws_lambda_function",
@@ -202,12 +208,23 @@
           ]
         },
         "resource_id": {
-          "maxLength": 2048,
+          "minLength": 1,
           "type": "string"
+        },
+        "resource_kind": {
+          "enum": [
+            "aws_ec2_resource",
+            "aws_ec2_security_group",
+            "aws_lambda_function",
+            "aws_eks_cluster",
+            "aws_s3_bucket"
+          ]
         }
       },
       "required": [
-        "collection"
+        "collection",
+        "resource_kind",
+        "resource_id"
       ],
       "type": "object"
     },

@@ -67,58 +67,41 @@
       ],
       "type": "object"
     },
+    "coverage_reason": {
+      "enum": [
+        "not_observed",
+        "permission_denied",
+        "throttled",
+        "source_error",
+        "unsupported",
+        "capacity_exceeded"
+      ]
+    },
     "coverage_report": {
       "additionalProperties": false,
       "properties": {
+        "resources": {
+          "items": {
+            "$ref": "#/$defs/resource_observation"
+          },
+          "maxItems": 10000,
+          "type": "array"
+        },
+        "root": {
+          "$ref": "#/$defs/root_coverage"
+        },
         "sets": {
           "items": {
             "$ref": "#/$defs/set_coverage"
           },
-          "maxItems": 10000,
-          "minItems": 1,
+          "maxItems": 20000,
           "type": "array"
         }
       },
       "required": [
+        "root",
+        "resources",
         "sets"
-      ],
-      "type": "object"
-    },
-    "coverage_scope": {
-      "additionalProperties": false,
-      "properties": {
-        "account_id": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "component_id": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "partition": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "region": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "service": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "tenant_id": {
-          "minLength": 1,
-          "type": "string"
-        }
-      },
-      "required": [
-        "tenant_id",
-        "component_id",
-        "account_id",
-        "partition",
-        "service",
-        "region"
       ],
       "type": "object"
     },
@@ -195,7 +178,7 @@
           "type": "string"
         },
         "trusted_deletion": {
-          "type": "boolean"
+          "const": false
         }
       },
       "required": [
@@ -209,7 +192,6 @@
       "properties": {
         "collection": {
           "enum": [
-            "aws_service",
             "aws_ec2_core",
             "aws_ec2_security_group_rules",
             "aws_lambda_function",
@@ -221,12 +203,23 @@
           ]
         },
         "resource_id": {
-          "maxLength": 2048,
+          "minLength": 1,
           "type": "string"
+        },
+        "resource_kind": {
+          "enum": [
+            "aws_ec2_resource",
+            "aws_ec2_security_group",
+            "aws_lambda_function",
+            "aws_eks_cluster",
+            "aws_s3_bucket"
+          ]
         }
       },
       "required": [
-        "collection"
+        "collection",
+        "resource_kind",
+        "resource_id"
       ],
       "type": "object"
     },
@@ -245,6 +238,68 @@
       "required": [
         "field",
         "reason"
+      ],
+      "type": "object"
+    },
+    "resource_observation": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "aws_ec2_resource",
+            "aws_ec2_security_group",
+            "aws_lambda_function",
+            "aws_eks_cluster",
+            "aws_s3_bucket"
+          ]
+        },
+        "reason": {
+          "$ref": "#/$defs/coverage_reason"
+        },
+        "state": {
+          "enum": [
+            "present",
+            "absent",
+            "incomplete"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "state"
+      ],
+      "type": "object"
+    },
+    "root_coverage": {
+      "additionalProperties": false,
+      "properties": {
+        "reason": {
+          "$ref": "#/$defs/coverage_reason"
+        },
+        "root": {
+          "enum": [
+            "aws_ec2_resources",
+            "aws_lambda_functions",
+            "aws_eks_clusters",
+            "aws_s3_buckets",
+            "aws_required_service"
+          ]
+        },
+        "state": {
+          "enum": [
+            "complete",
+            "incomplete"
+          ]
+        }
+      },
+      "required": [
+        "root",
+        "state"
       ],
       "type": "object"
     },
@@ -270,13 +325,7 @@
       "additionalProperties": false,
       "properties": {
         "reason": {
-          "enum": [
-            "not_observed",
-            "permission_denied",
-            "throttled",
-            "source_error",
-            "unsupported"
-          ]
+          "$ref": "#/$defs/coverage_reason"
         },
         "set": {
           "$ref": "#/$defs/ownership_set"

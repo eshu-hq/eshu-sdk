@@ -150,40 +150,47 @@ traces, and logs. Safe command failure stages are described in
 
 ## Opt-in AWS coverage contract (v1alpha3)
 
-`collector-sdk/v1alpha3` adds a host-issued `Contract.Coverage` and a matching
-`Result.Coverage`. It is a new protocol: a host must explicitly admit it.
-Earlier protocols reject the new coverage fields. The checked-in result schema
-is `schema/collector-sdk-v1alpha3.schema.json`; the request schema lists all
-three known versions. This source change is not a released or host-qualified
-candidate.
+`collector-sdk/v1alpha3` is an unreleased, host-opt-in wire revision. Earlier
+protocols keep their existing behavior and reject the new coverage fields. The
+checked-in request and result schemas are under `schema/`.
 
-The host declares one authorized tenant, component, account, partition,
-service, and region, plus an exact inventory of typed ownership sets. The
-collector reports each set exactly once as complete or incomplete and attaches
-one declared ownership set to each emitted whole fact. `aws_service` is a
-status-only sentinel for a required service failure; facts cannot belong to it.
-The separate collection types cover EC2 core and security-group rules, Lambda
-function and event-source mappings per function, EKS cluster and IAM
-enrichment per cluster, and S3 bucket and encryption per bucket. An incomplete
-set must carry one bounded reason. Missing, duplicate, unknown, cross-service,
-or contradictory reports fail validation. A producer cannot name a database
-selector, previous generation, or carry-forward payload in this wire shape.
+A host supplies `CoverageContract`: its authorized tenant, component, account,
+partition, service, and region; a typed discovery root; and a resource capacity
+no greater than the SDK limit. The root fixes the allowed resource kinds and
+required whole-fact collections. EC2 core details are per resource and
+security-group rules are separate per group. Lambda event-source mappings,
+EKS IAM enrichment, and S3 encryption each have a separate per-resource
+collection from their core facts. A required service without a typed resource
+root can report only an incomplete service failure, with no resource ownership.
 
-The v1alpha3 JSON Schema requires `coverage` for `complete` and `partial`
-results and forbids it for `unchanged`, `retryable`, and `terminal` results.
-It checks wire shape, not whether the declared sets came from the host. The Go
-validator compares the report with the host-supplied set inventory, rejects
-missing or duplicate sets, and checks state consistency and fact ownership
-tags. Neither check proves that a fact actually belongs to its tagged AWS
-resource or that source enumeration was complete. Those semantic checks need
-host-owned cloud authorization, source inventory, and fact-kind/resource rules.
+A producer returns an explicit root observation, typed resource identities and
+states (`present`, `absent`, or `incomplete`), and complete or incomplete
+collection reports. Every listed present resource needs complete core detail;
+an enrichment may be incomplete independently. A listed resource whose required
+core detail failed must be `incomplete`, with incomplete collections. It cannot
+be reclassified as absent. Absence requires a complete root enumeration and is
+an observation for the host to assess, never a producer-issued deletion command.
+An incomplete root cannot authorize absence. Empty resource and set arrays must
+be explicit. Reports over the host's resource capacity fail validation; a
+producer must report an incomplete root with `capacity_exceeded` rather than
+truncate and claim completeness. A qualified first-party producer attestation
+and the host's own source checks are needed to trust that behavior.
+`trusted_deletion` is forbidden for v1alpha3 results, including failures.
 
-The SDK checks structure and declared set identity only. A host must derive the
-contract independently of the producer, verify cloud grants and actual resource
-membership, prove the enumerated set is complete, and reject untrusted claims of
-completeness before persistence. It must compose retained old facts with their
-original provenance under its claim fence and scope lock, persist coverage and
-origin references, and enqueue projection atomically. It must expose stale
-coverage to graph and query readers. None of those host behaviors are supplied
-by this SDK. In particular, `ResultPartial` on older protocols must not be
-committed as a full replacement snapshot by a host.
+The v1alpha3 JSON Schema checks the wire shape and requires `coverage` for
+`complete` or `partial` results. The Go validator checks the host-issued policy,
+resource kind/root pairing, duplicate identities, exact required collections,
+result-state consistency, capacity, and fact ownership tags. It allows facts
+only from complete collections. Neither check proves that a producer is
+qualified, a complete enumeration reflects AWS reality, a resource identity is
+in the host-authorized scope, or a fact payload belongs to its tagged resource.
+Those are host-owned checks using cloud grants, source inventory, source trust,
+and fact-kind/resource rules. The host must not treat `absent` as a database
+selector or accept complete discovery on the producer's word alone.
+
+Before any partial publication, the host must compose retained old whole facts
+with their original provenance under the claim fence and scope lock, persist
+coverage and origin references, and enqueue projection atomically. Graph and
+query readers must expose stale coverage. This SDK does not implement those
+behaviors. Older-protocol `ResultPartial` must not be committed as a full
+replacement snapshot.

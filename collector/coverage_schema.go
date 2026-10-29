@@ -28,23 +28,32 @@ func coverageResultSchema() map[string]any {
 		"else": map[string]any{"not": map[string]any{"required": []string{"coverage"}}},
 	}}
 	defs := schema["$defs"].(map[string]any)
-	defs["generation"].(map[string]any)["properties"].(map[string]any)["trusted_deletion"] = map[string]any{"type": "boolean"}
+	defs["generation"].(map[string]any)["properties"].(map[string]any)["trusted_deletion"] = map[string]any{"const": false}
 	fact := defs["fact"].(map[string]any)
 	fact["properties"].(map[string]any)["ownership"] = ref("#/$defs/ownership_set")
-	required := fact["required"].([]string)
-	fact["required"] = append(required, "ownership")
-	defs["coverage_scope"] = coverageScopeSchema()
+	fact["required"] = append(fact["required"].([]string), "ownership")
 	defs["ownership_set"] = ownershipSetSchema()
-	defs["set_coverage"] = objectSchema([]string{"set", "state"}, map[string]any{
-		"set":   ref("#/$defs/ownership_set"),
-		"state": map[string]any{"enum": []string{string(CoverageComplete), string(CoverageIncomplete)}},
-		"reason": map[string]any{"enum": []string{
-			string(CoverageNotObserved), string(CoveragePermissionDenied), string(CoverageThrottled),
-			string(CoverageSourceError), string(CoverageUnsupported),
-		}},
+	defs["coverage_reason"] = coverageReasonSchema()
+	defs["root_coverage"] = objectSchema([]string{"root", "state"}, map[string]any{
+		"root":   coverageRootSchema(),
+		"state":  coverageStateSchema(),
+		"reason": ref("#/$defs/coverage_reason"),
 	})
-	defs["coverage_report"] = objectSchema([]string{"sets"}, map[string]any{
-		"sets": map[string]any{"type": "array", "minItems": 1, "maxItems": maxCoverageSets, "items": ref("#/$defs/set_coverage")},
+	defs["resource_observation"] = objectSchema([]string{"kind", "id", "state"}, map[string]any{
+		"kind":   resourceKindSchema(),
+		"id":     nonEmptyString(),
+		"state":  map[string]any{"enum": []string{string(ResourcePresent), string(ResourceAbsent), string(ResourceIncomplete)}},
+		"reason": ref("#/$defs/coverage_reason"),
+	})
+	defs["set_coverage"] = objectSchema([]string{"set", "state"}, map[string]any{
+		"set":    ref("#/$defs/ownership_set"),
+		"state":  coverageStateSchema(),
+		"reason": ref("#/$defs/coverage_reason"),
+	})
+	defs["coverage_report"] = objectSchema([]string{"root", "resources", "sets"}, map[string]any{
+		"root":      ref("#/$defs/root_coverage"),
+		"resources": map[string]any{"type": "array", "maxItems": maxCoverageResources, "items": ref("#/$defs/resource_observation")},
+		"sets":      map[string]any{"type": "array", "maxItems": 2 * maxCoverageResources, "items": ref("#/$defs/set_coverage")},
 	})
 	return schema
 }
@@ -57,21 +66,48 @@ func coverageScopeSchema() map[string]any {
 	return objectSchema([]string{"tenant_id", "component_id", "account_id", "partition", "service", "region"}, properties)
 }
 
+func coverageRootSchema() map[string]any {
+	return map[string]any{"enum": []string{
+		string(RootEC2Resources), string(RootLambdaFunctions), string(RootEKSClusters),
+		string(RootS3Buckets), string(RootRequiredService),
+	}}
+}
+
+func resourceKindSchema() map[string]any {
+	return map[string]any{"enum": []string{
+		string(ResourceEC2Core), string(ResourceEC2SecurityGroup), string(ResourceLambdaFunction),
+		string(ResourceEKSCluster), string(ResourceS3Bucket),
+	}}
+}
+
+func coverageStateSchema() map[string]any {
+	return map[string]any{"enum": []string{string(CoverageComplete), string(CoverageIncomplete)}}
+}
+
+func coverageReasonSchema() map[string]any {
+	return map[string]any{"enum": []string{
+		string(CoverageNotObserved), string(CoveragePermissionDenied), string(CoverageThrottled),
+		string(CoverageSourceError), string(CoverageUnsupported), string(CoverageCapacityExceeded),
+	}}
+}
+
 func ownershipSetSchema() map[string]any {
-	return objectSchema([]string{"collection"}, map[string]any{
+	return objectSchema([]string{"collection", "resource_kind", "resource_id"}, map[string]any{
 		"collection": map[string]any{"enum": []string{
-			string(CollectionAWSService), string(CollectionEC2Core), string(CollectionEC2SecurityGroupRules),
+			string(CollectionEC2Core), string(CollectionEC2SecurityGroupRules),
 			string(CollectionLambdaFunction), string(CollectionLambdaEventSourceMappings),
 			string(CollectionEKSCluster), string(CollectionEKSIAMEnrichment),
 			string(CollectionS3Bucket), string(CollectionS3BucketEncryption),
 		}},
-		"resource_id": map[string]any{"type": "string", "maxLength": 2048},
+		"resource_kind": resourceKindSchema(),
+		"resource_id":   nonEmptyString(),
 	})
 }
 
 func coverageContractSchema() map[string]any {
-	return objectSchema([]string{"scope", "sets"}, map[string]any{
-		"scope": ref("#/$defs/coverage_scope"),
-		"sets":  map[string]any{"type": "array", "minItems": 1, "maxItems": maxCoverageSets, "items": ref("#/$defs/ownership_set")},
+	return objectSchema([]string{"scope", "root", "max_resources"}, map[string]any{
+		"scope":         ref("#/$defs/coverage_scope"),
+		"root":          coverageRootSchema(),
+		"max_resources": map[string]any{"type": "integer", "minimum": 1, "maximum": maxCoverageResources},
 	})
 }

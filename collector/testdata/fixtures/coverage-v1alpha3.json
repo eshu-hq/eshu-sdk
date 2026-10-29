@@ -31,22 +31,31 @@
     }
   ],
   "coverage": {
+    "root": {
+      "root": "aws_ec2_resources",
+      "state": "complete"
+    },
+    "resources": [
+      {
+        "kind": "aws_ec2_security_group",
+        "id": "sg-123",
+        "state": "present"
+      }
+    ],
     "sets": [
       {
         "set": {
-          "collection": "aws_service"
+          "collection": "aws_ec2_core",
+          "resource_kind": "aws_ec2_security_group",
+          "resource_id": "sg-123"
         },
         "state": "complete"
       },
       {
         "set": {
-          "collection": "aws_ec2_core"
-        },
-        "state": "complete"
-      },
-      {
-        "set": {
-          "collection": "aws_ec2_security_group_rules"
+          "collection": "aws_ec2_security_group_rules",
+          "resource_kind": "aws_ec2_security_group",
+          "resource_id": "sg-123"
         },
         "state": "incomplete",
         "reason": "permission_denied"

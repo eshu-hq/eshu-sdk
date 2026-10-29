@@ -124,9 +124,10 @@ eventual tag establishes a qualified collector/core or deployed pair.
 
 ## Unreleased coverage protocol source
 
-The working source adds `collector-sdk/v1alpha3` for typed AWS coverage reports.
-It is not part of the published collector RC4 candidate and has no qualified
-core host or deployment acceptance. A host must opt in after it implements
-independent ownership authorization, set membership, durable composition, and
-stale-coverage query behavior; an SDK validator pass alone does not permit
-partial publication.
+The working source revises the unreleased `collector-sdk/v1alpha3` for typed
+AWS root discovery, bounded resource observations, and core/enrichment
+completeness. It is not part of the published collector RC4 candidate and has
+no qualified core host or deployment acceptance. A host must opt in after it
+implements qualified first-party producer attestation, independent ownership
+authorization, fact payload membership, durable composition, and stale-coverage
+query behavior; an SDK validator pass alone does not permit partial publication.

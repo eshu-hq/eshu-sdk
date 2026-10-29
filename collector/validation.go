@@ -43,7 +43,6 @@ func NewValidator(contract Contract) Validator {
 	}
 	if contract.Coverage != nil {
 		coverage := *contract.Coverage
-		coverage.Sets = append([]OwnershipSet(nil), contract.Coverage.Sets...)
 		validator.coverage = &coverage
 	}
 	for _, declared := range contract.Facts {

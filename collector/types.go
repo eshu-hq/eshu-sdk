@@ -122,7 +122,8 @@ type Generation struct {
 	// generation it commits, which bypasses the ingestion store's
 	// successor-emptiness backstop. It defaults to false: without it the
 	// store refuses to replace a content-bearing active generation with
-	// an empty or sharply shrunken one.
+	// an empty or sharply shrunken one. It is invalid in v1alpha3 because
+	// host-validated coverage determines whether absence can be published.
 	TrustedDeletion bool `json:"trusted_deletion,omitempty"`
 }
 
