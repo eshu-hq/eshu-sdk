@@ -19,7 +19,9 @@ var errCanonicalPayloadRequired = errors.New("canonical JSON payload required")
 func validateFactPayload(fact Fact) error {
 	raw, err := json.Marshal(fact.Payload)
 	if err != nil {
-		return fmt.Errorf("must be JSON serializable: %w", err)
+		// A producer's MarshalJSON error may contain a raw credential. Preserve
+		// the failure stage without carrying producer-controlled error text.
+		return errors.New("must be JSON serializable")
 	}
 	if err := walkFactPayload(fact.Payload, "", fact.Kind, fact.SchemaVersion, 0); err == nil {
 		return nil

@@ -6,6 +6,7 @@ package collector
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"strings"
 	"testing"
 )
@@ -13,6 +14,27 @@ import (
 type duplicatePayloadJSON string
 
 func (value duplicatePayloadJSON) MarshalJSON() ([]byte, error) { return []byte(value), nil }
+
+type failingPayloadJSON struct{}
+
+func (failingPayloadJSON) MarshalJSON() ([]byte, error) {
+	return nil, errors.New("synthetic-private-value-canary")
+}
+
+func TestValidateResultDoesNotExposeMarshalErrorText(t *testing.T) {
+	result := readFixture(t, "complete")
+	result.Facts[0].Payload = map[string]any{"body": failingPayloadJSON{}}
+	_, err := NewValidator(testContract()).ValidateResult(result)
+	if err == nil {
+		t.Fatal("failing custom marshaler accepted")
+	}
+	if strings.Contains(err.Error(), "synthetic-private-value-canary") {
+		t.Fatalf("producer error text escaped validation: %v", err)
+	}
+	if !strings.Contains(err.Error(), "JSON serializable") {
+		t.Fatalf("marshal failure stage lost: %v", err)
+	}
+}
 
 func TestValidateResultRejectsDuplicateNativeJSONKeys(t *testing.T) {
 	const canary = "synthetic-raw-secret-duplicate"

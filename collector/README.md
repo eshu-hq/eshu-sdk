@@ -74,7 +74,8 @@ JSON, including member-name uniqueness at every object depth. The caller must
 provide deterministic serialization and keep the result stable from validation
 through subsequent host use. `ValidationReport` does not freeze or copy the
 payload; concurrent mutation or stateful marshalers can change what is later
-emitted.
+emitted. If marshaling fails, validation reports the failure stage without
+forwarding the producer's error text, which may contain a credential.
 
 For `azure_tag_observation` schema `1.0.0` only, the root
 `tag_value_fingerprints` object may retain source tag names, including names
