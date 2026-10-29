@@ -36,6 +36,9 @@ func validateAWSResourceAttributes(value any, path, kind, schema string, depth i
 		return errCanonicalPayloadRequired
 	}
 	for key, child := range attributes {
+		if err := validateNativeMemberName(key); err != nil {
+			return err
+		}
 		childPath := payloadKeyPath(path, key)
 		switch {
 		case resourceType == "aws_lambda_function" && key == "environment":
@@ -67,6 +70,9 @@ func validateAWSLambdaEnvironment(value any) error {
 		return errCanonicalPayloadRequired
 	}
 	for name, marker := range environment {
+		if err := validateNativeMemberName(name); err != nil {
+			return err
+		}
 		if name == "" || name != strings.TrimSpace(name) {
 			return errors.New("invalid environment name")
 		}
@@ -91,6 +97,9 @@ func validateAWSContainers(value any, path, kind, schema string, depth int) erro
 			return errCanonicalPayloadRequired
 		}
 		for key, child := range container {
+			if err := validateNativeMemberName(key); err != nil {
+				return err
+			}
 			childPath := payloadKeyPath(path, key)
 			switch key {
 			case "environment":
@@ -127,6 +136,11 @@ func validateAWSEnvironmentEntries(value any) error {
 		if !ok {
 			return errCanonicalPayloadRequired
 		}
+		for key := range entry {
+			if err := validateNativeMemberName(key); err != nil {
+				return err
+			}
+		}
 		if len(entry) != 2 {
 			return errors.New("environment entry must contain name and value")
 		}
@@ -154,6 +168,11 @@ func validateAWSSecretReferences(value any) error {
 		if !ok {
 			return errCanonicalPayloadRequired
 		}
+		for key := range entry {
+			if err := validateNativeMemberName(key); err != nil {
+				return err
+			}
+		}
 		if len(entry) != 2 {
 			return errors.New("secret reference must contain name and value_from")
 		}
@@ -170,6 +189,11 @@ func validateAWSMarker(value any, source string) error {
 	fields, ok := value.(map[string]any)
 	if !ok {
 		return errCanonicalPayloadRequired
+	}
+	for key := range fields {
+		if err := validateNativeMemberName(key); err != nil {
+			return err
+		}
 	}
 	if len(fields) != 4 {
 		return errors.New("must contain exactly four marker fields")

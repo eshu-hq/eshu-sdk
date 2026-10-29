@@ -113,20 +113,42 @@ func TestCanonicalPayloadPreservesNumberTokens(t *testing.T) {
 }
 
 func TestValidateResultRejectsNativeKeysCollidingAfterJSONEncoding(t *testing.T) {
-	result := readFixture(t, "complete")
 	first := string([]byte{0xff})
 	second := string([]byte{0xfe})
-	result.Facts[0].Payload = map[string]any{
-		"body": map[string]any{first: "first", second: "second"},
+	generic := readFixture(t, "complete")
+	generic.Facts[0].Payload = map[string]any{"body": map[string]any{first: "first", second: "second"}}
+	stringsOnly := readFixture(t, "complete")
+	stringsOnly.Facts[0].Payload = map[string]any{"body": map[string]string{first: "first", second: "second"}}
+	azure, azureValidator := azureTagResult(t)
+	azure.Facts[0].Payload["tag_value_fingerprints"] = map[string]string{first: azureFixtureMarker, second: azureFixtureMarker}
+	aws, awsValidator := awsRedactionResult(t, "aws_lambda_function", "lambda", map[string]any{
+		"environment": map[string]any{
+			first:  awsMarker(t, "lambda.function.environment."+first),
+			second: awsMarker(t, "lambda.function.environment."+second),
+		},
+	})
+	tests := []struct {
+		name   string
+		result Result
+		check  Validator
+	}{
+		{"generic object", generic, NewValidator(testContract())},
+		{"string map", stringsOnly, NewValidator(testContract())},
+		{"Azure fingerprints", azure, azureValidator},
+		{"AWS Lambda environment", aws, awsValidator},
 	}
-	raw, err := json.Marshal(result.Facts[0].Payload)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if _, err := decodeCanonicalPayload(raw); err == nil {
-		t.Fatal("seeded keys did not collide after JSON encoding")
-	}
-	if _, err := NewValidator(testContract()).ValidateResult(result); err == nil {
-		t.Fatal("native payload with colliding JSON member names accepted")
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			raw, err := json.Marshal(tc.result.Facts[0].Payload)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if _, err := decodeCanonicalPayload(raw); err == nil {
+				t.Fatal("seeded keys did not collide after JSON encoding")
+			}
+			if _, err := tc.check.ValidateResult(tc.result); err == nil {
+				t.Fatal("native payload with colliding JSON member names accepted")
+			}
+		})
 	}
 }

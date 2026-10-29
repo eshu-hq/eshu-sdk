@@ -97,8 +97,10 @@ derived from its variable name, and `aws-launch-2026-05-14`. ECS
 string pairs. The legacy absent, null, and empty states remain valid. Other
 fields still receive recursive sensitive-key validation. A marker-shaped
 object proves its JSON shape, not that a producer used a particular key or
-raw input. Native and JSON-decoded facts use the same canonical JSON walk,
-which rejects duplicate member names before validating keys. The context-free
+raw input. Native maps reject malformed UTF-8 member names, which the Go JSON
+encoder would otherwise replace and potentially turn into duplicate names.
+Raw JSON and custom marshalers are decoded with duplicate-member detection
+before validating their serialized keys. The context-free
 `ValidateShareSafeKeys` policy is unchanged.
 
 For Kubernetes posture facts at schema `1.0.0`, the validator admits only these

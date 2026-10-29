@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"strings"
 	"time"
+	"unicode/utf8"
 )
 
 // Unknown native values need the same key walk as their wire representation.
@@ -20,12 +21,13 @@ func validateFactPayload(fact Fact) error {
 	if err != nil {
 		return fmt.Errorf("must be JSON serializable: %w", err)
 	}
-	if err := walkFactPayload(fact.Payload, "", fact.Kind, fact.SchemaVersion, 0); err != nil && !errors.Is(err, errCanonicalPayloadRequired) {
+	if err := walkFactPayload(fact.Payload, "", fact.Kind, fact.SchemaVersion, 0); err == nil {
+		return nil
+	} else if !errors.Is(err, errCanonicalPayloadRequired) {
 		return err
 	}
-	// Even a native map with safe keys may encode to duplicate JSON members:
-	// distinct invalid UTF-8 keys both become the replacement rune. Check the
-	// serialized form before accepting the result.
+	// Custom marshalers and unknown native types may emit hidden object keys.
+	// Check their serialized representation before accepting the result.
 	canonical, err := decodeCanonicalPayload(raw)
 	if err != nil {
 		return err
@@ -41,6 +43,9 @@ func walkFactPayload(value any, path, kind, schema string, depth int) error {
 			awsType = awsRedactionResourceType(typed)
 		}
 		for key, child := range typed {
+			if err := validateNativeMemberName(key); err != nil {
+				return err
+			}
 			childPath := payloadKeyPath(path, key)
 			if depth == 0 && key == "attributes" && awsType != "" {
 				if err := validateAWSResourceAttributes(child, childPath, kind, schema, depth+1, awsType); err != nil {
@@ -71,6 +76,9 @@ func walkFactPayload(value any, path, kind, schema string, depth int) error {
 		}
 	case map[string]string:
 		for key, val := range typed {
+			if err := validateNativeMemberName(key); err != nil {
+				return err
+			}
 			if err := rejectSensitivePayloadKey(key, val, payloadKeyPath(path, key)); err != nil {
 				return err
 			}
@@ -98,6 +106,9 @@ func validateAzureTagFingerprints(value any) error {
 			return errors.New("must be an object")
 		}
 		for key, fingerprint := range fingerprints {
+			if err := validateNativeMemberName(key); err != nil {
+				return err
+			}
 			if !validAzureTagMarker(fingerprint) {
 				return fmt.Errorf("invalid marker for tag %q", key)
 			}
@@ -107,6 +118,9 @@ func validateAzureTagFingerprints(value any) error {
 			return errors.New("must be an object")
 		}
 		for key, raw := range fingerprints {
+			if err := validateNativeMemberName(key); err != nil {
+				return err
+			}
 			fingerprint, ok := raw.(string)
 			if !ok {
 				return errCanonicalPayloadRequired
@@ -151,4 +165,14 @@ func payloadKeyPath(parent, key string) string {
 		return key
 	}
 	return parent + "." + key
+}
+
+// Go's JSON encoder replaces malformed UTF-8 in object member names with
+// U+FFFD. Reject those names before the native fast path can treat two
+// distinct map keys as distinct serialized members.
+func validateNativeMemberName(key string) error {
+	if !utf8.ValidString(key) {
+		return errInvalidCanonicalPayload
+	}
+	return nil
 }
