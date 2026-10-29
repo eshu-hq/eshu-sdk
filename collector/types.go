@@ -12,6 +12,9 @@ const (
 	// contract. Hosts admit it only when explicitly configured; the v1alpha1
 	// default is unchanged.
 	ProtocolVersionV1Alpha2 = "collector-sdk/v1alpha2"
+	// ProtocolVersionV1Alpha3 adds host-declared ownership and completeness.
+	// Older hosts must reject this protocol until they implement composition.
+	ProtocolVersionV1Alpha3 = "collector-sdk/v1alpha3"
 )
 
 const (
@@ -64,6 +67,7 @@ type StatusClass string
 type Contract struct {
 	ProtocolVersion string            `json:"protocol_version"`
 	Facts           []FactDeclaration `json:"facts"`
+	Coverage        *CoverageContract `json:"coverage,omitempty"`
 }
 
 // FactDeclaration describes one manifest-declared fact family.
@@ -74,14 +78,15 @@ type FactDeclaration struct {
 	TombstoneAllowed bool               `json:"tombstone_allowed,omitempty"`
 }
 
-// Result is the top-level collector-sdk/v1alpha1 extension response.
+// Result is the top-level versioned collector extension response.
 type Result struct {
-	ProtocolVersion string      `json:"protocol_version"`
-	State           ResultState `json:"state"`
-	Claim           Claim       `json:"claim"`
-	Generation      Generation  `json:"generation"`
-	Facts           []Fact      `json:"facts,omitempty"`
-	Statuses        []Status    `json:"statuses,omitempty"`
+	ProtocolVersion string          `json:"protocol_version"`
+	State           ResultState     `json:"state"`
+	Claim           Claim           `json:"claim"`
+	Generation      Generation      `json:"generation"`
+	Facts           []Fact          `json:"facts,omitempty"`
+	Statuses        []Status        `json:"statuses,omitempty"`
+	Coverage        *CoverageReport `json:"coverage,omitempty"`
 }
 
 // Claim is the bounded core-owned work item passed to an extension.
@@ -132,6 +137,7 @@ type Fact struct {
 	SourceRef        SourceRef        `json:"source_ref"`
 	Payload          map[string]any   `json:"payload"`
 	Redactions       []Redaction      `json:"redactions,omitempty"`
+	Ownership        *OwnershipSet    `json:"ownership,omitempty"`
 }
 
 // SourceRef identifies the source-local record that produced one fact.

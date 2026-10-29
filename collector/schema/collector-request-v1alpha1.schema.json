@@ -70,6 +70,9 @@
     "contract": {
       "additionalProperties": false,
       "properties": {
+        "coverage": {
+          "$ref": "#/$defs/coverage_contract"
+        },
         "facts": {
           "items": {
             "$ref": "#/$defs/fact_declaration"
@@ -82,12 +85,72 @@
         "protocol_version": {
           "enum": [
             "collector-sdk/v1alpha1",
-            "collector-sdk/v1alpha2"
+            "collector-sdk/v1alpha2",
+            "collector-sdk/v1alpha3"
           ]
         }
       },
       "required": [
         "protocol_version"
+      ],
+      "type": "object"
+    },
+    "coverage_contract": {
+      "additionalProperties": false,
+      "properties": {
+        "scope": {
+          "$ref": "#/$defs/coverage_scope"
+        },
+        "sets": {
+          "items": {
+            "$ref": "#/$defs/ownership_set"
+          },
+          "maxItems": 10000,
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "scope",
+        "sets"
+      ],
+      "type": "object"
+    },
+    "coverage_scope": {
+      "additionalProperties": false,
+      "properties": {
+        "account_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "component_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "partition": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "region": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "service": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "tenant_id": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "component_id",
+        "account_id",
+        "partition",
+        "service",
+        "region"
       ],
       "type": "object"
     },
@@ -122,6 +185,32 @@
       "required": [],
       "type": "object"
     },
+    "ownership_set": {
+      "additionalProperties": false,
+      "properties": {
+        "collection": {
+          "enum": [
+            "aws_service",
+            "aws_ec2_core",
+            "aws_ec2_security_group_rules",
+            "aws_lambda_function",
+            "aws_lambda_event_source_mappings",
+            "aws_eks_cluster",
+            "aws_eks_iam_enrichment",
+            "aws_s3_bucket",
+            "aws_s3_bucket_encryption"
+          ]
+        },
+        "resource_id": {
+          "maxLength": 2048,
+          "type": "string"
+        }
+      },
+      "required": [
+        "collection"
+      ],
+      "type": "object"
+    },
     "scope": {
       "additionalProperties": false,
       "properties": {
@@ -148,6 +237,11 @@
     {
       "properties": {
         "contract": {
+          "not": {
+            "required": [
+              "coverage"
+            ]
+          },
           "properties": {
             "protocol_version": {
               "const": "collector-sdk/v1alpha1"
@@ -162,6 +256,11 @@
     {
       "properties": {
         "contract": {
+          "not": {
+            "required": [
+              "coverage"
+            ]
+          },
           "properties": {
             "protocol_version": {
               "const": "collector-sdk/v1alpha2"
@@ -170,6 +269,23 @@
         },
         "protocol_version": {
           "const": "collector-sdk/v1alpha2"
+        }
+      }
+    },
+    {
+      "properties": {
+        "contract": {
+          "properties": {
+            "protocol_version": {
+              "const": "collector-sdk/v1alpha3"
+            }
+          },
+          "required": [
+            "coverage"
+          ]
+        },
+        "protocol_version": {
+          "const": "collector-sdk/v1alpha3"
         }
       }
     }
@@ -190,7 +306,8 @@
     "protocol_version": {
       "enum": [
         "collector-sdk/v1alpha1",
-        "collector-sdk/v1alpha2"
+        "collector-sdk/v1alpha2",
+        "collector-sdk/v1alpha3"
       ]
     }
   },

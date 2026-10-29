@@ -22,6 +22,7 @@ var (
 type Validator struct {
 	protocolVersion string
 	facts           map[string]factDeclaration
+	coverage        *CoverageContract
 }
 
 type factDeclaration struct {
@@ -39,6 +40,11 @@ func NewValidator(contract Contract) Validator {
 	validator := Validator{
 		protocolVersion: version,
 		facts:           make(map[string]factDeclaration, len(contract.Facts)),
+	}
+	if contract.Coverage != nil {
+		coverage := *contract.Coverage
+		coverage.Sets = append([]OwnershipSet(nil), contract.Coverage.Sets...)
+		validator.coverage = &coverage
 	}
 	for _, declared := range contract.Facts {
 		kind := strings.TrimSpace(declared.Kind)
@@ -77,6 +83,20 @@ func (v Validator) ValidateResult(result Result) (ValidationReport, error) {
 	}
 	if err := validateStateFactAllowance(result.State, len(result.Facts)); err != nil {
 		return report, err
+	}
+	if v.protocolVersion == ProtocolVersionV1Alpha3 {
+		if err := validateCoverageReport(v.coverage, result); err != nil {
+			return report, err
+		}
+	} else if v.coverage != nil || result.Coverage != nil {
+		return report, fmt.Errorf("coverage requires protocol %s", ProtocolVersionV1Alpha3)
+	}
+	if v.protocolVersion != ProtocolVersionV1Alpha3 {
+		for _, fact := range result.Facts {
+			if fact.Ownership != nil {
+				return report, fmt.Errorf("fact ownership requires protocol %s", ProtocolVersionV1Alpha3)
+			}
+		}
 	}
 
 	seen := make(map[string]Fact, len(result.Facts))

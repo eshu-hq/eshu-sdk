@@ -147,3 +147,34 @@ The SDK emits no telemetry. The command runner and generated commands execute
 on the collector runtime path; providers and hosts own operational metrics,
 traces, and logs. Safe command failure stages are described in
 [the command guide](../docs/command.md).
+
+## Opt-in AWS coverage contract (v1alpha3)
+
+`collector-sdk/v1alpha3` adds a host-issued `Contract.Coverage` and a matching
+`Result.Coverage`. It is a new protocol: a host must explicitly admit it.
+Earlier protocols reject the new coverage fields. The checked-in result schema
+is `schema/collector-sdk-v1alpha3.schema.json`; the request schema lists all
+three known versions. This source change is not a released or host-qualified
+candidate.
+
+The host declares one authorized tenant, component, account, partition,
+service, and region, plus an exact inventory of typed ownership sets. The
+collector reports each set exactly once as complete or incomplete and attaches
+one declared ownership set to each emitted whole fact. `aws_service` is a
+status-only sentinel for a required service failure; facts cannot belong to it.
+The separate collection types cover EC2 core and security-group rules, Lambda
+function and event-source mappings per function, EKS cluster and IAM
+enrichment per cluster, and S3 bucket and encryption per bucket. An incomplete
+set must carry one bounded reason. Missing, duplicate, unknown, cross-service,
+or contradictory reports fail validation. A producer cannot name a database
+selector, previous generation, or carry-forward payload in this wire shape.
+
+The SDK checks structure and declared set identity only. A host must derive the
+contract independently of the producer, verify cloud grants and actual resource
+membership, prove the enumerated set is complete, and reject untrusted claims of
+completeness before persistence. It must compose retained old facts with their
+original provenance under its claim fence and scope lock, persist coverage and
+origin references, and enqueue projection atomically. It must expose stale
+coverage to graph and query readers. None of those host behaviors are supplied
+by this SDK. In particular, `ResultPartial` on older protocols must not be
+committed as a full replacement snapshot by a host.

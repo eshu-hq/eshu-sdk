@@ -121,3 +121,12 @@ It must keep all request inputs immutable while `Run` executes. The SDK checks
 structural coverage and fixture tuples but does not load grants, assign core
 phases, or authorize a live emission. Neither this candidate source nor an
 eventual tag establishes a qualified collector/core or deployed pair.
+
+## Unreleased coverage protocol source
+
+The working source adds `collector-sdk/v1alpha3` for typed AWS coverage reports.
+It is not part of the published collector RC4 candidate and has no qualified
+core host or deployment acceptance. A host must opt in after it implements
+independent ownership authorization, set membership, durable composition, and
+stale-coverage query behavior; an SDK validator pass alone does not permit
+partial publication.

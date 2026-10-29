@@ -91,7 +91,7 @@ func validateManifest(m Manifest) error {
 	}
 	seen := make(map[string]bool, len(m.SupportedProtocols))
 	for _, protocol := range m.SupportedProtocols {
-		if protocol != collector.ProtocolVersionV1Alpha1 && protocol != collector.ProtocolVersionV1Alpha2 {
+		if protocol != collector.ProtocolVersionV1Alpha1 && protocol != collector.ProtocolVersionV1Alpha2 && protocol != collector.ProtocolVersionV1Alpha3 {
 			return errors.New("unknown protocol")
 		}
 		if seen[protocol] {

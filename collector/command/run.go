@@ -35,7 +35,7 @@ func Run(ctx context.Context, reader io.Reader, writer io.Writer, handler Handle
 		return errors.New("command options invalid")
 	}
 	for _, protocol := range opts.SupportedProtocols {
-		if protocol != collector.ProtocolVersionV1Alpha1 && protocol != collector.ProtocolVersionV1Alpha2 {
+		if protocol != collector.ProtocolVersionV1Alpha1 && protocol != collector.ProtocolVersionV1Alpha2 && protocol != collector.ProtocolVersionV1Alpha3 {
 			return errors.New("command options protocol invalid")
 		}
 	}

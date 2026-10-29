@@ -21,7 +21,7 @@ func JSONSchema() ([]byte, error) {
 }
 
 // RequestJSONSchema returns the public collector request JSON Schema.
-// It describes both known protocol versions without changing JSONSchema's
+// It describes all known protocol versions without changing JSONSchema's
 // existing result artifact or wire protocol version.
 func RequestJSONSchema() ([]byte, error) {
 	raw, err := json.MarshalIndent(requestSchema(), "", "  ")
@@ -42,15 +42,19 @@ func requestSchema() map[string]any {
 		"oneOf": []any{
 			map[string]any{"properties": map[string]any{
 				"protocol_version": map[string]any{"const": ProtocolVersionV1Alpha1},
-				"contract":         map[string]any{"properties": map[string]any{"protocol_version": map[string]any{"const": ProtocolVersionV1Alpha1}}},
+				"contract":         map[string]any{"properties": map[string]any{"protocol_version": map[string]any{"const": ProtocolVersionV1Alpha1}}, "not": map[string]any{"required": []string{"coverage"}}},
 			}},
 			map[string]any{"properties": map[string]any{
 				"protocol_version": map[string]any{"const": ProtocolVersionV1Alpha2},
-				"contract":         map[string]any{"properties": map[string]any{"protocol_version": map[string]any{"const": ProtocolVersionV1Alpha2}}},
+				"contract":         map[string]any{"properties": map[string]any{"protocol_version": map[string]any{"const": ProtocolVersionV1Alpha2}}, "not": map[string]any{"required": []string{"coverage"}}},
+			}},
+			map[string]any{"properties": map[string]any{
+				"protocol_version": map[string]any{"const": ProtocolVersionV1Alpha3},
+				"contract":         map[string]any{"properties": map[string]any{"protocol_version": map[string]any{"const": ProtocolVersionV1Alpha3}}, "required": []string{"coverage"}},
 			}},
 		},
 		"properties": map[string]any{
-			"protocol_version": map[string]any{"enum": []string{ProtocolVersionV1Alpha1, ProtocolVersionV1Alpha2}},
+			"protocol_version": map[string]any{"enum": []string{ProtocolVersionV1Alpha1, ProtocolVersionV1Alpha2, ProtocolVersionV1Alpha3}},
 			"claim":            ref("#/$defs/claim"),
 			"contract":         ref("#/$defs/contract"),
 			"config":           map[string]any{"type": []string{"object", "null"}},
@@ -61,10 +65,14 @@ func requestSchema() map[string]any {
 			"contract": objectSchema(
 				[]string{"protocol_version"},
 				map[string]any{
-					"protocol_version": map[string]any{"enum": []string{ProtocolVersionV1Alpha1, ProtocolVersionV1Alpha2}},
+					"protocol_version": map[string]any{"enum": []string{ProtocolVersionV1Alpha1, ProtocolVersionV1Alpha2, ProtocolVersionV1Alpha3}},
 					"facts":            map[string]any{"type": []string{"array", "null"}, "items": ref("#/$defs/fact_declaration")},
+					"coverage":         ref("#/$defs/coverage_contract"),
 				},
 			),
+			"coverage_scope":    coverageScopeSchema(),
+			"ownership_set":     ownershipSetSchema(),
+			"coverage_contract": coverageContractSchema(),
 			"fact_declaration": objectSchema(
 				[]string{},
 				map[string]any{

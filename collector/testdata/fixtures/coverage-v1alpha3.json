@@ -1,0 +1,56 @@
+{
+  "protocol_version": "collector-sdk/v1alpha3",
+  "state": "partial",
+  "claim": {
+    "component_id": "dev.eshu.collector.aws",
+    "instance_id": "scorecard-prod",
+    "collector_kind": "aws",
+    "source_system": "aws",
+    "scope": {
+      "id": "aws:123456789012:us-east-1:ec2",
+      "kind": "aws_region_service"
+    },
+    "source_run_id": "run-20260609",
+    "generation_id": "gen-20260609",
+    "work_item_id": "work-1",
+    "fencing_token": "fence-1",
+    "attempt": 1,
+    "deadline": "2026-06-09T12:00:00Z",
+    "config_handle": "secretref:scorecard-prod"
+  },
+  "generation": {
+    "id": "gen-20260609",
+    "observed_at": "2026-06-09T11:59:00Z",
+    "freshness_hint": "current"
+  },
+  "statuses": [
+    {
+      "class": "warning",
+      "partial": true,
+      "fact_count": 0
+    }
+  ],
+  "coverage": {
+    "sets": [
+      {
+        "set": {
+          "collection": "aws_service"
+        },
+        "state": "complete"
+      },
+      {
+        "set": {
+          "collection": "aws_ec2_core"
+        },
+        "state": "complete"
+      },
+      {
+        "set": {
+          "collection": "aws_ec2_security_group_rules"
+        },
+        "state": "incomplete",
+        "reason": "permission_denied"
+      }
+    ]
+  }
+}

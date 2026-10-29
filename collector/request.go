@@ -18,11 +18,26 @@ type Request struct {
 // Validate checks request structure and protocol agreement. It does not check
 // the clock, host admission, grants, fact declarations, or provider config.
 func (r Request) Validate() error {
-	if r.ProtocolVersion != ProtocolVersionV1Alpha1 && r.ProtocolVersion != ProtocolVersionV1Alpha2 {
+	if r.ProtocolVersion != ProtocolVersionV1Alpha1 && r.ProtocolVersion != ProtocolVersionV1Alpha2 && r.ProtocolVersion != ProtocolVersionV1Alpha3 {
 		return errors.New("request protocol is unsupported")
 	}
 	if r.Contract.ProtocolVersion != r.ProtocolVersion {
 		return errors.New("request and contract protocols differ")
 	}
-	return validateClaim(r.Claim)
+	if err := validateClaim(r.Claim); err != nil {
+		return err
+	}
+	if r.ProtocolVersion == ProtocolVersionV1Alpha3 {
+		if _, err := validateCoverageContract(r.Contract.Coverage); err != nil {
+			return err
+		}
+		if r.Contract.Coverage.Scope.ComponentID != r.Claim.ComponentID {
+			return errors.New("coverage component does not match claim")
+		}
+		return nil
+	}
+	if r.Contract.Coverage != nil {
+		return errors.New("coverage requires protocol collector-sdk/v1alpha3")
+	}
+	return nil
 }
