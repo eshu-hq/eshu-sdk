@@ -219,3 +219,64 @@ func TestCoverageRejectsFactsFromIncompleteOrAbsentResources(t *testing.T) {
 		}
 	}
 }
+
+func TestCoverageRejectsInvalidUTF8Scope(t *testing.T) {
+	bad := string([]byte{'x', 0xff})
+	for _, tc := range []struct {
+		name   string
+		change func(*Request)
+	}{
+		{"tenant_id", func(r *Request) { r.Contract.Coverage.Scope.TenantID = bad }},
+		{"component_id", func(r *Request) {
+			r.Contract.Coverage.Scope.ComponentID = bad
+			r.Claim.ComponentID = bad
+		}},
+		{"account_id", func(r *Request) { r.Contract.Coverage.Scope.AccountID = bad }},
+		{"partition", func(r *Request) { r.Contract.Coverage.Scope.Partition = bad }},
+		{"service", func(r *Request) {
+			r.Contract.Coverage.Scope.Service = bad
+			r.Contract.Coverage.Root = RootRequiredService
+		}},
+		{"region", func(r *Request) { r.Contract.Coverage.Scope.Region = bad }},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			request, _ := coverageFixture(t)
+			tc.change(&request)
+			err := request.Validate()
+			if err == nil || !strings.Contains(err.Error(), "coverage scope "+tc.name+" is invalid") {
+				t.Fatalf("Validate() error=%v, want invalid %s", err, tc.name)
+			}
+		})
+	}
+}
+
+func TestCoverageRejectsNativeIdentityWireCollision(t *testing.T) {
+	first := "sg-" + string([]byte{0xff})
+	second := "sg-" + string([]byte{0xfe})
+	firstWire, err := json.Marshal(first)
+	if err != nil {
+		t.Fatal(err)
+	}
+	secondWire, err := json.Marshal(second)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if first == second || !bytes.Equal(firstWire, secondWire) {
+		t.Fatal("test identities must differ natively and collide after JSON encoding")
+	}
+
+	request, result := coverageFixture(t)
+	result.Coverage.Resources[0].ID = first
+	for i := range result.Coverage.Sets {
+		result.Coverage.Sets[i].Set.ResourceID = first
+	}
+	result.Coverage.Resources = append(result.Coverage.Resources,
+		ResourceObservation{Kind: ResourceEC2SecurityGroup, ID: second, State: ResourcePresent})
+	result.Coverage.Sets = append(result.Coverage.Sets,
+		SetCoverage{Set: OwnershipSet{Collection: CollectionEC2Core, ResourceKind: ResourceEC2SecurityGroup, ResourceID: second}, State: CoverageComplete},
+		SetCoverage{Set: OwnershipSet{Collection: CollectionEC2SecurityGroupRules, ResourceKind: ResourceEC2SecurityGroup, ResourceID: second}, State: CoverageComplete})
+	_, err = NewValidator(request.Contract).ValidateResult(result)
+	if err == nil || !strings.Contains(err.Error(), "coverage resource id is invalid") {
+		t.Fatalf("ValidateResult() error=%v, want invalid resource id", err)
+	}
+}

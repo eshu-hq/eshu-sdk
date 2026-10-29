@@ -11,6 +11,7 @@ import (
 	"io"
 	"math"
 	"time"
+	"unicode/utf8"
 
 	"github.com/eshu-hq/eshu-sdk/collector"
 )
@@ -60,6 +61,9 @@ func Run(ctx context.Context, reader io.Reader, writer io.Writer, handler Handle
 	if decoder.Decode(&trailing) != io.EOF {
 		return errors.New("command trailing data")
 	}
+	if request.ProtocolVersion == collector.ProtocolVersionV1Alpha3 && !utf8.Valid(raw) {
+		return errors.New("command decode failed")
+	}
 	if request.Validate() != nil {
 		return errors.New("command request invalid")
 	}
@@ -87,6 +91,9 @@ func Run(ctx context.Context, reader io.Reader, writer io.Writer, handler Handle
 	}
 	if callCtx.Err() != nil {
 		return errors.New("command canceled")
+	}
+	if request.ProtocolVersion == collector.ProtocolVersionV1Alpha3 && collector.ValidateCoverageUTF8(result) != nil {
+		return errors.New("command encode failed")
 	}
 	var staged bytes.Buffer
 	if err := json.NewEncoder(&staged).Encode(result); err != nil {

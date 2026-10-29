@@ -6,6 +6,7 @@ package collector
 import (
 	"fmt"
 	"strings"
+	"unicode/utf8"
 )
 
 // CoverageCollection is a fixed AWS fact collection, never a database selector.
@@ -179,7 +180,7 @@ func validateCoverageContract(contract *CoverageContract) error {
 }
 
 func invalidCoverageValue(value string) bool {
-	return value == "" || len(value) > 2048 || strings.TrimSpace(value) != value || strings.ContainsAny(value, "\x00\n\r\t*?%")
+	return value == "" || len(value) > 2048 || !utf8.ValidString(value) || strings.TrimSpace(value) != value || strings.ContainsAny(value, "\x00\n\r\t*?%")
 }
 
 func validCoverageReason(reason CoverageReason) bool {
@@ -359,6 +360,42 @@ func validateCoverageReport(contract *CoverageContract, result Result) error {
 		}
 		if states[*fact.Ownership] != CoverageComplete {
 			return fmt.Errorf("fact %q requires complete owned collection", fact.Kind)
+		}
+	}
+	return nil
+}
+
+// ValidateCoverageUTF8 rejects native coverage strings that JSON encoding
+// would replace with U+FFFD. Command runners call it before writing v1alpha3
+// results; it is an encoding guard, not host result or source validation.
+func ValidateCoverageUTF8(result Result) error {
+	invalid := func(values ...string) bool {
+		for _, value := range values {
+			if !utf8.ValidString(value) {
+				return true
+			}
+		}
+		return false
+	}
+	if result.Coverage != nil {
+		root := result.Coverage.Root
+		if invalid(string(root.Root), string(root.State), string(root.Reason)) {
+			return fmt.Errorf("coverage contains invalid UTF-8")
+		}
+		for _, resource := range result.Coverage.Resources {
+			if invalid(string(resource.Kind), resource.ID, string(resource.State), string(resource.Reason)) {
+				return fmt.Errorf("coverage contains invalid UTF-8")
+			}
+		}
+		for _, entry := range result.Coverage.Sets {
+			if invalid(string(entry.Set.Collection), string(entry.Set.ResourceKind), entry.Set.ResourceID, string(entry.State), string(entry.Reason)) {
+				return fmt.Errorf("coverage contains invalid UTF-8")
+			}
+		}
+	}
+	for _, fact := range result.Facts {
+		if fact.Ownership != nil && invalid(string(fact.Ownership.Collection), string(fact.Ownership.ResourceKind), fact.Ownership.ResourceID) {
+			return fmt.Errorf("coverage contains invalid UTF-8")
 		}
 	}
 	return nil

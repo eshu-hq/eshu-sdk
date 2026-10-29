@@ -263,3 +263,74 @@ func TestRunStagesOutputAndReportsWriteFailure(t *testing.T) {
 		t.Fatalf("encode failure: %v %q", err, out.String())
 	}
 }
+
+func coverageRequestBytes(t *testing.T) []byte {
+	t.Helper()
+	var request collector.Request
+	if err := json.Unmarshal(requestBytes(t), &request); err != nil {
+		t.Fatal(err)
+	}
+	request.ProtocolVersion = collector.ProtocolVersionV1Alpha3
+	request.Contract.ProtocolVersion = collector.ProtocolVersionV1Alpha3
+	request.Contract.Coverage = &collector.CoverageContract{
+		Scope: collector.CoverageScope{TenantID: "tenant", ComponentID: request.Claim.ComponentID, AccountID: "123456789012", Partition: "aws", Service: "ec2", Region: "us-east-1"},
+		Root:  collector.RootEC2Resources, MaxResources: 1,
+	}
+	raw, err := json.Marshal(request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return raw
+}
+
+func TestRunRejectsInvalidUTF8CoverageWire(t *testing.T) {
+	valid := coverageRequestBytes(t)
+	invalidTenant := append([]byte(`"tenant_id":"`), 0xff)
+	invalidTenant = append(invalidTenant, '"')
+	raw := bytes.Replace(valid, []byte(`"tenant_id":"tenant"`), invalidTenant, 1)
+	if bytes.Equal(raw, valid) {
+		t.Fatal("did not seed invalid tenant bytes")
+	}
+	opts := Options{SupportedProtocols: []string{collector.ProtocolVersionV1Alpha3}, MaxRequestBytes: int64(len(raw)), MaxResultBytes: 4096}
+	called := false
+	var output bytes.Buffer
+	err := Run(context.Background(), bytes.NewReader(raw), &output, func(context.Context, collector.Request) (collector.Result, error) {
+		called = true
+		return collector.Result{}, nil
+	}, opts)
+	if err == nil || called || output.Len() != 0 {
+		t.Fatalf("invalid request reached handler: err=%v called=%t bytes=%d", err, called, output.Len())
+	}
+}
+
+func TestRunRejectsInvalidUTF8CoverageResultBeforeEncode(t *testing.T) {
+	raw := coverageRequestBytes(t)
+	opts := Options{SupportedProtocols: []string{collector.ProtocolVersionV1Alpha3}, MaxRequestBytes: int64(len(raw)), MaxResultBytes: 4096}
+	bad := string([]byte{'i', 0xff})
+	for _, tc := range []struct {
+		name   string
+		change func(*collector.Result)
+	}{
+		{"resource identity", func(r *collector.Result) {
+			r.Coverage.Resources = []collector.ResourceObservation{{Kind: collector.ResourceEC2Core, ID: bad, State: collector.ResourcePresent}}
+		}},
+		{"set identity", func(r *collector.Result) {
+			r.Coverage.Sets = []collector.SetCoverage{{Set: collector.OwnershipSet{Collection: collector.CollectionEC2Core, ResourceKind: collector.ResourceEC2Core, ResourceID: bad}}}
+		}},
+		{"fact ownership", func(r *collector.Result) {
+			r.Facts = []collector.Fact{{Ownership: &collector.OwnershipSet{Collection: collector.CollectionEC2Core, ResourceKind: collector.ResourceEC2Core, ResourceID: bad}}}
+		}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var output bytes.Buffer
+			err := Run(context.Background(), bytes.NewReader(raw), &output, func(context.Context, collector.Request) (collector.Result, error) {
+				result := collector.Result{ProtocolVersion: collector.ProtocolVersionV1Alpha3, Coverage: &collector.CoverageReport{}}
+				tc.change(&result)
+				return result, nil
+			}, opts)
+			if err == nil || output.Len() != 0 {
+				t.Fatalf("invalid result was encoded: err=%v bytes=%d", err, output.Len())
+			}
+		})
+	}
+}

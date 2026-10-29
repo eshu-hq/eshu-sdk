@@ -29,8 +29,10 @@ of a blocking reader or a noncooperative handler, process tree cleanup, or a
 hard memory bound. Provider byte budgets need representative measurement before
 adoption. No runtime telemetry is added by this library boundary.
 
-The opt-in `collector-sdk/v1alpha3` protocol carries host-declared AWS coverage
-sets and collector completeness reports. Hosts and generated commands must
-explicitly list the new protocol to use it. `command.Run` only exchanges and
-validates the request shape; the host still validates the result and must not
-publish a partial result until its durable composition path is implemented.
+The opt-in `collector-sdk/v1alpha3` protocol carries a host-declared AWS root
+policy and collector coverage reports. Hosts and generated commands must
+explicitly list the new protocol to use it. `command.Run` rejects invalid
+UTF-8 request bytes and invalid native coverage strings before result encoding;
+it does not validate the result's source truth or fact membership. The host
+must validate the result and must not publish a partial result until its
+durable composition path is implemented.

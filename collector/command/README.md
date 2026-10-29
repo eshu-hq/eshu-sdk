@@ -12,8 +12,10 @@ writing output. Cancellation does not forcibly interrupt an arbitrary blocked
 reader or a handler that ignores its context. A supervising host must enforce
 the process deadline and output cap.
 
-The SDK checks request structure and stages output, but the host owns admission,
-grants, claim identity, fact validation, and process supervision. A handler may
+For v1alpha3, the runner rejects invalid UTF-8 request bytes and invalid
+native coverage strings before JSON encoding can replace them with U+FFFD.
+This is an encoding guard; the host still owns admission, grants, claim
+identity, fact validation, and process supervision. A handler may
 return `retryable` or `terminal` as a normal result with a nil Go error. A
 non-nil Go error fails the command. Returned errors expose only a safe stage
 name, never input, config, or provider error text. A writer can still partially

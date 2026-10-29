@@ -177,6 +177,10 @@ truncate and claim completeness. A qualified first-party producer attestation
 and the host's own source checks are needed to trust that behavior.
 `trusted_deletion` is forbidden for v1alpha3 results, including failures.
 
+Native v1alpha3 scope and resource identities must be valid UTF-8. The
+command runner rejects invalid request bytes and invalid native coverage
+strings before JSON encoding can collapse distinct byte strings to U+FFFD.
+
 The v1alpha3 JSON Schema checks the wire shape and requires `coverage` for
 `complete` or `partial` results. The Go validator checks the host-issued policy,
 resource kind/root pairing, duplicate identities, exact required collections,
