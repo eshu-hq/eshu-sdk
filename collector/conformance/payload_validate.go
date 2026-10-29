@@ -5,6 +5,7 @@ package conformance
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"sort"
 	"strings"
@@ -36,7 +37,7 @@ func (s payloadSchema) validatePayload(payload map[string]any) error {
 func normalizePayload(payload map[string]any) (map[string]any, error) {
 	raw, err := json.Marshal(payload)
 	if err != nil {
-		return nil, fmt.Errorf("payload is not JSON serializable: %w", err)
+		return nil, errors.New("payload is not JSON serializable")
 	}
 	var normalized map[string]any
 	if err := json.Unmarshal(raw, &normalized); err != nil {

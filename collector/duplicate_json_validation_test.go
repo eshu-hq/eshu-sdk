@@ -34,6 +34,13 @@ func TestValidateResultDoesNotExposeMarshalErrorText(t *testing.T) {
 	if !strings.Contains(err.Error(), "JSON serializable") {
 		t.Fatalf("marshal failure stage lost: %v", err)
 	}
+	contextFreeErr := validatePayload(result.Facts[0].Payload)
+	if contextFreeErr == nil {
+		t.Fatal("context-free validation accepted failing custom marshaler")
+	}
+	if strings.Contains(contextFreeErr.Error(), "synthetic-private-value-canary") {
+		t.Fatalf("producer error text escaped context-free validation: %v", contextFreeErr)
+	}
 }
 
 func TestValidateResultRejectsDuplicateNativeJSONKeys(t *testing.T) {

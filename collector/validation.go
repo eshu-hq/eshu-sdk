@@ -345,7 +345,7 @@ func uriParseReason(err error) string {
 
 func validatePayload(payload map[string]any) error {
 	if _, err := json.Marshal(payload); err != nil {
-		return fmt.Errorf("must be JSON serializable: %w", err)
+		return errors.New("must be JSON serializable")
 	}
 	return validatePayloadKeys("", payload)
 }
