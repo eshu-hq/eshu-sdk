@@ -30,6 +30,10 @@ The public surface includes:
   terminal outcomes.
 - `Contract`, `FactDeclaration`, `Validator`, and `ValidationReport` for
   fail-closed host validation.
+- `ValidateFactPayload` for producers that have a complete `Fact` payload but
+  no host claim yet. It applies the same fact-kind and schema-version scoped
+  payload safety rules used by `Validator.ValidateResult`; it does not validate
+  payload presence, envelope fields, contract declarations, or source scope.
 - `Request` and `RequestJSONSchema` for the core-owned command input.
 
 `Request.Validate()` checks known and matching request/contract protocols and

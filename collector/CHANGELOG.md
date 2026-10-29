@@ -27,6 +27,9 @@ Tags for the new module use the Go subdirectory-module format after separate rel
 
 ### Fixed
 
+- Expose `ValidateFactPayload(Fact)` so a producer can apply the fact-scoped
+  redaction and duplicate-key rules before a host claim exists, without
+  relaxing the context-free `ValidateShareSafeKeys` policy.
 - Payload validation admits only the legacy redacted Lambda environment and
   ECS environment/secret-reference shapes on `aws_resource` schema `1.0.0`
   (eshu-hq/eshu#8852), retaining recursive sensitive-key and duplicate JSON

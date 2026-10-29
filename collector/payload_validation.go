@@ -16,6 +16,16 @@ import (
 // MarshalJSON may produce object keys that are invisible in the Go value.
 var errCanonicalPayloadRequired = errors.New("canonical JSON payload required")
 
+// ValidateFactPayload checks JSON serialization, duplicate member names, and
+// fact-scoped sensitive-key rules for one payload. Kind and SchemaVersion select
+// narrow exceptions such as legacy AWS redaction shapes. It does not validate
+// payload presence, fact identity, declarations, source references, or a host
+// claim; callers must keep native values and custom marshalers stable through
+// validation and later use.
+func ValidateFactPayload(fact Fact) error {
+	return validateFactPayload(fact)
+}
+
 func validateFactPayload(fact Fact) error {
 	raw, err := json.Marshal(fact.Payload)
 	if err != nil {

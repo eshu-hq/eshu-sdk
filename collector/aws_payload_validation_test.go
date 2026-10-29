@@ -68,6 +68,37 @@ func TestAWSLegacyRedactedEnvironmentAdmission(t *testing.T) {
 	}
 }
 
+func TestValidateFactPayloadWithoutHostClaim(t *testing.T) {
+	result, _ := awsRedactionResult(t, "aws_lambda_function", "lambda", map[string]any{
+		"environment": map[string]any{"API_KEY": awsMarker(t, "lambda.function.environment.API_KEY")},
+	})
+	fact := result.Facts[0]
+	if err := ValidateFactPayload(fact); err != nil {
+		t.Fatalf("valid fact payload rejected without host claim: %v", err)
+	}
+	if err := ValidateShareSafeKeys(fact.Payload); err == nil {
+		t.Fatal("context-free key policy unexpectedly accepted AWS exception")
+	}
+	fact.Payload["attributes"].(map[string]any)["environment"].(map[string]any)["API_KEY"] = "raw-secret"
+	if err := ValidateFactPayload(fact); err == nil {
+		t.Fatal("raw environment value accepted")
+	}
+	ecs, _ := awsRedactionResult(t, "aws_ecs_task_definition", "ecs", map[string]any{
+		"containers": []any{map[string]any{
+			"environment": []any{map[string]any{"name": "API_KEY", "value": awsMarker(t, "ecs.task_definition.container.environment.API_KEY")}},
+			"secrets":     []any{map[string]any{"name": "TOKEN", "value_from": "arn:aws:secretsmanager:us-east-1:123456789012:secret:synthetic"}},
+		}},
+	})
+	if err := ValidateFactPayload(ecs.Facts[0]); err != nil {
+		t.Fatalf("valid ECS payload rejected without host claim: %v", err)
+	}
+	invalid := ecs.Facts[0]
+	invalid.Payload["service_kind"] = "lambda"
+	if err := ValidateFactPayload(invalid); err == nil {
+		t.Fatal("inconsistent service kind accepted")
+	}
+}
+
 func TestAWSLegacyRedactedEnvironmentRejectsUnsafeShapes(t *testing.T) {
 	base, validator := awsRedactionResult(t, "aws_lambda_function", "lambda", map[string]any{
 		"environment": map[string]any{"API_KEY": awsMarker(t, "lambda.function.environment.API_KEY")},
