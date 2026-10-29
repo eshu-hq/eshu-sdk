@@ -20,9 +20,12 @@ func validateFactPayload(fact Fact) error {
 	if err != nil {
 		return fmt.Errorf("must be JSON serializable: %w", err)
 	}
-	if err := walkFactPayload(fact.Payload, "", fact.Kind, fact.SchemaVersion, 0); !errors.Is(err, errCanonicalPayloadRequired) {
+	if err := walkFactPayload(fact.Payload, "", fact.Kind, fact.SchemaVersion, 0); err != nil && !errors.Is(err, errCanonicalPayloadRequired) {
 		return err
 	}
+	// Even a native map with safe keys may encode to duplicate JSON members:
+	// distinct invalid UTF-8 keys both become the replacement rune. Check the
+	// serialized form before accepting the result.
 	canonical, err := decodeCanonicalPayload(raw)
 	if err != nil {
 		return err

@@ -111,3 +111,22 @@ func TestCanonicalPayloadPreservesNumberTokens(t *testing.T) {
 		}
 	}
 }
+
+func TestValidateResultRejectsNativeKeysCollidingAfterJSONEncoding(t *testing.T) {
+	result := readFixture(t, "complete")
+	first := string([]byte{0xff})
+	second := string([]byte{0xfe})
+	result.Facts[0].Payload = map[string]any{
+		"body": map[string]any{first: "first", second: "second"},
+	}
+	raw, err := json.Marshal(result.Facts[0].Payload)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := decodeCanonicalPayload(raw); err == nil {
+		t.Fatal("seeded keys did not collide after JSON encoding")
+	}
+	if _, err := NewValidator(testContract()).ValidateResult(result); err == nil {
+		t.Fatal("native payload with colliding JSON member names accepted")
+	}
+}
