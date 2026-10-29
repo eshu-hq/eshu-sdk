@@ -84,6 +84,23 @@ validation. This exception does not apply to nested objects, other fact kinds,
 other schema versions, or the context-free `ValidateShareSafeKeys` check.
 Native Go payloads and JSON-decoded payloads receive the same validation.
 
+For `aws_resource` schema `1.0.0`, only `aws_lambda_function` with
+`service_kind=lambda` and `aws_ecs_task_definition` with `service_kind=ecs`
+(when the service kind is present) admit the legacy AWS environment shapes.
+Lambda `attributes.environment` is an object keyed by variable name; ECS
+`attributes.containers[].environment` is an array of `{name,value}` objects.
+Each value must be an object with exactly `marker`, `reason`, `source`, and
+`ruleset_version`: a lowercase 64-hex HMAC-SHA256 marker, the legacy
+`known_sensitive_key` or `unknown_provider_schema` reason, the source path
+derived from its variable name, and `aws-launch-2026-05-14`. ECS
+`attributes.containers[].secrets` admits only an array of `{name,value_from}`
+string pairs. The legacy absent, null, and empty states remain valid. Other
+fields still receive recursive sensitive-key validation. A marker-shaped
+object proves its JSON shape, not that a producer used a particular key or
+raw input. Native and JSON-decoded facts use the same canonical JSON walk,
+which rejects duplicate member names before validating keys. The context-free
+`ValidateShareSafeKeys` policy is unchanged.
+
 For Kubernetes posture facts at schema `1.0.0`, the validator admits only these
 exact root fields through the sensitive-key check:
 

@@ -33,8 +33,18 @@ func validateFactPayload(fact Fact) error {
 func walkFactPayload(value any, path, kind, schema string, depth int) error {
 	switch typed := value.(type) {
 	case map[string]any:
+		awsType := ""
+		if depth == 0 && kind == "aws_resource" && schema == "1.0.0" {
+			awsType = awsRedactionResourceType(typed)
+		}
 		for key, child := range typed {
 			childPath := payloadKeyPath(path, key)
+			if depth == 0 && key == "attributes" && awsType != "" {
+				if err := validateAWSResourceAttributes(child, childPath, kind, schema, depth+1, awsType); err != nil {
+					return err
+				}
+				continue
+			}
 			if depth == 0 && key == "tag_value_fingerprints" && kind == "azure_tag_observation" && schema == "1.0.0" {
 				if err := validateAzureTagFingerprints(child); err != nil {
 					return fmt.Errorf("%s: %w", childPath, err)

@@ -27,6 +27,12 @@ Tags for the new module use the Go subdirectory-module format after separate rel
 
 ### Fixed
 
+- Payload validation admits only the legacy redacted Lambda environment and
+  ECS environment/secret-reference shapes on `aws_resource` schema `1.0.0`
+  (eshu-hq/eshu#8852), retaining recursive sensitive-key and duplicate JSON
+  member rejection. This changes validator acceptance only; the wire format
+  and schema remain unchanged. A later collector candidate needs separate
+  review, tag approval, consumer qualification, and deployment proof.
 - Payload validation admits the redaction-safe Vault auth-role metadata keys
   `token_ttl_seconds` (integer TTL duration), `token_policy_count` (integer
   policy count), and `token_policy_name_fingerprints` (HMAC redaction
