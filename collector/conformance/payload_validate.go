@@ -41,7 +41,7 @@ func normalizePayload(payload map[string]any) (map[string]any, error) {
 	}
 	var normalized map[string]any
 	if err := json.Unmarshal(raw, &normalized); err != nil {
-		return nil, fmt.Errorf("payload could not be re-decoded as JSON: %w", err)
+		return nil, errors.New("payload could not be re-decoded as JSON")
 	}
 	return normalized, nil
 }
@@ -137,7 +137,7 @@ func (p propertySchema) validateEnum(field string, value any) error {
 		return fmt.Errorf("field %q has unsupported enum value type %s", field, jsonTypeOf(value))
 	}
 	if _, ok := p.enum.values[typed]; !ok {
-		return fmt.Errorf("field %q has value %v outside the allowed enum", field, value)
+		return fmt.Errorf("field %q has value outside the allowed enum", field)
 	}
 	return nil
 }
@@ -153,7 +153,7 @@ func validateStringFormat(field, format string, value any) error {
 	switch format {
 	case "date-time":
 		if _, err := time.Parse(time.RFC3339Nano, typed); err != nil {
-			return fmt.Errorf("field %q is not a valid date-time: %w", field, err)
+			return fmt.Errorf("field %q is not a valid date-time", field)
 		}
 	default:
 		return fmt.Errorf("field %q uses unsupported string format %q", field, format)
