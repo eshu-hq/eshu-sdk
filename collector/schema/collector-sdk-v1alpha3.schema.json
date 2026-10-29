@@ -375,6 +375,32 @@
   "$id": "https://eshu.dev/schemas/collector-sdk/v1alpha3/result.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
+  "allOf": [
+    {
+      "else": {
+        "not": {
+          "required": [
+            "coverage"
+          ]
+        }
+      },
+      "if": {
+        "properties": {
+          "state": {
+            "enum": [
+              "complete",
+              "partial"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "coverage"
+        ]
+      }
+    }
+  ],
   "properties": {
     "claim": {
       "$ref": "#/$defs/claim"

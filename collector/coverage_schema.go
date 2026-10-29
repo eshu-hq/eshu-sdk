@@ -20,6 +20,13 @@ func coverageResultSchema() map[string]any {
 	properties := schema["properties"].(map[string]any)
 	properties["protocol_version"] = map[string]any{"const": ProtocolVersionV1Alpha3}
 	properties["coverage"] = ref("#/$defs/coverage_report")
+	schema["allOf"] = []any{map[string]any{
+		"if": map[string]any{"properties": map[string]any{"state": map[string]any{
+			"enum": []string{string(ResultComplete), string(ResultPartial)},
+		}}},
+		"then": map[string]any{"required": []string{"coverage"}},
+		"else": map[string]any{"not": map[string]any{"required": []string{"coverage"}}},
+	}}
 	defs := schema["$defs"].(map[string]any)
 	defs["generation"].(map[string]any)["properties"].(map[string]any)["trusted_deletion"] = map[string]any{"type": "boolean"}
 	fact := defs["fact"].(map[string]any)

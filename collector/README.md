@@ -169,6 +169,15 @@ set must carry one bounded reason. Missing, duplicate, unknown, cross-service,
 or contradictory reports fail validation. A producer cannot name a database
 selector, previous generation, or carry-forward payload in this wire shape.
 
+The v1alpha3 JSON Schema requires `coverage` for `complete` and `partial`
+results and forbids it for `unchanged`, `retryable`, and `terminal` results.
+It checks wire shape, not whether the declared sets came from the host. The Go
+validator compares the report with the host-supplied set inventory, rejects
+missing or duplicate sets, and checks state consistency and fact ownership
+tags. Neither check proves that a fact actually belongs to its tagged AWS
+resource or that source enumeration was complete. Those semantic checks need
+host-owned cloud authorization, source inventory, and fact-kind/resource rules.
+
 The SDK checks structure and declared set identity only. A host must derive the
 contract independently of the producer, verify cloud grants and actual resource
 membership, prove the enumerated set is complete, and reject untrusted claims of
