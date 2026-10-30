@@ -98,19 +98,61 @@ func TestClientRegistryVocabularySplitDocumentsExclusion(t *testing.T) {
 	}
 	for _, value := range []string{"local_full_stack", "  production  "} {
 		findings := reg.Validate(map[string]string{"ESHU_QUERY_PROFILE": value}, false)
-		found := false
-		for _, f := range findings {
-			if f.Name == "ESHU_QUERY_PROFILE" {
-				found = true
+		var got *Finding
+		for i := range findings {
+			if findings[i].Name == "ESHU_QUERY_PROFILE" {
+				got = &findings[i]
 			}
 		}
-		if !found {
+		if got == nil {
 			t.Fatalf("Validate(ESHU_QUERY_PROFILE=%q) has no finding, want invalid_value", value)
+		}
+		if got.Kind != FindingInvalidValue || !got.Error {
+			t.Fatalf("Validate(ESHU_QUERY_PROFILE=%q) = %+v, want Kind invalid_value with Error true", value, *got)
 		}
 	}
 	// Bool validation trims spaces, like core: padded input stays valid.
 	if findings := reg.Validate(map[string]string{"ESHU_MCP_ALLOW_UNAUTHENTICATED": " true "}, false); len(findings) != 0 {
 		t.Fatalf("padded bool yields findings, want 0: %+v", findings)
+	}
+}
+
+// TestValidateValueVectors pins the per-type value checks directly, including
+// the whitespace trimming the parser relies on. The client table carries no
+// int/duration entries, so those types are covered here at the unit level,
+// faithful to core validateValue.
+func TestValidateValueVectors(t *testing.T) {
+	t.Parallel()
+
+	cases := map[string]struct {
+		typ   VarType
+		value string
+		valid bool
+	}{
+		"int plain":      {VarInt, "42", true},
+		"int padded":     {VarInt, " 42 ", true},
+		"int invalid":    {VarInt, "4x", false},
+		"bool padded":    {VarBool, " true ", true},
+		"bool invalid":   {VarBool, "yes-ish", false},
+		"duration plain": {VarDuration, "90s", true},
+		"duration blank": {VarDuration, "   ", false},
+		"duration bad":   {VarDuration, "soon", false},
+		"enum padded":    {VarEnum, " x ", false},
+	}
+	entry := Entry{Name: "ESHU_PROBE", Type: VarString}
+	for name, tc := range cases {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			e := entry
+			e.Type = tc.typ
+			if tc.typ == VarEnum {
+				e.Allowed = []string{"x"}
+			}
+			_, ok := validateValue(&e, tc.value)
+			if ok != tc.valid {
+				t.Fatalf("validateValue(%v, %q) valid = %v, want %v", tc.typ, tc.value, ok, tc.valid)
+			}
+		})
 	}
 }
 
