@@ -60,19 +60,19 @@ else
   pass "satellite-ref is 40-hex ($sat)"
 fi
 
-# --- coverage-floors parses and names both modules (values: floors-sync). ---
+# --- coverage-floors parses and names all modules (values: floors-sync). ---
 floors="$(grep -E '^      coverage-floors:' "$WORKFLOW" | sed -E "s/.*coverage-floors: *'([^']+)'.*/\1/")"
 if [ -z "$floors" ]; then
   fail "coverage-floors input missing"
-elif python3 -c 'import json,sys; f=json.load(open(sys.argv[1])); sys.exit(0 if set(("collector","factschema")) <= set(f) else 1)' <(printf '%s' "$floors"); then
-  pass "coverage-floors names both modules"
+elif python3 -c 'import json,sys; f=json.load(open(sys.argv[1])); sys.exit(0 if set(("collector","factschema","wirecontract")) <= set(f) else 1)' <(printf '%s' "$floors"); then
+  pass "coverage-floors names all modules"
 else
-  fail "coverage-floors does not name both modules: $floors"
+  fail "coverage-floors does not name all modules: $floors"
 fi
 
 # --- Every floor in the workflow has a Makefile default to sync against. ---
-if grep -q '^COVERAGE_FLOOR_COLLECTOR' "$MAKEFILE" && grep -q '^COVERAGE_FLOOR_FACTSCHEMA' "$MAKEFILE"; then
-  pass "Makefile carries both COVERAGE_FLOOR_* defaults"
+if grep -q '^COVERAGE_FLOOR_COLLECTOR' "$MAKEFILE" && grep -q '^COVERAGE_FLOOR_FACTSCHEMA' "$MAKEFILE" && grep -q '^COVERAGE_FLOOR_WIRECONTRACT' "$MAKEFILE"; then
+  pass "Makefile carries all COVERAGE_FLOOR_* defaults"
 else
   fail "Makefile misses a COVERAGE_FLOOR_* default"
 fi

@@ -1,5 +1,23 @@
 # Release and cutover checklist
 
+## Current wirecontract RC1 preparation (Refs eshu-hq/eshu#9509)
+
+The `wirecontract` module is source-prepared in this change with no tag cut.
+It ports core `sdk/go/apicontract` byte-for-byte (envelopes, profiles,
+backends, freshness, tool shape, client env registry plus validator) with
+`wirecontract/testdata/golden/*.json` pinned to the core bytes and
+in-module parity tests green (`cd wirecontract && GOWORK=off go test
+./... -count=1`). It has no `go/internal` imports and stdlib only. Follow
+the checklist below for `wirecontract/v0.1.0-rc.1` up to but not including
+the tag push: reviewed mapping (this branch), versioned metadata
+(`wirecontract/CHANGELOG.md` Unreleased entry plus `docs/compatibility.md`
+row and module-pair qualification), standalone module CI green
+(`make build test vet lint tidy-check file-cap race govulncheck shape`),
+then separate tag approval and a fresh external `GOWORK=off` consumer probe
+before any tag. Tier-2 CLI repoint (Box 3) follows the published tag and is
+out of scope for this lane. No proxy verification, consumer qualification,
+or deployed acceptance is claimed here.
+
 ## Current RC4/RC10 state
 
 Git tags in this checkout reach `collector/v0.1.0-rc.4` and

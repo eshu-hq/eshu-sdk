@@ -1,10 +1,12 @@
 # Eshu Go SDK preparation
 
-This repository prepares two independent public Go modules initially copied
+This repository prepares three independent public Go modules initially copied
 from Eshu at commit `eb62fa3056f5ed3518bb5aa676bf2e3adc96c1d5`. The
 checked Git tags reach `collector/v0.1.0-rc.3` and
 `factschema/v0.1.0-rc.6`. This branch prepares an NVD paging golden
-fixture and accessor for a separately reviewed factschema RC7 publication. Check each candidate's tag and
+fixture and accessor for a separately reviewed factschema RC7 publication, plus
+the new Tier-2 API wire-contract module (Refs eshu-hq/eshu#9509) with no
+published tag yet. Check each candidate's tag and
 fresh public-proxy origin before use. Publication alone does not establish
 acceptance by a production Eshu consumer.
 
@@ -12,8 +14,9 @@ acceptance by a production Eshu consumer.
 | --- | --- | --- |
 | `collector/` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/vX.Y.Z` |
 | `factschema/` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/vX.Y.Z` |
+| `wirecontract/` | `github.com/eshu-hq/eshu-sdk/wirecontract` | `wirecontract/vX.Y.Z` |
 
-There is no root Go module. Each module is tested and versioned independently. Their first candidate tags are `collector/v0.1.0-rc.1` and `factschema/v0.1.0-rc.1`. The original in-tree modules and existing immutable tags remain in place until consumer tests and production cutover pass. See the [compatibility policy](docs/compatibility.md) for the old/new paths and acceptance states.
+There is no root Go module. Each module is tested and versioned independently. Their first candidate tags are `collector/v0.1.0-rc.1` and `factschema/v0.1.0-rc.1`; `wirecontract` prepares `wirecontract/v0.1.0-rc.1`. The original in-tree modules and existing immutable tags remain in place until consumer tests and production cutover pass. See the [compatibility policy](docs/compatibility.md) for the old/new paths and acceptance states.
 
 ## Source and scope
 
@@ -32,6 +35,6 @@ Published candidates do not grant production support to a new module path.
 
 ## Local checks
 
-Run `make pre-push` for both module suites, vet, generation drift, and the file cap. `GOWORK=off` ensures each module works independently. CI runs the same checks. Contract changes require updated tests, schemas, fixtures, and a consumer compatibility review before release.
+Run `make pre-push` for all three module suites, vet, generation drift, and the file cap. `GOWORK=off` ensures each module works independently. CI runs the same checks. Contract changes require updated tests, schemas, fixtures, and a consumer compatibility review before release.
 
 See [release and cutover](docs/release.md) for the unresolved acceptance steps. The upstream Eshu [Contract System v1](https://github.com/eshu-hq/eshu/blob/eb62fa3056/docs/internal/design/contract-system-v1.md) defines the original payload contract.

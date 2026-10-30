@@ -6,28 +6,34 @@ GO ?= go
 # epic #27. Keep the Makefile defaults in sync with the workflow inputs.
 COVERAGE_FLOOR_COLLECTOR ?= 85.0
 COVERAGE_FLOOR_FACTSCHEMA ?= 48.3
+COVERAGE_FLOOR_WIRECONTRACT ?= 84.7
 
 .PHONY: build test vet lint tidy-check generate-check file-cap race coverage govulncheck shellcheck shape actionlint gosec ci pre-push
 
 build:
 	cd collector && GOWORK=off $(GO) build ./...
 	cd factschema && GOWORK=off $(GO) build ./...
+	cd wirecontract && GOWORK=off $(GO) build ./...
 
 test:
 	cd collector && GOWORK=off $(GO) test ./... -count=1
 	cd factschema && GOWORK=off $(GO) test ./... -count=1
+	cd wirecontract && GOWORK=off $(GO) test ./... -count=1
 
 vet:
 	cd collector && GOWORK=off $(GO) vet ./...
 	cd factschema && GOWORK=off $(GO) vet ./...
+	cd wirecontract && GOWORK=off $(GO) vet ./...
 
 lint:
 	cd collector && GOWORK=off golangci-lint run ./...
 	cd factschema && GOWORK=off golangci-lint run ./...
+	cd wirecontract && GOWORK=off golangci-lint run ./...
 
 tidy-check:
 	bash scripts/ci/tidy-check.sh collector
 	bash scripts/ci/tidy-check.sh factschema
+	bash scripts/ci/tidy-check.sh wirecontract
 
 generate-check:
 	cd factschema && GOWORK=off $(GO) generate ./...
@@ -44,12 +50,15 @@ race:
 	cd collector && bash ../scripts/ci/check-coverage.sh coverage.out $(COVERAGE_FLOOR_COLLECTOR)
 	cd factschema && GOWORK=off $(GO) test -race ./... -count=1 -coverprofile=coverage.out
 	cd factschema && bash ../scripts/ci/check-coverage.sh coverage.out $(COVERAGE_FLOOR_FACTSCHEMA)
+	cd wirecontract && GOWORK=off $(GO) test -race ./... -count=1 -coverprofile=coverage.out
+	cd wirecontract && bash ../scripts/ci/check-coverage.sh coverage.out $(COVERAGE_FLOOR_WIRECONTRACT)
 
 coverage: race
 
 govulncheck:
 	cd collector && GOWORK=off govulncheck ./...
 	cd factschema && GOWORK=off govulncheck ./...
+	cd wirecontract && GOWORK=off govulncheck ./...
 
 shellcheck:
 	git ls-files '*.sh' | xargs shellcheck --severity=warning
@@ -72,6 +81,7 @@ actionlint:
 gosec:
 	cd collector && GOWORK=off gosec -fmt sarif -out ../gosec-collector.sarif ./... || true
 	cd factschema && GOWORK=off gosec -fmt sarif -out ../gosec-factschema.sarif ./... || true
+	cd wirecontract && GOWORK=off gosec -fmt sarif -out ../gosec-wirecontract.sarif ./... || true
 	@printf '%s\n' 'gosec: advisory only, see gosec-*.sarif (untracked, do not commit)'
 
 # Full local parity with the CI lanes (minus the satellite consumer-compat

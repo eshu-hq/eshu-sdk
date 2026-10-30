@@ -9,6 +9,7 @@ recorded in the module changelogs; they are not part of that source snapshot.
 | `sdk/go/collector/` | `collector/` | Module and import prefix substitution |
 | `sdk/go/factschema/` | `factschema/` | Module/import and contributor-path metadata substitution; test-only splitting and dispatch consolidation |
 | `go/internal/collector/sdk/` | `collector/transport/` | Package declaration and documentation changes; three inherited public comments corrected |
+| `sdk/go/apicontract/` (Refs eshu-hq/eshu#9509) | `wirecontract/` | Module and package rename `apicontract` to `wirecontract`, error-prefix substitution, doc path updates; envelope/profile/freshness/tool/env bytes unchanged, goldens copied |
 
 The initial relocation proof counted 1,076 source files. All 730 non-Go schema and fixture data files were byte identical in the relocation specimen. The original and relocated suites discovered the same 46 collector and 144 factschema Test/Benchmark names. The two original factschema decoder switches bound the same 179 fact-kind and public-decoder pairs; the relocated test map preserves that set. These are pre-publication local proofs, not consumer or deployment evidence.
 
