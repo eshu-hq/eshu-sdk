@@ -10,10 +10,12 @@
 // tool-definition shape from go/internal/mcp/contract/tool, and the
 // client-scoped environment-variable registry data plus its pure validator
 // from go/internal/envregistry. Every JSON field name, tag, and enum value is
-// pinned byte-for-byte to the core types by the committed goldens in
-// testdata/golden: the core drift tests regenerate those goldens from the
-// live types, and the in-module parity tests compare them against these
-// shapes, so neither side can drift without failing a gate.
+// pinned byte-for-byte to the core types at pin c606960c97 by the committed
+// goldens in testdata/golden: scripts/ci/test-wirecontract-core-pin.sh
+// rebuilds those bytes from the pinned core live types and from these
+// shapes, so the SDK side drifts only by failing that gate (see README.md
+// and AGENTS.md; core-side regeneration is core's own suite, and core drift
+// arrives here as a linked follow-up, never in the same change).
 //
 // What it deliberately does not publish, and why:
 //
