@@ -1,19 +1,21 @@
 # SDK module compatibility and candidate status
 
-The repository contains two independent Go module identities. The exact Git
+The repository contains three independent Go module identities. The exact Git
 refs available in this checkout include collector `v0.1.0-rc.4` and factschema
 `v0.1.0-rc.10`; earlier candidate tags remain immutable. Neither tag qualifies
 an Eshu consumer on its own: recheck tag origin and fresh public-proxy
-resolution before claiming candidate availability.
+resolution before claiming candidate availability. The `wirecontract` module
+is new in this change and has no published tag yet.
 
 | Existing supported module | New module identity | Latest checked Git tag | Prepared next candidate |
 | --- | --- | --- | --- |
 | `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.1.0-rc.4` | none in this change |
 | `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.10` | none in this change |
+| `github.com/eshu-hq/eshu/sdk/go/apicontract@v0.1.0` (release-prepared in core, tag NOT cut) | `github.com/eshu-hq/eshu-sdk/wirecontract` | none (new module) | `wirecontract/v0.1.0-rc.1` |
 
 The old and new import paths name different Go types. The new `v0.1.0`
 line is a new module identity, not a continuation of the old path's `v0.2.0`
-line or a drop-in replacement. Both modules require Go `1.26.10` or newer.
+line or a drop-in replacement. All three modules require Go `1.26.10` or newer.
 The old `v0.2.0` paths, their source, and their support and security policy
 remain in place until consumer and deployed acceptance authorize a cutover.
 
@@ -62,6 +64,23 @@ Collector RC4 allowlists the redaction-safe
 and extracted consumers must prove the same pinned fixture bytes, payloads,
 stable keys, and two-page traversal.
 
+The new `wirecontract` candidate publishes the Tier-2 API wire shapes only:
+response/truth/error envelopes, query profiles, graph backends, freshness
+causes, the MCP tool-definition shape, and the client-scoped environment
+registry with its pure validator. It ports core `sdk/go/apicontract`
+(Refs eshu-hq/eshu#9509, port source `c606960c97`) with no `go/internal`
+imports and stdlib only. The two-sided oracle runs in this repo's gates as
+`scripts/ci/test-wirecontract-core-pin.sh` (also via `make shape`): Guard A
+requires golden == core == port remarshal on all seven goldens (a
+mistranscribed tag fails the port side only); Guard B compares
+fully-populated shape key sets core-vs-port on the four wire types, which
+catches an additive omitempty field that remarshal-equality cannot see.
+Both guards carry seeded-violation RED/GREEN pairs. Core's own suite
+regenerates its goldens from live types (green at `fb4b777757ab`). The
+in-module tests then pin SDK output to those bytes. Run
+`cd wirecontract && GOWORK=off go test ./... -count=1` to reproduce the
+SDK side.
+
 ## Acceptance states
 
 The recorded status below is a snapshot from 2026-10-28. Tag origin was
@@ -75,9 +94,9 @@ vet, and run, and the RC10 proof records scratch consumers pinning
 
 | State | Evidence required | Recorded snapshot |
 | --- | --- | --- |
-| Candidate available | Merged core compatibility mapping, exact reviewed and merged source commit, green CI, separate tag approval, immutable directory-prefixed tag, and fresh proxy resolution | Collector RC4 and factschema RC10 Git tags exist and are proxy-verified as above |
-| Qualified consumer/core pair | Exact candidate pin plus contract and runtime gates for that consumer and core version | RC10 consumer NOT_CHECKED: core PR eshu-hq/eshu#9435 carries the RC10 pin and core `main` still pins factschema RC7; `eshu-collector-kubernetes-live` still pins collector RC3 plus factschema RC6 and its `StillBlocked` pin records the pre-fix expectation |
-| Deployed accepted pair | Matching deployment, reducer, graph, API/MCP, retry, operator, and rollback evidence | RC10 deployment NOT_CHECKED |
+| Candidate available | Merged core compatibility mapping, exact reviewed and merged source commit, green CI, separate tag approval, immutable directory-prefixed tag, and fresh proxy resolution | Collector RC4 and factschema RC10 Git tags exist and are proxy-verified as above; wirecontract has no tag yet (source prepared in this change, tag approval and proxy verification pending per [release and cutover](release.md)) |
+| Qualified consumer/core pair | Exact candidate pin plus contract and runtime gates for that consumer and core version | RC10 consumer NOT_CHECKED: core PR eshu-hq/eshu#9435 carries the RC10 pin and core `main` still pins factschema RC7; `eshu-collector-kubernetes-live` still pins collector RC3 plus factschema RC6 and its `StillBlocked` pin records the pre-fix expectation; wirecontract pair parity pinned, NOT qualified (module-pair scope): `github.com/eshu-hq/eshu-sdk/wirecontract` at this source pins byte-identical JSON to core `sdk/go/apicontract` via committed `wirecontract/testdata/golden/*.json` and green `TestGoldenEnvelopeBytes`, `TestGoldenErrorEnvelope`, `TestGoldenToolDefinition`, `TestClientEntriesMatchGolden`, `TestValidateVectors` — unverified against a core consumer gate; consumer qualification and Tier-2 CLI repoint (Box 3) follow the published tag |
+| Deployed accepted pair | Matching deployment, reducer, graph, API/MCP, retry, operator, and rollback evidence | RC10 deployment NOT_CHECKED; wirecontract deployment NOT_CHECKED |
 
 Use exact versions in consumer `go.mod` files; do not use `@latest`, a workspace,
 or a `replace` directive as release evidence. Before a tag, bind approval to
@@ -102,6 +121,27 @@ and a typed decode of the new `coverage_descriptor`.
 The [migration evidence](sdk-migration-evidence.md) also records the original
 module tag origins and Go checksums. See [release and cutover](release.md) for
 the order of approval and qualification.
+
+## MCP setup snippet scope decision (Box 4)
+
+`mcp setup` offline snippets MUST NOT use remote `tools/list` instead of the
+published `wirecontract.ToolDefinition` shape. Evidence: core
+`runMCPSetup` renders snippets offline from the static platform table plus
+`SetupRequest` (mode, posture, service URL) with no network and no
+`tools/list` (`go/internal/cli/mcpsetup/snippet.go` takes no tool
+definitions); `RunVerification` reuses the embedded in-process
+`mcp.ReadOnlyTools` catalog for the tools-visible count, and the hosted
+first-query probe uses the API client (`GET /health`, `GET
+/api/v0/index-status`) only when the posture holds a credential — otherwise
+those stages skip. Remote `tools/list` needs a running MCP server with the
+caller's credential chain (API key, scoped tokens, or OIDC resource URI;
+headerless requests to non-public routes are rejected 401), and its
+advertisement varies per deployment via `ESHU_MCP_TOOL_SURFACE` and
+`ESHU_QUERY_PROFILE`. Offline snippet generation therefore cannot depend on
+it. Recommendation: keep offline rendering on the published shape for
+decoding remote `tools/list` responses (verification counts); do not replace
+snippet generation with a live call. Full evidence lives in
+`wirecontract/README.md`.
 
 ## Trusted conformance context in the candidate
 

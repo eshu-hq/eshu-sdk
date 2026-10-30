@@ -26,7 +26,7 @@ else
   pass "coverage-floors input present in workflow"
 fi
 
-for module in collector factschema; do
+for module in collector factschema wirecontract; do
   upper="$(printf '%s' "$module" | tr 'a-z' 'A-Z')"
   mk_floor="$(grep -E "^COVERAGE_FLOOR_${upper}[[:space:]]*\\?= " "$MAKEFILE" | sed -E 's/.*\\?=[[:space:]]*//' || true)"
   if [ -z "$mk_floor" ]; then
