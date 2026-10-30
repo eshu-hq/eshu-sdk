@@ -10,8 +10,10 @@ contracts. It must remain independent from Eshu internals, mirroring
 - Keep `go.mod` as a standalone module with no require or replace directives.
 - Do not import `github.com/eshu-hq/eshu/go/internal/...`.
 - Use only the Go standard library outside tests.
-- When changing a shape or entry, update `README.md`, `doc.go`,
-  `testdata/golden/*.json`, and the core drift tests in the same change.
+- When changing a shape or entry, update `README.md`, `doc.go`, and
+  `testdata/golden/*.json` in the same change; file the matching core
+  drift update in eshu-hq/eshu as a linked follow-up (cross-repo, so it
+  cannot land in the same change).
 - Run `go test ./... -count=1` from this directory.
 - Run `gofmt` for changed Go files and `git diff --check` from the repo root.
 
