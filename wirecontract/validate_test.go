@@ -6,6 +6,7 @@ package wirecontract
 import (
 	"encoding/json"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -76,6 +77,57 @@ func TestValidateVectors(t *testing.T) {
 				t.Fatalf("Validate(%v, strict=%v) mismatch:\n got: %+v\nwant: %+v", vec.env, vec.strict, got, want)
 			}
 		})
+	}
+}
+
+// TestClientRegistryVocabularySplitDocumentsExclusion pins the inherited
+// core split: ParseQueryProfile accepts local_full_stack (trimming spaces),
+// while the client registry admits only three ESHU_QUERY_PROFILE values.
+// Enum comparison is untrimmed, exactly like core: padded input is invalid.
+// Both halves are faithful to core sdk/go/apicontract; do not "fix" one
+// side without the core comparison.
+func TestClientRegistryVocabularySplitDocumentsExclusion(t *testing.T) {
+	t.Parallel()
+
+	if _, err := ParseQueryProfile("local_full_stack"); err != nil {
+		t.Fatalf("ParseQueryProfile(local_full_stack) = %v, want nil", err)
+	}
+	reg, err := New(ClientEntries())
+	if err != nil {
+		t.Fatalf("New(ClientEntries()): %v", err)
+	}
+	for _, value := range []string{"local_full_stack", "  production  "} {
+		findings := reg.Validate(map[string]string{"ESHU_QUERY_PROFILE": value}, false)
+		found := false
+		for _, f := range findings {
+			if f.Name == "ESHU_QUERY_PROFILE" {
+				found = true
+			}
+		}
+		if !found {
+			t.Fatalf("Validate(ESHU_QUERY_PROFILE=%q) has no finding, want invalid_value", value)
+		}
+	}
+	// Bool validation trims spaces, like core: padded input stays valid.
+	if findings := reg.Validate(map[string]string{"ESHU_MCP_ALLOW_UNAUTHENTICATED": " true "}, false); len(findings) != 0 {
+		t.Fatalf("padded bool yields findings, want 0: %+v", findings)
+	}
+}
+
+// TestNewRejectsCanonicalShadowingAlias proves a canonical name that shadows
+// an earlier entry's alias fails fast instead of silently killing the alias:
+// Lookup would resolve the name to the new entry and leave the alias dead.
+func TestNewRejectsCanonicalShadowingAlias(t *testing.T) {
+	t.Parallel()
+
+	entries := []Entry{
+		{Name: "ESHU_X_ONE", Type: VarString, Subsystem: "api", Aliases: []string{"ESHU_X_TWO"}},
+		{Name: "ESHU_X_TWO", Type: VarString, Subsystem: "api"},
+	}
+	if _, err := New(entries); err == nil {
+		t.Fatal("New() with canonical shadowing an earlier alias = nil, want an error")
+	} else if !strings.Contains(err.Error(), "shadows alias") {
+		t.Fatalf("New() error = %q, want the shadows-alias refusal", err.Error())
 	}
 }
 

@@ -68,14 +68,15 @@ The new `wirecontract` candidate publishes the Tier-2 API wire shapes only:
 response/truth/error envelopes, query profiles, graph backends, freshness
 causes, the MCP tool-definition shape, and the client-scoped environment
 registry with its pure validator. It ports core `sdk/go/apicontract`
-(Refs eshu-hq/eshu#9509) byte-for-byte, with no `go/internal` imports and
-stdlib only. Proof is machine-checked, not prose: `wirecontract`
-`TestGoldenEnvelopeBytes`, `TestGoldenErrorEnvelope`,
-`TestGoldenToolDefinition`, `TestClientEntriesMatchGolden`, and
-`TestValidateVectors` pin every JSON field, tag, enum value, and validator
-finding against the same `testdata/golden/*.json` bytes the core module
-generates from its live types. Run `cd wirecontract && GOWORK=off go test
-./... -count=1` to reproduce.
+(Refs eshu-hq/eshu#9509, port source `c606960c97`) with no `go/internal`
+imports and stdlib only. The two-sided oracle is machine-checked: core's own
+suite regenerates its goldens from live types (`cd sdk/go/apicontract &&
+GOWORK=off go test -count=1 -run 'TestGolden|TestClientEntries|TestValidate'
+.`, green at `fb4b777757ab`), and `cmp` proves every
+`wirecontract/testdata/golden/*.json` byte-identical to the core golden; the
+in-module tests then pin SDK output to those bytes. Run
+`cd wirecontract && GOWORK=off go test ./... -count=1` to reproduce the
+SDK side.
 
 ## Acceptance states
 
@@ -91,7 +92,7 @@ vet, and run, and the RC10 proof records scratch consumers pinning
 | State | Evidence required | Recorded snapshot |
 | --- | --- | --- |
 | Candidate available | Merged core compatibility mapping, exact reviewed and merged source commit, green CI, separate tag approval, immutable directory-prefixed tag, and fresh proxy resolution | Collector RC4 and factschema RC10 Git tags exist and are proxy-verified as above; wirecontract has no tag yet (source prepared in this change, tag approval and proxy verification pending per [release and cutover](release.md)) |
-| Qualified consumer/core pair | Exact candidate pin plus contract and runtime gates for that consumer and core version | RC10 consumer NOT_CHECKED: core PR eshu-hq/eshu#9435 carries the RC10 pin and core `main` still pins factschema RC7; `eshu-collector-kubernetes-live` still pins collector RC3 plus factschema RC6 and its `StillBlocked` pin records the pre-fix expectation; wirecontract pair QUALIFIED (module-pair scope): `github.com/eshu-hq/eshu-sdk/wirecontract` at this source pins byte-identical JSON to core `sdk/go/apicontract` via committed `wirecontract/testdata/golden/*.json` and green `TestGoldenEnvelopeBytes`, `TestGoldenErrorEnvelope`, `TestGoldenToolDefinition`, `TestClientEntriesMatchGolden`, `TestValidateVectors` — no core consumer gate yet, Tier-2 CLI repoint (Box 3) follows the published tag |
+| Qualified consumer/core pair | Exact candidate pin plus contract and runtime gates for that consumer and core version | RC10 consumer NOT_CHECKED: core PR eshu-hq/eshu#9435 carries the RC10 pin and core `main` still pins factschema RC7; `eshu-collector-kubernetes-live` still pins collector RC3 plus factschema RC6 and its `StillBlocked` pin records the pre-fix expectation; wirecontract pair parity pinned, NOT qualified (module-pair scope): `github.com/eshu-hq/eshu-sdk/wirecontract` at this source pins byte-identical JSON to core `sdk/go/apicontract` via committed `wirecontract/testdata/golden/*.json` and green `TestGoldenEnvelopeBytes`, `TestGoldenErrorEnvelope`, `TestGoldenToolDefinition`, `TestClientEntriesMatchGolden`, `TestValidateVectors` — unverified against a core consumer gate; consumer qualification and Tier-2 CLI repoint (Box 3) follow the published tag |
 | Deployed accepted pair | Matching deployment, reducer, graph, API/MCP, retry, operator, and rollback evidence | RC10 deployment NOT_CHECKED; wirecontract deployment NOT_CHECKED |
 
 Use exact versions in consumer `go.mod` files; do not use `@latest`, a workspace,

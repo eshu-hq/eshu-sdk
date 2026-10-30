@@ -21,8 +21,9 @@ definition), and `go/internal/envregistry` (client entries, validator).
   the in-module parity tests compare them against these shapes
 
 The module version moves only when a ported shape or entry moves. A core
-change to any source shape must update the goldens and this module in the
-same change; both directions fail closed without it.
+change to any source shape must update the goldens and this module in a
+linked follow-up in eshu-hq/eshu; only the SDK side fails closed in this
+repo, and core drift coverage cannot land in the same change (cross-repo).
 
 There is no root Go module. Each module is tested and versioned
 independently.

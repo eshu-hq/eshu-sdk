@@ -6,7 +6,7 @@ GO ?= go
 # epic #27. Keep the Makefile defaults in sync with the workflow inputs.
 COVERAGE_FLOOR_COLLECTOR ?= 85.0
 COVERAGE_FLOOR_FACTSCHEMA ?= 48.3
-COVERAGE_FLOOR_WIRECONTRACT ?= 84.7
+COVERAGE_FLOOR_WIRECONTRACT ?= 85.6
 
 .PHONY: build test vet lint tidy-check generate-check file-cap race coverage govulncheck shellcheck shape actionlint gosec ci pre-push
 

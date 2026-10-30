@@ -107,6 +107,14 @@ func New(entries []Entry) (*Registry, error) {
 		if _, dup := r.byName[e.Name]; dup {
 			return nil, fmt.Errorf("wirecontract: duplicate name %q", e.Name)
 		}
+		// A canonical name must not shadow an earlier entry's alias either:
+		// otherwise Lookup resolves the name to this entry and leaves that
+		// alias silently dead. Deliberate hardening beyond core
+		// sdk/go/apicontract, which checks byName only; the shipped table is
+		// unaffected (no alias-canonical collision in it).
+		if existing, dup := r.byAlias[e.Name]; dup {
+			return nil, fmt.Errorf("wirecontract: name %q shadows alias of %q", e.Name, existing.Name)
+		}
 		r.byName[e.Name] = e
 		if prefix := subsystemPrefix(e.Name); prefix != "" {
 			r.prefixes[prefix] = struct{}{}

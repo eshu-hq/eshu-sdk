@@ -55,6 +55,11 @@ func NormalizeQueryProfile(raw string) QueryProfile {
 }
 
 // ParseQueryProfile validates raw against the supported query profiles.
+// It accepts all four profiles, trimming surrounding spaces. The
+// client-scoped env registry admits only three values for
+// ESHU_QUERY_PROFILE (production, local_authoritative, local_lightweight):
+// local_full_stack is server-selected, never client-set. Both halves are
+// faithful to core; see the vocabulary test pinning the split.
 func ParseQueryProfile(raw string) (QueryProfile, error) {
 	switch QueryProfile(strings.TrimSpace(raw)) {
 	case "":
