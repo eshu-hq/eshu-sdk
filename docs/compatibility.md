@@ -70,13 +70,14 @@ causes, the MCP tool-definition shape, and the client-scoped environment
 registry with its pure validator. It ports core `sdk/go/apicontract`
 (Refs eshu-hq/eshu#9509, port source `c606960c97`) with no `go/internal`
 imports and stdlib only. The two-sided oracle runs in this repo's gates as
-`scripts/ci/test-wirecontract-core-pin.sh` (also via `make shape`): it
-rebuilds the marshal goldens from the core live types at pin
-`c606960c97` and from the ported live types, requiring
-golden == core == port on all four. Core's own suite regenerates its
-goldens from live types (green at `fb4b777757ab`), and the guard carries
-a seeded-violation RED/GREEN pair (a mistranscribed tag fails the port
-side only). The in-module tests then pin SDK output to those bytes. Run
+`scripts/ci/test-wirecontract-core-pin.sh` (also via `make shape`): Guard A
+requires golden == core == port remarshal on all seven goldens (a
+mistranscribed tag fails the port side only); Guard B compares
+fully-populated shape key sets core-vs-port on the four wire types, which
+catches an additive omitempty field that remarshal-equality cannot see.
+Both guards carry seeded-violation RED/GREEN pairs. Core's own suite
+regenerates its goldens from live types (green at `fb4b777757ab`). The
+in-module tests then pin SDK output to those bytes. Run
 `cd wirecontract && GOWORK=off go test ./... -count=1` to reproduce the
 SDK side.
 

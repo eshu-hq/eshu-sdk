@@ -12,10 +12,12 @@
 // from go/internal/envregistry. Every JSON field name, tag, and enum value is
 // pinned byte-for-byte to the core types at pin c606960c97 by the committed
 // goldens in testdata/golden: scripts/ci/test-wirecontract-core-pin.sh
-// rebuilds those bytes from the pinned core live types and from these
-// shapes, so the SDK side drifts only by failing that gate (see README.md
-// and AGENTS.md; core-side regeneration is core's own suite, and core drift
-// arrives here as a linked follow-up, never in the same change).
+// checks golden == core == port remarshal on all seven (Guard A) and
+// fully-populated shape key sets core-vs-port on the four wire types
+// (Guard B, which catches additive omitempty drift that remarshal-equality
+// cannot see), so the SDK side drifts only by failing that gate (see
+// README.md and AGENTS.md; core-side regeneration is core's own suite, and
+// core drift arrives here as a linked follow-up, never in the same change).
 //
 // What it deliberately does not publish, and why:
 //
