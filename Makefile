@@ -72,6 +72,7 @@ shape:
 	bash scripts/ci/test-coverage-floor.sh
 	bash scripts/ci/test-floors-sync.sh
 	bash scripts/ci/test-wrapper-inputs.sh
+	bash scripts/ci/test-wirecontract-core-pin.sh
 
 actionlint:
 	actionlint -no-color .github/workflows/*.yml

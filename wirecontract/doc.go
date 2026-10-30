@@ -32,8 +32,9 @@
 //     a client contract.
 //
 // Sync rule: a core change to any ported shape or entry must update the
-// goldens and this package in the same change; the drift tests fail closed
-// until it does. Registry gaps the client reads but the core registry does
+// goldens and this package in a linked follow-up in eshu-hq/eshu; only the
+// SDK side fails closed in this repo (see README.md and AGENTS.md).
+// Registry gaps the client reads but the core registry does
 // not cover yet (ESHU_SERVICE_URL, ESHU_REMOTE_TIMEOUT_SECONDS) stay out of
 // ClientEntries until the registry owns them; see README.md.
 package wirecontract

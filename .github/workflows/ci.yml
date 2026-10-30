@@ -93,6 +93,8 @@ jobs:
           bash scripts/ci/test-coverage-floor.sh
           bash scripts/ci/test-floors-sync.sh
           bash scripts/ci/test-wrapper-inputs.sh
+      - name: Wirecontract core-pin drift guard
+        run: bash scripts/ci/test-wirecontract-core-pin.sh
 
   ci-complete:
     if: always()
