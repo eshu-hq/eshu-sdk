@@ -25,6 +25,14 @@ shapes the target reducer release consumes.
   source-snapshot/CVE fact kinds, stable keys and payloads expected from their complete collection.
   The Eshu core and extracted NVD providers can pin this one versioned fixture
   for input-to-payload proof.
+- `payloads/osv_severity_golden.json` — ten synthetic OSV records and the
+  `cvss_vector` and `severity_label` a conforming OSV collector writes for each
+  (eshu-hq/eshu#9692). `cvss_vector` is the first well-formed `severity[]`
+  entry of the highest CVSS version, CVSS_V4 then CVSS_V3; CVSS_V2 and unknown
+  types never fill it. `severity_label` is `database_specific.severity`
+  lower-cased, with `MODERATE` as `medium`; an unrecognized or non-string value
+  leaves it empty. The collector writes no `cvss_score`. Core and the extracted
+  collector each replay these records against their own envelope code.
 
 The NVD golden records the **full provider fact payload maps**, including
 producer metadata outside the narrower typed factschema CVE and source-snapshot
@@ -47,6 +55,7 @@ invalid, ok := fixturepack.InvalidPayload("aws_resource")
 all := fixturepack.Schemas()  // map[string]json.RawMessage, keyed by fact kind
 kinds := fixturepack.Kinds()  // sorted fact-kind list
 golden := fixturepack.NVDPagingGolden() // copied JSON bytes for the NVD paging fixture
+osv := fixturepack.OSVSeverityGolden()  // copied JSON bytes for the OSV severity fixture
 ```
 
 ## How a collector uses it
