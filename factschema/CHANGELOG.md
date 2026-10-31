@@ -26,6 +26,22 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
+## [0.1.0-rc.11] - Prepared (unpublished)
+
+This candidate source is not tagged. Publishing it needs a separate release
+ruling against the merged commit, and no proxy verification is claimed for it.
+
+### Added
+
+- Fixture-pack payload `payloads/osv_severity_golden.json` and the accessor
+  `fixturepack.OSVSeverityGolden()`: twelve synthetic OSV records and the
+  `cvss_vector` and `severity_label` a conforming OSV collector writes on
+  `vulnerability.cve` for each. Core and the extracted collector replay the same
+  file, so they read one OSV severity rule instead of two copies. The validator
+  derives every expected field from its record. This is additive: no schema
+  file, stable key, or wire format changes, and `vulnerability.cve` v1 already
+  declares both fields. Ported from core eshu-hq/eshu#9692.
+
 ## [0.1.0-rc.10] - 2026-10-28
 
 This tag is published and proxy-verified; it does not qualify a core consumer
