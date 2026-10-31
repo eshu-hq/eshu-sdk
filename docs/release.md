@@ -42,6 +42,15 @@ factschema RC7, and core PR eshu-hq/eshu#9435 carries the RC10 pin. No core
 pair has run its contract and runtime gates against RC4/RC10. Candidate
 publication alone is not consumer or production acceptance.
 
+Prepared next candidate: `factschema/v0.1.0-rc.11` (unpublished). It adds the
+fixture-pack payload `osv_severity_golden.json` and `OSVSeverityGolden()` from
+core eshu-hq/eshu#9692, with no schema, stable-key, or wire change. Merge the
+reviewed source, then obtain a separate release ruling against the concrete
+merged commit before creating the tag, and name rc.11 in the module's
+`CHANGELOG.md` before that commit is tagged. Verify it through a fresh external
+`GOWORK=off` public-proxy consumer, including the golden's SHA-256, before the
+extracted collector or Eshu pins it.
+
 ## Historical RC3 preparation
 
 The checklist below records the earlier RC3 preparation and cutover plan. Its

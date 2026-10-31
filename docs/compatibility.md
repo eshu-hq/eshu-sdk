@@ -10,7 +10,7 @@ is new in this change and has no published tag yet.
 | Existing supported module | New module identity | Latest checked Git tag | Prepared next candidate |
 | --- | --- | --- | --- |
 | `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.1.0-rc.4` | none in this change |
-| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.10` | none in this change |
+| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.10` | `factschema/v0.1.0-rc.11` (unpublished) |
 | `github.com/eshu-hq/eshu/sdk/go/apicontract@v0.1.0` (release-prepared in core, tag NOT cut) | `github.com/eshu-hq/eshu-sdk/wirecontract` | none (new module) | `wirecontract/v0.1.0-rc.1` |
 
 The old and new import paths name different Go types. The new `v0.1.0`
@@ -58,6 +58,10 @@ change with no payload schema or fixture change. RC10 adds the optional NVD
 `coverage_descriptor`, `collector_instance_id`, and `result_count` fields to
 `vulnerability.source_snapshot` (core eshu-hq/eshu#9227), an additive minor
 schema change with no stable-key change.
+Prepared next candidate: `factschema/v0.1.0-rc.11` (unpublished). It adds the
+fixture-pack payload `osv_severity_golden.json` and `OSVSeverityGolden()`
+(core eshu-hq/eshu#9692), additive, with no schema or wire change. It is not
+tagged and has no proxy proof; its tag needs a separate release ruling.
 Collector RC4 allowlists the redaction-safe
 `env_from_secret` boolean on `kubernetes_live.pod_template` payloads
 ([SDK PR #28](https://github.com/eshu-hq/eshu-sdk/pull/28), issue #26). Core
