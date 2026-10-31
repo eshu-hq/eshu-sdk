@@ -1,5 +1,86 @@
 # Release and cutover checklist
 
+## Releasing a module tag
+
+CI creates and proves SDK tags; nobody pushes one by hand. A person with write
+access opens Actions, chooses the `release` workflow, and runs it on `main`
+(`.github/workflows/release.yml`) with:
+
+| Input | Value |
+| --- | --- |
+| `module` | `collector`, `factschema`, or `wirecontract` |
+| `version` | the tag version, such as `v0.1.0-rc.11`; the tag is `<module>/<version>` |
+| `commit` | the full 40-hex SHA of a commit already on `main` |
+| `expect_file`, `expect_sha256` | optional pair: a file inside the module (repo-relative, starting with `<module>/`) and the SHA-256 it must have |
+
+The workflow does not decide that a release is ready. The release ruling, the
+`CHANGELOG.md` entry, and green CI on the commit are its inputs; consumer
+qualification and deployed acceptance stay separate acts.
+
+1. **verify** (read-only token). The commit is an ancestor of `origin/main`.
+   The `ci-complete` check run owned by `github-actions` (the required check on
+   `main`) concluded success on that exact SHA; the newest run decides. The
+   module's `CHANGELOG.md` at that commit has a `## [<version without v>]`
+   heading. The version is major 0 or 1 and `go.mod` declares exactly
+   `github.com/eshu-hq/eshu-sdk/<module>`; major 2 or later is refused until the
+   proof job supports a `/vN` module path, because Go serves the unsuffixed path
+   at v0 and v1 only. Leading zeros are rejected. Neither a local nor a remote tag
+   `<module>/<version>` exists. The module builds with `GOWORK=off`. If `expect_file` is given, it exists at the
+   commit, is not inside a nested module, and has the expected SHA-256, so a wrong
+   value stops the run here, before a tag exists. Each check prints as it passes.
+2. **tag** (the only job with `contents: write`, in the `release`
+   environment). It creates the lightweight tag at the verified SHA through the
+   git refs API, which rejects an existing ref, then reads the ref back and
+   requires the same SHA as a commit object, like the rc.8 to rc.10 tags. A ref
+   that already points at the verified commit is accepted unchanged, so a rerun
+   of this job after a failed read-back is safe; a ref anywhere else is refused.
+3. **prove** (read-only token). A fresh consumer module with an empty module
+   cache resolves the tag through `proxy.golang.org` with `GOWORK=off`, no
+   `replace`, no go env file, and the public checksum database, retrying while
+   the proxy catches up. The log records the tag's object SHA, the proxy's zip
+   and `go.mod` checksums, the origin commit the proxy reports (the job fails
+   unless it equals the verified commit), the consumer's `go.sum` lines, the
+   optional file hash, and a successful `go vet`, build, and run of a program
+   that imports the module. The log is uploaded as the artifact
+   `release-proof-<module>-<version>` (90 days) and copied to the run summary.
+
+A tag is immutable once published: never move or delete one, and fix forward
+with the next version. If verify fails, no tag exists and the run can be started
+again once the cause is fixed. If tag or prove fails after the tag exists (for
+example the proxy is slow), re-run only the failed jobs from the run page;
+starting a new run fails at verify because the tag exists. Two limits to know:
+GitHub keeps one pending run per concurrency group, so a third dispatch for the
+same module while one runs can silently drop the second; and a green
+`ci-complete` does not by itself show every module lane ran on that SHA (a
+skipped lane counts as success), so the build in verify is the per-SHA check.
+The logic lives in `scripts/ci/release-*.sh`; `make shape` runs their self-tests
+and the workflow-shape checks (`test-release-verify.sh`,
+`test-release-tag-prove.sh`).
+
+### What this does and does not protect
+
+The jobs refuse to run from any ref but `main`. That stops an accidental
+dispatch of an unedited copy from a branch; it is not a security boundary,
+because a branch can edit the workflow file and drop the guard. The `release`
+environment does not change that: its rules gate only jobs that reference it, so
+an edited branch copy can drop `environment:` and keep `contents: write`. What
+the environment gives is an approval step (required reviewers) and a
+deployment-branch limit for runs of this workflow as merged on `main`.
+
+Today no tag ruleset exists and no `release` environment is configured, so
+anyone with write access can already push a tag directly: this workflow adds an
+audited path that verifies and proves each tag, not a new barrier. Only a tag
+ruleset restricting who can create `*/v*` tags, or narrower write access, limits
+who can create tags. Recommended:
+
+- Create the `release` environment **before the first run** (Settings,
+  Environments), limit its deployment branches to `main`, and optionally add
+  required reviewers so the tag job waits for approval. A run that names an
+  environment that does not exist creates it without protection.
+- Add a tag ruleset restricting creation of `*/v*` tags if hand-pushed tags
+  should be blocked; whether the Actions token needs to be a bypass actor for it
+  has not been checked.
+
 ## Current wirecontract RC1 preparation (Refs eshu-hq/eshu#9509)
 
 The `wirecontract` module is source-prepared in this change with no tag cut.
@@ -46,10 +127,12 @@ Prepared next candidate: `factschema/v0.1.0-rc.11` (unpublished). It adds the
 fixture-pack payload `osv_severity_golden.json` and `OSVSeverityGolden()` from
 core eshu-hq/eshu#9692, with no schema, stable-key, or wire change. Merge the
 reviewed source, then obtain a separate release ruling against the concrete
-merged commit before creating the tag, and name rc.11 in the module's
-`CHANGELOG.md` before that commit is tagged. Verify it through a fresh external
-`GOWORK=off` public-proxy consumer, including the golden's SHA-256, before the
-extracted collector or Eshu pins it.
+merged commit, and name rc.11 in the module's `CHANGELOG.md` before that commit
+is tagged. Then run the release workflow (see Releasing a module tag) with
+`module=factschema`, `version=v0.1.0-rc.11`, that commit, and the golden's path
+and SHA-256 as `expect_file` and `expect_sha256`; its proof job is the fresh
+external `GOWORK=off` public-proxy check the extracted collector and Eshu wait
+for before they pin it.
 
 ## Historical RC3 preparation
 
@@ -97,13 +180,16 @@ qualification and deployed acceptance remain separate. See the [compatibility po
    a source SHA in these docs, because a docs edit changes the commit.
 4. After separate approval, tag the reviewed and merged release commit with
    `collector/v0.1.0-rc.3` and `factschema/v0.1.0-rc.3` as independently
-   versioned modules. Confirm the intended commit immediately before each tag;
-   do not substitute this preparation branch's SHA. Preserve all published
-   tags, including both first RC1s, collector `v0.1.0-rc.2` and
-   `v0.2.0-rc.1`, and factschema `v0.1.0-rc.2`. Never retarget a published tag.
+   versioned modules, by running the release workflow once per module (see
+   Releasing a module tag); it takes the commit as an input and checks it is on
+   `main` with green CI. Do not substitute this preparation branch's SHA.
+   Preserve all published tags, including both first RC1s, collector
+   `v0.1.0-rc.2` and `v0.2.0-rc.1`, and factschema `v0.1.0-rc.2`. Never
+   retarget a published tag.
 5. From a fresh external consumer, resolve each exact candidate version with
    `GOWORK=off`, no `replace`, and no `@latest`. Record proxy checksums, the
-   tag origin SHA, and a successful build. Candidate availability alone does
+   tag origin SHA, and a successful build; the workflow's prove job records
+   these in its log. Candidate availability alone does
    not establish a qualified consumer or production compatibility.
 6. Migrate consumers to exact published versions and run their contract and
    runtime gates. The caller must derive fresh, authoritative grant coverage,

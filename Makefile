@@ -73,6 +73,8 @@ shape:
 	bash scripts/ci/test-floors-sync.sh
 	bash scripts/ci/test-wrapper-inputs.sh
 	bash scripts/ci/test-wirecontract-core-pin.sh
+	bash scripts/ci/test-release-verify.sh
+	bash scripts/ci/test-release-tag-prove.sh
 
 actionlint:
 	actionlint -no-color .github/workflows/*.yml
