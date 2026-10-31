@@ -2,7 +2,7 @@
 
 The repository contains three independent Go module identities. The exact Git
 refs available in this checkout include collector `v0.1.0-rc.4` and factschema
-`v0.1.0-rc.10`; earlier candidate tags remain immutable. Neither tag qualifies
+`v0.1.0-rc.11`; earlier candidate tags remain immutable. Neither tag qualifies
 an Eshu consumer on its own: recheck tag origin and fresh public-proxy
 resolution before claiming candidate availability. The `wirecontract` module
 is new in this change and has no published tag yet.
@@ -10,7 +10,7 @@ is new in this change and has no published tag yet.
 | Existing supported module | New module identity | Latest checked Git tag | Prepared next candidate |
 | --- | --- | --- | --- |
 | `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.1.0-rc.4` | none in this change |
-| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.10` | `factschema/v0.1.0-rc.11` (unpublished) |
+| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.11` | `factschema/v0.1.0-rc.12` (unpublished) |
 | `github.com/eshu-hq/eshu/sdk/go/apicontract@v0.1.0` (release-prepared in core, tag NOT cut) | `github.com/eshu-hq/eshu-sdk/wirecontract` | none (new module) | `wirecontract/v0.1.0-rc.1` |
 
 The old and new import paths name different Go types. The new `v0.1.0`
@@ -48,7 +48,7 @@ repairs number-preserving typed decoding from
 integral decimal/exponent values and nested integer lists. Schemas, fixtures
 and wire protocols are unchanged by these two earlier changes.
 
-The collector RC3 and RC4 and factschema RC4 through RC10 source changes have
+The collector RC3 and RC4 and factschema RC4 through RC11 source changes have
 separate immutable Git tags. RC6 adds the optional EPSS `model_version` field;
 FIRST API rows do not supply it. RC7 adds the synthetic NVD paging golden
 without changing a wire schema. RC8 publishes the `terraformstate` drift
@@ -58,9 +58,13 @@ change with no payload schema or fixture change. RC10 adds the optional NVD
 `coverage_descriptor`, `collector_instance_id`, and `result_count` fields to
 `vulnerability.source_snapshot` (core eshu-hq/eshu#9227), an additive minor
 schema change with no stable-key change.
-Prepared next candidate: `factschema/v0.1.0-rc.11` (unpublished). It adds the
-fixture-pack payload `osv_severity_golden.json` and `OSVSeverityGolden()`
-(core eshu-hq/eshu#9692), additive, with no schema or wire change. It is not
+RC11 (tag `factschema/v0.1.0-rc.11`, at commit `d966966`, created by the release workflow on 2026-10-31) adds the fixture-pack
+payload `osv_severity_golden.json` and `OSVSeverityGolden()` (core
+eshu-hq/eshu#9692), additive, with no schema or wire change.
+Prepared next candidate: `factschema/v0.1.0-rc.12` (unpublished). It adds two
+additive optional-field changes: `status` and `replaced_by` on
+`vulnerability.cve` (core eshu-hq/eshu#9695) and the NVD operator and negate
+flags on `vulnerability.affected_product` (core eshu-hq/eshu#9696). It is not
 tagged and has no proxy proof; its tag needs a separate release ruling.
 Collector RC4 allowlists the redaction-safe
 `env_from_secret` boolean on `kubernetes_live.pod_template` payloads

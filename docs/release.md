@@ -102,7 +102,7 @@ or deployed acceptance is claimed here.
 ## Current RC4/RC10 state
 
 Git tags in this checkout reach `collector/v0.1.0-rc.4` and
-`factschema/v0.1.0-rc.10`. RC10 adds the optional NVD `coverage_descriptor`,
+`factschema/v0.1.0-rc.11`. RC10 adds the optional NVD `coverage_descriptor`,
 `collector_instance_id`, and `result_count` fields to
 `vulnerability.source_snapshot` (core eshu-hq/eshu#9227, PR #60) with no
 stable-key change; RC9 unexports the `terraformstate` drift allowlist table
@@ -123,22 +123,31 @@ factschema RC7, and core PR eshu-hq/eshu#9435 carries the RC10 pin. No core
 pair has run its contract and runtime gates against RC4/RC10. Candidate
 publication alone is not consumer or production acceptance.
 
-Prepared next candidate: `factschema/v0.1.0-rc.11` (unpublished). It adds the
+`factschema/v0.1.0-rc.11` is published at commit `d966966`, created by the
+release workflow on 2026-10-31 ([run 41231620015](https://github.com/eshu-hq/eshu-sdk/actions/runs/41231620015)) (it adds the
 fixture-pack payload `osv_severity_golden.json` and `OSVSeverityGolden()` from
-core eshu-hq/eshu#9692, with no schema, stable-key, or wire change. Merge the
-reviewed source, then obtain a separate release ruling against the concrete
-merged commit, and name rc.11 in the module's `CHANGELOG.md` before that commit
-is tagged. Then run the release workflow (see Releasing a module tag) with
-`module=factschema`, `version=v0.1.0-rc.11`, that commit, and the golden's path
-and SHA-256 as `expect_file` and `expect_sha256`; its proof job is the fresh
-external `GOWORK=off` public-proxy check the extracted collector and Eshu wait
-for before they pin it.
+core eshu-hq/eshu#9692, with no schema, stable-key, or wire change).
+
+Prepared next candidate: `factschema/v0.1.0-rc.12` (unpublished). It carries
+the optional `status` and `replaced_by` fields on `vulnerability.cve` (core
+eshu-hq/eshu#9695) and the four optional NVD operator and negate fields on
+`vulnerability.affected_product` (core eshu-hq/eshu#9696), both additive with no
+stable-key or wire change. Merge the reviewed source, then obtain a separate
+release ruling against the concrete merged commit, and name rc.12 in the
+module's `CHANGELOG.md` before that commit is tagged (the section is already
+there). Then run the release workflow (see Releasing a module tag) with
+`module=factschema`, `version=v0.1.0-rc.12`, that commit, and
+`factschema/schema/vulnerability.cve.v1.schema.json` with SHA-256
+`71fd533a311e6d029853c35b08e03f9007b3e5623c238e23f95e90523c7f2c03` as `expect_file` and `expect_sha256`; its proof job is the
+fresh external `GOWORK=off` public-proxy check Eshu waits for before it pins it.
+Core can only build the follow-up change sets for eshu-hq/eshu#9695 and
+eshu-hq/eshu#9696 after that tag is on the proxy.
 
 ## Historical RC3 preparation
 
 The checklist below records the earlier RC3 preparation and cutover plan. Its
 candidate-status statements predate the published RC3 through RC6 Git tags;
-use the current section above for RC10 actions and recheck exact tag and proxy
+use the current section above for current release actions and recheck exact tag and proxy
 state before any release act.
 
 Both first `v0.1.0-rc.1` module candidates are available through immutable

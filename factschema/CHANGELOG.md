@@ -26,6 +26,18 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
+## [0.1.0-rc.12] - Prepared (unpublished)
+
+This candidate source is not tagged. Publishing it needs a separate release
+ruling against the merged commit, and no proxy verification is claimed for it.
+It carries two additive changes, both optional fields on existing kinds, so the
+module bump is a minor step within the 0.1 line (the release candidate counter
+moves from rc.11 to rc.12). No required field, existing field, stable key, or
+wire format changes in either; the two generated schemas only gain optional
+properties. Schema file digests (SHA-256) at this source:
+`schema/vulnerability.cve.v1.schema.json` `71fd533a311e6d029853c35b08e03f9007b3e5623c238e23f95e90523c7f2c03`,
+`schema/vulnerability.affected_product.v1.schema.json` `76956466c7de1cb783dd49927efde78066a6e0a3c36f9a363e548da7bc8e4450`.
+
 ### Added
 
 - `vulnerability.cve` gains two optional fields, `status` and `replaced_by`
@@ -41,8 +53,8 @@ version — pinning this module pins the fixture pack too.
   without either key decodes as before. A value of the wrong JSON type (a
   number for `status`, a string for `replaced_by`) now fails the decode and
   quarantines the fact as `input_invalid`, where the extra key used to be
-  ignored; the collectors always emit a string and a string array. May share
-  one minor tag with issue #9696.
+  ignored; the collectors always emit a string and a string array. Ships in the
+  same tag as the `vulnerability.affected_product` flags below.
 
 - `vulnerability.affected_product` gains four optional fields the NVD
   collector already emitted: `source_configuration_operator`,
@@ -53,12 +65,17 @@ version — pinning this module pins the fixture pack too.
   groups from the operators. A flag of the wrong JSON type (for example the
   string `"true"`) now fails the decode and quarantines the fact as
   `input_invalid`, where the extra key used to be ignored; the NVD collector
-  always emits a bool and a string. May share one minor tag with issue #9695.
+  always emits a bool and a string. Ships in the same tag as the
+  `vulnerability.cve` status fields above.
 
-## [0.1.0-rc.11] - Prepared (unpublished)
+## [0.1.0-rc.11] - 2026-10-31
 
-This candidate source is not tagged. Publishing it needs a separate release
-ruling against the merged commit, and no proxy verification is claimed for it.
+This tag is published; it does not qualify a core consumer or deployed pair. The
+`release` workflow ([run 41231620015](https://github.com/eshu-hq/eshu-sdk/actions/runs/41231620015)) verified commit
+`d966966bbbda6b2253ab56c857050cbf64f58b8b`, created the tag
+`factschema/v0.1.0-rc.11` at it on 2026-10-31, and ran its public-proxy proof;
+the run concluded success. The public proxy lists the version and reports that
+commit as its origin.
 
 ### Added
 
