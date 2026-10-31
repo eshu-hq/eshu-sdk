@@ -44,6 +44,17 @@ version — pinning this module pins the fixture pack too.
   ignored; the collectors always emit a string and a string array. May share
   one minor tag with issue #9696.
 
+- `vulnerability.affected_product` gains four optional fields the NVD
+  collector already emitted: `source_configuration_operator`,
+  `source_configuration_negate`, `source_node_operator`, and
+  `source_node_negate` (issue #9696, additive minor). A nil negate flag means
+  an older fact that did not carry it. Facts carry no node id, so a reducer can
+  use the negate flags only to refuse an affected result; it cannot rebuild AND
+  groups from the operators. A flag of the wrong JSON type (for example the
+  string `"true"`) now fails the decode and quarantines the fact as
+  `input_invalid`, where the extra key used to be ignored; the NVD collector
+  always emits a bool and a string. May share one minor tag with issue #9695.
+
 ## [0.1.0-rc.11] - Prepared (unpublished)
 
 This candidate source is not tagged. Publishing it needs a separate release
