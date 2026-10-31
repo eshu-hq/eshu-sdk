@@ -95,6 +95,10 @@ jobs:
           bash scripts/ci/test-wrapper-inputs.sh
       - name: Wirecontract core-pin drift guard
         run: bash scripts/ci/test-wirecontract-core-pin.sh
+      - name: Release workflow guards (verifier, tagger, proof, workflow shape)
+        run: |
+          bash scripts/ci/test-release-verify.sh
+          bash scripts/ci/test-release-tag-prove.sh
 
   ci-complete:
     if: always()

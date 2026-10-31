@@ -1,0 +1,200 @@
+# SDK module release: CI creates the tag and proves it (replaces hand-pushed tags).
+#
+# Run by hand from the Actions tab ("Run workflow" on main) with:
+#   module         collector | factschema | wirecontract
+#   version        the tag version, e.g. v0.1.0-rc.11
+#   commit         the full 40-hex SHA to tag; it must already be on main
+#   expect_file    optional: a file inside the module, repo-relative
+#   expect_sha256  optional: the SHA-256 the proved copy of that file must have
+#
+# Three jobs, each with only the token permissions it needs:
+#   verify  read-only. Checks the commit is on main, ci-complete (the
+#           github-actions check) concluded success on that exact SHA, the
+#           module's CHANGELOG.md names the version, the version is v0 or v1
+#           (major >= 2 is refused until prove supports a /vN path), the tag
+#           does not exist,
+#           the optional file exists at the commit with the expected SHA-256,
+#           and the module builds with GOWORK=off. Any failure stops the run
+#           before a tag exists.
+#   tag     the only job with contents: write. It runs in the `release`
+#           environment, which gives an owner an approval step (required
+#           reviewers; Settings > Environments > release; optional) for runs of
+#           this workflow as merged on main. It creates the
+#           lightweight tag <module>/<version> at the verified SHA through the
+#           git refs API, which refuses an existing ref: a tag is never moved.
+#   prove   a fresh consumer on an empty module cache resolves the tag through
+#           proxy.golang.org with GOWORK=off and no replace, checks the proxy's
+#           origin commit and the optional file hash, builds and runs a tiny
+#           program, and uploads the log. The log is the proof record.
+#
+# The scripts under scripts/ci/release-*.sh hold the logic and are self-tested
+# in the shape job (test-release-verify.sh, test-release-tag-prove.sh). They
+# run from this workflow's own commit (the `tools` checkout), not from the
+# release commit, so a release of an older commit still gets the current checks.
+# The jobs refuse to run from any ref but main. That stops an accidental
+# dispatch of an unedited copy from a branch; it is not a security boundary,
+# because a branch can edit this file and drop the guard. The `release`
+# environment is the same: its rules gate only jobs that reference it, so a
+# branch copy can drop `environment:` and keep contents: write. It adds an
+# approval step to runs of this workflow as merged; it does not stop someone with
+# write access from editing a copy. Only a tag ruleset (restricting who can
+# create tags) or narrower write access limits that; see docs/release.md.
+#
+# GITHUB_TOKEN tags do not start other workflows; nothing here depends on that.
+# The existing ci-complete required check on main is unchanged by this file.
+#
+# Action pins match ci.yml (checkout, setup-go); upload-artifact is v7.0.2.
+
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      module:
+        description: Module to tag
+        required: true
+        type: choice
+        options:
+          - collector
+          - factschema
+          - wirecontract
+      version:
+        description: Tag version, e.g. v0.1.0-rc.11 (the tag becomes <module>/<version>)
+        required: true
+        type: string
+      commit:
+        description: Full 40-hex SHA of a commit already on main
+        required: true
+        type: string
+      expect_file:
+        description: Optional file in the module to hash after release, e.g. factschema/fixturepack/payloads/osv_severity_golden.json
+        required: false
+        type: string
+      expect_sha256:
+        description: SHA-256 that file must have (required with expect_file)
+        required: false
+        type: string
+
+concurrency:
+  group: release-${{ inputs.module }}
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      checks: read
+    steps:
+      # The scripts come from this workflow's own commit on main.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: tools
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      # The module tree comes from the commit being released, with all
+      # branches and tags so ancestry and tag checks see the real state.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: release
+          ref: ${{ inputs.commit }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: 'release/${{ inputs.module }}/go.mod'
+      - name: Verify the release commit
+        shell: bash
+        working-directory: release
+        env:
+          MODULE: ${{ inputs.module }}
+          VERSION: ${{ inputs.version }}
+          COMMIT: ${{ inputs.commit }}
+          EXPECT_FILE: ${{ inputs.expect_file }}
+          EXPECT_SHA256: ${{ inputs.expect_sha256 }}
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: bash ../tools/scripts/ci/release-verify.sh "$MODULE" "$VERSION" "$COMMIT"
+
+  tag:
+    needs: verify
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # An owner may add required reviewers to this environment so the tag waits
+    # for approval. Without reviewers it runs as soon as verify passes.
+    environment: release
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: tools
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Create the tag at the verified commit
+        shell: bash
+        env:
+          MODULE: ${{ inputs.module }}
+          VERSION: ${{ inputs.version }}
+          COMMIT: ${{ inputs.commit }}
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: bash tools/scripts/ci/release-tag.sh "$MODULE" "$VERSION" "$COMMIT"
+
+  prove:
+    needs: tag
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: tools
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: 'tools/collector/go.mod'
+      - name: Prove the tag through the public proxy
+        shell: bash
+        env:
+          MODULE: ${{ inputs.module }}
+          VERSION: ${{ inputs.version }}
+          COMMIT: ${{ inputs.commit }}
+          EXPECT_FILE: ${{ inputs.expect_file }}
+          EXPECT_SHA256: ${{ inputs.expect_sha256 }}
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          {
+            printf 'tag origin: %s/%s -> ' "$MODULE" "$VERSION"
+            gh api "repos/${REPO}/git/ref/tags/${MODULE}/${VERSION}" --jq '.object.sha + " (" + .object.type + ")"'
+            bash tools/scripts/ci/release-prove.sh "$MODULE" "$VERSION" "$COMMIT"
+          } 2>&1 | tee release-proof.log
+      - name: Summarize the proof
+        if: always()
+        shell: bash
+        env:
+          MODULE: ${{ inputs.module }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          {
+            printf '### Release proof: %s/%s\n\n' "$MODULE" "$VERSION"
+            printf '```\n'
+            cat release-proof.log 2>/dev/null || echo 'no proof log was written'
+            printf '```\n'
+          } >>"$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: release-proof-${{ inputs.module }}-${{ inputs.version }}
+          path: release-proof.log
+          if-no-files-found: warn
+          retention-days: 90
