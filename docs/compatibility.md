@@ -1,7 +1,7 @@
 # SDK module compatibility and candidate status
 
 The repository contains three independent Go module identities. The exact Git
-refs available in this checkout include collector `v0.2.0-rc.2` and
+refs available in this checkout include collector `v0.2.0-rc.3`, `v0.2.0-rc.2` and
 `v0.1.0-rc.5` and factschema `v0.1.0-rc.11`; earlier candidate tags remain immutable. None of these tags qualifies
 an Eshu consumer on its own: recheck tag origin and fresh public-proxy
 resolution before claiming candidate availability. The `wirecontract` module
@@ -9,7 +9,7 @@ is new in this change and has no published tag yet.
 
 | Existing supported module | New module identity | Latest checked Git tag | Prepared next candidate |
 | --- | --- | --- | --- |
-| `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.2.0-rc.2` (off `main`, at `a663423`); `collector/v0.1.0-rc.5` on the `v0.1.0` line | `collector/v0.2.0-rc.3` (unpublished; adds `collector-sdk/v1alpha3`) |
+| `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.2.0-rc.3` (at `1d52cade`, adds `collector-sdk/v1alpha3`; release run 41327854308); `collector/v0.2.0-rc.2` (off `main`, at `a663423`); `collector/v0.1.0-rc.5` on the `v0.1.0` line | none |
 | `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.11` | `factschema/v0.1.0-rc.12` (unpublished) |
 | `github.com/eshu-hq/eshu/sdk/go/apicontract@v0.1.0` (release-prepared in core, tag NOT cut) | `github.com/eshu-hq/eshu-sdk/wirecontract` | none (new module) | `wirecontract/v0.1.0-rc.1` |
 
