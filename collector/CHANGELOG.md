@@ -15,8 +15,9 @@ and this module follows the versioning rule in
 a breaking change to the `collector-sdk/v1alpha1` wire protocol or the public
 Go API is a major bump, an additive backward-compatible change is a minor
 bump, and a docs-only or internal change is a patch for stable releases.
-The preferred prerelease line remains `v0.1.0` until stable qualification;
-its latest published collector candidate is `v0.1.0-rc.4`. See
+Core Eshu pins the `v0.2.0` prerelease line (`v0.2.0-rc.2`), so new
+candidates continue there; the latest published `v0.1.0` candidate is
+`v0.1.0-rc.5`. See
 [SDK Compatibility](https://github.com/eshu-hq/eshu/blob/eb62fa3056/docs/public/extend/sdk-compatibility.md) for how
 this module version lines up with core Eshu releases and the wire protocol.
 
@@ -25,6 +26,27 @@ Tags for the new module use the Go subdirectory-module format after separate rel
 
 ## [Unreleased]
 
+## [0.2.0-rc.3] - Prepared (unpublished)
+
+This candidate source is not tagged. Publishing it needs a separate release
+ruling against the merged commit, and no proxy verification is claimed for it.
+It continues the `v0.2.0` prerelease line because core Eshu pins
+`collector/v0.2.0-rc.2`; a `v0.1.0-rc.N` tag would sort below that pin. The
+`Claim.ScopeQueries` entry first shipped in `collector/v0.2.0-rc.2`, whose tag
+points at `a663423`, a commit that was never merged to `main`; this source
+carries that change as a cherry-pick. The Fixed and Changed entries first
+shipped in `collector/v0.1.0-rc.5` and `collector/v0.2.0-rc.2`. The new item is
+the additive `collector-sdk/v1alpha3` pagination contract, so the module bump
+is a prerelease step within the 0.2 line (rc.2 to rc.3). No required field,
+existing field, or v1alpha1/v1alpha2 wire format changes. Schema file digests
+(SHA-256) at this source:
+`schema/collector-sdk-v1alpha3.schema.json` `c8a6a10926bfc3cf99c1c0f7d6c857cfd3e1637feed364154c06ebc8059124a0`,
+`schema/collector-request-v1alpha3.schema.json` `68dc5c58beb1da8f80782301838c29a80d0f58def5928e2b18e5f4768e454490`,
+and `schema/collector-sdk-v1alpha1.schema.json`, unchanged since `v0.2.0-rc.2`,
+`c665efe4b9021fe25791822a5990c19460ac8189f8707733513d579c8d5bb2b1`. The release
+workflow's `expect_file` pair is
+`collector/schema/collector-sdk-v1alpha3.schema.json` with the first digest.
+
 ### Added
 
 - `Claim.ScopeQueries` carries the per-scope query list (`ScopeQuery`
@@ -32,9 +54,13 @@ Tags for the new module use the Go subdirectory-module format after separate rel
   entries) for scope ids that name a shard rather than its contents
   (pinned virtual-slot scopes, eshu-hq/eshu#9432). Empty on every legacy
   scope id and omitted from the wire then, so old satellites read
-  byte-identical claims. Additive Go API and JSON Schema only: the
+  byte-identical claims. The wire change is additive: the
   `collector-sdk/v1alpha1` required sets are unchanged and
-  `validateClaim` needs no change.
+  `validateClaim` needs no change. The Go change is not fully additive:
+  the slice field makes `Claim` incomparable, so `a.Claim != b.Claim`
+  no longer compiles. Compare with `reflect.DeepEqual` or field by field.
+  Several satellite test suites use `==` on `Claim` and need that edit
+  when they move to `v0.2.0-rc.2` or later.
 - `ProtocolVersionV1Alpha3` (`collector-sdk/v1alpha3`): third collector
   extension wire contract with versioned multi-call pagination
   (eshu-hq/eshu#9385), ported from the Eshu host's in-tree mirror
@@ -52,8 +78,8 @@ Tags for the new module use the Go subdirectory-module format after separate rel
   conformance manifest admit the new protocol when listed. New artifacts:
   `schema/collector-sdk-v1alpha3.schema.json` (`JSONSchemaV1Alpha3`) and
   `schema/collector-request-v1alpha3.schema.json`
-  (`RequestJSONSchemaV1Alpha3`). Compatibility: the v1alpha1 result and
-  request schema artifacts are byte-identical, pageless results and
+  (`RequestJSONSchemaV1Alpha3`). Compatibility: this change leaves the v1alpha1 result and
+  request schema artifacts byte-identical to `v0.2.0-rc.2`, pageless results and
   first-call requests serialize unchanged, and a strict decoder of the
   older shapes rejects a page or continuation member, so older hosts and
   collectors fail closed instead of dropping the continuation. Adding the
