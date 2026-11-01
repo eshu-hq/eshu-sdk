@@ -25,6 +25,17 @@ Tags for the new module use the Go subdirectory-module format after separate rel
 
 ## [Unreleased]
 
+### Added
+
+- `Claim.ScopeQueries` carries the per-scope query list (`ScopeQuery`
+  with `ecosystem`, `package_name`, `version`; at most `MaxScopeQueries`
+  entries) for scope ids that name a shard rather than its contents
+  (pinned virtual-slot scopes, eshu-hq/eshu#9432). Empty on every legacy
+  scope id and omitted from the wire then, so old satellites read
+  byte-identical claims. Additive Go API and JSON Schema only: the
+  `collector-sdk/v1alpha1` required sets are unchanged and
+  `validateClaim` needs no change.
+
 ### Fixed
 
 - Payload validation admits the redaction-safe Vault auth-role metadata keys

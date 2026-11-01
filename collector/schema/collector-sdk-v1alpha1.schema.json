@@ -61,7 +61,18 @@
         "fencing_token": { "type": "string", "minLength": 1 },
         "attempt": { "type": "integer", "minimum": 1 },
         "deadline": { "type": "string", "format": "date-time" },
-        "config_handle": { "type": "string", "minLength": 1 }
+        "config_handle": { "type": "string", "minLength": 1 },
+        "scope_queries": { "type": "array", "items": { "$ref": "#/$defs/scope_query" } }
+      }
+    },
+    "scope_query": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["package_name", "version"],
+      "properties": {
+        "ecosystem": { "type": "string" },
+        "package_name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 }
       }
     },
     "scope": {

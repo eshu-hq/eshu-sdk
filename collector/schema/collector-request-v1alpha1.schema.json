@@ -38,6 +38,12 @@
         "scope": {
           "$ref": "#/$defs/scope"
         },
+        "scope_queries": {
+          "items": {
+            "$ref": "#/$defs/scope_query"
+          },
+          "type": "array"
+        },
         "source_run_id": {
           "minLength": 1,
           "type": "string"
@@ -137,6 +143,27 @@
       "required": [
         "id",
         "kind"
+      ],
+      "type": "object"
+    },
+    "scope_query": {
+      "additionalProperties": false,
+      "properties": {
+        "ecosystem": {
+          "type": "string"
+        },
+        "package_name": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "package_name",
+        "version"
       ],
       "type": "object"
     }

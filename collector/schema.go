@@ -56,8 +56,9 @@ func requestSchema() map[string]any {
 			"config":           map[string]any{"type": []string{"object", "null"}},
 		},
 		"$defs": map[string]any{
-			"claim": claimSchema(),
-			"scope": scopeSchema(),
+			"claim":       claimSchema(),
+			"scope":       scopeSchema(),
+			"scope_query": scopeQuerySchema(),
 			"contract": objectSchema(
 				[]string{"protocol_version"},
 				map[string]any{
@@ -103,13 +104,14 @@ func resultSchema() map[string]any {
 			"statuses":   arrayOf(ref("#/$defs/status")),
 		},
 		"$defs": map[string]any{
-			"claim":      claimSchema(),
-			"scope":      scopeSchema(),
-			"generation": generationSchema(),
-			"fact":       factSchema(),
-			"source_ref": sourceRefSchema(),
-			"redaction":  redactionSchema(),
-			"status":     statusSchema(),
+			"claim":       claimSchema(),
+			"scope":       scopeSchema(),
+			"scope_query": scopeQuerySchema(),
+			"generation":  generationSchema(),
+			"fact":        factSchema(),
+			"source_ref":  sourceRefSchema(),
+			"redaction":   redactionSchema(),
+			"status":      statusSchema(),
 		},
 	}
 }
@@ -143,6 +145,18 @@ func claimSchema() map[string]any {
 			"attempt":        map[string]any{"type": "integer", "minimum": 1},
 			"deadline":       map[string]any{"type": "string", "format": "date-time"},
 			"config_handle":  nonEmptyString(),
+			"scope_queries":  arrayOf(ref("#/$defs/scope_query")),
+		},
+	)
+}
+
+func scopeQuerySchema() map[string]any {
+	return objectSchema(
+		[]string{"package_name", "version"},
+		map[string]any{
+			"ecosystem":    map[string]any{"type": "string"},
+			"package_name": nonEmptyString(),
+			"version":      nonEmptyString(),
 		},
 	)
 }

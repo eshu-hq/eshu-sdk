@@ -98,6 +98,24 @@ type Claim struct {
 	Attempt       int       `json:"attempt"`
 	Deadline      time.Time `json:"deadline"`
 	ConfigHandle  string    `json:"config_handle"`
+	// ScopeQueries carries the per-scope query list for scope ids that
+	// name a shard rather than its contents (pinned virtual-slot scopes,
+	// eshu-hq/eshu#9432). It is empty for every legacy scope id, and
+	// omits from the wire then, so old satellites read byte-identical
+	// claims. At most MaxScopeQueries entries; the host enforces the same
+	// bound when resolving a claim, so a claim can carry one chunk.
+	ScopeQueries []ScopeQuery `json:"scope_queries,omitempty"`
+}
+
+// MaxScopeQueries bounds the per-claim scope query list. It mirrors the
+// host's per-target derived-query cap, so a claim can carry one chunk.
+const MaxScopeQueries = 100
+
+// ScopeQuery is one pinned package query behind a sharded scope id.
+type ScopeQuery struct {
+	Ecosystem string `json:"ecosystem,omitempty"`
+	Package   string `json:"package_name"`
+	Version   string `json:"version"`
 }
 
 // Scope identifies the source shard that the extension is allowed to observe.
