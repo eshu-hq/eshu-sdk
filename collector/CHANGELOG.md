@@ -26,10 +26,13 @@ Tags for the new module use the Go subdirectory-module format after separate rel
 
 ## [Unreleased]
 
-## [0.2.0-rc.3] - Prepared (unpublished)
+## [0.2.0-rc.3] - 2026-11-01
 
-This candidate source is not tagged. Publishing it needs a separate release
-ruling against the merged commit, and no proxy verification is claimed for it.
+Tagged `collector/v0.2.0-rc.3` at `1d52cadeb598d48d3c51b2198938b552800f041a`
+(the merge of eshu-hq/eshu-sdk#68) by release run 41327854308. The proxy
+reports that commit as the origin, and the `collector-sdk-v1alpha3` schema
+digest below matched at release. At release time core Eshu pinned `collector/v0.2.0-rc.2`;
+its bump to this tag is tracked in eshu-hq/eshu#9385.
 It continues the `v0.2.0` prerelease line because core Eshu pins
 `collector/v0.2.0-rc.2`; a `v0.1.0-rc.N` tag would sort below that pin. The
 `Claim.ScopeQueries` entry first shipped in `collector/v0.2.0-rc.2`, whose tag
