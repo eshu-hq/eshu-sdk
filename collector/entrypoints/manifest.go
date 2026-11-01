@@ -91,7 +91,7 @@ func validateManifest(m Manifest) error {
 	}
 	seen := make(map[string]bool, len(m.SupportedProtocols))
 	for _, protocol := range m.SupportedProtocols {
-		if protocol != collector.ProtocolVersionV1Alpha1 && protocol != collector.ProtocolVersionV1Alpha2 {
+		if !admittedProtocol(protocol) {
 			return errors.New("unknown protocol")
 		}
 		if seen[protocol] {
@@ -131,4 +131,15 @@ func validImportPath(path string) bool {
 		}
 	}
 	return true
+}
+
+// admittedProtocol reports whether protocol is a collector SDK wire protocol
+// a generated command may admit: v1alpha1, v1alpha2, or the paged v1alpha3.
+func admittedProtocol(protocol string) bool {
+	switch protocol {
+	case collector.ProtocolVersionV1Alpha1, collector.ProtocolVersionV1Alpha2, collector.ProtocolVersionV1Alpha3:
+		return true
+	default:
+		return false
+	}
 }

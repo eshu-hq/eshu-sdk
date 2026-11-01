@@ -69,6 +69,9 @@ func (v Validator) ValidateResult(result Result) (ValidationReport, error) {
 	if err := v.validateResultEnvelope(result); err != nil {
 		return report, err
 	}
+	if err := v.validateResultPage(result); err != nil {
+		return report, err
+	}
 	for _, status := range result.Statuses {
 		if err := validateStatus(result.State, status); err != nil {
 			return report, err
@@ -151,6 +154,23 @@ func validateClaim(claim Claim) error {
 	}
 	if claim.Deadline.IsZero() {
 		return fmt.Errorf("claim.deadline is required")
+	}
+	return validateScopeQueries(claim.ScopeQueries)
+}
+
+// validateScopeQueries holds the Go validator to the published schemas: at
+// most MaxScopeQueries entries, each with a non-blank package_name and version.
+func validateScopeQueries(queries []ScopeQuery) error {
+	if len(queries) > MaxScopeQueries {
+		return fmt.Errorf("claim.scope_queries has %d entries, above the limit %d", len(queries), MaxScopeQueries)
+	}
+	for i, query := range queries {
+		if strings.TrimSpace(query.Package) == "" {
+			return fmt.Errorf("claim.scope_queries[%d].package_name is required", i)
+		}
+		if strings.TrimSpace(query.Version) == "" {
+			return fmt.Errorf("claim.scope_queries[%d].version is required", i)
+		}
 	}
 	return nil
 }

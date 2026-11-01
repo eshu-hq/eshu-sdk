@@ -12,6 +12,13 @@ const (
 	// contract. Hosts admit it only when explicitly configured; the v1alpha1
 	// default is unchanged.
 	ProtocolVersionV1Alpha2 = "collector-sdk/v1alpha2"
+	// ProtocolVersionV1Alpha3 is the third collector extension wire
+	// contract. It admits the optional paged-result continuation in
+	// Result.Page and the resume cursor in Request.Continuation, so a
+	// satellite can split a result that would not fit one bounded stdout
+	// write into resumed calls. Hosts admit it only when explicitly
+	// configured; the v1alpha1 default is unchanged.
+	ProtocolVersionV1Alpha3 = "collector-sdk/v1alpha3"
 )
 
 const (
@@ -74,7 +81,10 @@ type FactDeclaration struct {
 	TombstoneAllowed bool               `json:"tombstone_allowed,omitempty"`
 }
 
-// Result is the top-level collector-sdk/v1alpha1 extension response.
+// Result is the top-level collector extension response. The Page field is
+// admitted only on ProtocolVersionV1Alpha3; older protocols must leave it
+// absent so older hosts fail closed on paged output instead of dropping the
+// continuation.
 type Result struct {
 	ProtocolVersion string      `json:"protocol_version"`
 	State           ResultState `json:"state"`
@@ -82,6 +92,42 @@ type Result struct {
 	Generation      Generation  `json:"generation"`
 	Facts           []Fact      `json:"facts,omitempty"`
 	Statuses        []Status    `json:"statuses,omitempty"`
+	Page            *ResultPage `json:"page,omitempty"`
+}
+
+// ResultPage carries versioned multi-call continuation for one result page.
+// A satellite splits a result that would not fit one bounded stdout write
+// into pages: every page repeats the claim and generation, carries its facts
+// in stable order, and names the resume cursor while more pages remain. The
+// host re-invokes the satellite with the cursor (Request.Continuation) until
+// a final page (More=false) closes the generation. Absent Page means a legacy
+// single-shot result.
+type ResultPage struct {
+	// Cursor is the opaque satellite-minted resume token. It is required
+	// while More is true and must be empty on the final page, so a cursor
+	// cannot outlive the generation it resumes.
+	Cursor string `json:"cursor,omitempty"`
+	// More reports whether the host must re-invoke the satellite with
+	// Cursor to fetch the next page.
+	More bool `json:"more,omitempty"`
+	// PageIndex is the zero-based page sequence. The first page is 0; the
+	// host rejects a gap or replay.
+	PageIndex int `json:"page_index,omitempty"`
+	// TotalFacts is the satellite-declared fact total across all pages of
+	// the generation. Zero means undeclared; when declared it must agree on
+	// every page and match the reassembled fact count.
+	TotalFacts int `json:"total_facts,omitempty"`
+}
+
+// PageContinuation is the resume cursor a host sends back to a satellite on
+// a collector-sdk/v1alpha3 continuation call. The host sends it only on
+// resumed calls, never on the first call, so a first-call request stays
+// byte-identical to the legacy request shape.
+type PageContinuation struct {
+	// Cursor is the opaque token the satellite minted on the previous page.
+	// Request.Validate rejects a blank cursor. The tag matches the host's
+	// continuation type field for field.
+	Cursor string `json:"cursor,omitempty"`
 }
 
 // Claim is the bounded core-owned work item passed to an extension.
@@ -98,6 +144,24 @@ type Claim struct {
 	Attempt       int       `json:"attempt"`
 	Deadline      time.Time `json:"deadline"`
 	ConfigHandle  string    `json:"config_handle"`
+	// ScopeQueries carries the per-scope query list for scope ids that
+	// name a shard rather than its contents (pinned virtual-slot scopes,
+	// eshu-hq/eshu#9432). It is empty for every legacy scope id, and
+	// omits from the wire then, so old satellites read byte-identical
+	// claims. At most MaxScopeQueries entries; the host enforces the same
+	// bound when resolving a claim, so a claim can carry one chunk.
+	ScopeQueries []ScopeQuery `json:"scope_queries,omitempty"`
+}
+
+// MaxScopeQueries bounds the per-claim scope query list. It mirrors the
+// host's per-target derived-query cap, so a claim can carry one chunk.
+const MaxScopeQueries = 100
+
+// ScopeQuery is one pinned package query behind a sharded scope id.
+type ScopeQuery struct {
+	Ecosystem string `json:"ecosystem,omitempty"`
+	Package   string `json:"package_name"`
+	Version   string `json:"version"`
 }
 
 // Scope identifies the source shard that the extension is allowed to observe.

@@ -35,7 +35,7 @@ func Run(ctx context.Context, reader io.Reader, writer io.Writer, handler Handle
 		return errors.New("command options invalid")
 	}
 	for _, protocol := range opts.SupportedProtocols {
-		if protocol != collector.ProtocolVersionV1Alpha1 && protocol != collector.ProtocolVersionV1Alpha2 {
+		if !admittedProtocol(protocol) {
 			return errors.New("command options protocol invalid")
 		}
 	}
@@ -103,4 +103,15 @@ func Run(ctx context.Context, reader io.Reader, writer io.Writer, handler Handle
 		return errors.New("command write failed")
 	}
 	return nil
+}
+
+// admittedProtocol reports whether protocol is a collector SDK wire protocol
+// this runner can decode: v1alpha1, v1alpha2, or the paged v1alpha3.
+func admittedProtocol(protocol string) bool {
+	switch protocol {
+	case collector.ProtocolVersionV1Alpha1, collector.ProtocolVersionV1Alpha2, collector.ProtocolVersionV1Alpha3:
+		return true
+	default:
+		return false
+	}
 }
