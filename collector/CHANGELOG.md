@@ -65,8 +65,9 @@ workflow's `expect_file` pair is
   (pinned virtual-slot scopes, eshu-hq/eshu#9432). Empty on every legacy
   scope id and omitted from the wire then, so old satellites read
   byte-identical claims. The wire change is additive: the
-  `collector-sdk/v1alpha1` required sets are unchanged and
-  `validateClaim` needs no change. The Go change is not fully additive:
+  `collector-sdk/v1alpha1` required sets are unchanged.
+  `validateClaim` now rejects more than `MaxScopeQueries` entries and any entry
+  with a blank `package_name` or `version`, matching the schemas. The Go change is not fully additive:
   the slice field makes `Claim` incomparable, so `a.Claim != b.Claim`
   no longer compiles. Compare with `reflect.DeepEqual` or field by field.
   Several satellite test suites use `==` on `Claim` and need that edit

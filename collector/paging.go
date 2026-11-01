@@ -121,7 +121,7 @@ func SplitFacts(facts []Fact, maxPageBytes int64) ([][]Fact, error) {
 		}
 		if int64(size) > maxPageBytes {
 			return nil, fmt.Errorf(
-				"fact %q stable key %q is %d bytes above page bound %d",
+				"fact %q stable key %q is %d bytes, above page bound %d",
 				fact.Kind, fact.StableKey, size, maxPageBytes,
 			)
 		}
