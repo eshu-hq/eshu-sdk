@@ -12,7 +12,8 @@ import (
 // pageEnvelopeHeadroomBytes reserves wire space for everything around one
 // page's facts on a bounded stdout write: the repeated claim and generation,
 // the page envelope, statuses, and JSON framing. It is deliberately generous:
-// measured claim+generation+status framing stays under 4 KiB, so a page sized
+// measured claim+generation+status framing stays under 4 KiB, plus up to
+// MaxScopeQueries repeated scope queries on every page, so a page sized
 // by PageBoundForStdout always fits the host's stdout limit with room to
 // spare, and the same headroom applies on every protocol version.
 const pageEnvelopeHeadroomBytes = int64(64 * 1024)

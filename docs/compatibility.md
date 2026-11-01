@@ -2,7 +2,7 @@
 
 The repository contains three independent Go module identities. The exact Git
 refs available in this checkout include collector `v0.2.0-rc.2` and
-`v0.1.0-rc.5` and factschema `v0.1.0-rc.11`; earlier candidate tags remain immutable. Neither tag qualifies
+`v0.1.0-rc.5` and factschema `v0.1.0-rc.11`; earlier candidate tags remain immutable. None of these tags qualifies
 an Eshu consumer on its own: recheck tag origin and fresh public-proxy
 resolution before claiming candidate availability. The `wirecontract` module
 is new in this change and has no published tag yet.

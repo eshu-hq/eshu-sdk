@@ -47,6 +47,16 @@ and `schema/collector-sdk-v1alpha1.schema.json`, unchanged since `v0.2.0-rc.2`,
 workflow's `expect_file` pair is
 `collector/schema/collector-sdk-v1alpha3.schema.json` with the first digest.
 
+### Breaking (Go API)
+
+- `Claim` is no longer comparable, because `Claim.ScopeQueries` is a slice.
+  `a.Claim != b.Claim` and `a.Claim == b.Claim` stop compiling. This first
+  shipped in `collector/v0.2.0-rc.2` and cannot change there; this candidate
+  adds no further break. Migrate by comparing field by field and using
+  `slices.Equal` on `ScopeQueries`, or use `reflect.DeepEqual`. The
+  `collector-sdk/v1alpha1` schema artifacts were also changed in place under
+  the same `$id` in that release.
+
 ### Added
 
 - `Claim.ScopeQueries` carries the per-scope query list (`ScopeQuery`
