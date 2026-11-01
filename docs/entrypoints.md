@@ -30,7 +30,9 @@ GOWORK=off go run ./cmd/collector-entrypoints-gen --manifest ./entrypoints.yaml 
 Both flags naming files are required. Choose exactly one mode. The generator
 accepts one strict YAML document and rejects unknown fields, duplicate output
 directories, unsafe paths/imports, unsupported protocols, invalid handler
-names, and nonpositive budgets. `max_request_bytes` cannot be the maximum
+names, and nonpositive budgets. Known protocols are `collector-sdk/v1alpha1`,
+`collector-sdk/v1alpha2`, and the paged `collector-sdk/v1alpha3`; list v1alpha3
+only when the handler sets `Result.Page` and honors `Request.Continuation`. `max_request_bytes` cannot be the maximum
 signed 64-bit integer because the runner uses a budget plus one to detect
 oversize input. Output directories must be relative to `--repo-root`; existing
 symlinks in the output path are refused.

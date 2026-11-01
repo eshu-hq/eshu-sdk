@@ -12,7 +12,8 @@ shape and SDK output without the `eshu` binary, the Eshu monorepo, or any
 ## What it checks
 
 `Run` evaluates one already-decoded manifest and the package's decoded
-collector-sdk/v1alpha1 result fixtures:
+collector-sdk result fixtures (v1alpha1 by default; v1alpha2 or the paged
+v1alpha3 when the manifest declares that runtime protocol):
 
 - **Config / manifest proof metadata** — identity, compatible-core range
   (comparator syntax is validated, not just presence), digest-pinned artifact,

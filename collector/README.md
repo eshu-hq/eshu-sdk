@@ -10,7 +10,12 @@ internal durable fact envelope.
 - Go module path: `github.com/eshu-hq/eshu-sdk/collector`
 - Release version: not yet selected for this relocated module
 - Initial wire protocol: `collector-sdk/v1alpha1`
+- Paged wire protocol: `collector-sdk/v1alpha3` (optional `Result.Page`
+  continuation and `Request.Continuation` resume cursor; v1alpha1 and v1alpha2
+  single-shot records are unchanged)
 - JSON Schema artifact: `schema/collector-sdk-v1alpha1.schema.json`
+- JSON Schema artifacts (paged): `schema/collector-sdk-v1alpha3.schema.json`
+  (result) and `schema/collector-request-v1alpha3.schema.json` (request)
 - Cassette format JSON Schema (replay fixtures): `schema/cassette-format.v1.schema.json`
   — a generated mirror of the host's cassette envelope contract
   (`go/internal/replay/schema`), so credential-free replay cassettes can be
@@ -28,6 +33,10 @@ The public surface includes:
 - `Fact`, `SourceRef`, and `Redaction` for source evidence.
 - `Status` and `Result` for complete, unchanged, partial, retryable, and
   terminal outcomes.
+- `ResultPage`, `PageContinuation`, and the byte-accounting helpers
+  `PageBoundForStdout`, `FactWireBytes`, and `SplitFacts` for versioned
+  (`collector-sdk/v1alpha3`) multi-call pagination of results that would not
+  fit one bounded stdout write.
 - `Contract`, `FactDeclaration`, `Validator`, and `ValidationReport` for
   fail-closed host validation.
 - `Request` and `RequestJSONSchema` for the core-owned command input.
@@ -38,6 +47,28 @@ the existing structural claim contract without consulting the clock. Opaque
 should convert them explicitly. The checked-in request schema and fixture are
 under `schema/` and `testdata/fixtures/`. See [command boundary](../docs/command.md)
 for byte budgets, deadline behavior, and host responsibilities.
+
+## Pagination (`collector-sdk/v1alpha3`)
+
+A host admits `collector-sdk/v1alpha3` only when it is explicitly configured.
+A collector that would exceed the host stdout limit splits its facts with
+`SplitFacts(facts, bound)`, where `bound` comes from
+`PageBoundForStdout(stdoutLimit)` (the limit minus 64 KiB of envelope
+headroom). Each page repeats the claim and generation and sets `Result.Page`:
+`more` and a non-blank `cursor` while pages remain, then a final page with
+`more` false and no cursor. Only `complete` and `partial` results may request
+continuation. `page_index` counts from zero, and `total_facts`, when declared,
+must agree on every page. The host re-invokes the collector with
+`Request.Continuation.Cursor` set to the previous cursor. The cursor format
+belongs to the collector. `SplitFacts` never drops a fact. One fact above the
+bound fails, naming its kind and stable key.
+
+`ValidateResult` rejects a page on v1alpha1 or v1alpha2, a continuation
+without a cursor, a final page with a cursor, and negative counters. Rules that
+span pages (no gaps or replays, a stable claim and generation, the declared
+total) need every page and belong to the reassembling host. A collector built
+on an older SDK decodes requests strictly, so it rejects a resumed call
+instead of restarting at page zero.
 
 Collectors emit facts only. They do not write graph truth, mutate queues, run
 DDL, or import Eshu internals.
@@ -116,7 +147,8 @@ commit.
 
 `testdata/fixtures` contains golden result fixtures for complete, unchanged,
 partial, retryable, terminal, duplicate, conflict, tombstone, and redaction
-cases. The package tests validate those fixtures against the public contract and
+cases. `paged_first.json` and `paged_final.json` are one two-page v1alpha3
+result, and `request_continuation.json` is a resumed v1alpha3 request. The package tests validate those fixtures against the public contract and
 assert the generated JSON Schema stays in lockstep with the checked-in artifact.
 
 The SDK emits no telemetry. The command runner and generated commands execute

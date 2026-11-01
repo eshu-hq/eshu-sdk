@@ -35,6 +35,31 @@ Tags for the new module use the Go subdirectory-module format after separate rel
   byte-identical claims. Additive Go API and JSON Schema only: the
   `collector-sdk/v1alpha1` required sets are unchanged and
   `validateClaim` needs no change.
+- `ProtocolVersionV1Alpha3` (`collector-sdk/v1alpha3`): third collector
+  extension wire contract with versioned multi-call pagination
+  (eshu-hq/eshu#9385), ported from the Eshu host's in-tree mirror
+  (eshu-hq/eshu#9395, eshu-hq/eshu#9635). Hosts admit it only when explicitly
+  configured; the v1alpha1 default is unchanged. `Result.Page`
+  (`ResultPage`) carries the resume `cursor` (required while `more` is true,
+  empty on the final page), the zero-based `page_index`, and the optional
+  declared `total_facts`; only `complete` and `partial` results may request
+  continuation. `Request.Continuation` (`PageContinuation`) carries the
+  cursor back on resumed calls and is admitted only on v1alpha3 with a
+  non-blank cursor. `PageBoundForStdout`, `FactWireBytes`, and `SplitFacts`
+  size every page against the host stdout limit minus 64 KiB of envelope
+  headroom; a single fact above the bound fails closed naming its kind and
+  stable key, never dropped. `command.Run`, `entrypoints` manifests, and the
+  conformance manifest admit the new protocol when listed. New artifacts:
+  `schema/collector-sdk-v1alpha3.schema.json` (`JSONSchemaV1Alpha3`) and
+  `schema/collector-request-v1alpha3.schema.json`
+  (`RequestJSONSchemaV1Alpha3`). Compatibility: the v1alpha1 result and
+  request schema artifacts are byte-identical, pageless results and
+  first-call requests serialize unchanged, and a strict decoder of the
+  older shapes rejects a page or continuation member, so older hosts and
+  collectors fail closed instead of dropping the continuation. Adding the
+  exported `Result.Page` and `Request.Continuation` fields can break external
+  unkeyed `Result` or `Request` literals; keyed literals stay source
+  compatible.
 
 ### Fixed
 

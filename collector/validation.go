@@ -69,6 +69,9 @@ func (v Validator) ValidateResult(result Result) (ValidationReport, error) {
 	if err := v.validateResultEnvelope(result); err != nil {
 		return report, err
 	}
+	if err := v.validateResultPage(result); err != nil {
+		return report, err
+	}
 	for _, status := range result.Statuses {
 		if err := validateStatus(result.State, status); err != nil {
 			return report, err

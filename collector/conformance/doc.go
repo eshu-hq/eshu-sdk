@@ -5,7 +5,8 @@
 // harness for Eshu component packages.
 //
 // It validates an out-of-tree collector package's manifest proof metadata and
-// its collector-sdk/v1alpha1 result fixtures against the manifest-derived host
+// its collector-sdk result fixtures (v1alpha1 by default; v1alpha2 and the
+// paged v1alpha3 when the manifest declares them) against the manifest-derived host
 // contract, then emits a stable machine-readable Report. The package performs
 // no file or network I/O and imports no Eshu internal packages, so an external
 // collector repository can run conformance in its own CI by importing only
