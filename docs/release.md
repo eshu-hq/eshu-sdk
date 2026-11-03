@@ -102,7 +102,7 @@ or deployed acceptance is claimed here.
 ## Current RC4/RC10 state
 
 Git tags in this checkout reach `collector/v0.1.0-rc.4` and
-`factschema/v0.1.0-rc.11`. RC10 adds the optional NVD `coverage_descriptor`,
+`factschema/v0.1.0-rc.12`. RC10 adds the optional NVD `coverage_descriptor`,
 `collector_instance_id`, and `result_count` fields to
 `vulnerability.source_snapshot` (core eshu-hq/eshu#9227, PR #60) with no
 stable-key change; RC9 unexports the `terraformstate` drift allowlist table
@@ -128,20 +128,25 @@ release workflow on 2026-10-31 ([run 41231620015](https://github.com/eshu-hq/esh
 fixture-pack payload `osv_severity_golden.json` and `OSVSeverityGolden()` from
 core eshu-hq/eshu#9692, with no schema, stable-key, or wire change).
 
-Prepared next candidate: `factschema/v0.1.0-rc.12` (unpublished). It carries
-the optional `status` and `replaced_by` fields on `vulnerability.cve` (core
+`factschema/v0.1.0-rc.12` is published at commit `7bfa786`, created by the
+release workflow on 2026-10-31 ([run 41250267912](https://github.com/eshu-hq/eshu-sdk/actions/runs/41250267912)). It carries the
+optional `status` and `replaced_by` fields on `vulnerability.cve` (core
 eshu-hq/eshu#9695) and the four optional NVD operator and negate fields on
 `vulnerability.affected_product` (core eshu-hq/eshu#9696), both additive with no
-stable-key or wire change. Merge the reviewed source, then obtain a separate
-release ruling against the concrete merged commit, and name rc.12 in the
-module's `CHANGELOG.md` before that commit is tagged (the section is already
-there). Then run the release workflow (see Releasing a module tag) with
-`module=factschema`, `version=v0.1.0-rc.12`, that commit, and
-`factschema/schema/vulnerability.cve.v1.schema.json` with SHA-256
-`71fd533a311e6d029853c35b08e03f9007b3e5623c238e23f95e90523c7f2c03` as `expect_file` and `expect_sha256`; its proof job is the
-fresh external `GOWORK=off` public-proxy check Eshu waits for before it pins it.
-Core can only build the follow-up change sets for eshu-hq/eshu#9695 and
-eshu-hq/eshu#9696 after that tag is on the proxy.
+stable-key or wire change.
+
+Prepared next candidate: `factschema/v0.1.0-rc.13` (unpublished). It carries the
+optional `releases` field on each `vulnerability.affected_package` range (core
+eshu-hq/eshu#9806), additive with no stable-key or wire change. Its source is
+merged (SDK PR #72). Obtain a separate release ruling against the concrete
+commit to tag, and name rc.13 in the module's `CHANGELOG.md` before that commit
+is tagged (the section is already there). Then run the release workflow (see
+Releasing a module tag) with `module=factschema`, `version=v0.1.0-rc.13`, that
+commit, and `factschema/schema/vulnerability.affected_package.v1.schema.json`
+with SHA-256 `fbe6f43e156e6db8e40e7fdc960584f3023136d2c90e1061244fc62a95da99b6`
+as `expect_file` and `expect_sha256`; its proof job is the fresh external
+`GOWORK=off` public-proxy check Eshu waits for before it pins it. Core can only
+pin it, with the in-tree mirror sync, after that tag is on the proxy.
 
 ## Historical RC3 preparation
 
