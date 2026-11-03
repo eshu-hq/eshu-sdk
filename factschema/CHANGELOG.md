@@ -26,10 +26,46 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
-## [0.1.0-rc.12] - Prepared (unpublished)
+## [0.1.0-rc.13] - Prepared (unpublished)
 
 This candidate source is not tagged. Publishing it needs a separate release
 ruling against the merged commit, and no proxy verification is claimed for it.
+It carries one additive change, an optional field on an existing kind, so the
+module bump is a minor step within the 0.1 line (the release candidate counter
+moves from rc.12 to rc.13). No required field, existing field, stable key, or
+wire format changes; the generated schema only gains an optional property.
+Schema file digest (SHA-256) at this source:
+`schema/vulnerability.affected_package.v1.schema.json` `fbe6f43e156e6db8e40e7fdc960584f3023136d2c90e1061244fc62a95da99b6`.
+
+### Added
+
+- `vulnerability.affected_package` gains an optional `releases` field on each
+  `AffectedRange` (core eshu-hq/eshu#9806, additive minor, no decode shim). It
+  names the operating-system release lines a range applies to, so a reducer can
+  match an installed OS package against the range for its own release instead of
+  every release at once. Each element is `<vendor>:<line>` in lowercase, for
+  example `debian:12`, `alpine:3.18`, `ubuntu:22.04`; the list is sorted and has
+  no duplicates. The line comes from the source ecosystem string by one closed
+  rule: Debian uses the major version, Alpine and Ubuntu use major.minor, a
+  leading `Pro` segment, a trailing `LTS` segment, and a leading `v` are
+  dropped, and a non-numeric ecosystem suffix gives no tag. The field is omitted
+  when the producer did not tag the range (an empty list means the same), and a
+  reader treats an omitted value as
+  "release unknown", never "every release". A fact is tagged on every ECOSYSTEM
+  range or on none. A fact without the key decodes as before, with a nil
+  `Releases`, and an unknown extra key on a range is still tolerated. A value of
+  the wrong JSON type (a string for `releases`, a non-string element) now fails
+  the decode and quarantines the fact as `input_invalid`, where the extra key
+  used to be ignored; a conforming producer always emits a string array. An rc.12
+  reader ignores the key because the range item keeps `additionalProperties:
+  true`, so a producer may emit `releases` before every reader reads it.
+
+## [0.1.0-rc.12] - 2026-10-31
+
+This tag is published. The `release` workflow ([run 41250267912](https://github.com/eshu-hq/eshu-sdk/actions/runs/41250267912))
+verified commit `7bfa7868926d0af0f0aae3a616889199790b126e` and ran its public-proxy proof; the run
+concluded success. The public proxy lists the version and reports that commit
+as its origin.
 It carries two additive changes, both optional fields on existing kinds, so the
 module bump is a minor step within the 0.1 line (the release candidate counter
 moves from rc.11 to rc.12). No required field, existing field, stable key, or
