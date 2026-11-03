@@ -26,10 +26,59 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
-## [0.1.0-rc.13] - Prepared (unpublished)
+## [0.1.0-rc.14] - Prepared (unpublished)
 
 This candidate source is not tagged. Publishing it needs a separate release
 ruling against the merged commit, and no proxy verification is claimed for it.
+It carries two additive changes: three optional fields on an existing kind and
+one fixture-pack payload, so the module bump is a minor step within the 0.1
+line (the release candidate counter moves from rc.13 to rc.14). No required
+field, existing field, stable key, schema version, or wire format changes; the
+generated schema only gains optional properties. File digests (SHA-256) at this
+source:
+`schema/vulnerability.cve.v1.schema.json` `5bc338252fd10e126ad4aef9e0de7305fd50c6f2984565c76e2dd3edd8ef8941`,
+`fixturepack/payloads/osv_identity_edges_golden.json` `3df283f40ecbe08dcd559bd3e3500c865411d247d8e644383c52fda8b3266010`.
+
+### Added
+
+- `vulnerability.cve` gains three optional raw identity-edge fields, `aliases`,
+  `related`, and `upstream` (core eshu-hq/eshu#9954, Phase 3 item 3.1 of
+  eshu-hq/eshu#9209, additive minor, no decode shim). Each is a string array
+  copied from the OSV record field of the same name; the collector trims each
+  value, drops blanks and duplicates, and sorts the list, and writes the edges
+  without interpreting them. An absent key, a null, and an empty list read
+  alike. `aliases` is a symmetric identity edge: the ids name the same
+  advisory, and it is the only edge a reducer may group advisories through.
+  `related` is display-only and never groups, keys, or enriches. `upstream` is
+  directed: this distro or downstream record names the upstream CVEs it
+  repackages, and a reducer may pass CVE enrichment down to this record, never
+  up. `upstream` is never an alias or a correlation anchor; folding it into the
+  symmetric set over-merged advisory groups in osv.dev (core
+  `docs/internal/design/advisory-intelligence-correlation-plan.md` section 4.2).
+  A fact without the keys decodes as before, with nil fields, and an unknown
+  extra key is still ignored. A value of the wrong JSON type (a string, a
+  number, an object, or a non-string element) now fails the decode and
+  quarantines the fact as `input_invalid`, where the extra key used to be
+  ignored; a conforming collector emits a string array or null. An rc.13 reader
+  ignores the keys, so a producer may emit them before every reader reads them.
+
+- Fixture-pack payload `payloads/osv_identity_edges_golden.json` and the
+  accessor `OSVIdentityEdgesGolden()` (core eshu-hq/eshu#9954), byte-identical
+  to the core copy. Seven synthetic OSV records and the `aliases`, `related`,
+  `upstream`, and `status` a conforming OSV collector writes for each:
+  `aliases` and `related` are always written, an empty list as JSON `null`;
+  `upstream` is written only when it has an id; `status` is `withdrawn` only for
+  a record with a non-blank `withdrawn` timestamp. A DSA bundle of CVEs is
+  `upstream`, not `aliases`. The pack test derives every expected field from
+  the case record and pins the file digest.
+
+## [0.1.0-rc.13] - 2026-11-03
+
+This tag is published. The `release` workflow ([run 41726236370](https://github.com/eshu-hq/eshu-sdk/actions/runs/41726236370))
+verified commit `9e57ec4a90c0a76d86b0cb84fc94ea455178a935`, created the tag
+`factschema/v0.1.0-rc.13` at it on 2026-11-03, and ran its public-proxy proof;
+the run concluded success. The public proxy lists the version and reports that
+commit as its origin.
 It carries three additive changes, each an optional field on an existing kind,
 so the module bump is a minor step within the 0.1 line (the release candidate
 counter moves from rc.12 to rc.13). No required field, existing field, stable

@@ -102,7 +102,7 @@ or deployed acceptance is claimed here.
 ## Current RC4/RC10 state
 
 Git tags in this checkout reach `collector/v0.1.0-rc.4` and
-`factschema/v0.1.0-rc.12`. RC10 adds the optional NVD `coverage_descriptor`,
+`factschema/v0.1.0-rc.13`. RC10 adds the optional NVD `coverage_descriptor`,
 `collector_instance_id`, and `result_count` fields to
 `vulnerability.source_snapshot` (core eshu-hq/eshu#9227, PR #60) with no
 stable-key change; RC9 unexports the `terraformstate` drift allowlist table
@@ -135,16 +135,28 @@ eshu-hq/eshu#9695) and the four optional NVD operator and negate fields on
 `vulnerability.affected_product` (core eshu-hq/eshu#9696), both additive with no
 stable-key or wire change.
 
-Prepared next candidate: `factschema/v0.1.0-rc.13` (unpublished). It carries the
+`factschema/v0.1.0-rc.13` is published at commit `9e57ec4`, created by the
+release workflow on 2026-11-03 ([run 41726236370](https://github.com/eshu-hq/eshu-sdk/actions/runs/41726236370)). It carries the
 optional `releases` field on each `vulnerability.affected_package` range (core
-eshu-hq/eshu#9806), additive with no stable-key or wire change. Its source is
-merged (SDK PR #72). Obtain a separate release ruling against the concrete
-commit to tag, and name rc.13 in the module's `CHANGELOG.md` before that commit
-is tagged (the section is already there). Then run the release workflow (see
-Releasing a module tag) with `module=factschema`, `version=v0.1.0-rc.13`, that
-commit, and `factschema/schema/vulnerability.affected_package.v1.schema.json`
-with SHA-256 `fbe6f43e156e6db8e40e7fdc960584f3023136d2c90e1061244fc62a95da99b6`
-as `expect_file` and `expect_sha256`; its proof job is the fresh external
+eshu-hq/eshu#9806, SDK PR #72), the optional `source_package` field on
+`vulnerability.os_package`, and three optional evidence fields on
+`reducer_supply_chain_impact_finding` (core eshu-hq/eshu#9859, SDK PR #74), all
+additive with no stable-key or wire change.
+
+Prepared next candidate: `factschema/v0.1.0-rc.14` (unpublished). It carries the
+optional `aliases`, `related`, and `upstream` identity-edge fields on
+`vulnerability.cve` (core eshu-hq/eshu#9954), additive with no stable-key,
+schema-version, or wire change, and the shared fixture-pack payload
+`osv_identity_edges_golden.json` with `OSVIdentityEdgesGolden()`, byte-identical
+to the core copy. Merge the reviewed source, then obtain a separate release
+ruling against the concrete merged commit, and name rc.14 in the module's
+`CHANGELOG.md` before that commit is tagged (the section is already there). Then
+run the release workflow (see Releasing a module tag) with `module=factschema`,
+`version=v0.1.0-rc.14`, that commit, and
+`factschema/fixturepack/payloads/osv_identity_edges_golden.json` with SHA-256
+`3df283f40ecbe08dcd559bd3e3500c865411d247d8e644383c52fda8b3266010` as
+`expect_file` and `expect_sha256` (the CHANGELOG also records the
+`vulnerability.cve` schema digest); its proof job is the fresh external
 `GOWORK=off` public-proxy check Eshu waits for before it pins it. Core can only
 pin it, with the in-tree mirror sync, after that tag is on the proxy.
 
