@@ -2,7 +2,7 @@
 
 The repository contains three independent Go module identities. The exact Git
 refs available in this checkout include collector `v0.2.0-rc.3`, `v0.2.0-rc.2` and
-`v0.1.0-rc.5` and factschema `v0.1.0-rc.11`; earlier candidate tags remain immutable. None of these tags qualifies
+`v0.1.0-rc.5` and factschema `v0.1.0-rc.12`; earlier candidate tags remain immutable. None of these tags qualifies
 an Eshu consumer on its own: recheck tag origin and fresh public-proxy
 resolution before claiming candidate availability. The `wirecontract` module
 is new in this change and has no published tag yet.
@@ -10,7 +10,7 @@ is new in this change and has no published tag yet.
 | Existing supported module | New module identity | Latest checked Git tag | Prepared next candidate |
 | --- | --- | --- | --- |
 | `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.2.0-rc.3` (at `1d52cade`, adds `collector-sdk/v1alpha3`; release run 41327854308); `collector/v0.2.0-rc.2` (off `main`, at `a663423`); `collector/v0.1.0-rc.5` on the `v0.1.0` line | none |
-| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.11` | `factschema/v0.1.0-rc.12` (unpublished); `factschema/v0.1.0-rc.13` (unpublished, after rc.12) |
+| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.12` | `factschema/v0.1.0-rc.13` (unpublished) |
 | `github.com/eshu-hq/eshu/sdk/go/apicontract@v0.1.0` (release-prepared in core, tag NOT cut) | `github.com/eshu-hq/eshu-sdk/wirecontract` | none (new module) | `wirecontract/v0.1.0-rc.1` |
 
 The old and new import paths name different Go types. The new `v0.1.0`
@@ -48,7 +48,7 @@ repairs number-preserving typed decoding from
 integral decimal/exponent values and nested integer lists. Schemas, fixtures
 and wire protocols are unchanged by these two earlier changes.
 
-The collector RC3 and RC4 and factschema RC4 through RC11 source changes have
+The collector RC3 and RC4 and factschema RC4 through RC12 source changes have
 separate immutable Git tags. RC6 adds the optional EPSS `model_version` field;
 FIRST API rows do not supply it. RC7 adds the synthetic NVD paging golden
 without changing a wire schema. RC8 publishes the `terraformstate` drift
@@ -61,12 +61,14 @@ schema change with no stable-key change.
 RC11 (tag `factschema/v0.1.0-rc.11`, at commit `d966966`, created by the release workflow on 2026-10-31) adds the fixture-pack
 payload `osv_severity_golden.json` and `OSVSeverityGolden()` (core
 eshu-hq/eshu#9692), additive, with no schema or wire change.
-Prepared next candidate: `factschema/v0.1.0-rc.12` (unpublished). It adds two
+RC12 (tag `factschema/v0.1.0-rc.12`, at commit `7bfa786`, published by the
+release workflow, [run 41250267912](https://github.com/eshu-hq/eshu-sdk/actions/runs/41250267912), on 2026-10-31) adds two
 additive optional-field changes: `status` and `replaced_by` on
 `vulnerability.cve` (core eshu-hq/eshu#9695) and the NVD operator and negate
-flags on `vulnerability.affected_product` (core eshu-hq/eshu#9696). It is not
-tagged and has no proxy proof; its tag needs a separate release ruling.
-Prepared after it: `factschema/v0.1.0-rc.13` (unpublished). It adds one additive
+flags on `vulnerability.affected_product` (core eshu-hq/eshu#9696). The public
+proxy lists it with that commit as its origin.
+Prepared next candidate: `factschema/v0.1.0-rc.13` (unpublished). Its source is
+merged (SDK PR #72). It adds one additive
 optional field, `releases` on each `vulnerability.affected_package` range (core
 eshu-hq/eshu#9806): the OS release lines the range applies to, written as
 `<vendor>:<line>` such as `debian:12` or `alpine:3.18`. It is an additive minor
