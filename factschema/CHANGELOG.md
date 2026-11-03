@@ -26,10 +26,47 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
-## [0.1.0-rc.13] - Prepared (unpublished)
+## [0.1.0-rc.14] - Prepared (unpublished)
 
 This candidate source is not tagged. Publishing it needs a separate release
 ruling against the merged commit, and no proxy verification is claimed for it.
+It carries one additive change, three optional fields on an existing kind, so
+the module bump is a minor step within the 0.1 line (the release candidate
+counter moves from rc.13 to rc.14). No required field, existing field, stable
+key, schema version, or wire format changes; the generated schema only gains
+optional properties. Schema file digest (SHA-256) at this source:
+`schema/vulnerability.cve.v1.schema.json` `5bc338252fd10e126ad4aef9e0de7305fd50c6f2984565c76e2dd3edd8ef8941`.
+
+### Added
+
+- `vulnerability.cve` gains three optional raw identity-edge fields, `aliases`,
+  `related`, and `upstream` (core eshu-hq/eshu#9954, Phase 3 item 3.1 of
+  eshu-hq/eshu#9209, additive minor, no decode shim). Each is a string array
+  copied from the OSV record field of the same name; the collector trims each
+  value, drops blanks and duplicates, and sorts the list, and writes the edges
+  without interpreting them. An absent key, a null, and an empty list read
+  alike. `aliases` is a symmetric identity edge: the ids name the same
+  advisory, and it is the only edge a reducer may group advisories through.
+  `related` is display-only and never groups, keys, or enriches. `upstream` is
+  directed: this distro or downstream record names the upstream CVEs it
+  repackages, and a reducer may pass CVE enrichment down to this record, never
+  up. `upstream` is never an alias or a correlation anchor; folding it into the
+  symmetric set over-merged advisory groups in osv.dev (core
+  `docs/internal/design/advisory-intelligence-correlation-plan.md` section 4.2).
+  A fact without the keys decodes as before, with nil fields, and an unknown
+  extra key is still ignored. A value of the wrong JSON type (a string, a
+  number, an object, or a non-string element) now fails the decode and
+  quarantines the fact as `input_invalid`, where the extra key used to be
+  ignored; a conforming collector always emits a string array. An rc.13 reader
+  ignores the keys, so a producer may emit them before every reader reads them.
+
+## [0.1.0-rc.13] - 2026-11-03
+
+This tag is published. The `release` workflow ([run 41726236370](https://github.com/eshu-hq/eshu-sdk/actions/runs/41726236370))
+verified commit `9e57ec4a90c0a76d86b0cb84fc94ea455178a935`, created the tag
+`factschema/v0.1.0-rc.13` at it on 2026-11-03, and ran its public-proxy proof;
+the run concluded success. The public proxy lists the version and reports that
+commit as its origin.
 It carries three additive changes, each an optional field on an existing kind,
 so the module bump is a minor step within the 0.1 line (the release candidate
 counter moves from rc.12 to rc.13). No required field, existing field, stable

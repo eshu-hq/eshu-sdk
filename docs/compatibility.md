@@ -2,7 +2,7 @@
 
 The repository contains three independent Go module identities. The exact Git
 refs available in this checkout include collector `v0.2.0-rc.3`, `v0.2.0-rc.2` and
-`v0.1.0-rc.5` and factschema `v0.1.0-rc.12`; earlier candidate tags remain immutable. None of these tags qualifies
+`v0.1.0-rc.5` and factschema `v0.1.0-rc.13`; earlier candidate tags remain immutable. None of these tags qualifies
 an Eshu consumer on its own: recheck tag origin and fresh public-proxy
 resolution before claiming candidate availability. The `wirecontract` module
 is new in this change and has no published tag yet.
@@ -10,7 +10,7 @@ is new in this change and has no published tag yet.
 | Existing supported module | New module identity | Latest checked Git tag | Prepared next candidate |
 | --- | --- | --- | --- |
 | `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.2.0-rc.3` (at `1d52cade`, adds `collector-sdk/v1alpha3`; release run 41327854308); `collector/v0.2.0-rc.2` (off `main`, at `a663423`); `collector/v0.1.0-rc.5` on the `v0.1.0` line | none |
-| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.12` | `factschema/v0.1.0-rc.13` (unpublished) |
+| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.13` | `factschema/v0.1.0-rc.14` (unpublished) |
 | `github.com/eshu-hq/eshu/sdk/go/apicontract@v0.1.0` (release-prepared in core, tag NOT cut) | `github.com/eshu-hq/eshu-sdk/wirecontract` | none (new module) | `wirecontract/v0.1.0-rc.1` |
 
 The old and new import paths name different Go types. The new `v0.1.0`
@@ -48,7 +48,7 @@ repairs number-preserving typed decoding from
 integral decimal/exponent values and nested integer lists. Schemas, fixtures
 and wire protocols are unchanged by these two earlier changes.
 
-The collector RC3 and RC4 and factschema RC4 through RC12 source changes have
+The collector RC3 and RC4 and factschema RC4 through RC13 source changes have
 separate immutable Git tags. RC6 adds the optional EPSS `model_version` field;
 FIRST API rows do not supply it. RC7 adds the synthetic NVD paging golden
 without changing a wire schema. RC8 publishes the `terraformstate` drift
@@ -67,9 +67,10 @@ additive optional-field changes: `status` and `replaced_by` on
 `vulnerability.cve` (core eshu-hq/eshu#9695) and the NVD operator and negate
 flags on `vulnerability.affected_product` (core eshu-hq/eshu#9696). The public
 proxy lists it with that commit as its origin.
-Prepared next candidate: `factschema/v0.1.0-rc.13` (unpublished). Its source is
-the releases change (merged, SDK PR #72) plus the source-package join in this
-change. It adds three additive
+RC13 (tag `factschema/v0.1.0-rc.13`, at commit `9e57ec4`, published by the
+release workflow, [run 41726236370](https://github.com/eshu-hq/eshu-sdk/actions/runs/41726236370), on 2026-11-03) carries
+the releases change (SDK PR #72) and the source-package join (SDK PR #74). It
+adds three additive
 optional-field changes: `releases` on each `vulnerability.affected_package`
 range (core eshu-hq/eshu#9806): the OS release lines the range applies to,
 written as `<vendor>:<line>` such as `debian:12` or `alpine:3.18`;
@@ -80,7 +81,15 @@ fields on `reducer_supply_chain_impact_finding` (core eshu-hq/eshu#9859):
 `os_package_match_derivation` (`binary_package` or `source_package`),
 `installed_package_name`, and `source_package`. Each change is an additive minor
 with no decode shim and no stable-key change; an rc.12 reader ignores the keys.
-It is not tagged and has no proxy proof; its tag needs a separate release
+The public proxy lists it with that commit as its origin.
+Prepared next candidate: `factschema/v0.1.0-rc.14` (unpublished). It adds three
+optional raw identity-edge fields on `vulnerability.cve` (core
+eshu-hq/eshu#9954): `aliases` (symmetric, the only edge a reducer may group
+through), `related` (display-only), and `upstream` (directed, a distro or
+downstream record naming the upstream CVEs it repackages; never an alias or a
+correlation anchor). It is an additive minor with no decode shim, no
+stable-key change, and no schema-version change; an rc.13 reader ignores the
+keys. It is not tagged and has no proxy proof; its tag needs a separate release
 ruling against the merged commit.
 Collector RC4 allowlists the redaction-safe
 `env_from_secret` boolean on `kubernetes_live.pod_template` payloads
