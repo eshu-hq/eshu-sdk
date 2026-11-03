@@ -146,14 +146,17 @@ additive with no stable-key or wire change.
 Prepared next candidate: `factschema/v0.1.0-rc.14` (unpublished). It carries the
 optional `aliases`, `related`, and `upstream` identity-edge fields on
 `vulnerability.cve` (core eshu-hq/eshu#9954), additive with no stable-key,
-schema-version, or wire change. Merge the reviewed source, then obtain a
-separate release ruling against the concrete merged commit, and name rc.14 in
-the module's `CHANGELOG.md` before that commit is tagged (the section is already
-there). Then run the release workflow (see Releasing a module tag) with
-`module=factschema`, `version=v0.1.0-rc.14`, that commit, and
-`factschema/schema/vulnerability.cve.v1.schema.json` with SHA-256
-`5bc338252fd10e126ad4aef9e0de7305fd50c6f2984565c76e2dd3edd8ef8941` as
-`expect_file` and `expect_sha256`; its proof job is the fresh external
+schema-version, or wire change, and the shared fixture-pack payload
+`osv_identity_edges_golden.json` with `OSVIdentityEdgesGolden()`, byte-identical
+to the core copy. Merge the reviewed source, then obtain a separate release
+ruling against the concrete merged commit, and name rc.14 in the module's
+`CHANGELOG.md` before that commit is tagged (the section is already there). Then
+run the release workflow (see Releasing a module tag) with `module=factschema`,
+`version=v0.1.0-rc.14`, that commit, and
+`factschema/fixturepack/payloads/osv_identity_edges_golden.json` with SHA-256
+`3df283f40ecbe08dcd559bd3e3500c865411d247d8e644383c52fda8b3266010` as
+`expect_file` and `expect_sha256` (the CHANGELOG also records the
+`vulnerability.cve` schema digest); its proof job is the fresh external
 `GOWORK=off` public-proxy check Eshu waits for before it pins it. Core can only
 pin it, with the in-tree mirror sync, after that tag is on the proxy.
 

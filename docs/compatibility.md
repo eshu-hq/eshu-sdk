@@ -89,7 +89,8 @@ through), `related` (display-only), and `upstream` (directed, a distro or
 downstream record naming the upstream CVEs it repackages; never an alias or a
 correlation anchor). It is an additive minor with no decode shim, no
 stable-key change, and no schema-version change; an rc.13 reader ignores the
-keys. It is not tagged and has no proxy proof; its tag needs a separate release
+keys. It also adds the fixture-pack payload `osv_identity_edges_golden.json` and
+`OSVIdentityEdgesGolden()`, byte-identical to the core copy. It is not tagged and has no proxy proof; its tag needs a separate release
 ruling against the merged commit.
 Collector RC4 allowlists the redaction-safe
 `env_from_secret` boolean on `kubernetes_live.pod_template` payloads
