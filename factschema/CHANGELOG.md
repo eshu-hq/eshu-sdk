@@ -30,12 +30,14 @@ version — pinning this module pins the fixture pack too.
 
 This candidate source is not tagged. Publishing it needs a separate release
 ruling against the merged commit, and no proxy verification is claimed for it.
-It carries one additive change, an optional field on an existing kind, so the
-module bump is a minor step within the 0.1 line (the release candidate counter
-moves from rc.12 to rc.13). No required field, existing field, stable key, or
-wire format changes; the generated schema only gains an optional property.
-Schema file digest (SHA-256) at this source:
-`schema/vulnerability.affected_package.v1.schema.json` `fbe6f43e156e6db8e40e7fdc960584f3023136d2c90e1061244fc62a95da99b6`.
+It carries three additive changes, each an optional field on an existing kind,
+so the module bump is a minor step within the 0.1 line (the release candidate
+counter moves from rc.12 to rc.13). No required field, existing field, stable
+key, or wire format changes; the generated schemas only gain optional
+properties. Schema file digests (SHA-256) at this source:
+`schema/vulnerability.affected_package.v1.schema.json` `fbe6f43e156e6db8e40e7fdc960584f3023136d2c90e1061244fc62a95da99b6`,
+`schema/vulnerability.os_package.v1.schema.json` `0d0dd4eae5d6a24b09ac795be698a31d1455faad601bd47d22afea9348bdf8de`,
+`schema/reducer_supply_chain_impact_finding.v1.schema.json` `bd3af73b4ee64eea5feca757caef14c753ad182c633d398ed91e88eb3ecfdfcb`.
 
 ### Added
 
@@ -59,6 +61,30 @@ Schema file digest (SHA-256) at this source:
   used to be ignored; a conforming producer always emits a string array. An rc.12
   reader ignores the key because the range item keeps `additionalProperties:
   true`, so a producer may emit `releases` before every reader reads it.
+
+- `vulnerability.os_package` gains an optional `source_package` field (core
+  eshu-hq/eshu#9859, additive minor, no decode shim). It names the source
+  package the installed binary was built from (`openssl` for the dpkg row
+  `libssl3`), verbatim from the installed database's Source field. Only
+  dpkg-family rows carry one today; a fact without the key decodes as before,
+  with a nil `SourcePackage`, and `name` stays the installed binary key, never
+  rewritten. A value of the wrong JSON type now fails the decode and quarantines
+  the fact as `input_invalid`, where the extra key used to be ignored. There is
+  deliberately no `source_version` field: impact is decided by
+  vendor-advisory-source matching only, never by version comparison. An rc.12
+  reader ignores the key, so a producer may emit `source_package` before every
+  reader reads it.
+
+- `reducer_supply_chain_impact_finding` gains three optional evidence fields
+  (core eshu-hq/eshu#9859, additive minor, no decode shim):
+  `os_package_match_derivation`, `installed_package_name`, and
+  `source_package`. They record which installed-row key an OS advisory finding
+  joined through: `os_package_match_derivation` is `binary_package` or
+  `source_package`, `installed_package_name` is the binary name joined on, and
+  `source_package` is the source name joined through (set only on a
+  source-joined row). A finding written before them decodes with nil fields, and
+  nil fields stay off the wire. A value of the wrong JSON type now fails the
+  decode and quarantines the fact as `input_invalid`.
 
 ## [0.1.0-rc.12] - 2026-10-31
 
