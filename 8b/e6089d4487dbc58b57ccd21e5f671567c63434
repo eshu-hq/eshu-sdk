@@ -1,0 +1,36 @@
+factschema/CHANGELOG.md
+  s_9c818346074e86::t_9303f5acb8f24b 29,33-69
+factschema/decode_vulnerability_cve_identity_edges_test.go
+  s_9c818346074e86::t_1f6eb046292f59 1-227
+factschema/vulnerability/v1/AGENTS.md
+  s_9c818346074e86::t_553b21ed65a6d8 92-99
+factschema/vulnerability/v1/cve.go
+  s_9c818346074e86::t_91de4829bbb3cb 75-106
+factschema/vulnerability/v1/README.md
+  s_9c818346074e86::t_d785a27af59063 200-209
+docs/release.md
+  s_9c818346074e86::t_0848c809cff8be 105
+  s_9c818346074e86::t_ce5068f6a6e0fe 138-139,141-156
+docs/compatibility.md
+  s_9c818346074e86::t_d2b7a460daed34 5,13,51,70-73,84-92
+factschema/fixturepack/schema/vulnerability.cve.v1.schema.json
+  s_9c818346074e86::t_bf71f1243dc41e 9-17,48-56,84-92
+factschema/schema/vulnerability.cve.v1.schema.json
+  s_9c818346074e86::t_97193bb2838b5b 9-17,48-56,84-92
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8be6089d4487dbc58b57ccd21e5f671567c63434",
+  "prompts": {},
+  "sessions": {
+    "s_9c818346074e86": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9c11fe27-4c11-4e6c-baf7-8b1b133adba8",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
