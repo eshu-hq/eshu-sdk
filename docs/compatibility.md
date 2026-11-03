@@ -68,11 +68,18 @@ additive optional-field changes: `status` and `replaced_by` on
 flags on `vulnerability.affected_product` (core eshu-hq/eshu#9696). The public
 proxy lists it with that commit as its origin.
 Prepared next candidate: `factschema/v0.1.0-rc.13` (unpublished). Its source is
-merged (SDK PR #72). It adds one additive
-optional field, `releases` on each `vulnerability.affected_package` range (core
-eshu-hq/eshu#9806): the OS release lines the range applies to, written as
-`<vendor>:<line>` such as `debian:12` or `alpine:3.18`. It is an additive minor
-with no decode shim and no stable-key change; an rc.12 reader ignores the key.
+the releases change (merged, SDK PR #72) plus the source-package join in this
+change. It adds three additive
+optional-field changes: `releases` on each `vulnerability.affected_package`
+range (core eshu-hq/eshu#9806): the OS release lines the range applies to,
+written as `<vendor>:<line>` such as `debian:12` or `alpine:3.18`;
+`source_package` on `vulnerability.os_package` (core eshu-hq/eshu#9859): the
+source package name the installed binary was built from (`openssl` for dpkg row
+`libssl3`), with deliberately no `source_version` field; and three evidence
+fields on `reducer_supply_chain_impact_finding` (core eshu-hq/eshu#9859):
+`os_package_match_derivation` (`binary_package` or `source_package`),
+`installed_package_name`, and `source_package`. Each change is an additive minor
+with no decode shim and no stable-key change; an rc.12 reader ignores the keys.
 It is not tagged and has no proxy proof; its tag needs a separate release
 ruling against the merged commit.
 Collector RC4 allowlists the redaction-safe
