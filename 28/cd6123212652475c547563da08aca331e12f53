@@ -1,0 +1,19 @@
+factschema/vulnerability/v1/cve.go
+  s_9c818346074e86::t_e380c02e5b4bda 77-79,83-86
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "28cd6123212652475c547563da08aca331e12f53",
+  "prompts": {},
+  "sessions": {
+    "s_9c818346074e86": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9c11fe27-4c11-4e6c-baf7-8b1b133adba8",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
