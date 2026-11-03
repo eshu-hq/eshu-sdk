@@ -10,7 +10,7 @@ is new in this change and has no published tag yet.
 | Existing supported module | New module identity | Latest checked Git tag | Prepared next candidate |
 | --- | --- | --- | --- |
 | `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.2.0-rc.3` (at `1d52cade`, adds `collector-sdk/v1alpha3`; release run 41327854308); `collector/v0.2.0-rc.2` (off `main`, at `a663423`); `collector/v0.1.0-rc.5` on the `v0.1.0` line | none |
-| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.11` | `factschema/v0.1.0-rc.12` (unpublished) |
+| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.11` | `factschema/v0.1.0-rc.12` (unpublished); `factschema/v0.1.0-rc.13` (unpublished, after rc.12) |
 | `github.com/eshu-hq/eshu/sdk/go/apicontract@v0.1.0` (release-prepared in core, tag NOT cut) | `github.com/eshu-hq/eshu-sdk/wirecontract` | none (new module) | `wirecontract/v0.1.0-rc.1` |
 
 The old and new import paths name different Go types. The new `v0.1.0`
@@ -66,6 +66,13 @@ additive optional-field changes: `status` and `replaced_by` on
 `vulnerability.cve` (core eshu-hq/eshu#9695) and the NVD operator and negate
 flags on `vulnerability.affected_product` (core eshu-hq/eshu#9696). It is not
 tagged and has no proxy proof; its tag needs a separate release ruling.
+Prepared after it: `factschema/v0.1.0-rc.13` (unpublished). It adds one additive
+optional field, `releases` on each `vulnerability.affected_package` range (core
+eshu-hq/eshu#9806): the OS release lines the range applies to, written as
+`<vendor>:<line>` such as `debian:12` or `alpine:3.18`. It is an additive minor
+with no decode shim and no stable-key change; an rc.12 reader ignores the key.
+It is not tagged and has no proxy proof; its tag needs a separate release
+ruling against the merged commit.
 Collector RC4 allowlists the redaction-safe
 `env_from_secret` boolean on `kubernetes_live.pod_template` payloads
 ([SDK PR #28](https://github.com/eshu-hq/eshu-sdk/pull/28), issue #26). Core
