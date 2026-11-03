@@ -1,0 +1,35 @@
+docs/compatibility.md
+  s_9c818346074e86::t_20a9884874bfff 92-93
+docs/release.md
+  s_9c818346074e86::t_ce124e9749b827 149-159
+factschema/CHANGELOG.md
+  s_9c818346074e86::t_dc346e275dd8e6 33-40
+  s_9c818346074e86::t_838dba91f3d662 62,65-73
+  s_9c818346074e86::t_939d70f5d4ff99 74
+factschema/fixturepack/README.md
+  s_9c818346074e86::t_82896e91b4fe97 36-47,71
+factschema/fixturepack/doc.go
+  s_9c818346074e86::t_7f08a75652f270 42-47
+factschema/fixturepack/osv_identity_edges_golden.go
+  s_9c818346074e86::t_a3c65f32e58244 1-19
+factschema/fixturepack/osv_identity_edges_golden_test.go
+  s_9c818346074e86::t_fde914b3b4e12a 1-325
+factschema/fixturepack/payloads/osv_identity_edges_golden.json
+  s_9c818346074e86::t_8b3920a3e37ed1 1-117
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "051280f2746dabfc4cf3476791b9a9c26f5b6e80",
+  "prompts": {},
+  "sessions": {
+    "s_9c818346074e86": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9c11fe27-4c11-4e6c-baf7-8b1b133adba8",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
