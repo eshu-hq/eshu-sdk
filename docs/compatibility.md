@@ -2,7 +2,7 @@
 
 The repository contains three independent Go module identities. The exact Git
 refs available in this checkout include collector `v0.2.0-rc.3`, `v0.2.0-rc.2` and
-`v0.1.0-rc.5` and factschema `v0.1.0-rc.13`; earlier candidate tags remain immutable. None of these tags qualifies
+`v0.1.0-rc.5` and factschema `v0.1.0-rc.14`; earlier candidate tags remain immutable. None of these tags qualifies
 an Eshu consumer on its own: recheck tag origin and fresh public-proxy
 resolution before claiming candidate availability. The `wirecontract` module
 is new in this change and has no published tag yet.
@@ -10,7 +10,7 @@ is new in this change and has no published tag yet.
 | Existing supported module | New module identity | Latest checked Git tag | Prepared next candidate |
 | --- | --- | --- | --- |
 | `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.2.0-rc.3` (at `1d52cade`, adds `collector-sdk/v1alpha3`; release run 41327854308); `collector/v0.2.0-rc.2` (off `main`, at `a663423`); `collector/v0.1.0-rc.5` on the `v0.1.0` line | none |
-| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.13` | `factschema/v0.1.0-rc.14` (unpublished) |
+| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.14` | none |
 | `github.com/eshu-hq/eshu/sdk/go/apicontract@v0.1.0` (release-prepared in core, tag NOT cut) | `github.com/eshu-hq/eshu-sdk/wirecontract` | none (new module) | `wirecontract/v0.1.0-rc.1` |
 
 The old and new import paths name different Go types. The new `v0.1.0`
@@ -82,7 +82,8 @@ fields on `reducer_supply_chain_impact_finding` (core eshu-hq/eshu#9859):
 `installed_package_name`, and `source_package`. Each change is an additive minor
 with no decode shim and no stable-key change; an rc.12 reader ignores the keys.
 The public proxy lists it with that commit as its origin.
-Prepared next candidate: `factschema/v0.1.0-rc.14` (unpublished). It adds three
+RC14 (tag `factschema/v0.1.0-rc.14`, at commit `dd82190`, published by the
+release workflow, [run 41750345061](https://github.com/eshu-hq/eshu-sdk/actions/runs/41750345061), on 2026-11-04) adds three
 optional raw identity-edge fields on `vulnerability.cve` (core
 eshu-hq/eshu#9954): `aliases` (symmetric, the only edge a reducer may group
 through), `related` (display-only), and `upstream` (directed, a distro or
@@ -90,8 +91,7 @@ downstream record naming the upstream CVEs it repackages; never an alias or a
 correlation anchor). It is an additive minor with no decode shim, no
 stable-key change, and no schema-version change; an rc.13 reader ignores the
 keys. It also adds the fixture-pack payload `osv_identity_edges_golden.json` and
-`OSVIdentityEdgesGolden()`, byte-identical to the core copy. It is not tagged and has no proxy proof; its tag needs a separate release
-ruling against the merged commit.
+`OSVIdentityEdgesGolden()`, byte-identical to the core copy. The public proxy lists it with that commit as its origin.
 Collector RC4 allowlists the redaction-safe
 `env_from_secret` boolean on `kubernetes_live.pod_template` payloads
 ([SDK PR #28](https://github.com/eshu-hq/eshu-sdk/pull/28), issue #26). Core
