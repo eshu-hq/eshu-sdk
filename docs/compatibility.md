@@ -112,8 +112,11 @@ optional provenance fields (`scan_level`, `scan_mode`, `scanner_version`,
 `source_commit_sha`, `trace_count`) to `vulnerability.go_call_reachability` for
 core eshu-hq/eshu#10026 and states Eshu's trace order (entry point first,
 vulnerable symbol last). It is an additive minor with no decode shim and no
-stable-key or schema-version change; an rc.16 reader ignores the keys. It is
-not tagged and has no proxy proof.
+stable-key or schema-version change; an rc.16 reader ignores the keys. It also
+adds two optional fields, `repository_id` and `relative_path`, to
+`scanner_worker.warning` for core eshu-hq/eshu#10043, with the same guarantees,
+so a failed Go reachability scan's warning can be joined to a repository and to
+the go.mod file that failed. It is not tagged and has no proxy proof.
 Collector RC4 allowlists the redaction-safe
 `env_from_secret` boolean on `kubernetes_live.pod_template` payloads
 ([SDK PR #28](https://github.com/eshu-hq/eshu-sdk/pull/28), issue #26). Core

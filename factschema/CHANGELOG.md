@@ -40,6 +40,14 @@ changes; the generated schema only gains optional properties. File digests
 `fixturepack/payloads/vulnerability.go_call_reachability.valid.json`
 `cbcc32e16ab71db090acb25cd720f6c7d71cc52297a6513a6069b9ddadbdf48e`.
 
+A second change in this candidate (core eshu-hq/eshu#10043) adds two optional
+fields to `scanner_worker.warning`; it is the same kind of step, with the same
+no-shim, no-stable-key, no-schema-version guarantees. File digests (SHA-256):
+`schema/scanner_worker.warning.v1.schema.json`
+`d1ded1c9cfe3703b6a72d6d53706116a23a436042e74d1acfbf35bc3bcff12a6`,
+`fixturepack/payloads/scanner_worker.warning.valid.json`
+`f8a9c84b816c38cb9e6568fdd6165a0c604bb7874b4203558b7e62c900cbd942`.
+
 ### Added
 
 - `vulnerability.go_call_reachability` gains five optional provenance fields,
@@ -64,7 +72,8 @@ changes; the generated schema only gains optional properties. File digests
   the wire change meaning: the order was already entry first in every recorded
   fact.
 - The type documentation states what a producer writes for each outcome
-  (`symbol`, `import`, `module`, `not_called`, and a partial scan) and ties
+  (`symbol`, `import`, `module`, `not_called`, and a partial scan, for which it
+  writes no fact and warns instead) and ties
   `reachability_level` to `scan_level`: `import` and `module` are for package
   and module scans, and a symbol scan's package-only or module-only finding is
   `not_called`, because the reducer reads `import` as reachable. Every finding
@@ -82,6 +91,33 @@ changes; the generated schema only gains optional properties. File digests
 - The fixture pack's `vulnerability.go_call_reachability.valid.json` carries the
   five new fields, a frame `version`, and string positions, so a conformance run
   validates them against the schema. The invalid payload is unchanged.
+- `scanner_worker.warning` gains two optional fields, `repository_id` and
+  `relative_path` (core eshu-hq/eshu#10043, part of eshu-hq/eshu#10002;
+  additive minor, no decode shim). They scope a failed or partial Go
+  reachability scan (`analyzer: go_reachability`) to a repository and to the
+  go.mod file that failed. `relative_path` is the slash-separated go.mod file
+  path relative to the repository root, byte-equal to the `relative_path` on that
+  file's `go_module_evidence` rows; blank or absent means the whole repository,
+  and a warning with no `repository_id` joins nothing. The file path is the
+  scope, not a module path, because a finding is keyed by the vulnerable
+  dependency and a scan by its go.mod file. A producer MUST put the failure class
+  in `reason`, MUST leave `warning_class` as the constant
+  `scanner_worker_warning`, and MUST NOT write a `go_call_reachability` fact for
+  any module of a go.mod it warns about. The type documentation gives the reader
+  rule: a reachable fact wins; any other fact, or none, beside a joined warning is
+  missing evidence naming the `reason`. The core reducer does not read this kind
+  yet (eshu-hq/eshu#10043); until that lands a failed scan stays unknown.
+  Neither field is required, a payload without them decodes with nil fields, and
+  a value of the wrong JSON type fails the decode as `input_invalid`. The
+  hand-written `EncodeScannerWorkerWarning` writes both keys when set, and a new
+  reflection test fails when any `Warning` field has no encoder line. The fixture
+  pack's valid payload sets every optional field so a conformance run validates
+  them; it is not the shape any one producer writes. The invalid payload is
+  unchanged.
+- The `go_call_reachability` failed-scan guidance no longer offers a
+  `reachability_level "unknown"` fact: a producer that warns for a go.mod writes
+  no fact for its modules. No schema property changes, so that schema's digest is
+  unchanged.
 
 ## [0.1.0-rc.16] - 2026-11-04
 
