@@ -26,10 +26,52 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
-## [0.1.0-rc.16] - Prepared (unpublished)
+## [0.1.0-rc.17] - Prepared (unpublished)
 
 This candidate source is not tagged. Publishing it needs a separate release
 ruling against the merged commit, and no proxy verification is claimed for it.
+It adds five optional fields to one existing kind, so the module bump is a
+minor step within the 0.1 line (the counter moves from rc.16 to rc.17). No
+required field, existing field, stable key, schema version, or wire format
+changes; the generated schema only gains optional properties. File digests
+(SHA-256) at this source:
+`schema/vulnerability.go_call_reachability.v1.schema.json`
+`9470f63b617a4650dcfe9dd73f65bf8cc794d204fd62e52c3b736397e55fba7d`,
+`fixturepack/payloads/vulnerability.go_call_reachability.valid.json`
+`cbcc32e16ab71db090acb25cd720f6c7d71cc52297a6513a6069b9ddadbdf48e`.
+
+### Added
+
+- `vulnerability.go_call_reachability` gains five optional provenance fields,
+  `scan_level`, `scan_mode`, `scanner_version`, `source_commit_sha`, and
+  `trace_count` (core eshu-hq/eshu#10026, part of eshu-hq/eshu#10002; additive
+  minor, no decode shim). `scan_level` (`module`, `package`, or `symbol`) says
+  how deep the scan went, so a reader can tell a `symbol` scan, the only kind
+  that can show no call path exists, from a shallower one. `scan_mode` is
+  `source` or `binary`. `scanner_version` names the scanner release,
+  `source_commit_sha` the commit that was scanned, and `trace_count` how many
+  traces the scanner found; `trace` carries one of them. `scan_level` and
+  `scan_mode` are open strings: the schema does not restrict them and the
+  decode does not check them, so a reader keeps a value it does not know. A
+  payload without the keys decodes as before, with nil fields, and a value of
+  the wrong JSON type now fails the decode as `input_invalid`.
+- The struct documentation now states Eshu's trace order: `trace` runs entry
+  point first and vulnerable symbol last, and `deepest_*` describes the last
+  frame. This is the opposite of govulncheck's own order, which lists the
+  vulnerable symbol first, so a producer reading govulncheck output reverses it.
+  `position` stays one string rendered `filename:line:column`; govulncheck
+  reports an object, so a producer renders it and drops the offset. No bytes on
+  the wire change meaning: the order was already entry first in every recorded
+  fact.
+- The fixture pack's `vulnerability.go_call_reachability.valid.json` carries the
+  five new fields, a frame `version`, and string positions, so a conformance run
+  validates them against the schema. The invalid payload is unchanged.
+
+## [0.1.0-rc.16] - 2026-11-04
+
+This tag is published. The `release` workflow ([run 41860075638](https://github.com/eshu-hq/eshu-sdk/actions/runs/41860075638))
+verified commit `95bae1a95dd5080cb90fc3a120d99c18af872607`, created the tag
+`factschema/v0.1.0-rc.16` at it on 2026-11-04, and the run concluded success.
 It changes one fixture-pack payload and adds no field, so the module bump is a
 minor step within the 0.1 line (the counter moves from rc.15 to rc.16). No
 payload schema changes. File digest (SHA-256) at this source:

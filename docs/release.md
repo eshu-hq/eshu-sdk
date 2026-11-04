@@ -162,18 +162,23 @@ fixture-pack payload `source_terms_golden.json` with `SourceTermsGolden()`,
 additive with no stable-key, schema-version, or wire change. Core and the
 extracted collector pin it in eshu-hq/eshu#9958.
 
-Prepared next candidate: `factschema/v0.1.0-rc.16` (unpublished). It adds a
-`ghsa` row to `source_terms_golden.json` (SHA-256
-`c8a611ffb9afd154c3ecc3377ae73d073d1394086c3fdc569fa4470ede8ec6a4`) for core
-eshu-hq/eshu#9959 and changes no payload schema. Merge the reviewed source, then
-obtain a separate release ruling against the concrete merged commit, and name
-rc.16 in the module's `CHANGELOG.md` before that commit is tagged (the section is
-already there). Then run the release workflow (see Releasing a module tag) with
-`module=factschema`, `version=v0.1.0-rc.16`, that commit, and
-`factschema/fixturepack/payloads/source_terms_golden.json` with the SHA-256 above
-as `expect_file` and `expect_sha256`. Core and the extracted collector can only
-pin it after that tag is on the proxy, and core's golden replay fails on a source
-with no builder, so the core pin ships with the GHSA builder for #9959.
+`factschema/v0.1.0-rc.16` is published at commit `95bae1a`, created by the
+release workflow on 2026-11-04 ([run 41860075638](https://github.com/eshu-hq/eshu-sdk/actions/runs/41860075638)). It adds a
+`ghsa` row to `source_terms_golden.json` for core eshu-hq/eshu#9959 and changes
+no payload schema.
+
+Prepared next candidate: `factschema/v0.1.0-rc.17` (unpublished). It adds the
+optional `scan_level`, `scan_mode`, `scanner_version`, `source_commit_sha`, and
+`trace_count` fields to `vulnerability.go_call_reachability` for core
+eshu-hq/eshu#10026 and documents Eshu's trace order. Merge the reviewed source,
+then obtain a separate release ruling against the concrete merged commit, and
+confirm rc.17 is named in the module's `CHANGELOG.md` before that commit is
+tagged (the section is already there). Then run the release workflow (see
+Releasing a module tag) with `module=factschema`, `version=v0.1.0-rc.17`, that
+commit, and `factschema/schema/vulnerability.go_call_reachability.v1.schema.json`
+with SHA-256 `9470f63b617a4650dcfe9dd73f65bf8cc794d204fd62e52c3b736397e55fba7d`
+as `expect_file` and `expect_sha256`. Core can only pin it after that tag is on
+the proxy; the pin and the in-tree mirror sync land together.
 
 ## Historical RC3 preparation
 
