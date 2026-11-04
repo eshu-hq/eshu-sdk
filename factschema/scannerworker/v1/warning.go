@@ -65,11 +65,10 @@ package v1
 //	no fact                                 | none           | module_only, unknown (go_module_evidence rows exist)
 //	(no go_module_evidence rows)            | any            | no Go finding
 //
-// A module-level fact with no joined warning stays module_only, "govulncheck
-// matched only the vulnerable module, not an import or call"; an unknown-level
-// one stays unknown, "govulncheck recorded a finding but Eshu cannot classify
-// reachability". The reader MUST NOT add analysis_failed to either without a
-// joined warning.
+// A module-level fact with no joined warning stays module_only and an
+// unknown-level one stays unknown, each with the reason text the reader
+// already attaches to that level; this contract does not fix that text. The
+// reader MUST NOT add analysis_failed to either without a joined warning.
 //
 // An analysis_failed outcome names each distinct warning as
 // "govulncheck analysis failed: <Reason>" for a whole-repository warning and

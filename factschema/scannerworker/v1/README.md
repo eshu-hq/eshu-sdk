@@ -46,8 +46,8 @@ scan still writes its facts, even for the same dependency. A reader applies the 
 fact or no fact beside a joined warning is missing evidence naming
 `govulncheck analysis failed: <reason> at <relative_path>`. A `module` or
 `unknown` level fact with no joined warning keeps its own state, `module_only`
-("govulncheck matched only the vulnerable module, not an import or call") or
-`unknown`. The core reducer
+or `unknown`, with the reason text the reader already attaches to that level;
+this contract does not fix that text. The core reducer
 does not read this kind yet (eshu-hq/eshu#10043); until that lands a failed scan
 stays unknown.
 
