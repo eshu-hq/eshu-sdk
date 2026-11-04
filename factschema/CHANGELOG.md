@@ -63,6 +63,11 @@ changes; the generated schema only gains optional properties. File digests
   reports an object, so a producer renders it and drops the offset. No bytes on
   the wire change meaning: the order was already entry first in every recorded
   fact.
+- The type documentation states what a producer writes for each outcome
+  (`symbol`, `import`, `not_called`, and a partial scan). Every finding that
+  names a module sets `deepest_module`, including a `not_called` finding with
+  an empty `trace`: the core reducer joins on it, and a fact without it reads
+  as "no govulncheck evidence loaded". The generated schema is unchanged.
 - The fixture pack's `vulnerability.go_call_reachability.valid.json` carries the
   five new fields, a frame `version`, and string positions, so a conformance run
   validates them against the schema. The invalid payload is unchanged.
