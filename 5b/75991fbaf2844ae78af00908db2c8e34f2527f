@@ -1,0 +1,23 @@
+docs/compatibility.md
+  s_9c818346074e86::t_4fdfba636c03eb 5,13,85-86,94
+docs/release.md
+  s_9c818346074e86::t_9bf56250bbd4d4 146-148,151-155
+factschema/CHANGELOG.md
+  s_9c818346074e86::t_7aa7875d8a191f 29,31-37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5b75991fbaf2844ae78af00908db2c8e34f2527f",
+  "prompts": {},
+  "sessions": {
+    "s_9c818346074e86": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9c11fe27-4c11-4e6c-baf7-8b1b133adba8",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Allen Sanabria <asanabria6910@gmail.com>"
+    }
+  }
+}
