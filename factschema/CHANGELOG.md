@@ -26,10 +26,15 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
-## [0.1.0-rc.14] - Prepared (unpublished)
+## [0.1.0-rc.14] - 2026-11-04
 
-This candidate source is not tagged. Publishing it needs a separate release
-ruling against the merged commit, and no proxy verification is claimed for it.
+This tag is published. The `release` workflow ([run 41750345061](https://github.com/eshu-hq/eshu-sdk/actions/runs/41750345061))
+verified commit `dd82190ef9192564c410c32892e3b2caf0751d27`, created the tag
+`factschema/v0.1.0-rc.14` at it on 2026-11-04, and ran its public-proxy proof.
+The first two proof attempts ran before `proxy.golang.org` had indexed the tag
+and failed with a 404; a re-run of the proof job after the proxy served the
+version succeeded, and the run concluded success. The public proxy lists the
+version and reports that commit as its origin.
 It carries two additive changes: three optional fields on an existing kind and
 one fixture-pack payload, so the module bump is a minor step within the 0.1
 line (the release candidate counter moves from rc.13 to rc.14). No required

@@ -143,22 +143,16 @@ eshu-hq/eshu#9806, SDK PR #72), the optional `source_package` field on
 `reducer_supply_chain_impact_finding` (core eshu-hq/eshu#9859, SDK PR #74), all
 additive with no stable-key or wire change.
 
-Prepared next candidate: `factschema/v0.1.0-rc.14` (unpublished). It carries the
-optional `aliases`, `related`, and `upstream` identity-edge fields on
+`factschema/v0.1.0-rc.14` is published at commit `dd82190`, created by the
+release workflow on 2026-11-04 ([run 41750345061](https://github.com/eshu-hq/eshu-sdk/actions/runs/41750345061)). It carries the optional
+`aliases`, `related`, and `upstream` identity-edge fields on
 `vulnerability.cve` (core eshu-hq/eshu#9954), additive with no stable-key,
 schema-version, or wire change, and the shared fixture-pack payload
-`osv_identity_edges_golden.json` with `OSVIdentityEdgesGolden()`, byte-identical
-to the core copy. Merge the reviewed source, then obtain a separate release
-ruling against the concrete merged commit, and name rc.14 in the module's
-`CHANGELOG.md` before that commit is tagged (the section is already there). Then
-run the release workflow (see Releasing a module tag) with `module=factschema`,
-`version=v0.1.0-rc.14`, that commit, and
-`factschema/fixturepack/payloads/osv_identity_edges_golden.json` with SHA-256
-`3df283f40ecbe08dcd559bd3e3500c865411d247d8e644383c52fda8b3266010` as
-`expect_file` and `expect_sha256` (the CHANGELOG also records the
-`vulnerability.cve` schema digest); its proof job is the fresh external
-`GOWORK=off` public-proxy check Eshu waits for before it pins it. Core can only
-pin it, with the in-tree mirror sync, after that tag is on the proxy.
+`osv_identity_edges_golden.json` with `OSVIdentityEdgesGolden()` (SHA-256
+`3df283f40ecbe08dcd559bd3e3500c865411d247d8e644383c52fda8b3266010`). The proof
+job failed twice on a proxy 404 before the proxy indexed the tag and passed on a
+re-run; a tag is immutable, so the re-run only repeated the proof. Core pins it,
+with the in-tree mirror sync, in the first change that needs the typed fields.
 
 ## Historical RC3 preparation
 
