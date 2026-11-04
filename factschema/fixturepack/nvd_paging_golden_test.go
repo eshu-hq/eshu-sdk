@@ -53,7 +53,7 @@ func TestNVDPagingGoldenRejectsSeededCorruption(t *testing.T) {
 	}
 }
 
-const nvdPagingGoldenSHA256 = "bd1d347f1e89d27ad66c9014162d337bc9b7fa890a0abc5222314cf961e324fa"
+const nvdPagingGoldenSHA256 = "a89330a9573970c9cc94927a2fd9e4e802d7ab3ea7f51b1fda6815204da6ee4a"
 
 func validateNVDPagingGolden(raw []byte) error {
 	var golden struct {

@@ -178,3 +178,45 @@ func validateSourceTermsGolden(raw []byte) error {
 	}
 	return nil
 }
+
+// TestNVDPagingGoldenSnapshotCarriesSourceTerms proves the NVD paging golden's
+// expected source_snapshot payload carries the same terms as the source terms
+// golden, so the two shared fixtures cannot drift apart.
+func TestNVDPagingGoldenSnapshotCarriesSourceTerms(t *testing.T) {
+	entries, err := parseSourceTermsGolden(SourceTermsGolden())
+	if err != nil {
+		t.Fatal(err)
+	}
+	var want sourceTermsEntry
+	for _, entry := range entries {
+		if entry.Source == "nvd" {
+			want = entry
+		}
+	}
+	if want.Source == "" {
+		t.Fatal("source terms golden has no nvd entry")
+	}
+	var golden struct {
+		ExpectedFacts []struct {
+			Kind    string         `json:"kind"`
+			Payload map[string]any `json:"payload"`
+		} `json:"expected_facts"`
+	}
+	if err := json.Unmarshal(NVDPagingGolden(), &golden); err != nil {
+		t.Fatalf("decode NVD paging golden: %v", err)
+	}
+	seen := false
+	for _, fact := range golden.ExpectedFacts {
+		if fact.Kind != "vulnerability.source_snapshot" {
+			continue
+		}
+		seen = true
+		if fact.Payload["license"] != want.License || fact.Payload["attribution"] != want.Attribution {
+			t.Fatalf("NVD golden snapshot terms = (%v, %v), want (%q, %q)",
+				fact.Payload["license"], fact.Payload["attribution"], want.License, want.Attribution)
+		}
+	}
+	if !seen {
+		t.Fatal("NVD paging golden has no source_snapshot fact")
+	}
+}

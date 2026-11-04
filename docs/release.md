@@ -159,7 +159,9 @@ optional `license`, `attribution`, `cache_expires_at`, and `cache_mode` fields o
 `vulnerability.source_snapshot` (core eshu-hq/eshu#9958), additive with no
 stable-key, schema-version, or wire change, and the shared fixture-pack payload
 `source_terms_golden.json` with `SourceTermsGolden()` (SHA-256
-`6716429bbbbcec3f5f2317fff2b797f807e2c2b356deca485bba01c0e7e71924`). Merge the
+`6716429bbbbcec3f5f2317fff2b797f807e2c2b356deca485bba01c0e7e71924`). The NVD
+paging golden's expected snapshot payload gains the same two keys (new SHA-256
+`a89330a9573970c9cc94927a2fd9e4e802d7ab3ea7f51b1fda6815204da6ee4a`). Merge the
 reviewed source, then obtain a separate release ruling against the concrete
 merged commit, and name rc.15 in the module's `CHANGELOG.md` before that commit
 is tagged (the section is already there). Then run the release workflow (see
