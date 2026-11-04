@@ -154,6 +154,22 @@ job failed twice on a proxy 404 before the proxy indexed the tag and passed on a
 re-run; a tag is immutable, so the re-run only repeated the proof. Core pins it,
 with the in-tree mirror sync, in the first change that needs the typed fields.
 
+Prepared next candidate: `factschema/v0.1.0-rc.15` (unpublished). It carries the
+optional `license`, `attribution`, `cache_expires_at`, and `cache_mode` fields on
+`vulnerability.source_snapshot` (core eshu-hq/eshu#9958), additive with no
+stable-key, schema-version, or wire change, and the shared fixture-pack payload
+`source_terms_golden.json` with `SourceTermsGolden()` (SHA-256
+`6716429bbbbcec3f5f2317fff2b797f807e2c2b356deca485bba01c0e7e71924`). Merge the
+reviewed source, then obtain a separate release ruling against the concrete
+merged commit, and name rc.15 in the module's `CHANGELOG.md` before that commit
+is tagged (the section is already there). Then run the release workflow (see
+Releasing a module tag) with `module=factschema`, `version=v0.1.0-rc.15`, that
+commit, and `factschema/schema/vulnerability.source_snapshot.v1.schema.json`
+with SHA-256
+`17905bba18014b479b61b3709747130877842a8d3f41ca5336b2c65ad8eeeead` as
+`expect_file` and `expect_sha256`. Core can only pin it, with the in-tree mirror
+sync, after that tag is on the proxy.
+
 ## Historical RC3 preparation
 
 The checklist below records the earlier RC3 preparation and cutover plan. Its
