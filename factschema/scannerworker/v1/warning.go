@@ -61,8 +61,14 @@ package v1
 //	not_called, module, or unknown level    | one or more    | analysis_failed: missing evidence
 //	no fact                                 | one or more    | analysis_failed: missing evidence
 //	not_called level                        | none           | not_called
+//	module or unknown level                 | none           | the fact's own state: module_only or unknown (unchanged)
 //	no fact                                 | none           | module_only, unknown (go_module_evidence rows exist)
 //	(no go_module_evidence rows)            | any            | no Go finding
+//
+// A module-level fact with no joined warning stays module_only and an
+// unknown-level one stays unknown, each with the reason text the reader
+// already attaches to that level; this contract does not fix that text. The
+// reader MUST NOT add analysis_failed to either without a joined warning.
 //
 // An analysis_failed outcome names each distinct warning as
 // "govulncheck analysis failed: <Reason>" for a whole-repository warning and
