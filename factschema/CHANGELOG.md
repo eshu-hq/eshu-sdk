@@ -106,7 +106,8 @@ no-shim, no-stable-key, no-schema-version guarantees. File digests (SHA-256):
   the failed scan of a go.mod it warns about; a sibling go.mod's finished scan
   still writes its facts, even for the same dependency. The type documentation gives the reader
   rule: a reachable fact wins; any other fact, or none, beside a joined warning is
-  missing evidence naming the `reason`. The core reducer does not read this kind
+  missing evidence naming the `reason`; a `module` or `unknown` level fact with no
+  joined warning keeps its own state, `module_only` or `unknown`. The core reducer does not read this kind
   yet (eshu-hq/eshu#10043); until that lands a failed scan stays unknown.
   Neither field is required, a payload without them decodes with nil fields, and
   a value of the wrong JSON type fails the decode as `input_invalid`. The
