@@ -17,14 +17,14 @@ import (
 
 // requiredTermsSources are the sources whose snapshots carried no terms before
 // eshu-hq/eshu#9958. The golden must name each one.
-var requiredTermsSources = []string{"cisa_kev", "first_epss", "glad", "nvd", "osv"}
+var requiredTermsSources = []string{"cisa_kev", "first_epss", "nvd", "osv"}
 
 var licenseIdentifier = regexp.MustCompile(`^[A-Za-z0-9.+-]+$`)
 
 const maxAttributionLen = 300
 
 func TestSourceTermsGoldenFullContentDigest(t *testing.T) {
-	const expected = "6716429bbbbcec3f5f2317fff2b797f807e2c2b356deca485bba01c0e7e71924"
+	const expected = "2c60495311714fcac206c7df467657c8d7e0430370a4cd21554374046ee5b335"
 	got := fmt.Sprintf("%x", sha256.Sum256(SourceTermsGolden()))
 	if got != expected {
 		t.Fatalf("source terms golden digest = %s, want %s; review every source before updating the pin", got, expected)
@@ -57,7 +57,7 @@ func TestSourceTermsGoldenRejectsSeededCorruption(t *testing.T) {
 			`"attribution": "EPSS scores are provided by FIRST, https://www.first.org/epss"`,
 			`"attribution": "` + strings.Repeat("x", maxAttributionLen+1) + `"`,
 		},
-		"source dropped":           {`"source": "glad"`, `"source": "gitlab"`},
+		"source dropped":           {`"source": "osv"`, `"source": "osv_other"`},
 		"source name untrimmed":    {`"source": "nvd"`, `"source": "nvd "`},
 		"duplicate source":         {`"source": "first_epss"`, `"source": "cisa_kev"`},
 		"sources out of order":     {`"source": "cisa_kev"`, `"source": "zzz_kev"`},

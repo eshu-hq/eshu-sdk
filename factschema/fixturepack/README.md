@@ -47,12 +47,13 @@ shapes the target reducer release consumes.
   every expected field from the case record and pins the file digest.
 - `payloads/source_terms_golden.json` — the `license` and `attribution` each
   existing vulnerability source's `source_snapshot` carries (#9958): `osv`,
-  `nvd`, `cisa_kev`, `first_epss`, and `glad`. `license` is an SPDX identifier, a
+  `nvd`, `cisa_kev`, and `first_epss`. `license` is an SPDX identifier, a
   `LicenseRef-` identifier where the source publishes terms with no SPDX
   identifier, or `NOASSERTION` where no stated license was found. It describes
   the source, not each record (`osv` mixes licenses per record, so it says
   `LicenseRef-OSV-per-record`), and it discloses terms without deciding access.
-  A source absent from the file carries neither key. Core and the extracted
+  A source absent from the file carries neither key; `glad` is absent on
+  purpose because GitLab's published terms forbid storing the content. Core and the extracted
   collector each replay it against their own per-source constants. The pack
   test validates the rules, replays seeded violations, and pins the digest.
 

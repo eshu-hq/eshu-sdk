@@ -55,12 +55,12 @@ at this source: `schema/vulnerability.source_snapshot.v1.schema.json`
   `input_invalid`.
 - The fixture pack gains `payloads/source_terms_golden.json` and
   `SourceTermsGolden()`: the per-source `license` and `attribution` that the
-  `osv`, `nvd`, `cisa_kev`, `first_epss`, and `glad` snapshots carry (SHA-256
-  `6716429bbbbcec3f5f2317fff2b797f807e2c2b356deca485bba01c0e7e71924`). Core and
+  `osv`, `nvd`, `cisa_kev`, and `first_epss` snapshots carry (SHA-256
+  `2c60495311714fcac206c7df467657c8d7e0430370a4cd21554374046ee5b335`). Core and
   the extracted collector each replay it against their own snapshot builder.
   The NVD paging golden's expected `source_snapshot` payload gains the same two
   keys, so its digest moves to
-  `a89330a9573970c9cc94927a2fd9e4e802d7ab3ea7f51b1fda6815204da6ee4a`; a
+  `2c7c83dcfd8905ae7eddb753268fcbb0485e2cbda37839659e9ceacb3233c76a`; a
   consumer pinned to rc.14 keeps the old bytes and the old expectation.
 
 ## [0.1.0-rc.14] - 2026-11-04
