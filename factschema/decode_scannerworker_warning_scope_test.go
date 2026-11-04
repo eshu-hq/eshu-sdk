@@ -164,7 +164,7 @@ func TestEncodeScannerWorkerWarningScopeRoundTrips(t *testing.T) {
 // TestScannerWorkerWarningSchemaDeclaresScopeFields proves the generated
 // schema, in both the canonical copy and the embedded fixture-pack copy,
 // declares each scope field as an optional nullable string outside the required
-// set, and leaves the required set unchanged.
+// set, leaves the required set unchanged, and does not declare module_path.
 func TestScannerWorkerWarningSchemaDeclaresScopeFields(t *testing.T) {
 	canonical, err := os.ReadFile("schema/scanner_worker.warning.v1.schema.json")
 	if err != nil {
@@ -187,6 +187,9 @@ func TestScannerWorkerWarningSchemaDeclaresScopeFields(t *testing.T) {
 			sort.Strings(required)
 			if got, want := strings.Join(required, ","), strings.Join(warningCoreRequired, ","); got != want {
 				t.Fatalf("required = %s, want %s", got, want)
+			}
+			if _, present := schema.Properties["module_path"]; present {
+				t.Fatal("schema declares module_path; the warning joins on repository_id and relative_path, and a module line is evidence, not identity")
 			}
 			for _, key := range warningScopeKeys {
 				field, present := schema.Properties[key]
@@ -214,6 +217,15 @@ func TestScannerWorkerWarningFixturePackCarriesScope(t *testing.T) {
 	payload, ok := fixturepack.ValidPayload("scanner_worker.warning")
 	if !ok {
 		t.Fatal("fixturepack has no valid scanner_worker.warning payload")
+	}
+	if _, stray := payload["module_path"]; stray {
+		t.Fatal("valid fixture carries module_path; the schema allows extra keys, so only this check keeps it out")
+	}
+	if got := payload["warning_class"]; got != "scanner_worker_warning" {
+		t.Fatalf("fixture warning_class = %v, want the constant scanner_worker_warning", got)
+	}
+	if payload["reason"] == payload["warning_class"] {
+		t.Fatal("fixture reason equals warning_class; the failure class belongs in reason")
 	}
 	warning, err := DecodeScannerWorkerWarning(testScannerWorkerEnvelope(FactKindScannerWorkerWarning, payload))
 	if err != nil {

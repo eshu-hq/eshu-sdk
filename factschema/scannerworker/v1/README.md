@@ -40,7 +40,8 @@ the vulnerable dependency, while a scan is keyed by the go.mod file.
 A producer MUST put the failure class in `reason` and MUST leave
 `warning_class` as the constant `scanner_worker_warning`; a reader names the
 failure from `reason`. A producer MUST NOT write a `go_call_reachability` fact
-for any module of a go.mod it warns about. A reader applies the rule on
+from the failed scan of a go.mod it warns about; a sibling go.mod's finished
+scan still writes its facts, even for the same dependency. A reader applies the rule on
 `Warning`'s type documentation: a reachable fact always wins, and any other
 fact or no fact beside a joined warning is missing evidence naming
 `govulncheck analysis failed: <reason> at <relative_path>`. The core reducer

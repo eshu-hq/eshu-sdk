@@ -42,9 +42,10 @@ package v1
 //     "tools/go.mod"), byte-equal to the relative_path the claim writes on that
 //     go.mod's go_module_evidence rows. It MUST leave RelativePath absent or
 //     blank when the failure covers the whole repository.
-//   - MUST NOT write a vulnerability.go_call_reachability fact for any module
-//     of a go.mod it warns about, because a failed run has no trustworthy
-//     reachability result.
+//   - MUST NOT write a vulnerability.go_call_reachability fact from the failed
+//     scan of a go.mod it warns about, because a failed run has no trustworthy
+//     reachability result. A sibling go.mod's finished scan still writes its
+//     facts, even for the same dependency.
 //
 // RelativePath names the go.mod file, not the vulnerable dependency, because a
 // finding is keyed by the dependency while a scan is keyed by the file.
@@ -66,7 +67,7 @@ package v1
 // An analysis_failed outcome names each distinct warning as
 // "govulncheck analysis failed: <Reason>" for a whole-repository warning and
 // "govulncheck analysis failed: <Reason> at <RelativePath>" for a go.mod
-// warning. A module with neither a fact nor a warning has no evidence either
+// warning, plus the "govulncheck call-graph evidence missing" entry. A module with neither a fact nor a warning has no evidence either
 // way and stays unknown.
 //
 // The core reducer does not read this kind yet (eshu-hq/eshu#10043); until that
