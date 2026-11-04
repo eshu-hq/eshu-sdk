@@ -12,6 +12,11 @@
       "attribution": "EPSS scores are provided by FIRST, https://www.first.org/epss"
     },
     {
+      "source": "ghsa",
+      "license": "CC-BY-4.0",
+      "attribution": "GitHub Advisory Database, https://github.com/advisories, licensed CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/). Eshu normalizes these records."
+    },
+    {
       "source": "nvd",
       "license": "LicenseRef-NVD-API-Terms-of-Use",
       "attribution": "This product uses the NVD API but is not endorsed or certified by the NVD."

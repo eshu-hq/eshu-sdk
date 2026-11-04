@@ -154,23 +154,26 @@ job failed twice on a proxy 404 before the proxy indexed the tag and passed on a
 re-run; a tag is immutable, so the re-run only repeated the proof. Core pins it,
 with the in-tree mirror sync, in the first change that needs the typed fields.
 
-Prepared next candidate: `factschema/v0.1.0-rc.15` (unpublished). It carries the
+`factschema/v0.1.0-rc.15` is published at commit `10f6c17`, created by the
+release workflow on 2026-11-04 ([run 41852031597](https://github.com/eshu-hq/eshu-sdk/actions/runs/41852031597)). It carries the
 optional `license`, `attribution`, `cache_expires_at`, and `cache_mode` fields on
-`vulnerability.source_snapshot` (core eshu-hq/eshu#9958), additive with no
-stable-key, schema-version, or wire change, and the shared fixture-pack payload
-`source_terms_golden.json` with `SourceTermsGolden()` (SHA-256
-`2c60495311714fcac206c7df467657c8d7e0430370a4cd21554374046ee5b335`). The NVD
-paging golden's expected snapshot payload gains the same two keys (new SHA-256
-`2c7c83dcfd8905ae7eddb753268fcbb0485e2cbda37839659e9ceacb3233c76a`). Merge the
-reviewed source, then obtain a separate release ruling against the concrete
-merged commit, and name rc.15 in the module's `CHANGELOG.md` before that commit
-is tagged (the section is already there). Then run the release workflow (see
-Releasing a module tag) with `module=factschema`, `version=v0.1.0-rc.15`, that
-commit, and `factschema/schema/vulnerability.source_snapshot.v1.schema.json`
-with SHA-256
-`17905bba18014b479b61b3709747130877842a8d3f41ca5336b2c65ad8eeeead` as
-`expect_file` and `expect_sha256`. Core can only pin it, with the in-tree mirror
-sync, after that tag is on the proxy.
+`vulnerability.source_snapshot` (core eshu-hq/eshu#9958) and the shared
+fixture-pack payload `source_terms_golden.json` with `SourceTermsGolden()`,
+additive with no stable-key, schema-version, or wire change. Core and the
+extracted collector pin it in eshu-hq/eshu#9958.
+
+Prepared next candidate: `factschema/v0.1.0-rc.16` (unpublished). It adds a
+`ghsa` row to `source_terms_golden.json` (SHA-256
+`c8a611ffb9afd154c3ecc3377ae73d073d1394086c3fdc569fa4470ede8ec6a4`) for core
+eshu-hq/eshu#9959 and changes no payload schema. Merge the reviewed source, then
+obtain a separate release ruling against the concrete merged commit, and name
+rc.16 in the module's `CHANGELOG.md` before that commit is tagged (the section is
+already there). Then run the release workflow (see Releasing a module tag) with
+`module=factschema`, `version=v0.1.0-rc.16`, that commit, and
+`factschema/fixturepack/payloads/source_terms_golden.json` with the SHA-256 above
+as `expect_file` and `expect_sha256`. Core and the extracted collector can only
+pin it after that tag is on the proxy, and core's golden replay fails on a source
+with no builder, so the core pin ships with the GHSA builder for #9959.
 
 ## Historical RC3 preparation
 

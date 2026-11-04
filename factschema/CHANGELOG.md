@@ -26,10 +26,34 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
-## [0.1.0-rc.15] - Prepared (unpublished)
+## [0.1.0-rc.16] - Prepared (unpublished)
 
 This candidate source is not tagged. Publishing it needs a separate release
 ruling against the merged commit, and no proxy verification is claimed for it.
+It changes one fixture-pack payload and adds no field, so the module bump is a
+minor step within the 0.1 line (the counter moves from rc.15 to rc.16). No
+payload schema changes. File digest (SHA-256) at this source:
+`fixturepack/payloads/source_terms_golden.json`
+`c8a611ffb9afd154c3ecc3377ae73d073d1394086c3fdc569fa4470ede8ec6a4`.
+
+### Added
+
+- The shared `source_terms_golden.json` gains a `ghsa` row (core
+  eshu-hq/eshu#9959, Phase 4 item 4.2 of eshu-hq/eshu#9209): license
+  `CC-BY-4.0`, with an attribution line that credits the GitHub Advisory
+  Database, links `https://github.com/advisories` (the link GitHub's terms say
+  fulfils the attribution term), names the license and its URL, and says Eshu
+  normalizes the records. A consumer that replays the golden through its
+  source table must add the `ghsa` row to pass, so a consumer pinned to rc.15
+  keeps the old bytes and the old expectation.
+
+## [0.1.0-rc.15] - 2026-11-04
+
+This tag is published. The `release` workflow ([run 41852031597](https://github.com/eshu-hq/eshu-sdk/actions/runs/41852031597))
+verified commit `10f6c1772aa1f6f15b3ced4d26f2a7a59ebc4818`, created the tag
+`factschema/v0.1.0-rc.15` at it on 2026-11-04, and ran its public-proxy proof,
+which succeeded. The public proxy lists the version and reports that commit as
+its origin; module zip checksum `h1:lJ99lFqDQtZd5YfCBLRJC2up31A9SDBzVaGr1qvKes4=`.
 It carries one additive change, four optional fields on an existing kind plus
 one fixture-pack payload, so the module bump is a minor step within the 0.1
 line (the release candidate counter moves from rc.14 to rc.15). No required
@@ -261,238 +285,6 @@ or deployed pair. See the
   fixture-pack copy were regenerated in lockstep and match the core in-tree
   schema byte for byte.
 
-## [0.1.0-rc.9] - 2026-10-28
+## Older entries
 
-This tag is published on the Go proxy. It shipped without its own changelog
-section; this entry is reconstructed from the `factschema/v0.1.0-rc.8` to
-`factschema/v0.1.0-rc.9` diff (PR #53). No proxy-proof evidence note was
-recorded for it.
-
-### Changed
-
-- **Go API break:** the `terraformstate/v1` drift allowlist table is no longer
-  exported. `DriftAttributeAllowlist` became the unexported
-  `driftAttributeAllowlist`; read it through `DriftAllowlistFor` (which returns
-  a copy) and `DriftAllowlistResourceTypes`. A caller that referenced the RC8
-  variable directly no longer compiles. The doc comment now states the host
-  and satellite consumers in future tense, since neither delegates to it yet.
-  No payload schema, fixture-pack, or stable-key change.
-
-## [0.1.0-rc.8] - 2026-10-28
-
-This tag is published and proxy-verified; it does not qualify a core consumer
-or deployed pair.
-
-### Added
-
-- The `terraformstate` config-vs-state drift attribute allowlist as Go API
-  (`DriftAttributeAllowlist`, `DriftAllowlistFor`,
-  `DriftAllowlistResourceTypes` in `terraformstate/v1`, PR #50), ported from
-  `eshu` `sdk/go/factschema/terraformstate/v1`. Fail-closed: unlisted
-  resource types emit no attributes. No payload schema, fixture-pack, or
-  stable-key change.
-
-### Changed
-
-- Go directive `1.26.5` → `1.26.10` (toolchain floor only, aligned with the
-  collector module; govulncheck already reported no reachable advisories for
-  this module, with no language or library break for consumers). RC7 and
-  earlier tags declare `go 1.26.5`; RC8 is the first with `go 1.26.10`.
-
-## [0.1.0-rc.7] - 2026-10-27
-
-This tag is published and proxy-verified; it does not qualify a core consumer
-or deployed pair.
-
-### Added
-
-- A shared synthetic two-page NVD input-to-payload golden in `fixturepack`,
-  including exact source-snapshot and CVE fact kinds, stable keys, and payloads
-  for core #9225 and its extracted collector. No wire schema changes.
-
-## [0.1.0-rc.6] - 2026-10-26
-
-This immutable candidate adds one optional EPSS payload field. Exact consumer
-qualification and deployed acceptance remain separate checks.
-
-### Added
-
-- Optional `model_version` on `vulnerability.epss_score` (core #9226). The
-  typed codec preserves a source-supplied string, permits absence, and rejects
-  a non-string value. Canonical and fixture-pack schemas are regenerated in
-  lockstep. FIRST API rows do not supply this field.
-
-## [0.1.0-rc.5] - 2026-10-25
-
-### Added
-
-- Optional `dependency_resolution_state` on `PackageConsumptionCorrelation`
-  (`reducer_package_consumption_correlation`, core #8988): the state the
-  manifest parser gave the row (`resolved`, `partial`, or `unresolved`). Facts
-  written before the field keep the text fallback. The schema and fixture-pack
-  copy were regenerated in lockstep.
-
-## [0.1.0-rc.4] - 2026-10-25
-
-### Added
-
-- New `runtimedeclaration/v1` package with `DecodeRuntimeDeclarationVersion` and
-  `EncodeRuntimeDeclarationVersion` seams, a schema, and fixture-pack entries
-  for `runtime_declaration.version` (core #8815): one runtime version a
-  repository declares in one file, with nine required fields, nullable version
-  parts and range bounds, and a closed `spec_kind` set (`exact`, `partial`,
-  `range`, `alias`, `unresolved`) that readers decode tolerantly.
-
-## [0.1.0-rc.3] - 2026-10-25
-
-This candidate updated the fixture pack without changing the payload schema or
-typed decoder. Its Git tag exists; consumer and deployed acceptance are separate.
-
-### Fixed
-
-- The `azure_tag_observation` valid and invalid examples now carry a deterministic
-  synthetic HMAC-SHA256 fingerprint in place of a placeholder. The payload
-  schema and typed decode contract are unchanged.
-
-## [0.1.0-rc.2] - 2026-10-24
-
-Published candidate from the reviewed source commit also used by collector
-`v0.2.0-rc.1`. Fresh public-proxy resolution and a typed-decoder smoke check are
-recorded in [candidate evidence](../docs/evidence/factschema-v0.1.0-rc.2.md). Publication does not qualify a consumer/core pair.
-
-### Fixed
-
-- Nested integer slices accept exact integral `json.Number` decimal and
-  exponent values, retain legacy mixed-member conversion and report bounded
-  invalid-input errors.
-
-- Typed payload decoding now accepts number-preserving `json.Number` input.
-  Integer fields preserve integral decimal and exponent values exactly and
-  reject fractional or out-of-range values. Float fields accept finite values,
-  including fractions, with float64 rounding. Malformed tokens and float64
-  overflow fail as `input_invalid`. Schemas and fixture payloads are unchanged.
-
-## [0.1.0-rc.1] - 2026-10-23
-
-Candidate source prepared for separate review, merge, CI, and tag approval.
-This entry belongs to the new module path, not the historical `v0.2.0` line.
-
-### Added
-
-- `identity` provides stable fact identity derivation, and `contracttest`
-  provides generic contract assertions for out-of-tree consumers. Their core
-  adoption remains a separately validated step.
-- New `ref_overlay/v1` package with `Decode`/`Encode` seams, schemas, and
-  fixture-pack entries for epic #5393 Phase 1 (contract only — no collector,
-  reducer, or query consumer yet): `ref_overlay.branch_observation` (one
-  deployment-referenced non-default ref with its resolution state) and
-  `config_key_divergence` (one per-environment config-key divergence row
-  carrying keys plus a divergence boolean only — no values, no hashes).
-- `codegraph/v1` `Import` gains three optional booleans, `type_only`, `deferred`
-  and `inferred` (json tags of the same names, `omitempty`). A parser sets one
-  only when it is true. An additive optional field is a minor change.
-- Compared with the supported old `factschema@v0.2.0`, this source contains
-  three added schemas, no removed schemas, and four existing schemas with
-  optional nullable fields added. The count changes from 176 to 179; it does
-  not establish acceptance by an old core consumer.
-
-## [0.2.0] - 2026-09-16
-
-Historical additive post-`v0.1.0` changes in the original module — 46 new schemas, zero breaking schema
-diffs against tag `factschema/v0.1.0`
-(`bash scripts/verify-factschema-diff.sh -base-ref factschema/v0.1.0`
-exits 0), so this stays a minor bump per the policy above. See
-[SDK Compatibility](https://github.com/eshu-hq/eshu/blob/eb62fa3056/docs/public/extend/sdk-compatibility.md) for the
-version row for this release.
-
-### Added
-
-- Six new typed `<family>/v1` packages with `Decode<Kind>`/`Encode<Kind>`
-  seams, schemas, and fixture-pack entries: `codeowners`
-  (`codeowners.ownership`), `reducerderived` (governed reducer-owned findings
-  such as `reducer_supply_chain_impact_finding`,
-  `reducer_aws_cloud_runtime_drift_finding`,
-  `reducer_multi_cloud_runtime_drift_finding`, plus package-correlation and
-  terraform-drift findings), `scannerworker` (`scanner_worker.analysis`,
-  `scanner_worker.warning`), `semantic` (`semantic.code_hint`,
-  `semantic.documentation_observation`), `submodule` (`submodule.pin`), and
-  `vulnerabilitysuppression` (`vulnerability.suppression`, shared by VEX,
-  operator-policy, and provider-dismissal producers).
-- `reducer_supply_chain_impact_finding` carries the optional
-  `environment_evidence` field (`map[string]string`, `omitempty`), labelling
-  each name in `environments` as `deploy_event` or `declared` (issue #5426),
-  plus the optional `ci_declared_artifact_digest` and `ci_declared_image_ref`
-  fields holding the matched `cicd_run_correlation` deployment's own declared
-  artifact identity, baked only on a strong-branch match (issue #5469). All
-  three are additive-optional: a finding written before them existed still
-  decodes with nil fields.
-- New kinds in existing families: `vulnerability.reference` and
-  `vulnerability.source_snapshot`; `aws` IAM boundary/policy/attachment/trust,
-  DNS, image-reference, and warning kinds; `azure` identity-observation,
-  image-reference, resource-change, and tag-observation kinds; `gcp` IAM and
-  image-reference kinds; `ci.deployment_event`; Kubernetes RBAC and
-  service-account-token kinds; `secrets_iam_coverage_warning`; Vault
-  auth-mount, identity, and secret-engine-mount kinds; and `workitem` metadata
-  extensions.
-- `SchemaBytes` — embedded access to the checked-in `schema/*.json` bytes for
-  one fact kind, so out-of-module conformance tests can load a committed
-  schema without duplicating the schema tree the way `fixturepack` must.
-
-### Changed
-
-- Core Eshu now generates the adapter that maps durable internal fact envelopes
-  into this module's `Envelope` for Decode calls. This does not change any
-  factschema payload schema, fixture-pack artifact, or public Go API.
-- Go directive `1.26.0` → `1.26.5` (toolchain floor only; no language or
-  library break for consumers).
-
-## [0.1.0] - 2026-07-06
-
-First tagged release of the original in-tree module (`factschema/v0.1.0` at `92061fe39`, fetchable via
-the Go module proxy; closes the scaffold started in #4567). Content below is
-the module tree at that tag: 130 generated schemas, zero breaking diffs since
-only the tag itself is the baseline.
-
-### Added
-
-- `Envelope` — the canonical fact envelope shared by every typed fact kind.
-- Twenty typed `<family>/v1` packages, each with a `Decode<Kind>`/`Encode<Kind>`
-  seam: `aws`, `azure`, `gcp`, `iam`, `secretsiam`, `incident` (the first family
-  with dotted wire kinds, e.g. `incident_routing.applied_pagerduty_resource`),
-  `cicdrun`, `codedataflow`, `codegraph`, `documentation`, `kuberneteslive`,
-  `observability`, `ociregistry`, `packageregistry`, `sbom`,
-  `securityalert`, `servicecatalog`, `terraformstate`, `vulnerability`, and
-  `workitem`. This is an incremental migration (Contract System v1 §7); a fact
-  kind without a typed struct yet still decodes through the untyped envelope
-  path.
-- Generated JSON Schema artifacts under `schema/<kind>.v1.schema.json` for
-  every typed fact kind, produced with `invopop/jsonschema`.
-- `fixturepack` subpackage — the versioned, importable payload-conformance
-  artifact bundling the checked-in schemas plus one valid and one invalid
-  example payload per kind, with a drift-lock test guaranteeing the embedded
-  copy matches the canonical generated schema in the same commit.
-- `DecodeError` classified error type (`ClassificationInputInvalid`) so a
-  missing required field on decode dead-letters visibly instead of silently
-  zeroing out.
-
-## Convention for future entries
-
-Add a new `## [Unreleased]` entry at the top of this file for every
-merge-worthy change to this module — a new typed family, a schema version
-bump, a fixture-pack payload change, or a decode-seam behavior change —
-grouped under `### Added`, `### Changed`, `### Deprecated`, `### Removed`,
-`### Fixed`, or `### Security` as needed (omit empty groups). Name the
-affected fact kind(s) explicitly; "misc fixes" is not sufficient detail for a
-contracts module external collectors pin against.
-
-When a maintainer cuts a release:
-
-1. Run generation, module tests, and a consumer schema compatibility review
-   against the intended release baseline. The new repository does not yet
-   carry the original Eshu schema-diff gate.
-2. Rename the top `[Unreleased]` section to `[X.Y.Z] - YYYY-MM-DD` using the
-   highest-severity bump any fact kind in the release needed.
-3. Add a fresh empty `## [Unreleased]` section above it.
-4. Follow the [release and cutover checklist](../docs/release.md) before
-   tagging a new module release with `factschema/vX.Y.Z`. This would also
-   version the fixture pack; it has no separate tag.
+Entries from `0.1.0-rc.9` back to `0.1.0` are in [CHANGELOG-archive.md](CHANGELOG-archive.md).

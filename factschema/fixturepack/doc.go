@@ -48,7 +48,7 @@
 //
 // SourceTermsGolden supplies the license and attribution each existing
 // vulnerability source's source_snapshot carries (osv, nvd, cisa_kev,
-// first_epss). A license is an SPDX identifier, a LicenseRef- identifier,
+// first_epss, ghsa). A license is an SPDX identifier, a LicenseRef- identifier,
 // or NOASSERTION; it describes the source, not each record, and discloses terms
 // without deciding access. Core and the extracted collector replay it against
 // their own per-source constants.
