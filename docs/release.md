@@ -154,6 +154,24 @@ job failed twice on a proxy 404 before the proxy indexed the tag and passed on a
 re-run; a tag is immutable, so the re-run only repeated the proof. Core pins it,
 with the in-tree mirror sync, in the first change that needs the typed fields.
 
+Prepared next candidate: `factschema/v0.1.0-rc.15` (unpublished). It carries the
+optional `license`, `attribution`, `cache_expires_at`, and `cache_mode` fields on
+`vulnerability.source_snapshot` (core eshu-hq/eshu#9958), additive with no
+stable-key, schema-version, or wire change, and the shared fixture-pack payload
+`source_terms_golden.json` with `SourceTermsGolden()` (SHA-256
+`2c60495311714fcac206c7df467657c8d7e0430370a4cd21554374046ee5b335`). The NVD
+paging golden's expected snapshot payload gains the same two keys (new SHA-256
+`2c7c83dcfd8905ae7eddb753268fcbb0485e2cbda37839659e9ceacb3233c76a`). Merge the
+reviewed source, then obtain a separate release ruling against the concrete
+merged commit, and name rc.15 in the module's `CHANGELOG.md` before that commit
+is tagged (the section is already there). Then run the release workflow (see
+Releasing a module tag) with `module=factschema`, `version=v0.1.0-rc.15`, that
+commit, and `factschema/schema/vulnerability.source_snapshot.v1.schema.json`
+with SHA-256
+`17905bba18014b479b61b3709747130877842a8d3f41ca5336b2c65ad8eeeead` as
+`expect_file` and `expect_sha256`. Core can only pin it, with the in-tree mirror
+sync, after that tag is on the proxy.
+
 ## Historical RC3 preparation
 
 The checklist below records the earlier RC3 preparation and cutover plan. Its

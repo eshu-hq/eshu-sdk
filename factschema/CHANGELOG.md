@@ -26,6 +26,43 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
+## [0.1.0-rc.15] - Prepared (unpublished)
+
+This candidate source is not tagged. Publishing it needs a separate release
+ruling against the merged commit, and no proxy verification is claimed for it.
+It carries one additive change, four optional fields on an existing kind plus
+one fixture-pack payload, so the module bump is a minor step within the 0.1
+line (the release candidate counter moves from rc.14 to rc.15). No required
+field, existing field, stable key, schema version, or wire format changes; the
+generated schema only gains optional properties. Schema file digest (SHA-256)
+at this source: `schema/vulnerability.source_snapshot.v1.schema.json`
+`17905bba18014b479b61b3709747130877842a8d3f41ca5336b2c65ad8eeeead`.
+
+### Added
+
+- `vulnerability.source_snapshot` gains four optional fields, `license`,
+  `attribution`, `cache_expires_at`, and `cache_mode` (core eshu-hq/eshu#9958,
+  Phase 4 item 4.0 of eshu-hq/eshu#9209, additive minor, no decode shim).
+  `license` names the terms the source's data was collected under: an SPDX
+  identifier such as `CC0-1.0`, a `LicenseRef-` identifier where the source
+  publishes terms with no SPDX identifier, or `NOASSERTION` where no stated
+  license was found. It describes the source, not each record, and it is a
+  disclosure carried with the snapshot, not an access decision; no reader
+  enforces it. `attribution` is one plain-text credit line. `cache_expires_at`
+  and `cache_mode` were already written by the cache-wrapping layer but absent
+  from the typed struct. A snapshot without the keys decodes as before, with nil
+  fields, and a value of the wrong JSON type now fails the decode as
+  `input_invalid`.
+- The fixture pack gains `payloads/source_terms_golden.json` and
+  `SourceTermsGolden()`: the per-source `license` and `attribution` that the
+  `osv`, `nvd`, `cisa_kev`, and `first_epss` snapshots carry (SHA-256
+  `2c60495311714fcac206c7df467657c8d7e0430370a4cd21554374046ee5b335`). Core and
+  the extracted collector each replay it against their own snapshot builder.
+  The NVD paging golden's expected `source_snapshot` payload gains the same two
+  keys, so its digest moves to
+  `2c7c83dcfd8905ae7eddb753268fcbb0485e2cbda37839659e9ceacb3233c76a`; a
+  consumer pinned to rc.14 keeps the old bytes and the old expectation.
+
 ## [0.1.0-rc.14] - 2026-11-04
 
 This tag is published. The `release` workflow ([run 41750345061](https://github.com/eshu-hq/eshu-sdk/actions/runs/41750345061))

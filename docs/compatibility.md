@@ -10,7 +10,7 @@ is new in this change and has no published tag yet.
 | Existing supported module | New module identity | Latest checked Git tag | Prepared next candidate |
 | --- | --- | --- | --- |
 | `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.2.0-rc.3` (at `1d52cade`, adds `collector-sdk/v1alpha3`; release run 41327854308); `collector/v0.2.0-rc.2` (off `main`, at `a663423`); `collector/v0.1.0-rc.5` on the `v0.1.0` line | none |
-| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.14` | none |
+| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.14` | `factschema/v0.1.0-rc.15` (unpublished) |
 | `github.com/eshu-hq/eshu/sdk/go/apicontract@v0.1.0` (release-prepared in core, tag NOT cut) | `github.com/eshu-hq/eshu-sdk/wirecontract` | none (new module) | `wirecontract/v0.1.0-rc.1` |
 
 The old and new import paths name different Go types. The new `v0.1.0`
@@ -92,6 +92,15 @@ correlation anchor). It is an additive minor with no decode shim, no
 stable-key change, and no schema-version change; an rc.13 reader ignores the
 keys. It also adds the fixture-pack payload `osv_identity_edges_golden.json` and
 `OSVIdentityEdgesGolden()`, byte-identical to the core copy. The public proxy lists it with that commit as its origin.
+Prepared next candidate: `factschema/v0.1.0-rc.15` (unpublished). It adds four
+optional fields on `vulnerability.source_snapshot` (core eshu-hq/eshu#9958):
+`license` (an SPDX identifier, a `LicenseRef-` identifier, or `NOASSERTION`),
+`attribution` (one credit line), and the two cache fields `cache_expires_at` and
+`cache_mode` that the cache layer already wrote. It is an additive minor with no
+decode shim, no stable-key change, and no schema-version change; an rc.14 reader
+ignores the keys. It also adds the fixture-pack payload
+`source_terms_golden.json` and `SourceTermsGolden()`. It is not tagged and has
+no proxy proof.
 Collector RC4 allowlists the redaction-safe
 `env_from_secret` boolean on `kubernetes_live.pod_template` payloads
 ([SDK PR #28](https://github.com/eshu-hq/eshu-sdk/pull/28), issue #26). Core
