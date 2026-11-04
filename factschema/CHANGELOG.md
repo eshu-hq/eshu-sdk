@@ -67,10 +67,18 @@ changes; the generated schema only gains optional properties. File digests
   (`symbol`, `import`, `module`, `not_called`, and a partial scan) and ties
   `reachability_level` to `scan_level`: `import` and `module` are for package
   and module scans, and a symbol scan's package-only or module-only finding is
-  `not_called`, because the reducer reads `import` as reachable. Every finding that
-  names a module sets `deepest_module`, including a `not_called` finding with
-  an empty `trace`: the core reducer joins on it, and a fact without it reads
-  as "no govulncheck evidence loaded". The generated schema is unchanged.
+  `not_called`, because the reducer reads `import` as reachable. Every finding
+  that names a module sets `deepest_module`, including a `not_called` finding
+  with an empty `trace`: the core reducer joins on it, and a fact without it
+  reads as "no govulncheck evidence loaded". The finding depth is the deepest
+  finding for one (advisory, module) pair: govulncheck reports an advisory
+  several times as the scan deepens (module, then package, then function), so a
+  producer folds all of those messages into one fact before it picks the level,
+  and never takes a level from a single message. The reducer also needs a
+  `go_module_evidence` row and an `affected_package` row for the advisory and
+  module; without either it emits no finding for that module. The `module`
+  outcome reads in the reducer as "govulncheck matched only the vulnerable
+  module, not an import or call". The generated schema is unchanged.
 - The fixture pack's `vulnerability.go_call_reachability.valid.json` carries the
   five new fields, a frame `version`, and string positions, so a conformance run
   validates them against the schema. The invalid payload is unchanged.
