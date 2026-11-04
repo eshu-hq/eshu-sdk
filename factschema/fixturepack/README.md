@@ -53,7 +53,10 @@ shapes the target reducer release consumes.
   the source, not each record (`osv` mixes licenses per record, so it says
   `LicenseRef-OSV-per-record`), and it discloses terms without deciding access.
   A source absent from the file carries neither key; `glad` is absent on
-  purpose because GitLab's published terms forbid storing the content. Core and the extracted
+  purpose because GitLab's published terms forbid storing the content. The
+  `first_epss` attribution is provisional Eshu wording until the owner gives
+  FIRST's, and the `nvd` values rest on a reproduction of the NVD API terms, not
+  the primary page. Core and the extracted
   collector each replay it against their own per-source constants. The pack
   test validates the rules, replays seeded violations, and pins the digest.
 

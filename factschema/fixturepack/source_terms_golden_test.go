@@ -53,6 +53,7 @@ func TestSourceTermsGoldenRejectsSeededCorruption(t *testing.T) {
 		"license a free sentence":  {`"license": "NOASSERTION"`, `"license": "no stated license"`},
 		"attribution left blank":   {`"attribution": "EPSS scores are provided by FIRST, https://www.first.org/epss"`, `"attribution": ""`},
 		"attribution on two lines": {`EPSS scores are provided by FIRST,`, `EPSS scores are\nprovided by FIRST,`},
+		"attribution with a tab":   {`EPSS scores are provided by FIRST,`, `EPSS scores are\tprovided by FIRST,`},
 		"attribution too long": {
 			`"attribution": "EPSS scores are provided by FIRST, https://www.first.org/epss"`,
 			`"attribution": "` + strings.Repeat("x", maxAttributionLen+1) + `"`,
@@ -159,7 +160,7 @@ func validateSourceTermsGolden(raw []byte) error {
 		if strings.TrimSpace(entry.Attribution) == "" {
 			return fmt.Errorf("%s: attribution must not be blank", entry.Source)
 		}
-		if strings.ContainsAny(entry.Attribution, "\r\n") {
+		if strings.ContainsAny(entry.Attribution, "\r\n\t") {
 			return fmt.Errorf("%s: attribution must be one line", entry.Source)
 		}
 		if len(entry.Attribution) > maxAttributionLen {
