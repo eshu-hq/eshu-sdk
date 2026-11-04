@@ -170,15 +170,37 @@ no payload schema.
 Prepared next candidate: `factschema/v0.1.0-rc.17` (unpublished). It adds the
 optional `scan_level`, `scan_mode`, `scanner_version`, `source_commit_sha`, and
 `trace_count` fields to `vulnerability.go_call_reachability` for core
-eshu-hq/eshu#10026 and documents Eshu's trace order. Merge the reviewed source,
-then obtain a separate release ruling against the concrete merged commit, and
-confirm rc.17 is named in the module's `CHANGELOG.md` before that commit is
-tagged (the section is already there). Then run the release workflow (see
-Releasing a module tag) with `module=factschema`, `version=v0.1.0-rc.17`, that
-commit, and `factschema/schema/vulnerability.go_call_reachability.v1.schema.json`
-with SHA-256 `9470f63b617a4650dcfe9dd73f65bf8cc794d204fd62e52c3b736397e55fba7d`
-as `expect_file` and `expect_sha256`. Core can only pin it after that tag is on
-the proxy; the pin and the in-tree mirror sync land together.
+eshu-hq/eshu#10026 and documents Eshu's trace order. It also adds the optional
+`repository_id` and `relative_path` fields to `scanner_worker.warning` for core
+eshu-hq/eshu#10043. Hold the tag until both changes are on `main`. Merge the
+reviewed source, then obtain a separate release ruling against the concrete
+merged commit M, and confirm rc.17 is named in the module's `CHANGELOG.md`
+before M is tagged (the section is already there).
+
+The release workflow takes one `expect_file`, so pin the file that fails when
+the newest change is missing. Run the workflow (see Releasing a module tag)
+with `module=factschema`, `version=v0.1.0-rc.17`, commit M, and
+`factschema/schema/scanner_worker.warning.v1.schema.json` with SHA-256
+`d1ded1c9cfe3703b6a72d6d53706116a23a436042e74d1acfbf35bc3bcff12a6` as
+`expect_file` and `expect_sha256`. Pinning the
+`vulnerability.go_call_reachability` schema instead would pass without the
+warning change. That file cannot be pinned too, so check it by hand:
+
+- Before the dispatch, run `git show M:factschema/schema/vulnerability.go_call_reachability.v1.schema.json | sha256sum`
+  and expect `9470f63b617a4650dcfe9dd73f65bf8cc794d204fd62e52c3b736397e55fba7d`.
+- Before the dispatch, confirm the two fixture-pack schema copies are
+  byte-equal to the canonical files, and that the digests the `CHANGELOG.md`
+  lists equal `sha256sum` of those files at M.
+- Before the dispatch, confirm `git ls-remote --tags origin` shows no rc.17 and
+  that `ci-complete` succeeded on M.
+- After the tag, wait for the `prove` job to pass with origin commit M. It checks
+  only the pinned file. Then run
+  `go mod download -json github.com/eshu-hq/eshu-sdk/factschema@v0.1.0-rc.17` and
+  `sha256sum` both schema files inside the downloaded module directory against
+  the two digests above. A proxy 404 means re-run the failed job; never retag.
+
+Core can only pin it after that tag is on the proxy; the pin and the in-tree
+mirror sync land together.
 
 ## Historical RC3 preparation
 
