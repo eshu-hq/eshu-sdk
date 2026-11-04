@@ -47,7 +47,7 @@ shapes the target reducer release consumes.
   every expected field from the case record and pins the file digest.
 - `payloads/source_terms_golden.json` — the `license` and `attribution` each
   existing vulnerability source's `source_snapshot` carries (#9958): `osv`,
-  `nvd`, `cisa_kev`, and `first_epss`. `license` is an SPDX identifier, a
+  `nvd`, `cisa_kev`, `first_epss`, and `ghsa`. `license` is an SPDX identifier, a
   `LicenseRef-` identifier where the source publishes terms with no SPDX
   identifier, or `NOASSERTION` where no stated license was found. It describes
   the source, not each record (`osv` mixes licenses per record, so it says
@@ -55,8 +55,9 @@ shapes the target reducer release consumes.
   A source absent from the file carries neither key; `glad` is absent on
   purpose because GitLab's published terms forbid storing the content. The
   `first_epss` attribution is provisional Eshu wording until the owner gives
-  FIRST's, and the `nvd` values rest on a reproduction of the NVD API terms, not
-  the primary page. Core and the extracted
+  FIRST's, and the `nvd` notice is the one the NVD API terms prescribe, confirmed
+  against the Wayback Machine copy of the terms page captured 2026-01-01. The
+  `ghsa` row carries GitHub's CC-BY 4.0 notice. Core and the extracted
   collector each replay it against their own per-source constants. The pack
   test validates the rules, replays seeded violations, and pins the digest.
 
