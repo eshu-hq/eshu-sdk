@@ -26,6 +26,17 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
+### Added
+
+- `reducer_supply_chain_impact_finding` gains one optional field,
+  `exploited_tier` (core eshu-hq/eshu#9882 item 4.5; additive minor, no decode
+  shim). Pointer with omitempty, additive-optional like
+  `os_package_match_derivation`: a payload written before the tier existed
+  carries no key and decodes with a nil field. Closed vocabulary `kev`,
+  `ssvc_active`, `epss`, `none`. No required field, existing field, stable
+  key, schema version, or wire format changes; the generated schema only gains
+  the optional property.
+
 ## [0.1.0-rc.17] - Prepared (unpublished)
 
 This candidate source is not tagged. Publishing it needs a separate release
