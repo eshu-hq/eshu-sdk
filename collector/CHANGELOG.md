@@ -26,6 +26,18 @@ Tags for the new module use the Go subdirectory-module format after separate rel
 
 ## [Unreleased]
 
+### Added
+
+- `Claim.ScopeCVEIDs` carries the per-scope CVE id list (`scope_cve_ids`;
+  at most `MaxScopeCVEIDs` entries) for scope ids that name a shard rather
+  than its contents (findings-derived FIRST EPSS scopes,
+  eshu-hq/eshu#9876). Empty on every other scope id and omitted from the
+  wire then, so old satellites read byte-identical claims. The wire change
+  is additive: no required field, existing field, or v1alpha1/v1alpha2 wire
+  format changes. `validateClaim` rejects more than `MaxScopeCVEIDs` entries
+  and any blank entry; shape and join validation against the FIRST client
+  boundary lives satellite-side.
+
 ## [0.2.0-rc.3] - 2026-11-01
 
 Tagged `collector/v0.2.0-rc.3` at `1d52cadeb598d48d3c51b2198938b552800f041a`

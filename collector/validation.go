@@ -155,7 +155,26 @@ func validateClaim(claim Claim) error {
 	if claim.Deadline.IsZero() {
 		return fmt.Errorf("claim.deadline is required")
 	}
-	return validateScopeQueries(claim.ScopeQueries)
+	if err := validateScopeQueries(claim.ScopeQueries); err != nil {
+		return err
+	}
+	return validateScopeCVEIDs(claim.ScopeCVEIDs)
+}
+
+// validateScopeCVEIDs holds the Go validator to the published schemas: at
+// most MaxScopeCVEIDs entries, each non-blank. Shape and join validation
+// against the FIRST client boundary lives satellite-side (epssCVEParam),
+// mirroring how the host never validates query contents.
+func validateScopeCVEIDs(ids []string) error {
+	if len(ids) > MaxScopeCVEIDs {
+		return fmt.Errorf("claim.scope_cve_ids has %d entries, above the limit %d", len(ids), MaxScopeCVEIDs)
+	}
+	for i, id := range ids {
+		if strings.TrimSpace(id) == "" {
+			return fmt.Errorf("claim.scope_cve_ids[%d] is required", i)
+		}
+	}
+	return nil
 }
 
 // validateScopeQueries holds the Go validator to the published schemas: at

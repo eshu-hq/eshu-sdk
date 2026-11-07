@@ -62,6 +62,7 @@
         "attempt": { "type": "integer", "minimum": 1 },
         "deadline": { "type": "string", "format": "date-time" },
         "config_handle": { "type": "string", "minLength": 1 },
+        "scope_cve_ids": { "type": "array", "items": { "type": "string", "minLength": 1 } },
         "scope_queries": { "type": "array", "items": { "$ref": "#/$defs/scope_query" } }
       }
     },

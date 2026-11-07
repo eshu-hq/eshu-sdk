@@ -146,6 +146,7 @@ func claimSchema() map[string]any {
 			"deadline":       map[string]any{"type": "string", "format": "date-time"},
 			"config_handle":  nonEmptyString(),
 			"scope_queries":  arrayOf(ref("#/$defs/scope_query")),
+			"scope_cve_ids":  arrayOf(nonEmptyString()),
 		},
 	)
 }

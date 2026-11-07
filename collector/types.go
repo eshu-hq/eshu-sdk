@@ -151,11 +151,23 @@ type Claim struct {
 	// claims. At most MaxScopeQueries entries; the host enforces the same
 	// bound when resolving a claim, so a claim can carry one chunk.
 	ScopeQueries []ScopeQuery `json:"scope_queries,omitempty"`
+	// ScopeCVEIDs carries the per-scope CVE id list for scope ids that
+	// name a shard rather than its contents (findings-derived FIRST EPSS
+	// scopes, eshu-hq/eshu#9876). It is empty for every other scope id,
+	// and omits from the wire then, so old satellites read byte-identical
+	// claims. At most MaxScopeCVEIDs entries; the host enforces the same
+	// bound when resolving a claim, so a claim can carry one chunk.
+	ScopeCVEIDs []string `json:"scope_cve_ids,omitempty"`
 }
 
 // MaxScopeQueries bounds the per-claim scope query list. It mirrors the
 // host's per-target derived-query cap, so a claim can carry one chunk.
 const MaxScopeQueries = 100
+
+// MaxScopeCVEIDs bounds the per-claim scope CVE id list. It mirrors the
+// per-target derived EPSS chunk caps in core and the satellite, so a claim
+// can carry one chunk. The three constants must stay equal.
+const MaxScopeCVEIDs = 100
 
 // ScopeQuery is one pinned package query behind a sharded scope id.
 type ScopeQuery struct {
