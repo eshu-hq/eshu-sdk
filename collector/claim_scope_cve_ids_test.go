@@ -90,6 +90,19 @@ func TestClaimScopeCVEIDsEmptySerializesIdentical(t *testing.T) {
 	}
 }
 
+// TestScopeCVEIDsCapMatchesChunkCap pins the claim transport cap at one
+// chunk: 100, the same bound the coordinator chunks by, the satellite
+// resolves by, and the host enforces. The three constants must stay equal
+// (eshu-hq/eshu#9876), so this test names the number instead of following
+// the constant.
+func TestScopeCVEIDsCapMatchesChunkCap(t *testing.T) {
+	t.Parallel()
+
+	if MaxScopeCVEIDs != 100 {
+		t.Fatalf("MaxScopeCVEIDs = %d, want 100: the claim, chunk, and resolve caps must stay equal", MaxScopeCVEIDs)
+	}
+}
+
 // TestValidateScopeCVEIDs proves the Go validator holds CVE transport to the
 // published shape: at most MaxScopeCVEIDs entries, each non-blank. Shape and
 // join validation against the FIRST client boundary lives satellite-side
