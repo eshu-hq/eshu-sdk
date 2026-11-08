@@ -26,6 +26,23 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
+## [0.1.0-rc.18] - Prepared (unpublished)
+
+This candidate source is not tagged. Publishing it needs a separate release
+ruling against the merged commit, and no proxy verification is claimed for it.
+It adds one optional field to one existing kind and rewords one attribution
+line (the counter moves from rc.17 to rc.18; eshu-hq/eshu#9876 and core
+eshu-hq/eshu#9882 item 4.5). No required field, existing field, stable key,
+schema version, or wire format changes; the generated schema only gains one
+optional property. File digests (SHA-256) at this source:
+`schema/reducer_supply_chain_impact_finding.v1.schema.json`
+`733575bfb56dd4fc54dd3eaffd48d3af3724db6cbe17f0d6c6d3db4f7d82b935`,
+`fixturepack/payloads/source_terms_golden.json`
+`d2572732bd167504eaa87e3c60c8dc21d7ce58e88887a116dfd3ee6091564bf8`.
+The release workflow's `expect_file` pair is
+`factschema/schema/reducer_supply_chain_impact_finding.v1.schema.json` with
+the first digest.
+
 ### Changed
 
 - `first_epss` source-snapshot attribution is the arbiter-approved line
