@@ -9,8 +9,8 @@ is new in this change and has no published tag yet.
 
 | Existing supported module | New module identity | Latest checked Git tag | Prepared next candidate |
 | --- | --- | --- | --- |
-| `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.2.0-rc.3` (at `1d52cade`, adds `collector-sdk/v1alpha3`; release run 41327854308); `collector/v0.2.0-rc.2` (off `main`, at `a663423`); `collector/v0.1.0-rc.5` on the `v0.1.0` line | none |
-| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.16` | `factschema/v0.1.0-rc.17` (unpublished) |
+| `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.2.0-rc.3` (at `1d52cade`, adds `collector-sdk/v1alpha3`; release run 41327854308); `collector/v0.2.0-rc.2` (off `main`, at `a663423`); `collector/v0.1.0-rc.5` on the `v0.1.0` line | `collector/v0.2.0-rc.4` (unpublished) |
+| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.16` | `factschema/v0.1.0-rc.18` (unpublished) |
 | `github.com/eshu-hq/eshu/sdk/go/apicontract@v0.1.0` (release-prepared in core, tag NOT cut) | `github.com/eshu-hq/eshu-sdk/wirecontract` | none (new module) | `wirecontract/v0.1.0-rc.1` |
 
 The old and new import paths name different Go types. The new `v0.1.0`

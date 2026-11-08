@@ -26,6 +26,27 @@ Tags for the new module use the Go subdirectory-module format after separate rel
 
 ## [Unreleased]
 
+## [0.2.0-rc.4] - Prepared (unpublished)
+
+This candidate source is not tagged. Publishing it needs a separate release
+ruling against the merged commit, and no proxy verification is claimed for it.
+It adds one optional claim field on the `v0.2.0` prerelease line core Eshu
+pins (the counter moves from rc.3 to rc.4; eshu-hq/eshu-sdk#83, for core
+eshu-hq/eshu#9876). No required field, existing field, or wire format
+changes; the four claim schemas only gain the optional `scope_cve_ids`
+property, omitted from the wire when empty. File digests (SHA-256) at this
+source:
+`schema/collector-sdk-v1alpha3.schema.json`
+`5f322699e039301a964eec7569c6d242413a262ba6be33df81d7b86a74ff7015`,
+`schema/collector-sdk-v1alpha1.schema.json`
+`22994f93d176650607383700c0538bc72ad4779bb5ffd83bd3fbfd0dafecaf62`,
+`schema/collector-request-v1alpha3.schema.json`
+`65fb69c91c89429883f1e3999b33dfd82ad9995235add30b1975deb889359f55`,
+`schema/collector-request-v1alpha1.schema.json`
+`a9002e2daa9043b4906df7d0b62e3c48095173d8c8fc240f51700c277ab31874`.
+The release workflow's `expect_file` pair is
+`collector/schema/collector-sdk-v1alpha3.schema.json` with the first digest.
+
 ### Added
 
 - `Claim.ScopeCVEIDs` carries the per-scope CVE id list (`scope_cve_ids`;
