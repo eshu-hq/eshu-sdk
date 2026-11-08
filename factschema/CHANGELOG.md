@@ -24,7 +24,11 @@ Tags for the new module use the Go subdirectory-module format after separate rel
 (`factschema/fixturepack`) ships inside this module and has no separate
 version — pinning this module pins the fixture pack too.
 
-## [Unreleased]
+## [0.1.0-rc.19] - 2026-11-08 (unpublished)
+
+This candidate source is not tagged. Publishing it needs the `release`
+workflow dispatch against the merged commit, and no proxy verification is
+claimed for it.
 
 ### Added
 
