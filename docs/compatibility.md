@@ -10,7 +10,7 @@ is new in this change and has no published tag yet.
 | Existing supported module | New module identity | Latest checked Git tag | Prepared next candidate |
 | --- | --- | --- | --- |
 | `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.2.0-rc.3` (at `1d52cade`, adds `collector-sdk/v1alpha3`; release run 41327854308); `collector/v0.2.0-rc.2` (off `main`, at `a663423`); `collector/v0.1.0-rc.5` on the `v0.1.0` line | `collector/v0.2.0-rc.4` (unpublished) |
-| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.16` | `factschema/v0.1.0-rc.18` (unpublished) |
+| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.16` | `factschema/v0.1.0-rc.19` (unpublished; supersedes the untagged rc.18 candidate) |
 | `github.com/eshu-hq/eshu/sdk/go/apicontract@v0.1.0` (release-prepared in core, tag NOT cut) | `github.com/eshu-hq/eshu-sdk/wirecontract` | none (new module) | `wirecontract/v0.1.0-rc.1` |
 
 The old and new import paths name different Go types. The new `v0.1.0`
@@ -117,6 +117,12 @@ adds two optional fields, `repository_id` and `relative_path`, to
 `scanner_worker.warning` for core eshu-hq/eshu#10043, with the same guarantees,
 so a failed Go reachability scan's warning can be joined to a repository and to
 the go.mod file that failed. It is not tagged and has no proxy proof.
+Prepared next candidate: `factschema/v0.1.0-rc.19` (unpublished). It adds
+one optional field, `covered_through` (RFC 3339), to
+`vulnerability.source_snapshot` for core eshu-hq/eshu#10037 S3a. It is an
+additive minor with no decode shim and no stable-key or schema-version
+change; older readers ignore the key. It is not tagged and has no proxy
+proof.
 Collector RC4 allowlists the redaction-safe
 `env_from_secret` boolean on `kubernetes_live.pod_template` payloads
 ([SDK PR #28](https://github.com/eshu-hq/eshu-sdk/pull/28), issue #26). Core
