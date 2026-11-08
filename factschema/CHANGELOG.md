@@ -26,6 +26,13 @@ version — pinning this module pins the fixture pack too.
 
 ## [Unreleased]
 
+### Changed
+
+- `first_epss` source-snapshot attribution is the arbiter-approved line
+  (eshu-hq/eshu#9876): `EPSS scores are provided by FIRST (Forum of Incident
+  Response and Security Teams, Inc.), https://www.first.org/epss`. License
+  stays `NOASSERTION`. Wording only, not legal clearance.
+
 ### Added
 
 - `reducer_supply_chain_impact_finding` gains one optional field,

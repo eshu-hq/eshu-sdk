@@ -54,8 +54,10 @@ shapes the target reducer release consumes.
   `LicenseRef-OSV-per-record`), and it discloses terms without deciding access.
   A source absent from the file carries neither key; `glad` is absent on
   purpose because GitLab's published terms forbid storing the content. The
-  `first_epss` attribution is provisional Eshu wording until the owner gives
-  FIRST's, and the `nvd` notice is the one the NVD API terms prescribe, confirmed
+  `first_epss` attribution is the arbiter-approved line (eshu-hq/eshu#9876):
+  FIRST requests attribution but prescribes no wording, so this covers the
+  wording only, not legal clearance. The `nvd` notice is the one the NVD API
+  terms prescribe, confirmed
   against the Wayback Machine copy of the terms page captured 2026-01-01. The
   `ghsa` row carries GitHub's CC-BY 4.0 notice. Core and the extracted
   collector each replay it against their own per-source constants. The pack
