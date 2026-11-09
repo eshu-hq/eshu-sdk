@@ -1,40 +1,99 @@
-# Eshu Go SDK preparation
+# eshu-sdk
 
-This repository prepares three independent public Go modules initially copied
-from Eshu at commit `eb62fa3056f5ed3518bb5aa676bf2e3adc96c1d5`. The
-checked Git tags reach `collector/v0.1.0-rc.3` and
-`factschema/v0.1.0-rc.6`. This branch prepares an NVD paging golden
-fixture and accessor for a separately reviewed factschema RC7 publication, plus
-the new Tier-2 API wire-contract module (Refs eshu-hq/eshu#9509) with no
-published tag yet. Check each candidate's tag and
-fresh public-proxy origin before use. Publication alone does not establish
-acceptance by a production Eshu consumer.
+Status: pre-release. The modules here ship only as release candidates
+(versions with an `-rc` suffix). A candidate you can download isn't
+automatically one a production Eshu system accepts. The
+[compatibility policy](docs/compatibility.md) says, per module, what's
+actually been checked.
 
-| Directory | Module path | Tag prefix |
-| --- | --- | --- |
-| `collector/` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/vX.Y.Z` |
-| `factschema/` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/vX.Y.Z` |
-| `wirecontract/` | `github.com/eshu-hq/eshu-sdk/wirecontract` | `wirecontract/vX.Y.Z` |
+In short: these are the shared Go libraries that let code outside Eshu
+core speak Eshu's data formats without importing core itself. Eshu
+collects facts, small typed records about software systems, from many
+collector programs. Collectors and the core reducer (the part that
+turns facts into a queryable graph) have to agree byte-for-byte on what
+a fact looks like. This repo holds that agreement as three independent
+Go modules. There's no root module and nothing here runs as a service.
 
-There is no root Go module. Each module is tested and versioned independently. Their first candidate tags are `collector/v0.1.0-rc.1` and `factschema/v0.1.0-rc.1`; `wirecontract` prepares `wirecontract/v0.1.0-rc.1`. The original in-tree modules and existing immutable tags remain in place until consumer tests and production cutover pass. See the [compatibility policy](docs/compatibility.md) for the old/new paths and acceptance states.
+```mermaid
+flowchart LR
+    C["Collector programs<br/>(separate repos)"] -->|"facts, using<br/>collector + factschema"| R["Eshu core reducer"]
+    R --> G["Graph and API"]
+    G -->|"answers, decoded with<br/>wirecontract"| CLI["Thin command-line clients"]
+    SDK["eshu-sdk (this repo):<br/>collector · factschema · wirecontract"] -.->|"shared types only"| C
+    SDK -.-> R
+    SDK -.-> CLI
+```
 
-## Source and scope
+Collectors emit facts shaped by `collector` and `factschema`, and the
+reducer reads those same shapes. API clients decode answers with
+`wirecontract`. You only get types and validators here, no running code.
 
-The modules came from `sdk/go/collector` and `sdk/go/factschema` in Eshu. Go import paths and module declarations now use the proposed SDK paths. Inherited schema and fixture bytes are unchanged; the public request schema and fixture are added separately. The inherited factschema tests were split below 500 lines; their public-decoder coverage remains explicit. See [provenance](docs/provenance.md) for the mapping and checks.
+## When it fits, and when it doesn't
 
-The collector module also provides `transport` helpers, the public `Request`,
-a bounded `command.Run`, and a neutral `entrypoints` generator. The fact-schema
-module includes stable `identity` derivation and generic `contracttest`
-assertions. See [command behavior](docs/command.md) and
-[entrypoint generation](docs/entrypoints.md).
+Reach for these modules when you're writing a collector, a reducer, or
+a client that has to produce or consume Eshu fact or API formats from
+outside core.
 
-Core call sites, full conformance orchestration, AWS scanner checks, and legacy
-hosted entrypoint templates remain in Eshu. The neutral generator gives
-collectors a stdio command without moving database or workflow ownership.
-Published candidates do not grant production support to a new module path.
+Don't use them to reach into core behaviour. Admission, grants, graph
+writes, queues, and durable state stay in core on purpose. The package
+comment in [wirecontract/doc.go](wirecontract/doc.go) lists exactly
+what's left out and why.
 
-## Local checks
+## Shortest path in
 
-Run `make pre-push` for all three module suites, vet, generation drift, and the file cap. `GOWORK=off` ensures each module works independently. CI runs the same checks. Contract changes require updated tests, schemas, fixtures, and a consumer compatibility review before release.
+All three modules need Go 1.26.10 or newer (check the `go` line in each
+`go.mod`). Pick an exact candidate version from the
+[compatibility policy](docs/compatibility.md) first. Never use
+`@latest` as release evidence.
 
-See [release and cutover](docs/release.md) for the unresolved acceptance steps. The upstream Eshu [Contract System v1](https://github.com/eshu-hq/eshu/blob/eb62fa3056/docs/internal/design/contract-system-v1.md) defines the original payload contract.
+```sh
+go get github.com/eshu-hq/eshu-sdk/collector@<exact-version>
+go get github.com/eshu-hq/eshu-sdk/factschema@<exact-version>
+go get github.com/eshu-hq/eshu-sdk/wirecontract@<exact-version>
+```
+
+Then import what you need. [Getting started](docs/getting-started/README.md)
+has the per-module imports and the version check worth doing before
+you rely on a tag. [Reference](docs/reference/README.md) covers how the
+old in-core module paths relate to these.
+
+## Documentation
+
+| Doc | What's in it |
+| --- | --- |
+| [Docs index](docs/README.md) | Every docs section and detailed contract page, grouped |
+| [Getting started](docs/getting-started/README.md) | Pick an exact version, `go get` it, and make a first import |
+| [Guides](docs/guides/README.md) | Wire up a collector; decode facts and API answers |
+| [Concepts](docs/concepts/README.md) | The three contracts and where each one stops |
+| [Reference](docs/reference/README.md) | Module table, imports, dependencies, and versioning as it's actually practised |
+| [Diagrams](docs/diagrams/README.md) | Every diagram, each with a plain-text version |
+| [Compatibility policy](docs/compatibility.md) | Candidate tags, checked versions, and acceptance state per module |
+| [Command behaviour](docs/command.md) | How a collector command swaps one JSON request and result with a core host |
+| [Entrypoint generation](docs/entrypoints.md) | How the SDK renders a stdio collector command from a provider handler |
+| [Conformance grants](docs/conformance-grants.md) | How trusted core fact context lets conformance checks cover reserved fact kinds |
+| [Collector README](collector/README.md), [factschema README](factschema/README.md), [wirecontract README](wirecontract/README.md) | The full contract surface for each module |
+| [Entrypoint generator README](collector/cmd/collector-entrypoints-gen/README.md) | The one runnable tool in the tree |
+| [Identity migration](docs/identity-migration.md) | Where `StableID` came from in core and how it landed in `factschema/identity` |
+| [Contracttest migration](docs/contracttest-migration.md) | How the generic contract helpers moved into `factschema/contracttest` |
+| [Migration evidence](docs/sdk-migration-evidence.md) and [evidence notes](docs/evidence) | Recorded comparisons and consumer proofs for specific candidates |
+| [Provenance](docs/provenance.md) | Which Eshu commit this code came from, file by file |
+| [Release checklist](docs/release.md) | How a tag gets cut and proved in CI |
+
+## Related repos
+
+Eshu core (`eshu-hq/eshu`) owns the original payload contract and the
+host, reducer, and API that use these modules. Collector repos and thin
+API clients sit on the other side and import them.
+
+## Development
+
+Run `make pre-push` before you push. It builds, tests, vets, lints, and
+checks tidy state, generation drift, and the file cap, with `GOWORK=off`
+so each module proves it stands alone. More detail lives in
+[AGENTS.md](AGENTS.md).
+
+## Contributing, security, and licence
+
+There's no separate `CONTRIBUTING.md` or `SECURITY.md` here, so use
+[AGENTS.md](AGENTS.md) for the contribution rules. The licence is MIT,
+in [LICENSE](LICENSE).
