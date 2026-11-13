@@ -65,7 +65,7 @@ jobs:
       generate-check-command: 'make generate-check'
       generate-check-go-module: 'factschema'
       satellite-repository: 'eshu-hq/eshu-collector-kubernetes-live'
-      satellite-ref: '2ec5ade94f2ccee4401e6c7767b1b5bc4347469d'
+      satellite-ref: 'df09f8ed78f64f5377f82df13285ab11c1630939'
       primary-module: 'collector'
       # consumer-compat-command left at its default, which shells out to the
       # caller's scripts/ci/consumer-compat.sh against the satellite above.
