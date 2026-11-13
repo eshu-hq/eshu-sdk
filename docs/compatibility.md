@@ -11,7 +11,7 @@ and fresh public-proxy resolution before claiming candidate availability.
 | Existing supported module | New module identity | Latest checked Git tag | Prepared next candidate |
 | --- | --- | --- | --- |
 | `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.2.0-rc.4` (at `947f8449`; proxy origin `refs/tags/collector/v0.2.0-rc.4` verified 2026-11-13 for eshu-hq/eshu#10621). Earlier: `collector/v0.2.0-rc.3` (at `1d52cade`, adds `collector-sdk/v1alpha3`; release run 41327854308); `collector/v0.2.0-rc.2` (off `main`, at `a663423`); `collector/v0.1.0-rc.5` on the `v0.1.0` line | none pending |
-| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.19` (at `5537eb64`; proxy origin `refs/tags/factschema/v0.1.0-rc.19` verified 2026-11-13 for eshu-hq/eshu#10621; supersedes tagged rc.18 at `947f8449`). Earlier: `factschema/v0.1.0-rc.16` | none pending |
+| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.19` (at `5537eb64`; proxy origin `refs/tags/factschema/v0.1.0-rc.19` verified 2026-11-13 for eshu-hq/eshu#10621; supersedes `factschema/v0.1.0-rc.18`, tagged at `947f8449` — the merge-#84 commit that also carries collector rc.4 — with proxy origin `refs/tags/factschema/v0.1.0-rc.18` verified 2026-11-13). Earlier: `factschema/v0.1.0-rc.16` | none pending |
 | `github.com/eshu-hq/eshu/sdk/go/apicontract@v0.1.0` (release-prepared in core, tag NOT cut) | `github.com/eshu-hq/eshu-sdk/wirecontract` | `wirecontract/v0.1.0-rc.1` (at `3a653648`; proxy origin `refs/tags/wirecontract/v0.1.0-rc.1` verified 2026-11-13 for eshu-hq/eshu#10621) | none pending |
 
 The old and new import paths name different Go types. The new `v0.1.0`
@@ -108,8 +108,9 @@ release workflow, [run 41860075638](https://github.com/eshu-hq/eshu-sdk/actions/
 `ghsa` row (CC-BY-4.0 with its attribution line) to the shared
 `source_terms_golden.json` for core eshu-hq/eshu#9959 and changes no payload
 schema.
-Published: `factschema/v0.1.0-rc.17` (tag at `0acd485a`; proxy lists
-`v0.1.0-rc.17`, tag-ref origin NOT_CHECKED). It adds five
+Published: `factschema/v0.1.0-rc.17` (tag at `0acd485a`; proxy origin
+`refs/tags/factschema/v0.1.0-rc.17` verified 2026-11-13 for
+eshu-hq/eshu#10621). It adds five
 optional provenance fields (`scan_level`, `scan_mode`, `scanner_version`,
 `source_commit_sha`, `trace_count`) to `vulnerability.go_call_reachability` for
 core eshu-hq/eshu#10026 and states Eshu's trace order (entry point first,
@@ -118,7 +119,7 @@ stable-key or schema-version change; an rc.16 reader ignores the keys. It also
 adds two optional fields, `repository_id` and `relative_path`, to
 `scanner_worker.warning` for core eshu-hq/eshu#10043, with the same guarantees,
 so a failed Go reachability scan's warning can be joined to a repository and to
-the go.mod file that failed. Proxy origin NOT_CHECKED.
+the go.mod file that failed. Proxy origin `refs/tags/factschema/v0.1.0-rc.17`, verified 2026-11-13 for eshu-hq/eshu#10621.
 Published: `factschema/v0.1.0-rc.19` (tag at `5537eb64`; proxy origin
 `refs/tags/factschema/v0.1.0-rc.19` verified 2026-11-13 for
 eshu-hq/eshu#10621). It adds
