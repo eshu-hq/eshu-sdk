@@ -24,11 +24,11 @@ Tags for the new module use the Go subdirectory-module format after separate rel
 (`factschema/fixturepack`) ships inside this module and has no separate
 version — pinning this module pins the fixture pack too.
 
-## [0.1.0-rc.19] - 2026-11-08 (unpublished)
+## [0.1.0-rc.19] - Published (`factschema/v0.1.0-rc.19` at `5537eb64`, 2026-11-08)
 
-This candidate source is not tagged. Publishing it needs the `release`
-workflow dispatch against the merged commit, and no proxy verification is
-claimed for it.
+Tagged `factschema/v0.1.0-rc.19` at the merge-#85 commit; the Go proxy lists
+`v0.1.0-rc.19` with tag-ref origin `refs/tags/factschema/v0.1.0-rc.19`
+(verified 2026-11-13 for eshu-hq/eshu#10621).
 
 ### Added
 
@@ -43,10 +43,12 @@ claimed for it.
   version, or wire format changes; the generated schema only gains the
   optional property, mirrored into the fixture-pack copy in lockstep.
 
-## [0.1.0-rc.18] - Prepared (unpublished)
+## [0.1.0-rc.18] - Published (`factschema/v0.1.0-rc.18` at `947f8449`, 2026-11-07)
 
-This candidate source is not tagged. Publishing it needs a separate release
-ruling against the merged commit, and no proxy verification is claimed for it.
+Tagged `factschema/v0.1.0-rc.18` at the merge-#84 commit (which also carries
+collector `v0.2.0-rc.4`); the Go proxy lists `v0.1.0-rc.18` with tag-ref origin
+`refs/tags/factschema/v0.1.0-rc.18` (verified 2026-11-13 for
+eshu-hq/eshu#10621).
 It adds one optional field to one existing kind and rewords one attribution
 line (the counter moves from rc.17 to rc.18; eshu-hq/eshu#9876 and core
 eshu-hq/eshu#9882 item 4.5). No required field, existing field, stable key,
@@ -78,10 +80,11 @@ the first digest.
   key, schema version, or wire format changes; the generated schema only gains
   the optional property.
 
-## [0.1.0-rc.17] - Prepared (unpublished)
+## [0.1.0-rc.17] - Published (`factschema/v0.1.0-rc.17` at `0acd485a`)
 
-This candidate source is not tagged. Publishing it needs a separate release
-ruling against the merged commit, and no proxy verification is claimed for it.
+Tagged `factschema/v0.1.0-rc.17`; the Go proxy lists `v0.1.0-rc.17` with
+tag-ref origin `refs/tags/factschema/v0.1.0-rc.17` (verified 2026-11-13 for
+eshu-hq/eshu#10621).
 It adds five optional fields to one existing kind, so the module bump is a
 minor step within the 0.1 line (the counter moves from rc.16 to rc.17). No
 required field, existing field, stable key, schema version, or wire format

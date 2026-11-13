@@ -1,17 +1,18 @@
 # SDK module compatibility and candidate status
 
-The repository contains three independent Go module identities. The exact Git
-refs available in this checkout include collector `v0.2.0-rc.3`, `v0.2.0-rc.2` and
-`v0.1.0-rc.5` and factschema `v0.1.0-rc.16`; earlier candidate tags remain immutable. None of these tags qualifies
-an Eshu consumer on its own: recheck tag origin and fresh public-proxy
-resolution before claiming candidate availability. The `wirecontract` module
-is new in this change and has no published tag yet.
+The repository contains three independent Go module identities. The published
+Git tags include collector `v0.2.0-rc.4` (at `947f8449`), factschema
+`v0.1.0-rc.19` (at `5537eb64`), and `wirecontract/v0.1.0-rc.1` (at `3a653648`);
+earlier candidate tags remain immutable, and the public Go proxy lists each
+tag with its tag ref as origin (verified 2026-11-13 for eshu-hq/eshu#10621).
+None of these tags qualifies an Eshu consumer on its own: recheck tag origin
+and fresh public-proxy resolution before claiming candidate availability.
 
 | Existing supported module | New module identity | Latest checked Git tag | Prepared next candidate |
 | --- | --- | --- | --- |
-| `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.2.0-rc.3` (at `1d52cade`, adds `collector-sdk/v1alpha3`; release run 41327854308); `collector/v0.2.0-rc.2` (off `main`, at `a663423`); `collector/v0.1.0-rc.5` on the `v0.1.0` line | `collector/v0.2.0-rc.4` (unpublished) |
-| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.16` | `factschema/v0.1.0-rc.19` (unpublished; supersedes the untagged rc.18 candidate) |
-| `github.com/eshu-hq/eshu/sdk/go/apicontract@v0.1.0` (release-prepared in core, tag NOT cut) | `github.com/eshu-hq/eshu-sdk/wirecontract` | none (new module) | `wirecontract/v0.1.0-rc.1` |
+| `github.com/eshu-hq/eshu/sdk/go/collector@v0.2.0` | `github.com/eshu-hq/eshu-sdk/collector` | `collector/v0.2.0-rc.4` (at `947f8449`; proxy origin `refs/tags/collector/v0.2.0-rc.4` verified 2026-11-13 for eshu-hq/eshu#10621). Earlier: `collector/v0.2.0-rc.3` (at `1d52cade`, adds `collector-sdk/v1alpha3`; release run 41327854308); `collector/v0.2.0-rc.2` (off `main`, at `a663423`); `collector/v0.1.0-rc.5` on the `v0.1.0` line | none pending |
+| `github.com/eshu-hq/eshu/sdk/go/factschema@v0.2.0` | `github.com/eshu-hq/eshu-sdk/factschema` | `factschema/v0.1.0-rc.19` (at `5537eb64`; proxy origin `refs/tags/factschema/v0.1.0-rc.19` verified 2026-11-13 for eshu-hq/eshu#10621; supersedes `factschema/v0.1.0-rc.18`, tagged at `947f8449` — the merge-#84 commit that also carries collector rc.4 — with proxy origin `refs/tags/factschema/v0.1.0-rc.18` verified 2026-11-13). Earlier: `factschema/v0.1.0-rc.16` | none pending |
+| `github.com/eshu-hq/eshu/sdk/go/apicontract@v0.1.0` (release-prepared in core, tag NOT cut) | `github.com/eshu-hq/eshu-sdk/wirecontract` | `wirecontract/v0.1.0-rc.1` (at `3a653648`; proxy origin `refs/tags/wirecontract/v0.1.0-rc.1` verified 2026-11-13 for eshu-hq/eshu#10621) | none pending |
 
 The old and new import paths name different Go types. The new `v0.1.0`
 line is a new module identity, not a continuation of the old path's `v0.2.0`
@@ -107,7 +108,9 @@ release workflow, [run 41860075638](https://github.com/eshu-hq/eshu-sdk/actions/
 `ghsa` row (CC-BY-4.0 with its attribution line) to the shared
 `source_terms_golden.json` for core eshu-hq/eshu#9959 and changes no payload
 schema.
-Prepared next candidate: `factschema/v0.1.0-rc.17` (unpublished). It adds five
+Published: `factschema/v0.1.0-rc.17` (tag at `0acd485a`; proxy origin
+`refs/tags/factschema/v0.1.0-rc.17` verified 2026-11-13 for
+eshu-hq/eshu#10621). It adds five
 optional provenance fields (`scan_level`, `scan_mode`, `scanner_version`,
 `source_commit_sha`, `trace_count`) to `vulnerability.go_call_reachability` for
 core eshu-hq/eshu#10026 and states Eshu's trace order (entry point first,
@@ -116,20 +119,25 @@ stable-key or schema-version change; an rc.16 reader ignores the keys. It also
 adds two optional fields, `repository_id` and `relative_path`, to
 `scanner_worker.warning` for core eshu-hq/eshu#10043, with the same guarantees,
 so a failed Go reachability scan's warning can be joined to a repository and to
-the go.mod file that failed. It is not tagged and has no proxy proof.
-Prepared next candidate: `factschema/v0.1.0-rc.19` (unpublished). It adds
+the go.mod file that failed. Proxy origin `refs/tags/factschema/v0.1.0-rc.17`, verified 2026-11-13 for eshu-hq/eshu#10621.
+Published: `factschema/v0.1.0-rc.19` (tag at `5537eb64`; proxy origin
+`refs/tags/factschema/v0.1.0-rc.19` verified 2026-11-13 for
+eshu-hq/eshu#10621). It adds
 one optional field, `covered_through` (RFC 3339), to
 `vulnerability.source_snapshot` for core eshu-hq/eshu#10037 S3a. It is an
 additive minor with no decode shim and no stable-key or schema-version
-change; older readers ignore the key. It is not tagged and has no proxy
-proof.
-Collector RC4 allowlists the redaction-safe
+change; older readers ignore the key.
+Published: collector RC4 (tag `collector/v0.2.0-rc.4` at `947f8449`; proxy
+origin `refs/tags/collector/v0.2.0-rc.4` verified 2026-11-13 for
+eshu-hq/eshu#10621) allowlists the redaction-safe
 `env_from_secret` boolean on `kubernetes_live.pod_template` payloads
 ([SDK PR #28](https://github.com/eshu-hq/eshu-sdk/pull/28), issue #26). Core
 and extracted consumers must prove the same pinned fixture bytes, payloads,
 stable keys, and two-page traversal.
 
-The new `wirecontract` candidate publishes the Tier-2 API wire shapes only:
+Published: `wirecontract/v0.1.0-rc.1` (tag at `3a653648`; proxy origin
+`refs/tags/wirecontract/v0.1.0-rc.1` verified 2026-11-13 for
+eshu-hq/eshu#10621). The `wirecontract` module publishes the Tier-2 API wire shapes only:
 response/truth/error envelopes, query profiles, graph backends, freshness
 causes, the MCP tool-definition shape, and the client-scoped environment
 registry with its pure validator. It ports core `sdk/go/apicontract`
@@ -159,7 +167,7 @@ vet, and run, and the RC10 proof records scratch consumers pinning
 
 | State | Evidence required | Recorded snapshot |
 | --- | --- | --- |
-| Candidate available | Merged core compatibility mapping, exact reviewed and merged source commit, green CI, separate tag approval, immutable directory-prefixed tag, and fresh proxy resolution | Collector RC4 and factschema RC10 Git tags exist and are proxy-verified as above; wirecontract has no tag yet (source prepared in this change, tag approval and proxy verification pending per [release and cutover](release.md)) |
+| Candidate available | Merged core compatibility mapping, exact reviewed and merged source commit, green CI, separate tag approval, immutable directory-prefixed tag, and fresh proxy resolution | Collector `v0.2.0-rc.4`, factschema `v0.1.0-rc.19`, and wirecontract `v0.1.0-rc.1` Git tags exist and are proxy-verified as above (origins checked 2026-11-13 for eshu-hq/eshu#10621) |
 | Qualified consumer/core pair | Exact candidate pin plus contract and runtime gates for that consumer and core version | RC10 consumer NOT_CHECKED: core PR eshu-hq/eshu#9435 carries the RC10 pin and core `main` still pins factschema RC7; `eshu-collector-kubernetes-live` still pins collector RC3 plus factschema RC6 and its `StillBlocked` pin records the pre-fix expectation; wirecontract pair parity pinned, NOT qualified (module-pair scope): `github.com/eshu-hq/eshu-sdk/wirecontract` at this source pins byte-identical JSON to core `sdk/go/apicontract` via committed `wirecontract/testdata/golden/*.json` and green `TestGoldenEnvelopeBytes`, `TestGoldenErrorEnvelope`, `TestGoldenToolDefinition`, `TestClientEntriesMatchGolden`, `TestValidateVectors` — unverified against a core consumer gate; consumer qualification and Tier-2 CLI repoint (Box 3) follow the published tag |
 | Deployed accepted pair | Matching deployment, reducer, graph, API/MCP, retry, operator, and rollback evidence | RC10 deployment NOT_CHECKED; wirecontract deployment NOT_CHECKED |
 

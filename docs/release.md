@@ -81,9 +81,11 @@ who can create tags. Recommended:
   should be blocked; whether the Actions token needs to be a bypass actor for it
   has not been checked.
 
-## Current wirecontract RC1 preparation (Refs eshu-hq/eshu#9509)
+## Wirecontract RC1 preparation (Refs eshu-hq/eshu#9509; historical — tag cut, see compatibility.md)
 
-The `wirecontract` module is source-prepared in this change with no tag cut.
+The `wirecontract` module was source-prepared with no tag cut at the time of
+writing. `wirecontract/v0.1.0-rc.1` (at `3a653648`) is now tagged, with proxy
+origin `refs/tags/wirecontract/v0.1.0-rc.1` recorded in `docs/compatibility.md`.
 It ports core `sdk/go/apicontract` byte-for-byte (envelopes, profiles,
 backends, freshness, tool shape, client env registry plus validator) with
 `wirecontract/testdata/golden/*.json` pinned to the core bytes and
@@ -97,7 +99,9 @@ row and module-pair qualification), standalone module CI green
 then separate tag approval and a fresh external `GOWORK=off` consumer probe
 before any tag. Tier-2 CLI repoint (Box 3) follows the published tag and is
 out of scope for this lane. No proxy verification, consumer qualification,
-or deployed acceptance is claimed here.
+or deployed acceptance is claimed here (historical note: the tag is now cut and
+its proxy origin is recorded in `docs/compatibility.md`; consumer qualification
+and deployed acceptance remain unclaimed).
 
 ## Current RC4/RC10 state
 
@@ -167,7 +171,7 @@ release workflow on 2026-11-04 ([run 41860075638](https://github.com/eshu-hq/esh
 `ghsa` row to `source_terms_golden.json` for core eshu-hq/eshu#9959 and changes
 no payload schema.
 
-Prepared next candidate: `factschema/v0.1.0-rc.17` (unpublished). It adds the
+Published: `factschema/v0.1.0-rc.17` (tag at `0acd485a`; proxy origin `refs/tags/factschema/v0.1.0-rc.17` verified 2026-11-13 for eshu-hq/eshu#10621). It adds the
 optional `scan_level`, `scan_mode`, `scanner_version`, `source_commit_sha`, and
 `trace_count` fields to `vulnerability.go_call_reachability` for core
 eshu-hq/eshu#10026 and documents Eshu's trace order. It also adds the optional
