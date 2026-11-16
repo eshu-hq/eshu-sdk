@@ -52,4 +52,11 @@
 // or NOASSERTION; it describes the source, not each record, and discloses terms
 // without deciding access. Core and the extracted collector replay it against
 // their own per-source constants.
+//
+// NVDVerdictKeysGolden supplies the NVD window and baseline checkpoint verdict
+// keys a satellite stamps on vulnerability.source_snapshot and the core
+// extension host reads, with the type, unit and reader of each key and named
+// cases of stamped payload to commit outcome. The collector checks its
+// constants and real verdict builders against it; core replays every case
+// through its commit path.
 package fixturepack
