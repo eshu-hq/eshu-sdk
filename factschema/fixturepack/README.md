@@ -63,6 +63,22 @@ shapes the target reducer release consumes.
   collector each replay it against their own per-source constants. The pack
   test validates the rules, replays seeded violations, and pins the digest.
 
+- `payloads/nvd_verdict_keys_golden.json` — the NVD window and baseline
+  checkpoint verdict keys a satellite stamps on `vulnerability.source_snapshot`
+  and the Eshu core extension host reads (eshu-hq/eshu-sdk#93, eshu-hq/eshu#10732).
+  Each section (`window`, `baseline`) has a `keys` table (payload key name, JSON
+  type, unit, whether core reads it, whether it is always stamped) and `cases`:
+  a stamped `payload`, its `scope_id`, and the `expect`ed commit outcome. Window
+  outcomes are `advanced` or `held`; baseline outcomes add `not_covered` (with a
+  closed `reason`) and `refused` (with a closed `class`). Verdict booleans are
+  strict, so the string `"true"` holds; baseline `advance_to` is floored to a
+  whole millisecond. Numbers are plain JSON numbers because the claim transport
+  decodes them as float64. A case lists `malformed_keys` for payload keys that
+  deliberately carry the wrong JSON type. The collector replays its real verdict
+  builders against the keys, and core replays every case through its commit
+  path. The pack test validates the shape, replays seeded violations, and pins
+  the digest.
+
 The NVD golden records the **full provider fact payload maps**, including
 producer metadata outside the narrower typed factschema CVE and source-snapshot
 structs. It is separate from the per-kind schema-valid/invalid examples. The
@@ -87,6 +103,7 @@ golden := fixturepack.NVDPagingGolden() // copied JSON bytes for the NVD paging 
 osv := fixturepack.OSVSeverityGolden()  // copied JSON bytes for the OSV severity fixture
 edges := fixturepack.OSVIdentityEdgesGolden() // copied JSON bytes for the OSV identity-edge fixture
 terms := fixturepack.SourceTermsGolden() // copied JSON bytes for the per-source license and attribution fixture
+verdicts := fixturepack.NVDVerdictKeysGolden() // copied JSON bytes for the NVD verdict-key vector
 ```
 
 ## How a collector uses it
