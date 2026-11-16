@@ -206,6 +206,43 @@ warning change. That file cannot be pinned too, so check it by hand:
 Core can only pin it after that tag is on the proxy; the pin and the in-tree
 mirror sync land together.
 
+### Prepared: `factschema/v0.1.0-rc.20` (not tagged)
+
+`factschema/v0.1.0-rc.20` is prepared on the branch that adds the vector and
+has no tag; it is on `main` once that change merges. Its `CHANGELOG.md` section
+lists two changes: the six optional `vulnerability.cve` fields
+(eshu-hq/eshu#10755) and the shared NVD verdict-key vector,
+`fixturepack/payloads/nvd_verdict_keys_golden.json` with
+`NVDVerdictKeysGolden()` (eshu-hq/eshu-sdk#93, refs eshu-hq/eshu#10732). Both
+are additive, with no stable-key, schema-version, or wire change.
+
+Until the tag exists, a consumer that needs the vector may pin the merged
+`main` commit as a pseudo-version, as core already does for other pre-tag
+changes. The collector and core then replace their local copies and the
+hand-copied reader with the vector in their own changes. Cutting the tag is a
+separate act that needs its own release ruling against the concrete merged
+commit M; nobody tags by hand.
+
+When that ruling lands, run the release workflow (see Releasing a module tag)
+with `module=factschema`, `version=v0.1.0-rc.20`, commit M, and
+`factschema/fixturepack/payloads/nvd_verdict_keys_golden.json` as `expect_file`
+with SHA-256 `6a489baa68ec96eb01034536a78a8b3643c2ce31f8fe84cb73e2367830bdd073` as `expect_sha256`. That file is
+the newest change, so the pin fails if the vector is missing.
+
+The `vulnerability.cve` schema cannot be pinned too, so check it by hand before
+the dispatch:
+
+- Run `git show M:factschema/schema/vulnerability.cve.v1.schema.json | sha256sum`
+  and expect `9af9132a55ffbff057dace7291d9082cdade5231223a075a1c7f569762c642b1`.
+- Confirm the fixture-pack copy is byte-equal.
+- Confirm `git ls-remote --tags origin` shows no rc.20 and that `ci-complete`
+  succeeded on M.
+
+After the tag, wait for the `prove` job to pass with origin commit M. A proxy
+404 means re-run the failed job; never retag. A consumer can pin the
+`v0.1.0-rc.20` version itself only after that tag is on the proxy; until then
+the merged-commit pseudo-version is the pin.
+
 ## Historical RC3 preparation
 
 The checklist below records the earlier RC3 preparation and cutover plan. Its

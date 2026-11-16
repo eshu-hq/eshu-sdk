@@ -63,6 +63,28 @@ shapes the target reducer release consumes.
   collector each replay it against their own per-source constants. The pack
   test validates the rules, replays seeded violations, and pins the digest.
 
+- `payloads/nvd_verdict_keys_golden.json` — the NVD window and baseline
+  checkpoint verdict keys a satellite stamps on `vulnerability.source_snapshot`
+  and the Eshu core extension host reads (eshu-hq/eshu-sdk#93, eshu-hq/eshu#10732).
+  Each section (`window`, `baseline`) has a `keys` table (payload key name, JSON
+  type, unit, whether core reads it, whether it is always stamped) and `cases`:
+  a stamped `payload`, its `scope_id`, and the `expect`ed commit outcome. Window
+  outcomes are `advanced` or `held`; baseline outcomes add `not_covered` (with a
+  closed `reason`) and `refused` (with a closed `class`). Verdict booleans are
+  strict, so the string `"true"` holds; baseline `advance_to` is floored to a
+  whole millisecond, and the seed sha is trimmed of surrounding whitespace
+  before the 64-hex check. Numbers are plain JSON numbers because the claim
+  transport decodes them as float64. A case lists `malformed_keys` for payload
+  keys that deliberately carry the wrong JSON type, and carries
+  `emitted_by_collector`: true only when a real collector builder can stamp
+  exactly that payload, false for a reader pin that exercises core on input the
+  collector never emits. The collector and core are expected to read the file
+  in their own changes (builders and constants on one side, a replay of every
+  case through the commit path on the other); the pack test validates the shape
+  (including that an emitted case is self-consistent), replays seeded
+  violations of each rule, and pins the digest. Payload keys that ride on the
+  same snapshot but are outside the vector are listed in its `comment`.
+
 The NVD golden records the **full provider fact payload maps**, including
 producer metadata outside the narrower typed factschema CVE and source-snapshot
 structs. It is separate from the per-kind schema-valid/invalid examples. The
@@ -87,6 +109,7 @@ golden := fixturepack.NVDPagingGolden() // copied JSON bytes for the NVD paging 
 osv := fixturepack.OSVSeverityGolden()  // copied JSON bytes for the OSV severity fixture
 edges := fixturepack.OSVIdentityEdgesGolden() // copied JSON bytes for the OSV identity-edge fixture
 terms := fixturepack.SourceTermsGolden() // copied JSON bytes for the per-source license and attribution fixture
+verdicts := fixturepack.NVDVerdictKeysGolden() // copied JSON bytes for the NVD verdict-key vector
 ```
 
 ## How a collector uses it

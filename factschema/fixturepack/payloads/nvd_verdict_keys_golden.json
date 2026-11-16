@@ -1,0 +1,260 @@
+{
+  "version": 1,
+  "snapshot_fact_kind": "vulnerability.source_snapshot",
+  "comment": "Shared verdict-key vector for the NVD window and baseline checkpoint verdicts a satellite stamps on the vulnerability.source_snapshot payload and the Eshu core extension host reads (eshu-hq/eshu-sdk#93, eshu-hq/eshu#10732). Reader: eshu go/internal/collector/extensionhost nvd_window_cursor.go (armNVDWindowCursorWriter) and nvd_baseline_cursor.go (NVDBaselineCommitPolicy.CommitPolicy), read at eshu origin/main f6c9b68d4d5d9b4ef39b5490b1109cc7f1e4b1c2 and replayed unchanged at 6bf9450d7acb. Writers: eshu-collector-vulnerability-intelligence origin/main ffbeade7d38374d0bec8d2c4e6f327d7bd6f99ac for the window keys (stampNVDWindowVerdict, decideNVDWindowAdvance) and, for the baseline keys, its unmerged branch drive/158-nvd-baseline-snapshot-keys at 6965a17 (nvdBaselineSnapshot), because collector main does not yet stamp them. Numbers are plain JSON numbers because the claim transport decodes them as float64. expect.advance_to, expect.head and expect.year_complete are what the armed commit-transaction writer carries, and 0, 0 and false when no writer is armed. A case's malformed_keys names payload keys that deliberately carry the wrong JSON type. emitted_by_collector is true only when a real collector builder can stamp exactly that payload; false marks a reader pin that exercises core on input the collector never emits. Payload keys that ride on the same snapshot but are outside this vector: nvd_keyed, nvd_transport, nvd_feed_selector, nvd_feed_time_unix_us, nvd_feed_span_start_unix_us, nvd_feed_sha256.",
+  "window": {
+    "scope_prefix": "vuln-intel://nvd/_window/",
+    "key_prefix": "nvd_window_",
+    "outcomes": ["advanced", "held"],
+    "reasons": [],
+    "classes": [],
+    "keys": [
+      {"field": "advance_to", "name": "nvd_window_advance_to_unix_us", "type": "int64", "unit": "unix_us", "read_by": "core", "presence": "always", "note": "The next cursor. 0 when should_advance is false. Core arms nothing when it is not positive."},
+      {"field": "head", "name": "nvd_window_head_unix_us", "type": "int64", "unit": "unix_us", "read_by": "core", "presence": "always", "note": "The server catalog head the advance was clamped to. 0 when unknown."},
+      {"field": "should_advance", "name": "nvd_window_should_advance", "type": "bool", "unit": "none", "read_by": "core", "presence": "always", "note": "Strict: only the JSON boolean true can move the cursor. The string \"true\" holds."},
+      {"field": "time_anomaly_reason", "name": "nvd_window_time_anomaly_reason", "type": "string", "unit": "none", "read_by": "none", "presence": "always", "enum": ["", "head_unknown", "record_timestamp_unparsable", "record_timestamp_beyond_head", "head_behind_cursor"], "note": "Pinned, not read by core: a hold rides on should_advance false. Empty when the observation is clean."},
+      {"field": "pages_refetched", "name": "nvd_window_pages_refetched", "type": "int", "unit": "count", "read_by": "none", "presence": "always", "note": "Informational, not read by core, not cased: window pages refetched after a retryable failure."},
+      {"field": "pages_downsized", "name": "nvd_window_pages_downsized", "type": "int", "unit": "count", "read_by": "none", "presence": "always", "note": "Informational, not read by core, not cased: window pages refetched at a halved size after an oversize page."},
+      {"field": "split", "name": "nvd_window_split", "type": "bool", "unit": "none", "read_by": "none", "presence": "conditional", "note": "Informational, not read by core, not cased: stamped true on a claim that was split across the feed or the API."},
+      {"field": "retry_reason", "name": "nvd_window_retry_reason", "type": "string", "unit": "none", "read_by": "none", "presence": "conditional", "enum": ["widened_start_capacity"], "note": "Informational, not read by core, not cased: present only when the window refetched from its minted start."}
+    ],
+    "cases": [
+      {
+        "name": "advances",
+        "scope_id": "vuln-intel://nvd/_window/1767225600000000-1767398400000000",
+        "payload": {"nvd_window_advance_to_unix_us": 1767398400000000, "nvd_window_head_unix_us": 1767398400000000, "nvd_window_should_advance": true, "nvd_window_time_anomaly_reason": "", "nvd_window_pages_refetched": 0, "nvd_window_pages_downsized": 0},
+        "expect": {"outcome": "advanced", "advance_to": 1767398400000000, "head": 1767398400000000},
+        "emitted_by_collector": true,
+        "note": "A clean window: should_advance true, a positive advance_to, the server head. The writer is armed with both."
+      },
+      {
+        "name": "advances_clamped_to_head",
+        "scope_id": "vuln-intel://nvd/_window/1767225600000000-1767398400000000",
+        "payload": {"nvd_window_advance_to_unix_us": 1767312000000000, "nvd_window_head_unix_us": 1767312000000000, "nvd_window_should_advance": true, "nvd_window_time_anomaly_reason": "", "nvd_window_pages_refetched": 0, "nvd_window_pages_downsized": 0},
+        "expect": {"outcome": "advanced", "advance_to": 1767312000000000, "head": 1767312000000000},
+        "emitted_by_collector": true,
+        "note": "The collector clamps advance_to to min(planned end, head), so a head before the window end is the advance."
+      },
+      {
+        "name": "advances_with_record_beyond_head_anomaly",
+        "scope_id": "vuln-intel://nvd/_window/1767225600000000-1767398400000000",
+        "payload": {"nvd_window_advance_to_unix_us": 1767398400000000, "nvd_window_head_unix_us": 1767398400000000, "nvd_window_should_advance": true, "nvd_window_time_anomaly_reason": "record_timestamp_beyond_head", "nvd_window_pages_refetched": 0, "nvd_window_pages_downsized": 0},
+        "expect": {"outcome": "advanced", "advance_to": 1767398400000000, "head": 1767398400000000},
+        "emitted_by_collector": true,
+        "note": "A time anomaly alone never holds the cursor: the reader does not read time_anomaly_reason."
+      },
+      {
+        "name": "holds_head_unknown",
+        "scope_id": "vuln-intel://nvd/_window/1767225600000000-1767398400000000",
+        "payload": {"nvd_window_advance_to_unix_us": 0, "nvd_window_head_unix_us": 0, "nvd_window_should_advance": false, "nvd_window_time_anomaly_reason": "head_unknown", "nvd_window_pages_refetched": 0, "nvd_window_pages_downsized": 0},
+        "expect": {"outcome": "held", "advance_to": 0, "head": 0},
+        "emitted_by_collector": true,
+        "note": "No server head, so the collector stamps should_advance false with advance_to and head 0. Facts commit, the cursor holds."
+      },
+      {
+        "name": "holds_head_behind_cursor",
+        "scope_id": "vuln-intel://nvd/_window/1767225600000000-1767398400000000",
+        "payload": {"nvd_window_advance_to_unix_us": 0, "nvd_window_head_unix_us": 1767139200000000, "nvd_window_should_advance": false, "nvd_window_time_anomaly_reason": "head_behind_cursor", "nvd_window_pages_refetched": 0, "nvd_window_pages_downsized": 0},
+        "expect": {"outcome": "held", "advance_to": 0, "head": 0},
+        "emitted_by_collector": true,
+        "note": "The server head reads at or before the window start: the collector holds rather than moving the cursor backward."
+      },
+      {
+        "name": "holds_should_advance_false",
+        "scope_id": "vuln-intel://nvd/_window/1767225600000000-1767398400000000",
+        "payload": {"nvd_window_advance_to_unix_us": 1767398400000000, "nvd_window_head_unix_us": 1767398400000000, "nvd_window_should_advance": false, "nvd_window_time_anomaly_reason": "", "nvd_window_pages_refetched": 0, "nvd_window_pages_downsized": 0},
+        "expect": {"outcome": "held", "advance_to": 0, "head": 0},
+        "emitted_by_collector": false,
+        "note": "Reader pin, not a shape the collector emits: should_advance false holds even beside a positive advance_to."
+      },
+      {
+        "name": "holds_zero_advance_to",
+        "scope_id": "vuln-intel://nvd/_window/1767225600000000-1767398400000000",
+        "payload": {"nvd_window_advance_to_unix_us": 0, "nvd_window_head_unix_us": 1767398400000000, "nvd_window_should_advance": true, "nvd_window_time_anomaly_reason": "", "nvd_window_pages_refetched": 0, "nvd_window_pages_downsized": 0},
+        "expect": {"outcome": "held", "advance_to": 0, "head": 0},
+        "emitted_by_collector": false,
+        "note": "Reader pin, not a shape the collector emits: should_advance true with advance_to 0 is degenerate and arms nothing."
+      },
+      {
+        "name": "holds_string_should_advance",
+        "scope_id": "vuln-intel://nvd/_window/1767225600000000-1767398400000000",
+        "payload": {"nvd_window_advance_to_unix_us": 1767398400000000, "nvd_window_head_unix_us": 1767398400000000, "nvd_window_should_advance": "true", "nvd_window_time_anomaly_reason": "", "nvd_window_pages_refetched": 0, "nvd_window_pages_downsized": 0},
+        "malformed_keys": ["nvd_window_should_advance"],
+        "expect": {"outcome": "held", "advance_to": 0, "head": 0},
+        "emitted_by_collector": false,
+        "note": "The verdict is strict: the string \"true\" is not the boolean true, so the cursor holds."
+      }
+    ]
+  },
+  "baseline": {
+    "scope_prefix": "vuln-intel://nvd/_baseline/",
+    "key_prefix": "nvd_baseline_",
+    "outcomes": ["advanced", "held", "not_covered", "refused"],
+    "reasons": ["advance_behind_start", "advance_missing", "advance_not_past_start", "sha_malformed"],
+    "classes": ["nvd_baseline_window_writer_armed"],
+    "keys": [
+      {"field": "run", "name": "nvd_baseline_run", "type": "string", "unit": "none", "read_by": "none", "presence": "always", "note": "Informational, not read by core: the run id is parsed from the scope id."},
+      {"field": "year", "name": "nvd_baseline_year", "type": "int", "unit": "year", "read_by": "none", "presence": "always", "note": "Informational, not read by core: the year is parsed from the scope id."},
+      {"field": "advance_to", "name": "nvd_baseline_advance_to_unix_us", "type": "int64", "unit": "unix_us", "read_by": "core", "presence": "always", "note": "The resume stamp the next chunk starts from, exclusive. Core floors it to a whole millisecond."},
+      {"field": "year_sha256", "name": "nvd_baseline_year_sha256", "type": "string", "unit": "none", "read_by": "core", "presence": "always", "note": "The seed year file identity: 64 lowercase hex characters once surrounding whitespace is trimmed. Anything else covers nothing."},
+      {"field": "year_complete", "name": "nvd_baseline_year_complete", "type": "bool", "unit": "none", "read_by": "core", "presence": "always", "note": "True when the chunk finished the year. A complete chunk may land exactly on its start."},
+      {"field": "should_advance", "name": "nvd_baseline_should_advance", "type": "bool", "unit": "none", "read_by": "core", "presence": "always", "note": "Strict: only the JSON boolean true can advance the checkpoint."}
+    ],
+    "cases": [
+      {
+        "name": "advances_past_start",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1009843200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "advanced", "reason": "", "class": "", "advance_to": 1041379200000000, "year_complete": false},
+        "emitted_by_collector": true,
+        "note": "An incomplete chunk that moves strictly past its start: the checkpoint is armed to advance_to."
+      },
+      {
+        "name": "advances_complete_past_start",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1009843200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": true, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "advanced", "reason": "", "class": "", "advance_to": 1041379200000000, "year_complete": true},
+        "emitted_by_collector": true,
+        "note": "A year-complete chunk past its start."
+      },
+      {
+        "name": "advances_complete_at_start",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1041379200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": true, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "advanced", "reason": "", "class": "", "advance_to": 1041379200000000, "year_complete": true},
+        "emitted_by_collector": true,
+        "note": "A complete chunk may land exactly on its start: it resumed at the stream tail and has no later stamp to name."
+      },
+      {
+        "name": "advances_sub_millisecond_floors",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1009843200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000500, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "advanced", "reason": "", "class": "", "advance_to": 1041379200000000, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "advance_to is floored to a whole millisecond, never rounded up, so a stored resume can only re-read."
+      },
+      {
+        "name": "not_covered_incomplete_at_start",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1041379200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "not_covered", "reason": "advance_not_past_start", "class": "", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "Reader pin, not a shape the collector emits (it stamps should_advance false here): an incomplete chunk that does not move past its start would re-mint the same scope forever."
+      },
+      {
+        "name": "not_covered_sub_millisecond_floors_to_start",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1041379200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000500, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "not_covered", "reason": "advance_not_past_start", "class": "", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "The floor applies before the comparison, so a sub-millisecond lead over the start is no progress."
+      },
+      {
+        "name": "not_covered_behind_start",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1041379200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1009843200000000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "not_covered", "reason": "advance_behind_start", "class": "", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "No verdict may move behind the chunk start."
+      },
+      {
+        "name": "not_covered_complete_behind_start",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1041379200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1009843200000000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": true, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "not_covered", "reason": "advance_behind_start", "class": "", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "A complete verdict is also refused behind the start: the behind-start check comes first."
+      },
+      {
+        "name": "not_covered_missing_advance",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1009843200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "not_covered", "reason": "advance_missing", "class": "", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "should_advance true without an advance_to stamp."
+      },
+      {
+        "name": "not_covered_zero_advance",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1009843200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 0, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "not_covered", "reason": "advance_missing", "class": "", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "A non-positive advance_to is missing."
+      },
+      {
+        "name": "not_covered_string_advance",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1009843200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": "1041379200000000", "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "malformed_keys": ["nvd_baseline_advance_to_unix_us"],
+        "expect": {"outcome": "not_covered", "reason": "advance_missing", "class": "", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "advance_to must be a JSON number; a string is missing."
+      },
+      {
+        "name": "not_covered_sha_blank",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1009843200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "", "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "not_covered", "reason": "sha_malformed", "class": "", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "A blank seed sha names nothing the next plan can pin."
+      },
+      {
+        "name": "not_covered_sha_malformed",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1009843200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "61DB8D5B74D993FED8E8D70E84200FBB9ABB84DCF0D4CEC4BCE8A9E09104126D", "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "not_covered", "reason": "sha_malformed", "class": "", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "The seed sha is 64 lowercase hex characters; uppercase is malformed."
+      },
+      {
+        "name": "advances_sha_with_surrounding_whitespace",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1009843200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "  61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d  ", "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "advanced", "reason": "", "class": "", "advance_to": 1041379200000000, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "Core trims surrounding whitespace from the seed sha before the 64-hex check and stores the trimmed value, so padded input is accepted."
+      },
+      {
+        "name": "holds_should_advance_false",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1041379200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": false},
+        "expect": {"outcome": "held", "reason": "", "class": "", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": true,
+        "note": "The no-progress shape: an incomplete chunk that resumed at its own start and found nothing past it. should_advance is false, so facts commit and the checkpoint holds."
+      },
+      {
+        "name": "holds_string_should_advance",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1009843200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": "true"},
+        "malformed_keys": ["nvd_baseline_should_advance"],
+        "expect": {"outcome": "held", "reason": "", "class": "", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "The verdict is strict: the string \"true\" is not the boolean true."
+      },
+      {
+        "name": "holds_no_snapshot_keys",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1009843200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002},
+        "expect": {"outcome": "held", "reason": "", "class": "", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "A snapshot that carries only identity keys has no verdict, so the checkpoint holds."
+      },
+      {
+        "name": "refused_window_verdict_present",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1009843200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true, "nvd_window_should_advance": true, "nvd_window_advance_to_unix_us": 1767398400000000},
+        "expect": {"outcome": "refused", "reason": "", "class": "nvd_baseline_window_writer_armed", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "A baseline generation carrying a window advance verdict is refused and nothing commits: a baseline chunk never arms the window cursor writer."
+      },
+      {
+        "name": "refused_window_verdict_beside_baseline_hold",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1009843200000000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": false, "nvd_window_should_advance": true, "nvd_window_advance_to_unix_us": 1767398400000000},
+        "expect": {"outcome": "refused", "reason": "", "class": "nvd_baseline_window_writer_armed", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "The window-verdict refusal comes before the baseline should_advance check, so a baseline hold does not hide it."
+      }
+    ]
+  }
+}
