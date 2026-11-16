@@ -119,7 +119,7 @@ func TestNVDVerdictKeysGoldenRejectsSeededCorruption(t *testing.T) {
 	for _, seed := range verdictSeeds() {
 		t.Run(seed.name, func(t *testing.T) {
 			t.Logf("seed %q want %q", seed.name, seed.want)
-			mutated := original
+			var mutated string
 			if seed.mutate != nil {
 				mutated = mutateVerdictDoc(t, original, seed.mutate)
 			} else {
