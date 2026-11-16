@@ -24,6 +24,34 @@ Tags for the new module use the Go subdirectory-module format after separate rel
 (`factschema/fixturepack`) ships inside this module and has no separate
 version — pinning this module pins the fixture pack too.
 
+## [0.1.0-rc.20] - 2026-11-15 (unpublished)
+
+This candidate source is not tagged. Publishing it needs the `release`
+workflow dispatch against the merged commit, and no proxy verification is
+claimed for it.
+
+### Added
+
+- `vulnerability.cve` declares six optional fields the vulnerability collector
+  already emits, `collector_instance_id`, `source_identifier`, `descriptions`,
+  `cwes`, `cvss_metrics`, and `correlation_anchors` (eshu-hq/eshu#10755, part of
+  eshu-hq/eshu#9209; additive minor, no decode shim). Nothing is narrowed and no
+  field becomes required: `advisory_id` is still the only required key, and the
+  wire `schema_version` stays `1.0.0` because every older and current fact still
+  decodes unchanged. Declared types follow what the NVD, CVE List, GHSA, OSV,
+  and GitLab Gemnasium envelopes write: `collector_instance_id` and
+  `source_identifier` are strings, `descriptions` is a list of `{lang, value}`
+  objects, `cvss_metrics` is an open object (NVD maps a version key to a list of
+  metric objects; the CVE List maps a container and version key to one metric
+  object), `correlation_anchors` is a list of strings, and `cwes` is a list
+  whose elements are id strings (NVD, GitLab Gemnasium) or `{"cwe_id": ...}`
+  objects (CVE List). The `cwes` schema therefore declares element
+  `type: ["string", "object"]` rather than open `items: true`, which the
+  collector conformance validator cannot compile; `internal/schemagen` applies
+  that in a post-step. The reducer still does not attach CWEs; the advisory
+  query reads `cwes` at read time. The generated schema only gains optional
+  properties, mirrored into the fixture-pack copy in lockstep.
+
 ## [0.1.0-rc.19] - Published (`factschema/v0.1.0-rc.19` at `5537eb64`, 2026-11-08)
 
 Tagged `factschema/v0.1.0-rc.19` at the merge-#85 commit; the Go proxy lists
