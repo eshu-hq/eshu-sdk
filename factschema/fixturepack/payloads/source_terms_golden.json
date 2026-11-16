@@ -1,5 +1,5 @@
 {
-  "description": "The terms each existing vulnerability source's source_snapshot must carry in the license and attribution payload keys (eshu-hq/eshu#9958). Both the in-tree collector and the extracted collector build their snapshot from a per-source constant and replay this file to catch drift. license is an SPDX identifier, a LicenseRef- identifier where the source publishes terms with no SPDX identifier, or NOASSERTION where Eshu has found no stated license. It describes the source, not each record: osv mixes licenses per record (Ubuntu and Alpine are CC-BY-SA-4.0, Chainguard and Wolfi are CC-BY-NC-ND-4.0), so it says LicenseRef-OSV-per-record and the attribution points at the per-record list. attribution is one plain-text credit line. A source absent from this file carries neither key; glad (GitLab Advisory Database) is absent on purpose, because its published terms forbid storing the content and are not a license to record. license is a disclosure on the snapshot, not an access decision.",
+  "description": "The terms each vulnerability source's source_snapshot must carry in the license and attribution payload keys (eshu-hq/eshu#9958). Both the in-tree collector and the extracted collector build their snapshot from a per-source constant and replay this file to catch drift. license is an SPDX identifier, a LicenseRef- identifier where the source publishes terms with no SPDX identifier, or NOASSERTION where Eshu has found no stated license. It describes the source, not each record: osv mixes licenses per record (Ubuntu and Alpine are CC-BY-SA-4.0, Chainguard and Wolfi are CC-BY-NC-ND-4.0), so it says LicenseRef-OSV-per-record and the attribution points at the per-record list. attribution is one plain-text credit line. A source absent from this file carries neither key; vulncheck_nvdpp is the separately labelled VulnCheck NVD++ lane (eshu-hq/eshu#10720, eshu-collector-vulnerability-intelligence#103); its attribution wording is a proposal that carries the owner's reading of VulnCheck's published NVD++ attribution page, not legal advice, and it never merges into nvd. glad (GitLab Advisory Database) is absent on purpose, because its published terms forbid storing the content and are not a license to record. license is a disclosure on the snapshot, not an access decision.",
   "sources": [
     {
       "source": "cisa_kev",
@@ -25,6 +25,11 @@
       "source": "osv",
       "license": "LicenseRef-OSV-per-record",
       "attribution": "Open Source Vulnerabilities (OSV.dev), https://osv.dev. Each record carries the license of its source database; see https://google.github.io/osv.dev/data/."
+    },
+    {
+      "source": "vulncheck_nvdpp",
+      "license": "LicenseRef-VulnCheck-NVDPP-Terms",
+      "attribution": "VulnCheck NVD++ data, https://vulncheck.com. Eshu normalizes these records."
     }
   ]
 }

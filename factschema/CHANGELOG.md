@@ -32,6 +32,13 @@ claimed for it.
 
 ### Added
 
+- `fixturepack/payloads/source_terms_golden.json` gains a `vulncheck_nvdpp` row
+  (eshu-hq/eshu#10720, collector#103): license
+  `LicenseRef-VulnCheck-NVDPP-Terms` and a one-line attribution. The attribution
+  wording is Eshu's proposal, not legal advice, and no vendor confirmed it. No
+  payload schema, stable key, or wire change; the collector source ships off.
+  The golden's SHA-256 is now
+  `8f1107d2525569d5046f7bb0618d992e003fe3e2ef1e6a505f509fa5100e06ca`.
 - `vulnerability.cve` declares six optional fields the vulnerability collector
   already emits, `collector_instance_id`, `source_identifier`, `descriptions`,
   `cwes`, `cvss_metrics`, and `correlation_anchors` (eshu-hq/eshu#10755, part of

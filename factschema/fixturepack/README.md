@@ -47,7 +47,7 @@ shapes the target reducer release consumes.
   every expected field from the case record and pins the file digest.
 - `payloads/source_terms_golden.json` — the `license` and `attribution` each
   existing vulnerability source's `source_snapshot` carries (#9958): `osv`,
-  `nvd`, `cisa_kev`, `first_epss`, and `ghsa`. `license` is an SPDX identifier, a
+  `nvd`, `cisa_kev`, `first_epss`, `ghsa`, and `vulncheck_nvdpp`. `license` is an SPDX identifier, a
   `LicenseRef-` identifier where the source publishes terms with no SPDX
   identifier, or `NOASSERTION` where no stated license was found. It describes
   the source, not each record (`osv` mixes licenses per record, so it says

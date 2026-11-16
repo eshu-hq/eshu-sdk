@@ -17,14 +17,14 @@ import (
 
 // requiredTermsSources are the sources whose snapshots carried no terms before
 // eshu-hq/eshu#9958. The golden must name each one.
-var requiredTermsSources = []string{"cisa_kev", "first_epss", "ghsa", "nvd", "osv"}
+var requiredTermsSources = []string{"cisa_kev", "first_epss", "ghsa", "nvd", "osv", "vulncheck_nvdpp"}
 
 var licenseIdentifier = regexp.MustCompile(`^[A-Za-z0-9.+-]+$`)
 
 const maxAttributionLen = 300
 
 func TestSourceTermsGoldenFullContentDigest(t *testing.T) {
-	const expected = "d2572732bd167504eaa87e3c60c8dc21d7ce58e88887a116dfd3ee6091564bf8"
+	const expected = "8f1107d2525569d5046f7bb0618d992e003fe3e2ef1e6a505f509fa5100e06ca"
 	got := fmt.Sprintf("%x", sha256.Sum256(SourceTermsGolden()))
 	if got != expected {
 		t.Fatalf("source terms golden digest = %s, want %s; review every source before updating the pin", got, expected)
