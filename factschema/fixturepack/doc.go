@@ -56,7 +56,9 @@
 // NVDVerdictKeysGolden supplies the NVD window and baseline checkpoint verdict
 // keys a satellite stamps on vulnerability.source_snapshot and the core
 // extension host reads, with the type, unit and reader of each key and named
-// cases of stamped payload to commit outcome. The collector checks its
-// constants and real verdict builders against it; core replays every case
-// through its commit path.
+// cases of stamped payload to commit outcome. Each case says whether a real
+// collector builder can emit it or whether it only exercises core. The
+// collector and core are expected to read it in their own changes (constants
+// and builders on one side, a replay through the commit path on the other);
+// this package validates the vector's shape.
 package fixturepack

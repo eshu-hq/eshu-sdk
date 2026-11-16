@@ -8,74 +8,14 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
-	"regexp"
 	"slices"
-	"strconv"
 	"strings"
 	"testing"
 )
 
 // nvdVerdictKeysGoldenSHA256 pins the file bytes. A deliberate vector change
 // updates this digest in the same commit; an accidental one fails here first.
-const nvdVerdictKeysGoldenSHA256 = "8c5ae1b9638e968174df3098db3a2d0ad1ad4b596c0f4b8676c55bde0c799248"
-
-// Closed sets the validator holds the vector to. They are repeated here on
-// purpose: a vector edit that widens a set must also edit this test.
-var (
-	verdictKeyTypes     = []string{"bool", "int", "int64", "string"}
-	verdictKeyUnits     = []string{"count", "none", "unix_us", "year"}
-	verdictKeyReaders   = []string{"core", "none"}
-	verdictKeyPresences = []string{"always", "conditional"}
-
-	windowOutcomes   = []string{"advanced", "held"}
-	baselineOutcomes = []string{"advanced", "held", "not_covered", "refused"}
-	baselineReasons  = []string{"advance_behind_start", "advance_missing", "advance_not_past_start", "sha_malformed"}
-	baselineClasses  = []string{"nvd_baseline_window_writer_armed"}
-	windowAnomalies  = []string{"", "head_unknown", "record_timestamp_unparsable", "record_timestamp_beyond_head", "head_behind_cursor"}
-)
-
-var (
-	windowScopeShape   = regexp.MustCompile(`^vuln-intel://nvd/_window/([0-9]+)-([0-9]+)$`)
-	baselineScopeShape = regexp.MustCompile(`^vuln-intel://nvd/_baseline/[A-Za-z0-9_-]{1,64}/([0-9]{4})/([0-9]+)$`)
-)
-
-type verdictKey struct {
-	Field    string   `json:"field"`
-	Name     string   `json:"name"`
-	Type     string   `json:"type"`
-	Unit     string   `json:"unit"`
-	ReadBy   string   `json:"read_by"`
-	Presence string   `json:"presence"`
-	Enum     []string `json:"enum"`
-	Note     string   `json:"note"`
-}
-
-type verdictCase struct {
-	Name          string                     `json:"name"`
-	ScopeID       string                     `json:"scope_id"`
-	Payload       map[string]json.RawMessage `json:"payload"`
-	Expect        map[string]json.RawMessage `json:"expect"`
-	MalformedKeys []string                   `json:"malformed_keys"`
-	Note          string                     `json:"note"`
-}
-
-type verdictSection struct {
-	ScopePrefix string        `json:"scope_prefix"`
-	KeyPrefix   string        `json:"key_prefix"`
-	Outcomes    []string      `json:"outcomes"`
-	Reasons     []string      `json:"reasons"`
-	Classes     []string      `json:"classes"`
-	Keys        []verdictKey  `json:"keys"`
-	Cases       []verdictCase `json:"cases"`
-}
-
-type verdictGolden struct {
-	Version          int            `json:"version"`
-	SnapshotFactKind string         `json:"snapshot_fact_kind"`
-	Comment          string         `json:"comment"`
-	Window           verdictSection `json:"window"`
-	Baseline         verdictSection `json:"baseline"`
-}
+const nvdVerdictKeysGoldenSHA256 = "6a489baa68ec96eb01034536a78a8b3643c2ce31f8fe84cb73e2367830bdd073"
 
 func TestNVDVerdictKeysGoldenFullContentDigest(t *testing.T) {
 	got := fmt.Sprintf("%x", sha256.Sum256(NVDVerdictKeysGolden()))
@@ -99,80 +39,92 @@ func TestNVDVerdictKeysGoldenContentAndCopy(t *testing.T) {
 // literally, so a rename needs an edit here as well as in the vector.
 func TestNVDVerdictKeysGoldenPinsNamesAndOutcomes(t *testing.T) {
 	golden := decodeVerdictGolden(t, NVDVerdictKeysGolden())
-	wantWindow := map[string]string{
-		"advance_to":          "nvd_window_advance_to_unix_us",
-		"head":                "nvd_window_head_unix_us",
-		"should_advance":      "nvd_window_should_advance",
-		"time_anomaly_reason": "nvd_window_time_anomaly_reason",
+	want := map[string]map[string]string{
+		"window": {
+			"advance_to": "nvd_window_advance_to_unix_us", "head": "nvd_window_head_unix_us",
+			"should_advance": "nvd_window_should_advance", "time_anomaly_reason": "nvd_window_time_anomaly_reason",
+			"pages_refetched": "nvd_window_pages_refetched", "pages_downsized": "nvd_window_pages_downsized",
+			"split": "nvd_window_split", "retry_reason": "nvd_window_retry_reason",
+		},
+		"baseline": {
+			"run": "nvd_baseline_run", "year": "nvd_baseline_year", "advance_to": "nvd_baseline_advance_to_unix_us",
+			"year_sha256": "nvd_baseline_year_sha256", "year_complete": "nvd_baseline_year_complete",
+			"should_advance": "nvd_baseline_should_advance",
+		},
 	}
-	wantBaseline := map[string]string{
-		"run":            "nvd_baseline_run",
-		"year":           "nvd_baseline_year",
-		"advance_to":     "nvd_baseline_advance_to_unix_us",
-		"year_sha256":    "nvd_baseline_year_sha256",
-		"year_complete":  "nvd_baseline_year_complete",
-		"should_advance": "nvd_baseline_should_advance",
-	}
-	for section, want := range map[string]map[string]string{"window": wantWindow, "baseline": wantBaseline} {
-		keys := golden.Window.Keys
-		if section == "baseline" {
-			keys = golden.Baseline.Keys
-		}
+	for section, keys := range map[string][]verdictKey{"window": golden.Window.Keys, "baseline": golden.Baseline.Keys} {
 		got := map[string]string{}
 		for _, key := range keys {
 			got[key.Field] = key.Name
-		}
-		for field, name := range want {
-			if got[field] != name {
-				t.Errorf("%s key %q = %q, want %q", section, field, got[field], name)
+			if key.Field == "time_anomaly_reason" && !slices.Equal(key.Enum, windowAnomalies) {
+				t.Errorf("time_anomaly_reason enum = %v, want %v", key.Enum, windowAnomalies)
 			}
 		}
-	}
-	for section, keys := range map[string][]verdictKey{"window": golden.Window.Keys, "baseline": golden.Baseline.Keys} {
-		for _, key := range keys {
-			if key.Field == "should_advance" && (key.Type != "bool" || key.ReadBy != "core") {
-				t.Errorf("%s should_advance must be a core-read bool, got %s read by %s", section, key.Type, key.ReadBy)
-			}
+		if fmt.Sprint(got) != fmt.Sprint(want[section]) {
+			t.Errorf("%s keys = %v, want %v", section, got, want[section])
 		}
-	}
-	for _, key := range golden.Window.Keys {
-		if key.Field == "time_anomaly_reason" && !slices.Equal(key.Enum, windowAnomalies) {
-			t.Errorf("time_anomaly_reason enum = %v, want %v", key.Enum, windowAnomalies)
-		}
-	}
-	if golden.SnapshotFactKind != "vulnerability.source_snapshot" || golden.Version != 1 {
-		t.Fatalf("version %d / fact kind %q, want 1 / vulnerability.source_snapshot", golden.Version, golden.SnapshotFactKind)
 	}
 	if !slices.Equal(golden.Baseline.Outcomes, baselineOutcomes) || !slices.Equal(golden.Window.Outcomes, windowOutcomes) {
 		t.Fatalf("outcome sets drifted: window %v baseline %v", golden.Window.Outcomes, golden.Baseline.Outcomes)
 	}
 }
 
+// TestNVDVerdictKeysGoldenReaderPinSet pins which cases the collector cannot
+// emit, so flipping a flag to make a case look collector-backed fails here.
+func TestNVDVerdictKeysGoldenReaderPinSet(t *testing.T) {
+	golden := decodeVerdictGolden(t, NVDVerdictKeysGolden())
+	wantPins := map[string][]string{
+		"window": {"holds_should_advance_false", "holds_zero_advance_to", "holds_string_should_advance"},
+		"baseline": {
+			"advances_sub_millisecond_floors", "advances_sha_with_surrounding_whitespace", "not_covered_incomplete_at_start",
+			"not_covered_sub_millisecond_floors_to_start", "not_covered_behind_start", "not_covered_complete_behind_start",
+			"not_covered_missing_advance", "not_covered_zero_advance", "not_covered_string_advance", "not_covered_sha_blank",
+			"not_covered_sha_malformed", "holds_string_should_advance", "holds_no_snapshot_keys",
+			"refused_window_verdict_present", "refused_window_verdict_beside_baseline_hold",
+		},
+	}
+	for section, cases := range map[string][]verdictCase{"window": golden.Window.Cases, "baseline": golden.Baseline.Cases} {
+		var pins []string
+		for _, c := range cases {
+			if !*c.Emitted {
+				pins = append(pins, c.Name)
+			}
+		}
+		slices.Sort(pins)
+		want := slices.Clone(wantPins[section])
+		slices.Sort(want)
+		if !slices.Equal(pins, want) {
+			t.Errorf("%s reader pins = %v, want %v", section, pins, want)
+		}
+	}
+}
+
+// verdictSeed is one planted violation. A text seed replaces the first
+// occurrence of old with new; a mutate seed edits the decoded document. Every
+// seed names the validator error it must provoke, so a violation that passes,
+// or that fails through a different rule, is caught.
+type verdictSeed struct {
+	name   string
+	old    string
+	new    string
+	mutate func(doc map[string]any)
+	want   string
+}
+
 // TestNVDVerdictKeysGoldenRejectsSeededCorruption plants one violation of each
-// rule and requires the validator to reject it, so it cannot pass vacuously.
+// validator rule and requires that rule's error, so no rule can be weakened
+// without a seed going red.
 func TestNVDVerdictKeysGoldenRejectsSeededCorruption(t *testing.T) {
 	original := string(NVDVerdictKeysGolden())
-	cases := map[string][2]string{
-		"renamed key in the table":      {`"name": "nvd_window_should_advance"`, `"name": "nvd_window_should_advanced"`},
-		"unprefixed key":                {`"name": "nvd_baseline_run"`, `"name": "baseline_run"`},
-		"duplicate key name":            {`"name": "nvd_baseline_year"`, `"name": "nvd_baseline_run"`},
-		"key type outside the set":      {`"type": "int64"`, `"type": "float64"`},
-		"should_advance declared text":  {`"nvd_window_should_advance", "type": "bool"`, `"nvd_window_should_advance", "type": "string"`},
-		"non-bool should_advance value": {`"nvd_window_should_advance": true`, `"nvd_window_should_advance": "yes"`},
-		"undeclared payload key":        {`"nvd_window_pages_refetched": 0`, `"nvd_window_pages_refetched_total": 0`},
-		"window outcome outside set":    {`"outcome": "advanced"`, `"outcome": "moved"`},
-		"baseline outcome outside set":  {`"outcome": "not_covered"`, `"outcome": "uncovered"`},
-		"baseline reason outside set":   {`"reason": "advance_missing"`, `"reason": "no_advance"`},
-		"sub-millisecond advance_to":    {`"advance_to": 1041379200000000`, `"advance_to": 1041379200000500`},
-		"missing scope_id":              {`"scope_id": "vuln-intel://nvd/_window/1767225600000000-1767398400000000",`, ``},
-		"missing expect block":          {`"expect": {`, `"expected": {`},
-		"missing case name":             {`"name": "advances",`, ``},
-		"stale malformed marker":        {`"malformed_keys": [`, `"malformed_keys": ["nvd_window_head_unix_us", `},
-		"unsupported version":           {`"version": 1`, `"version": 2`},
-	}
-	for name, replacement := range cases {
-		t.Run(name, func(t *testing.T) {
-			mutated := strings.Replace(original, replacement[0], replacement[1], 1)
+	for _, seed := range verdictSeeds() {
+		t.Run(seed.name, func(t *testing.T) {
+			t.Logf("seed %q want %q", seed.name, seed.want)
+			mutated := original
+			if seed.mutate != nil {
+				mutated = mutateVerdictDoc(t, original, seed.mutate)
+			} else {
+				mutated = strings.Replace(original, seed.old, seed.new, 1)
+			}
 			if mutated == original {
 				t.Fatal("seeded violation did not change the fixture")
 			}
@@ -180,237 +132,120 @@ func TestNVDVerdictKeysGoldenRejectsSeededCorruption(t *testing.T) {
 			if err == nil {
 				t.Fatal("seeded violation passed golden validation")
 			}
-			t.Logf("rejected: %v", err)
+			if !strings.Contains(err.Error(), seed.want) {
+				t.Fatalf("seeded violation failed through another rule: %v, want error containing %q", err, seed.want)
+			}
 		})
 	}
 }
 
-func decodeVerdictGolden(t *testing.T, raw []byte) verdictGolden {
+func mutateVerdictDoc(t *testing.T, raw string, edit func(doc map[string]any)) string {
 	t.Helper()
-	var golden verdictGolden
-	if err := strictDecode(raw, &golden); err != nil {
+	decoder := json.NewDecoder(bytes.NewReader([]byte(raw)))
+	decoder.UseNumber()
+	var doc map[string]any
+	if err := decoder.Decode(&doc); err != nil {
 		t.Fatal(err)
 	}
-	return golden
-}
-
-// strictDecode rejects unknown members, so a misspelled case field cannot
-// silently become an absent one.
-func strictDecode(raw []byte, into any) error {
-	decoder := json.NewDecoder(bytes.NewReader(raw))
-	decoder.DisallowUnknownFields()
-	if err := decoder.Decode(into); err != nil {
-		return fmt.Errorf("decode NVD verdict keys golden: %w", err)
-	}
-	return nil
-}
-
-func validateNVDVerdictKeysGolden(raw []byte) error {
-	var golden verdictGolden
-	if err := strictDecode(raw, &golden); err != nil {
-		return err
-	}
-	if golden.Version != 1 || golden.SnapshotFactKind != "vulnerability.source_snapshot" || strings.TrimSpace(golden.Comment) == "" {
-		return fmt.Errorf("NVD verdict keys golden header changed: version %d kind %q", golden.Version, golden.SnapshotFactKind)
-	}
-	seen := map[string]bool{}
-	// A baseline payload may also carry window keys: that mixed shape is the
-	// refused one, so a baseline case may name any declared window key.
-	if err := validateVerdictSection("window", golden.Window, "vuln-intel://nvd/_window/", "nvd_window_", windowOutcomes, seen, nil); err != nil {
-		return err
-	}
-	if err := validateVerdictSection("baseline", golden.Baseline, "vuln-intel://nvd/_baseline/", "nvd_baseline_", baselineOutcomes, seen, golden.Window.Keys); err != nil {
-		return err
-	}
-	if !slices.Equal(golden.Baseline.Reasons, baselineReasons) || !slices.Equal(golden.Baseline.Classes, baselineClasses) {
-		return fmt.Errorf("baseline reason or class set changed: %v %v", golden.Baseline.Reasons, golden.Baseline.Classes)
-	}
-	return nil
-}
-
-func validateVerdictSection(name string, section verdictSection, scopePrefix, keyPrefix string, outcomes []string, seen map[string]bool, borrowed []verdictKey) error {
-	if section.ScopePrefix != scopePrefix || section.KeyPrefix != keyPrefix || !slices.Equal(section.Outcomes, outcomes) {
-		return fmt.Errorf("%s section prefixes or outcomes changed", name)
-	}
-	declared := map[string]verdictKey{}
-	for _, key := range section.Keys {
-		switch {
-		case !strings.HasPrefix(key.Name, keyPrefix) || key.Field == "":
-			return fmt.Errorf("%s key %q lacks prefix %q or field name", name, key.Name, keyPrefix)
-		case seen[key.Name]:
-			return fmt.Errorf("%s key name %q is not unique", name, key.Name)
-		case !slices.Contains(verdictKeyTypes, key.Type), !slices.Contains(verdictKeyUnits, key.Unit),
-			!slices.Contains(verdictKeyReaders, key.ReadBy), !slices.Contains(verdictKeyPresences, key.Presence):
-			return fmt.Errorf("%s key %q has a type, unit, reader or presence outside the closed sets", name, key.Name)
-		case key.Field == "should_advance" && (key.Type != "bool" || key.ReadBy != "core"):
-			return fmt.Errorf("%s should_advance must be a core-read bool", name)
-		}
-		seen[key.Name] = true
-		declared[key.Name] = key
-	}
-	own := len(declared)
-	for _, key := range borrowed {
-		declared[key.Name] = key
-	}
-	if own == 0 || len(section.Cases) == 0 {
-		return fmt.Errorf("%s section has no keys or no cases", name)
-	}
-	names := map[string]bool{}
-	for _, c := range section.Cases {
-		if c.Name == "" || c.ScopeID == "" || len(c.Payload) == 0 || len(c.Expect) == 0 {
-			return fmt.Errorf("%s case %q is missing name, scope_id, payload or expect", name, c.Name)
-		}
-		if names[c.Name] {
-			return fmt.Errorf("%s case name %q is not unique", name, c.Name)
-		}
-		names[c.Name] = true
-		if err := validateVerdictCase(name, section, c, declared); err != nil {
-			return fmt.Errorf("%s case %q: %w", name, c.Name, err)
-		}
-	}
-	return nil
-}
-
-func validateVerdictCase(section string, s verdictSection, c verdictCase, declared map[string]verdictKey) error {
-	if !strings.HasPrefix(c.ScopeID, s.ScopePrefix) {
-		return fmt.Errorf("scope_id %q lacks prefix %q", c.ScopeID, s.ScopePrefix)
-	}
-	if section == "window" {
-		m := windowScopeShape.FindStringSubmatch(c.ScopeID)
-		if m == nil {
-			return fmt.Errorf("scope_id %q is not a window scope", c.ScopeID)
-		}
-		start, _ := strconv.ParseInt(m[1], 10, 64)
-		end, _ := strconv.ParseInt(m[2], 10, 64)
-		if start <= 0 || end <= start {
-			return fmt.Errorf("scope_id %q has degenerate bounds", c.ScopeID)
-		}
-	} else if baselineScopeShape.FindStringSubmatch(c.ScopeID) == nil {
-		return fmt.Errorf("scope_id %q is not a baseline scope", c.ScopeID)
-	}
-	for _, malformed := range c.MalformedKeys {
-		if _, ok := declared[malformed]; !ok {
-			return fmt.Errorf("malformed_keys names undeclared key %q", malformed)
-		}
-		if _, ok := c.Payload[malformed]; !ok {
-			return fmt.Errorf("malformed_keys names %q, which the payload does not carry", malformed)
-		}
-	}
-	for key, value := range c.Payload {
-		spec, ok := declared[key]
-		if !ok {
-			return fmt.Errorf("payload key %q is not declared", key)
-		}
-		matches := jsonMatchesType(value, spec.Type)
-		if slices.Contains(c.MalformedKeys, key) == matches {
-			return fmt.Errorf("payload key %q: type match %v disagrees with its malformed marker", key, matches)
-		}
-		if matches && len(spec.Enum) > 0 {
-			var text string
-			_ = json.Unmarshal(value, &text)
-			if !slices.Contains(spec.Enum, text) {
-				return fmt.Errorf("payload key %q value %q is outside its enum", key, text)
-			}
-		}
-	}
-	return validateVerdictExpect(section, s, c)
-}
-
-func jsonMatchesType(value json.RawMessage, typ string) bool {
-	text := strings.TrimSpace(string(value))
-	switch typ {
-	case "bool":
-		return text == "true" || text == "false"
-	case "string":
-		return strings.HasPrefix(text, `"`)
-	default:
-		_, err := strconv.ParseInt(text, 10, 64)
-		return err == nil
-	}
-}
-
-func intMember(members map[string]json.RawMessage, key string) (int64, error) {
-	raw, ok := members[key]
-	if !ok {
-		return 0, fmt.Errorf("member %q is absent", key)
-	}
-	value, err := strconv.ParseInt(strings.TrimSpace(string(raw)), 10, 64)
+	edit(doc)
+	out, err := json.Marshal(doc)
 	if err != nil {
-		return 0, fmt.Errorf("member %q is not a whole JSON number: %w", key, err)
+		t.Fatal(err)
 	}
-	return value, nil
+	return string(out)
 }
 
-func stringMember(members map[string]json.RawMessage, key string) (string, error) {
-	var text string
-	if err := json.Unmarshal(members[key], &text); err != nil {
-		return "", fmt.Errorf("member %q is not a string", key)
+// caseEdit edits the named case of a section in the decoded document.
+func caseEdit(section, name string, edit func(c, payload map[string]any)) func(map[string]any) {
+	return func(doc map[string]any) {
+		for _, raw := range doc[section].(map[string]any)["cases"].([]any) {
+			c := raw.(map[string]any)
+			if c["name"] == name {
+				edit(c, c["payload"].(map[string]any))
+				return
+			}
+		}
+		panic("no case " + name)
 	}
-	return text, nil
 }
 
-func validateVerdictExpect(section string, s verdictSection, c verdictCase) error {
-	outcome, err := stringMember(c.Expect, "outcome")
-	if err != nil || !slices.Contains(s.Outcomes, outcome) {
-		return fmt.Errorf("expect.outcome %q is outside the closed set", outcome)
+func num(v string) json.Number { return json.Number(v) }
+
+func verdictSeeds() []verdictSeed {
+	const windowScope = `vuln-intel://nvd/_window/1767225600000000-1767398400000000`
+	const baselineScope = `_baseline/run-1/2002/1009843200000000`
+	return []verdictSeed{
+		{name: "unsupported version", old: `"version": 1`, new: `"version": 2`, want: "version or snapshot_fact_kind changed"},
+		{name: "other snapshot fact kind", old: `"snapshot_fact_kind": "vulnerability.source_snapshot"`, new: `"snapshot_fact_kind": "vulnerability.cve"`, want: "version or snapshot_fact_kind changed"},
+		{name: "blank comment", mutate: func(d map[string]any) { d["comment"] = " " }, want: "comment is blank"},
+		{name: "window outcome set widened", old: `"outcomes": ["advanced", "held"]`, new: `"outcomes": ["advanced", "held", "moved"]`, want: "scope_prefix, key_prefix or outcomes changed"},
+		{name: "window scope prefix changed", old: `"scope_prefix": "vuln-intel://nvd/_window/"`, new: `"scope_prefix": "vuln-intel://nvd/_windows/"`, want: "scope_prefix, key_prefix or outcomes changed"},
+		{name: "window declares reasons", old: `"reasons": [],`, new: `"reasons": ["advance_missing"],`, want: "declares reasons or classes"},
+		{name: "baseline reason set edited", old: `"reasons": ["advance_behind_start", "advance_missing", "advance_not_past_start", "sha_malformed"]`, new: `"reasons": ["advance_behind_start", "advance_missing", "advance_not_past_start", "sha_malformed", "extra"]`, want: "baseline reason set changed"},
+		{name: "baseline class set edited", old: `"classes": ["nvd_baseline_window_writer_armed"]`, new: `"classes": ["nvd_baseline_window_writer_armed", "other"]`, want: "baseline class set changed"},
+		{name: "window with no keys", mutate: func(d map[string]any) { d["window"].(map[string]any)["keys"] = []any{} }, want: "section declares no keys"},
+		{name: "baseline with no cases", mutate: func(d map[string]any) { d["baseline"].(map[string]any)["cases"] = []any{} }, want: "section declares no cases"},
+
+		{name: "renamed key in the table", old: `"name": "nvd_window_should_advance"`, new: `"name": "nvd_window_should_advanced"`, want: "is not declared"},
+		{name: "key with no field name", old: `{"field": "advance_to", "name": "nvd_window_advance_to_unix_us"`, new: `{"field": "", "name": "nvd_window_advance_to_unix_us"`, want: "has no field name"},
+		{name: "unprefixed key", old: `"name": "nvd_baseline_run"`, new: `"name": "baseline_run"`, want: "lacks the section key prefix"},
+		{name: "duplicate key name that cases use", old: `"name": "nvd_baseline_year"`, new: `"name": "nvd_baseline_run"`, want: "is declared twice"},
+		{name: "duplicate key name nothing uses", old: `"name": "nvd_window_retry_reason"`, new: `"name": "nvd_window_split"`, want: "is declared twice"},
+		{name: "key type outside the set", old: `"type": "int64"`, new: `"type": "float64"`, want: "outside the closed type set"},
+		{name: "key unit outside the set", old: `"unit": "unix_us"`, new: `"unit": "furlongs"`, want: "outside the closed unit set"},
+		{name: "key reader outside the set", old: `"read_by": "core"`, new: `"read_by": "everyone"`, want: "outside the closed reader set"},
+		{name: "key presence outside the set", old: `"presence": "always"`, new: `"presence": "sometimes"`, want: "outside the closed presence set"},
+		{name: "should_advance declared a string", old: `"nvd_window_should_advance", "type": "bool"`, new: `"nvd_window_should_advance", "type": "string"`, want: "must be a core-read bool"},
+		{name: "should_advance not read by core", old: `"type": "bool", "unit": "none", "read_by": "core", "presence": "always", "note": "Strict: only the JSON boolean true can move`, new: `"type": "bool", "unit": "none", "read_by": "none", "presence": "always", "note": "Strict: only the JSON boolean true can move`, want: "must be a core-read bool"},
+
+		{name: "missing case name", old: `"name": "advances",`, new: ``, want: "a case with no name"},
+		{name: "missing scope_id", old: `"scope_id": "` + windowScope + `",`, new: ``, want: "has no scope_id"},
+		{name: "empty payload", mutate: caseEdit("window", "advances", func(c, _ map[string]any) { c["payload"] = map[string]any{} }), want: "has an empty payload"},
+		{name: "missing expect", old: `"expect": {"outcome": "advanced", "advance_to": 1767398400000000, "head": 1767398400000000},`, new: ``, want: "has an empty expect"},
+		{name: "misspelled expect member", old: `"expect": {`, new: `"expected": {`, want: "unknown field"},
+		{name: "missing emitted_by_collector", old: `"emitted_by_collector": true,`, new: ``, want: "must declare emitted_by_collector"},
+		{name: "duplicate case name", old: `"name": "advances_clamped_to_head"`, new: `"name": "advances"`, want: "is used twice"},
+		{name: "scope outside the family prefix", old: `"scope_id": "vuln-intel://nvd/_window/`, new: `"scope_id": "vuln-intel://nvd/_other/`, want: "does not start with the section scope prefix"},
+		{name: "window scope shape", old: `_window/1767225600000000-1767398400000000`, new: `_window/1767225600000000_1767398400000000`, want: "is not a window scope"},
+		{name: "window scope degenerate bounds", old: `_window/1767225600000000-1767398400000000`, new: `_window/1767398400000000-1767225600000000`, want: "degenerate window bounds"},
+		{name: "baseline scope shape", old: baselineScope, new: `_baseline/run-1/02/1009843200000000`, want: "is not a baseline scope"},
+
+		{name: "malformed marker on an undeclared key", old: `"malformed_keys": ["nvd_window_should_advance"]`, new: `"malformed_keys": ["nvd_window_bogus"]`, want: "names undeclared key"},
+		{name: "malformed marker on a key the payload lacks", old: `"malformed_keys": ["nvd_window_should_advance"]`, new: `"malformed_keys": ["nvd_window_retry_reason"]`, want: "which the payload does not carry"},
+		{name: "stale malformed marker", old: `"malformed_keys": [`, new: `"malformed_keys": ["nvd_window_head_unix_us", `, want: "matches its declared type"},
+		{name: "non-bool should_advance value", old: `"nvd_window_should_advance": true`, new: `"nvd_window_should_advance": "yes"`, want: "wrong-typed but not listed"},
+		{name: "string where an int is expected", old: `"nvd_window_head_unix_us": 1767398400000000`, new: `"nvd_window_head_unix_us": "1767398400000000"`, want: "wrong-typed but not listed"},
+		{name: "enum value outside the key's enum", old: `"nvd_window_time_anomaly_reason": "head_unknown"`, new: `"nvd_window_time_anomaly_reason": "head_unkown"`, want: "is outside its enum"},
+		{name: "undeclared payload key", old: `"nvd_window_pages_refetched": 0`, new: `"nvd_window_pages_refetched_total": 0`, want: "is not declared"},
+
+		{name: "emitted case with malformed keys", mutate: caseEdit("window", "holds_string_should_advance", func(c, _ map[string]any) { c["emitted_by_collector"] = true }), want: "must not carry malformed_keys"},
+		{name: "emitted window case omits an always key", mutate: caseEdit("window", "advances", func(_, p map[string]any) { delete(p, "nvd_window_pages_downsized") }), want: "omits the always-present key"},
+		{name: "emitted window advance beyond the head", mutate: caseEdit("window", "advances", func(_, p map[string]any) { p["nvd_window_head_unix_us"] = num("0") }), want: "without 0 < advance_to <= head"},
+		{name: "emitted window hold with an advance", mutate: caseEdit("window", "holds_head_unknown", func(_, p map[string]any) { p["nvd_window_advance_to_unix_us"] = num("5") }), want: "non-zero advance_to with should_advance false"},
+		{name: "emitted baseline case with a window key", mutate: caseEdit("baseline", "advances_past_start", func(_, p map[string]any) { p["nvd_window_should_advance"] = true }), want: "carries the window key"},
+		{name: "emitted baseline advance sub-millisecond", mutate: caseEdit("baseline", "advances_past_start", func(_, p map[string]any) { p["nvd_baseline_advance_to_unix_us"] = num("1041379200000500") }), want: "not a whole millisecond at or after its scope start"},
+		{name: "emitted baseline advance behind start", mutate: caseEdit("baseline", "advances_past_start", func(_, p map[string]any) { p["nvd_baseline_advance_to_unix_us"] = num("1000000000000000") }), want: "not a whole millisecond at or after its scope start"},
+		{name: "emitted baseline should_advance inconsistent", mutate: caseEdit("baseline", "advances_past_start", func(_, p map[string]any) { p["nvd_baseline_should_advance"] = false }), want: "stamps should_advance="},
+		{name: "emitted baseline sha malformed", mutate: caseEdit("baseline", "advances_past_start", func(_, p map[string]any) { p["nvd_baseline_year_sha256"] = "ABC" }), want: "not 64 lowercase hex"},
+
+		{name: "window outcome outside the set", old: `"outcome": "advanced"`, new: `"outcome": "moved"`, want: "outside the closed outcome set"},
+		{name: "baseline outcome outside the set", old: `"outcome": "not_covered"`, new: `"outcome": "uncovered"`, want: "outside the closed outcome set"},
+		{name: "expect advance_to a string", old: `"expect": {"outcome": "advanced", "advance_to": 1767398400000000`, new: `"expect": {"outcome": "advanced", "advance_to": "1767398400000000"`, want: "is not a whole JSON number"},
+		{name: "held window with a non-zero advance_to", old: `"expect": {"outcome": "held", "advance_to": 0, "head": 0}`, new: `"expect": {"outcome": "held", "advance_to": 5, "head": 0}`, want: "a held window arms no writer"},
+		{name: "held window with a non-zero head", old: `"expect": {"outcome": "held", "advance_to": 0, "head": 0}`, new: `"expect": {"outcome": "held", "advance_to": 0, "head": 5}`, want: "a held window arms no writer"},
+		{name: "advanced window expects another advance_to", old: `"expect": {"outcome": "advanced", "advance_to": 1767398400000000, "head": 1767398400000000}`, new: `"expect": {"outcome": "advanced", "advance_to": 1767398400000001, "head": 1767398400000000}`, want: "an advanced window expects advance_to"},
+		{name: "advanced window expects another head", old: `"expect": {"outcome": "advanced", "advance_to": 1767398400000000, "head": 1767398400000000}`, new: `"expect": {"outcome": "advanced", "advance_to": 1767398400000000, "head": 1767398400000001}`, want: "an advanced window expects head"},
+		{name: "baseline expect advance_to sub-millisecond", old: `"advance_to": 1041379200000000, "year_complete": false}`, new: `"advance_to": 1041379200000500, "year_complete": false}`, want: "must be a whole millisecond"},
+		{name: "baseline expect advance_to not the floored stamp", old: `"advance_to": 1041379200000000, "year_complete": false}`, new: `"advance_to": 1041379201000000, "year_complete": false}`, want: "want the stamp floored"},
+		{name: "baseline expect year_complete differs from the stamp", old: `"advance_to": 1041379200000000, "year_complete": false}`, new: `"advance_to": 1041379200000000, "year_complete": true}`, want: "expects year_complete to equal the stamp"},
+		{name: "baseline expect year_complete not a bool", old: `"advance_to": 1041379200000000, "year_complete": false}`, new: `"advance_to": 1041379200000000, "year_complete": "false"}`, want: "must be a JSON bool"},
+		{name: "not_covered with a blank reason", old: `"reason": "advance_behind_start"`, new: `"reason": ""`, want: "must expect a reason from the closed reason set"},
+		{name: "not_covered with an unknown reason", old: `"reason": "advance_missing"`, new: `"reason": "no_advance"`, want: "must expect a reason from the closed reason set"},
+		{name: "advanced with a reason", old: `"outcome": "advanced", "reason": ""`, new: `"outcome": "advanced", "reason": "advance_missing"`, want: "only not_covered carries one"},
+		{name: "advanced with a class", old: `"outcome": "advanced", "reason": "", "class": ""`, new: `"outcome": "advanced", "reason": "", "class": "nvd_baseline_window_writer_armed"`, want: "only refused carries one"},
+		{name: "refused with a blank class", old: `"class": "nvd_baseline_window_writer_armed", "advance_to"`, new: `"class": "", "advance_to"`, want: "must expect a class from the closed class set"},
+		{name: "refused with an unknown class", old: `"class": "nvd_baseline_window_writer_armed", "advance_to"`, new: `"class": "other", "advance_to"`, want: "must expect a class from the closed class set"},
+		{name: "held baseline with a non-zero advance_to", old: `"outcome": "held", "reason": "", "class": "", "advance_to": 0`, new: `"outcome": "held", "reason": "", "class": "", "advance_to": 1000`, want: "arms no writer, so expect advance_to and year_complete"},
+		{name: "advanced baseline without an advance_to stamp", mutate: caseEdit("baseline", "advances_sub_millisecond_floors", func(_, p map[string]any) { delete(p, "nvd_baseline_advance_to_unix_us") }), want: "must stamp advance_to"},
 	}
-	advanceTo, err := intMember(c.Expect, "advance_to")
-	if err != nil {
-		return err
-	}
-	prefix := "nvd_" + section + "_"
-	payloadAdvance, havePayloadAdvance := c.Payload[prefix+"advance_to_unix_us"]
-	if section == "window" {
-		head, err := intMember(c.Expect, "head")
-		if err != nil {
-			return err
-		}
-		if outcome == "held" && (advanceTo != 0 || head != 0) {
-			return fmt.Errorf("a held window arms no writer, so expect advance_to and head must be 0")
-		}
-		if outcome == "advanced" {
-			if got, _ := intMember(c.Payload, prefix+"advance_to_unix_us"); got != advanceTo {
-				return fmt.Errorf("advanced window expects advance_to %d but stamps %d", advanceTo, got)
-			}
-			if got, _ := intMember(c.Payload, prefix+"head_unix_us"); got != head {
-				return fmt.Errorf("advanced window expects head %d but stamps %d", head, got)
-			}
-		}
-		return nil
-	}
-	// Baseline: expect.advance_to is the whole-millisecond value the armed
-	// checkpoint writer would carry, 0 when nothing is armed.
-	if advanceTo%1000 != 0 {
-		return fmt.Errorf("expect.advance_to %d is not a whole millisecond", advanceTo)
-	}
-	completeRaw := string(c.Expect["year_complete"])
-	if completeRaw != "true" && completeRaw != "false" {
-		return fmt.Errorf("expect.year_complete must be a JSON bool")
-	}
-	complete := completeRaw == "true"
-	reason, _ := stringMember(c.Expect, "reason")
-	class, _ := stringMember(c.Expect, "class")
-	if (outcome == "not_covered") != (reason != "") || (outcome == "not_covered" && !slices.Contains(s.Reasons, reason)) {
-		return fmt.Errorf("expect.reason %q does not fit outcome %q", reason, outcome)
-	}
-	if (outcome == "refused") != (class != "") || (outcome == "refused" && !slices.Contains(s.Classes, class)) {
-		return fmt.Errorf("expect.class %q does not fit outcome %q", class, outcome)
-	}
-	if outcome != "advanced" {
-		if advanceTo != 0 || complete {
-			return fmt.Errorf("outcome %q arms no writer, so expect advance_to and year_complete must be 0 and false", outcome)
-		}
-		return nil
-	}
-	if !havePayloadAdvance {
-		return fmt.Errorf("an advanced baseline case must stamp advance_to")
-	}
-	stamped, err := strconv.ParseInt(strings.TrimSpace(string(payloadAdvance)), 10, 64)
-	if err != nil || advanceTo != stamped-stamped%1000 {
-		return fmt.Errorf("advanced baseline expects advance_to %d, want the stamp floored to a whole millisecond", advanceTo)
-	}
-	if string(c.Payload[prefix+"year_complete"]) != completeRaw {
-		return fmt.Errorf("advanced baseline expects year_complete to equal the stamp")
-	}
-	return nil
 }
