@@ -72,12 +72,18 @@ shapes the target reducer release consumes.
   outcomes are `advanced` or `held`; baseline outcomes add `not_covered` (with a
   closed `reason`) and `refused` (with a closed `class`). Verdict booleans are
   strict, so the string `"true"` holds; baseline `advance_to` is floored to a
-  whole millisecond. Numbers are plain JSON numbers because the claim transport
-  decodes them as float64. A case lists `malformed_keys` for payload keys that
-  deliberately carry the wrong JSON type. The collector replays its real verdict
-  builders against the keys, and core replays every case through its commit
-  path. The pack test validates the shape, replays seeded violations, and pins
-  the digest.
+  whole millisecond, and the seed sha is trimmed of surrounding whitespace
+  before the 64-hex check. Numbers are plain JSON numbers because the claim
+  transport decodes them as float64. A case lists `malformed_keys` for payload
+  keys that deliberately carry the wrong JSON type, and carries
+  `emitted_by_collector`: true only when a real collector builder can stamp
+  exactly that payload, false for a reader pin that exercises core on input the
+  collector never emits. The collector and core are expected to read the file
+  in their own changes (builders and constants on one side, a replay of every
+  case through the commit path on the other); the pack test validates the shape
+  (including that an emitted case is self-consistent), replays seeded
+  violations of each rule, and pins the digest. Payload keys that ride on the
+  same snapshot but are outside the vector are listed in its `comment`.
 
 The NVD golden records the **full provider fact payload maps**, including
 producer metadata outside the narrower typed factschema CVE and source-snapshot

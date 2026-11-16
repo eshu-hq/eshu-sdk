@@ -57,16 +57,21 @@ claimed for it.
   checkpoint verdict keys a satellite stamps on `vulnerability.source_snapshot`
   and the core extension host reads. Each section lists the payload keys with
   their JSON type, unit and reader, then named cases: a stamped payload, its
-  scope id, and the commit outcome the core reader reaches (`advanced`, `held`,
-  `not_covered` with a closed reason, `refused` with a closed class). The
-  extracted collector asserts its constants and real verdict builders against
-  it; core replays every case through its commit path, so a rename or a changed
-  verdict rule fails both suites. It adds no payload schema, typed decoder,
-  stable key, or wire change. SHA-256 of the file at this source:
-  `8c5ae1b9638e968174df3098db3a2d0ad1ad4b596c0f4b8676c55bde0c799248`. The key set tracks the
-  core reader at eshu `f6c9b68d4d5d` and the collector's window builder at
-  `ffbeade7d383`; the baseline keys are the collector's issue #158 names, which
-  equal core's.
+  scope id, the commit outcome the core reader reaches (`advanced`, `held`,
+  `not_covered` with a closed reason, `refused` with a closed class), and an
+  `emitted_by_collector` flag that is false for reader pins the collector never
+  emits. This change adds the vector and its own shape tests only. The
+  collector and core are expected to read it in their own changes (the
+  collector against its constants and verdict builders, core by replaying every
+  case through its commit path); until they do, a rename or a changed verdict
+  rule is not caught outside this package. It adds no payload schema, typed
+  decoder, stable key, or wire change. SHA-256 of the file at this source:
+  `6a489baa68ec96eb01034536a78a8b3643c2ce31f8fe84cb73e2367830bdd073`. The key set tracks the core reader
+  at eshu `f6c9b68d4d5d` (replayed unchanged at `6bf9450d7acb`) and the
+  collector's window builder at `ffbeade7d383`. The baseline keys are the
+  collector's issue #158 names, checked against that unmerged branch
+  (`drive/158-nvd-baseline-snapshot-keys` at `6965a17`), not collector `main`,
+  and they equal core's.
 
 ## [0.1.0-rc.19] - Published (`factschema/v0.1.0-rc.19` at `5537eb64`, 2026-11-08)
 
