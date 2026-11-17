@@ -11,7 +11,7 @@ core speak Eshu's data formats without importing core itself. Eshu
 collects facts, small typed records about software systems, from many
 collector programs. Collectors and the core reducer (the part that
 turns facts into a queryable graph) have to agree byte-for-byte on what
-a fact looks like. This repo holds that agreement as three independent
+a fact looks like. This repo holds that agreement as four independent
 Go modules. There's no root module and nothing here runs as a service.
 
 ```mermaid
@@ -41,7 +41,7 @@ what's left out and why.
 
 ## Shortest path in
 
-All three modules need Go 1.26.10 or newer (check the `go` line in each
+All four modules need Go 1.26.10 or newer (check the `go` line in each
 `go.mod`). Pick an exact candidate version from the
 [compatibility policy](docs/compatibility.md) first. Never use
 `@latest` as release evidence.

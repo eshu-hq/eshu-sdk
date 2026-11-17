@@ -8,7 +8,7 @@ access opens Actions, chooses the `release` workflow, and runs it on `main`
 
 | Input | Value |
 | --- | --- |
-| `module` | `collector`, `factschema`, or `wirecontract` |
+| `module` | `apicontract`, `collector`, `factschema`, or `wirecontract` |
 | `version` | the tag version, such as `v0.1.0-rc.11`; the tag is `<module>/<version>` |
 | `commit` | the full 40-hex SHA of a commit already on `main` |
 | `expect_file`, `expect_sha256` | optional pair: a file inside the module (repo-relative, starting with `<module>/`) and the SHA-256 it must have |
