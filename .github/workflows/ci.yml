@@ -58,8 +58,8 @@ jobs:
       actions: write
     uses: eshu-hq/.github/.github/workflows/go-multi-module-ci.yml@048d30a904b9e5f02ab8276285f0e889ce7820b0
     with:
-      modules: '["collector", "factschema", "wirecontract"]'
-      coverage-floors: '{"collector": 85.0, "factschema": 48.3, "wirecontract": 89.0}'
+      modules: '["apicontract", "collector", "factschema", "wirecontract"]'
+      coverage-floors: '{"apicontract": 0.0, "collector": 85.0, "factschema": 48.3, "wirecontract": 89.0}'
       fixture-subpaths: 'testdata,schema,fixturepack'
       generate-check-modules: '["factschema"]'
       generate-check-command: 'make generate-check'

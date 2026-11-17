@@ -9,7 +9,7 @@
 
 # The modules this repository tags. release.yml's module choice must list the
 # same names; scripts/ci/test-release-verify.sh pins that.
-RELEASE_ALLOWED_MODULES=(collector factschema wirecontract)
+RELEASE_ALLOWED_MODULES=(apicontract collector factschema wirecontract)
 
 # The module is compared against the list and never interpolated into a path
 # first, so "../x" and "a/b" cannot pass.

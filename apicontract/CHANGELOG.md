@@ -17,6 +17,8 @@ separate release approval: `apicontract/vX.Y.Z`.
 
 ## [Unreleased]
 
+## [0.1.0-rc.1] - Prepared (unpublished)
+
 ### Added
 
 - Frozen `EnvelopeMIMEType` (`application/eshu.envelope+json`), copied from
