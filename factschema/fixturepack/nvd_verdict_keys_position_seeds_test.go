@@ -98,6 +98,11 @@ func positionSeeds() []verdictSeed {
 		{name: "advanced expect carries an empty id member", mutate: expectEdit("baseline", "advances_cut_inside_instant", func(e map[string]any) { e["advance_to_cve_id"] = "" }), want: "not a non-empty canonical id"},
 		{name: "advanced expect carries another year_generated", mutate: expectEdit("baseline", "advances_cut_inside_instant", func(e map[string]any) { e["year_generated_unix_us"] = num("1") }), want: "an advanced case expects position id"},
 		{name: "advanced expect drops year_generated", mutate: expectEdit("baseline", "advances_cut_inside_instant", func(e map[string]any) { delete(e, "year_generated_unix_us") }), want: "an advanced case expects position id"},
+		{name: "zero advance expected as behind start", mutate: expectEdit("baseline", "not_covered_zero_advance", func(e map[string]any) { e["reason"] = "advance_behind_start" }), want: "a missing or zero advance_to must expect reason advance_missing"},
+		{name: "missing advance expected as a tie", mutate: expectEdit("baseline", "not_covered_missing_advance", func(e map[string]any) { e["reason"] = "advance_not_past_start" }), want: "a missing or zero advance_to must expect reason advance_missing"},
+		{name: "string advance expected as behind start", mutate: expectEdit("baseline", "not_covered_string_advance", func(e map[string]any) { e["reason"] = "advance_behind_start" }), want: "a missing or zero advance_to must expect reason advance_missing"},
+		{name: "wrong-typed expect id on a held case", mutate: expectEdit("baseline", "holds_no_progress_at_position", func(e map[string]any) { e["advance_to_cve_id"] = num("5") }), want: "must be a JSON string"},
+		{name: "wrong-typed expect id on an advanced case", mutate: expectEdit("baseline", "advances_instant_drained", func(e map[string]any) { e["advance_to_cve_id"] = true }), want: "must be a JSON string"},
 		{name: "misspelled expect member", mutate: expectEdit("baseline", "advances_cut_inside_instant", func(e map[string]any) {
 			e["advance_to_cve_idd"] = e["advance_to_cve_id"]
 			delete(e, "advance_to_cve_id")

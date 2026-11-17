@@ -301,6 +301,9 @@ func validateCasePosition(c verdictCase) error {
 	}
 	stamped, advanceErr := intMember(c.Payload, "nvd_baseline_advance_to_unix_us")
 	outcome, reason := stringMember(c.Expect, "outcome"), stringMember(c.Expect, "reason")
+	if outcome == "not_covered" && (advanceErr != nil || stamped <= 0) && reason != "advance_missing" {
+		return fmt.Errorf("a missing or zero advance_to must expect reason advance_missing, got %q", reason)
+	}
 	if advanceErr == nil && stamped > 0 {
 		complete := boolMember(c.Payload, "nvd_baseline_year_complete")
 		cmp := comparePosition(stamped-stamped%1000, id, start.StartUnixUS, start.FromCVEID)
@@ -339,7 +342,10 @@ func optionalIDMember(members map[string]json.RawMessage, key, where string) (st
 	}
 	var id string
 	if err := json.Unmarshal(raw, &id); err != nil {
-		return "", nil // a wrong-typed stamp is the malformed_keys rule's to judge
+		if where == "expect" {
+			return "", fmt.Errorf("expect member %q must be a JSON string, got %s", key, raw)
+		}
+		return "", nil // a wrong-typed payload stamp is the malformed_keys rule's to judge
 	}
 	if canonical, valid := canonicalCVEID(id); !valid || canonical != id {
 		return "", fmt.Errorf("%s member %q is %q, which is not a non-empty canonical id (an empty id is absent)", where, key, id)
