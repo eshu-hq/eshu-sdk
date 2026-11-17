@@ -21,21 +21,23 @@ const (
 	positionScopeGrammar = "vuln-intel://nvd/_baseline/<run>/<year>/<start_unix_us>[/<from_cve_id>]"
 	positionRunPattern   = "^[A-Za-z0-9_-]{1,64}$"
 	positionYearPattern  = "^[0-9]{4}$"
-	positionStartPattern = "^[0-9]+$"
+	positionStartPattern = "^(0|[1-9][0-9]{0,18})$"
 	positionIDPattern    = "^[A-Z0-9-]{1,64}$"
-	positionCanonical    = "trim ASCII space and tab, reject any non-ASCII byte, upper-case ASCII letters, then require cve_id_pattern"
+	positionCanonical    = "trim Unicode white space (strings.TrimSpace semantics), reject any non-ASCII byte, upper-case ASCII letters, then require cve_id_pattern"
 	positionOrder        = "start_unix_us ascending as an integer, then from_cve_id by unsigned byte order; the empty id sorts before every id"
 )
 
 var (
 	positionRoundTripNames = []string{"four_segment", "four_segment_longest_id", "three_segment_empty_id"}
 	positionRejectionNames = []string{
-		"empty_trailing_segment", "extra_segment", "id_in_start_slot", "lowercase_id", "non_ascii_id",
-		"non_ascii_id_upper_cases_to_ascii", "non_numeric_start", "overlong_id", "padded_id_leading", "padded_id_trailing",
+		"empty_trailing_segment", "extra_segment", "id_in_start_slot", "leading_zero_start", "lowercase_id", "non_ascii_id",
+		"non_ascii_id_upper_cases_to_ascii", "non_numeric_start", "overflow_start", "overlong_id", "padded_id_leading",
+		"padded_id_nbsp", "padded_id_newline", "padded_id_trailing",
 	}
 	positionCanonicalNames = []string{
-		"blank", "canonical_unchanged", "inner_space", "longest_64", "lowercase_upper_cased", "non_ascii_accent",
-		"non_ascii_upper_cases_to_ascii", "overlong_65", "tab_and_space_trimmed", "underscore",
+		"blank", "canonical_unchanged", "carriage_return_trimmed", "inner_space", "longest_64", "lowercase_upper_cased",
+		"nbsp_trimmed", "newline_trimmed", "non_ascii_accent", "non_ascii_upper_cases_to_ascii", "overlong_65",
+		"tab_and_space_trimmed", "underscore",
 	}
 	positionOrderNames = []string{
 		"empty_id_before_any_id", "equal_empty_position", "equal_position", "hyphen_before_digit", "id_nine_thousand_after_ten_thousand",
@@ -110,12 +112,13 @@ type scopePosition struct {
 
 var positionIDShape = regexp.MustCompile(positionIDPattern)
 
-// canonicalCVEID is the reference canonicalization. Non-ASCII bytes are
-// rejected before upper-casing because unicode upper-casing maps some of them
+// canonicalCVEID is the reference canonicalization, the collector's
+// strings.ToUpper(strings.TrimSpace(id)) convention narrowed to ASCII. Non-ASCII
+// bytes (after the trim) are rejected before upper-casing because unicode upper-casing maps some of them
 // into ASCII (for example U+017F to "S"), which would admit ids the grammar
 // excludes.
 func canonicalCVEID(raw string) (string, bool) {
-	trimmed := strings.Trim(raw, " \t")
+	trimmed := strings.TrimSpace(raw)
 	for i := 0; i < len(trimmed); i++ {
 		if trimmed[i] >= 0x80 {
 			return "", false
@@ -208,8 +211,10 @@ func validateVerdictPosition(p *verdictPosition) error {
 		{"rejection", sortedNames(p.Rejections, func(c positionRejection) string { return c.Name }), positionRejectionNames},
 		{"order", sortedNames(p.Orders, func(c positionOrderCase) string { return c.Name }), positionOrderNames},
 	} {
-		if !slices.Equal(check.got, check.want) {
-			return fmt.Errorf("position %s case names = %v, want %v", check.what, check.got, check.want)
+		want := slices.Clone(check.want)
+		slices.Sort(want)
+		if !slices.Equal(check.got, want) {
+			return fmt.Errorf("position %s case names = %v, want %v", check.what, check.got, want)
 		}
 	}
 	for _, c := range p.CanonicalIDs {

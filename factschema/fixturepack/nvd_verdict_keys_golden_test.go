@@ -15,7 +15,7 @@ import (
 
 // nvdVerdictKeysGoldenSHA256 pins the file bytes. A deliberate vector change
 // updates this digest in the same commit; an accidental one fails here first.
-const nvdVerdictKeysGoldenSHA256 = "a2b2ee3ca5abe9d3fd0811760bfec28cb93ee594e34fdb184e3a477df7ab331a"
+const nvdVerdictKeysGoldenSHA256 = "fdb456f8bac262f62374514e041663d8a771e3f5993c9a63fc759815c9b670f9"
 
 func TestNVDVerdictKeysGoldenFullContentDigest(t *testing.T) {
 	got := fmt.Sprintf("%x", sha256.Sum256(NVDVerdictKeysGolden()))
@@ -71,7 +71,7 @@ func TestNVDVerdictKeysGoldenPinsNamesAndOutcomes(t *testing.T) {
 }
 
 // TestNVDVerdictKeysGoldenReaderPinSet pins which cases the collector cannot
-// emit, so flipping a flag to make a case look collector-backed fails here.
+// emit (and the baseline cases it must), so flipping a flag to make a case look collector-backed fails here.
 func TestNVDVerdictKeysGoldenReaderPinSet(t *testing.T) {
 	golden := decodeVerdictGolden(t, NVDVerdictKeysGolden())
 	wantPins := map[string][]string{
@@ -86,14 +86,26 @@ func TestNVDVerdictKeysGoldenReaderPinSet(t *testing.T) {
 			"not_covered_complete_dropped_id_behind_position", "not_covered_id_numeric_order_behind_position",
 		},
 	}
+	wantBaselineEmitted := []string{
+		"advances_complete_at_position", "advances_complete_at_start", "advances_complete_past_start", "advances_cut_inside_instant",
+		"advances_id_byte_order_past_numeric", "advances_instant_drained", "advances_past_start", "advances_whole_instant_cut_inside",
+		"advances_within_instant_by_cve_id", "holds_no_progress_at_position", "holds_should_advance_false",
+	}
+	slices.Sort(wantBaselineEmitted)
 	for section, cases := range map[string][]verdictCase{"window": golden.Window.Cases, "baseline": golden.Baseline.Cases} {
-		var pins []string
+		var pins, emitted []string
 		for _, c := range cases {
 			if !*c.Emitted {
 				pins = append(pins, c.Name)
+			} else if section == "baseline" {
+				emitted = append(emitted, c.Name)
 			}
 		}
 		slices.Sort(pins)
+		slices.Sort(emitted)
+		if section == "baseline" && !slices.Equal(emitted, wantBaselineEmitted) {
+			t.Errorf("baseline emitted cases = %v, want %v", emitted, wantBaselineEmitted)
+		}
 		want := slices.Clone(wantPins[section])
 		slices.Sort(want)
 		if !slices.Equal(pins, want) {

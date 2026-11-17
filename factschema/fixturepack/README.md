@@ -95,14 +95,22 @@ shapes the target reducer release consumes.
   `vuln-intel://nvd/_baseline/<run>/<year>/<start_unix_us>`, plus
   `/<from_cve_id>` when the id is not empty, so one position has exactly one
   scope id. The top-level `position` block holds the scope grammar, the id
-  canonicalization (trimmed, upper-cased, `[A-Z0-9-]{1,64}`, ASCII only),
+  canonicalization (Unicode white space trimmed as `strings.TrimSpace` does,
+  then any non-ASCII byte rejected, then ASCII upper-case, then
+  `[A-Z0-9-]{1,64}`; a scope id carries the canonical id as is), a start stamp
+  that is a canonical decimal int64 (no leading zeros, no overflow),
   round-trip and rejection cases, and order cases: stamp first, then the id by
   byte order, so `CVE-2025-10000` sorts before `CVE-2025-9999` and `(T, "")`
   before `(T, id)`. The `expect` of a baseline case may carry
   `advance_to_cve_id` and `year_generated_unix_us`; absent reads as `""` and 0.
   No collector stamps these keys and core does not read them yet: the cases with
   `emitted_by_collector` true that carry them state the shape the collector
-  change must stamp. The vector does not pin how core treats a malformed
+  change must stamp. Moving a consumer's pin to this vector therefore fails
+  that consumer by design until its change lands: the collector's vector test
+  (digest, key names, builder replay) until the collector change, and core's
+  replay (digest, then the four-segment and tie cases) until the core change.
+  That is the order the baseline ruling set: the SDK first, then core, then the
+  collector. The vector does not pin how core treats a malformed
   `advance_to_cve_id` or an absent year stamp, nor the seed-rollback refusal,
   which needs stored checkpoint state.
 

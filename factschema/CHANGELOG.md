@@ -75,7 +75,7 @@ claimed for it.
   baseline cases gain the year stamp; the other 23 are unchanged. No collector
   stamps these keys and core does not read them yet. This adds the vector and
   its shape tests only, and no payload schema, decoder, stable key, or wire
-  change. SHA-256 of the file: `a2b2ee3ca5abe9d3fd0811760bfec28cb93ee594e34fdb184e3a477df7ab331a`.
+  change. SHA-256 of the file: `fdb456f8bac262f62374514e041663d8a771e3f5993c9a63fc759815c9b670f9`.
   The key set tracks core `f6c9b68d4d5d` (replayed at `6bf9450d7acb`), the
   collector window builder `ffbeade7d383`, and the collector's unmerged
   `drive/158-nvd-baseline-snapshot-keys` at `6965a17` for the baseline keys.

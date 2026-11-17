@@ -31,7 +31,7 @@ var (
 
 var (
 	windowScopeShape   = regexp.MustCompile(`^vuln-intel://nvd/_window/([0-9]+)-([0-9]+)$`)
-	baselineScopeShape = regexp.MustCompile(`^vuln-intel://nvd/_baseline/([A-Za-z0-9_-]{1,64})/([0-9]{4})/([0-9]+)(?:/([A-Z0-9-]{1,64}))?$`)
+	baselineScopeShape = regexp.MustCompile(`^vuln-intel://nvd/_baseline/([A-Za-z0-9_-]{1,64})/([0-9]{4})/(0|[1-9][0-9]{0,18})(?:/([A-Z0-9-]{1,64}))?$`)
 	yearSHAShape       = regexp.MustCompile(`^[0-9a-f]{64}$`)
 )
 

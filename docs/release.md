@@ -227,7 +227,7 @@ commit M; nobody tags by hand.
 When that ruling lands, run the release workflow (see Releasing a module tag)
 with `module=factschema`, `version=v0.1.0-rc.20`, commit M, and
 `factschema/fixturepack/payloads/nvd_verdict_keys_golden.json` as `expect_file`
-with SHA-256 `a2b2ee3ca5abe9d3fd0811760bfec28cb93ee594e34fdb184e3a477df7ab331a` as `expect_sha256`. That file is
+with SHA-256 `fdb456f8bac262f62374514e041663d8a771e3f5993c9a63fc759815c9b670f9` as `expect_sha256`. That file is
 the newest change, so the pin fails if the vector is missing.
 
 The `vulnerability.cve` schema cannot be pinned too, so check it by hand before
