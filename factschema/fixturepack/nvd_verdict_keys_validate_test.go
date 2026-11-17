@@ -31,7 +31,7 @@ var (
 
 var (
 	windowScopeShape   = regexp.MustCompile(`^vuln-intel://nvd/_window/([0-9]+)-([0-9]+)$`)
-	baselineScopeShape = regexp.MustCompile(`^vuln-intel://nvd/_baseline/[A-Za-z0-9_-]{1,64}/([0-9]{4})/([0-9]+)$`)
+	baselineScopeShape = regexp.MustCompile(`^vuln-intel://nvd/_baseline/([A-Za-z0-9_-]{1,64})/([0-9]{4})/(0|[1-9][0-9]{0,18})(?:/([A-Z0-9-]{1,64}))?$`)
 	yearSHAShape       = regexp.MustCompile(`^[0-9a-f]{64}$`)
 )
 
@@ -67,11 +67,12 @@ type verdictSection struct {
 }
 
 type verdictGolden struct {
-	Version          int            `json:"version"`
-	SnapshotFactKind string         `json:"snapshot_fact_kind"`
-	Comment          string         `json:"comment"`
-	Window           verdictSection `json:"window"`
-	Baseline         verdictSection `json:"baseline"`
+	Version          int              `json:"version"`
+	SnapshotFactKind string           `json:"snapshot_fact_kind"`
+	Comment          string           `json:"comment"`
+	Window           verdictSection   `json:"window"`
+	Baseline         verdictSection   `json:"baseline"`
+	Position         *verdictPosition `json:"position"`
 }
 
 func decodeVerdictGolden(t *testing.T, raw []byte) verdictGolden {
@@ -123,7 +124,7 @@ func validateNVDVerdictKeysGolden(raw []byte) error {
 	if !slices.Equal(golden.Baseline.Classes, baselineClasses) {
 		return fmt.Errorf("baseline class set changed: %v", golden.Baseline.Classes)
 	}
-	return nil
+	return validateVerdictPosition(golden.Position)
 }
 
 func validateVerdictSection(name string, section verdictSection, scopePrefix, keyPrefix string, outcomes []string, seen map[string]bool, borrowed []verdictKey) error {
@@ -189,6 +190,10 @@ func validateVerdictKey(section string, key verdictKey, keyPrefix string, seen m
 		return fmt.Errorf("%s key %q has presence %q outside the closed presence set", section, key.Name, key.Presence)
 	case key.Field == "should_advance" && (key.Type != "bool" || key.ReadBy != "core"):
 		return fmt.Errorf("%s should_advance must be a core-read bool", section)
+	case key.Field == "advance_to_cve_id" && (key.Type != "string" || key.ReadBy != "core" || key.Presence != "conditional"):
+		return fmt.Errorf("%s advance_to_cve_id must be a conditional core-read string", section)
+	case key.Field == "year_generated" && (key.Type != "int64" || key.Unit != "unix_us" || key.ReadBy != "core" || key.Presence != "always"):
+		return fmt.Errorf("%s year_generated must be an always-present core-read int64 unix_us", section)
 	}
 	return nil
 }
@@ -226,7 +231,13 @@ func validateVerdictCase(section string, s verdictSection, c verdictCase, declar
 			return err
 		}
 	}
-	return validateVerdictExpect(section, s, c)
+	if err := validateVerdictExpect(section, s, c); err != nil {
+		return err
+	}
+	if section == "baseline" {
+		return validateCasePosition(c)
+	}
+	return nil
 }
 
 func validatePayloadTypes(c verdictCase, declared map[string]verdictKey) error {

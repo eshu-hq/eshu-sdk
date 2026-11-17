@@ -40,18 +40,28 @@ func validateEmittedPayload(section string, s verdictSection, c verdictCase) err
 			return fmt.Errorf("an emitted baseline case carries the window key %q", name)
 		}
 	}
-	m := baselineScopeShape.FindStringSubmatch(c.ScopeID)
-	start, _ := strconv.ParseInt(m[2], 10, 64)
+	start, err := parseBaselineScope(c.ScopeID)
+	if err != nil {
+		return err
+	}
 	advance, _ := intMember(c.Payload, prefix+"advance_to_unix_us")
-	if advance%1000 != 0 || advance < start {
-		return fmt.Errorf("an emitted baseline case stamps advance_to %d, which is not a whole millisecond at or after its scope start %d", advance, start)
+	id, err := optionalIDMember(c.Payload, prefix+"advance_to_cve_id", "payload")
+	if err != nil {
+		return err
+	}
+	cmp := comparePosition(advance, id, start.StartUnixUS, start.FromCVEID)
+	if advance%1000 != 0 || cmp < 0 {
+		return fmt.Errorf("an emitted baseline case stamps advance_to %d with id %q, which is not a whole millisecond at or after its scope start position (%d, %q)", advance, id, start.StartUnixUS, start.FromCVEID)
 	}
 	complete := boolMember(c.Payload, prefix+"year_complete")
-	if should := boolMember(c.Payload, prefix+"should_advance"); should != (complete || advance > start) {
-		return fmt.Errorf("an emitted baseline case stamps should_advance=%v, want complete or advance_to past start", should)
+	if should := boolMember(c.Payload, prefix+"should_advance"); should != (complete || cmp > 0) {
+		return fmt.Errorf("an emitted baseline case stamps should_advance=%v, want complete or a position past start", should)
 	}
 	if !yearSHAShape.MatchString(stringMember(c.Payload, prefix+"year_sha256")) {
 		return fmt.Errorf("an emitted baseline case stamps a year_sha256 that is not 64 lowercase hex")
+	}
+	if generated, err := intMember(c.Payload, prefix+"year_generated_unix_us"); err != nil || generated <= 0 {
+		return fmt.Errorf("an emitted baseline case must stamp a positive year_generated_unix_us (the seed manifest lastModified): %v", err)
 	}
 	return nil
 }

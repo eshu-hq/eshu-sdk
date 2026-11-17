@@ -67,18 +67,18 @@ claimed for it.
   scope id, the commit outcome the core reader reaches (`advanced`, `held`,
   `not_covered` with a closed reason, `refused` with a closed class), and an
   `emitted_by_collector` flag that is false for reader pins the collector never
-  emits. This change adds the vector and its own shape tests only. The
-  collector and core are expected to read it in their own changes (the
-  collector against its constants and verdict builders, core by replaying every
-  case through its commit path); until they do, a rename or a changed verdict
-  rule is not caught outside this package. It adds no payload schema, typed
-  decoder, stable key, or wire change. SHA-256 of the file at this source:
-  `6a489baa68ec96eb01034536a78a8b3643c2ce31f8fe84cb73e2367830bdd073`. The key set tracks the core reader
-  at eshu `f6c9b68d4d5d` (replayed unchanged at `6bf9450d7acb`) and the
-  collector's window builder at `ffbeade7d383`. The baseline keys are the
-  collector's issue #158 names, checked against that unmerged branch
-  (`drive/158-nvd-baseline-snapshot-keys` at `6965a17`), not collector `main`,
-  and they equal core's.
+  emits. eshu-hq/eshu-sdk#97 extends the baseline section with the resume
+  position: keys `nvd_baseline_advance_to_cve_id` (conditional) and
+  `nvd_baseline_year_generated_unix_us` (always, so core can refuse a seed
+  rollback), four-segment scopes, and a `position` block (scope grammar,
+  round-trip and rejection cases, byte-order cases). The four older emitted
+  baseline cases gain the year stamp; the other 23 are unchanged. No collector
+  stamps these keys and core does not read them yet. This adds the vector and
+  its shape tests only, and no payload schema, decoder, stable key, or wire
+  change. SHA-256 of the file: `fdb456f8bac262f62374514e041663d8a771e3f5993c9a63fc759815c9b670f9`.
+  The key set tracks core `f6c9b68d4d5d` (replayed at `6bf9450d7acb`), the
+  collector window builder `ffbeade7d383`, and the collector's unmerged
+  `drive/158-nvd-baseline-snapshot-keys` at `6965a17` for the baseline keys.
 
 ## [0.1.0-rc.19] - Published (`factschema/v0.1.0-rc.19` at `5537eb64`, 2026-11-08)
 
