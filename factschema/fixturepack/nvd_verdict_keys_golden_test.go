@@ -15,7 +15,7 @@ import (
 
 // nvdVerdictKeysGoldenSHA256 pins the file bytes. A deliberate vector change
 // updates this digest in the same commit; an accidental one fails here first.
-const nvdVerdictKeysGoldenSHA256 = "6a489baa68ec96eb01034536a78a8b3643c2ce31f8fe84cb73e2367830bdd073"
+const nvdVerdictKeysGoldenSHA256 = "a2b2ee3ca5abe9d3fd0811760bfec28cb93ee594e34fdb184e3a477df7ab331a"
 
 func TestNVDVerdictKeysGoldenFullContentDigest(t *testing.T) {
 	got := fmt.Sprintf("%x", sha256.Sum256(NVDVerdictKeysGolden()))
@@ -48,7 +48,8 @@ func TestNVDVerdictKeysGoldenPinsNamesAndOutcomes(t *testing.T) {
 		},
 		"baseline": {
 			"run": "nvd_baseline_run", "year": "nvd_baseline_year", "advance_to": "nvd_baseline_advance_to_unix_us",
-			"year_sha256": "nvd_baseline_year_sha256", "year_complete": "nvd_baseline_year_complete",
+			"advance_to_cve_id": "nvd_baseline_advance_to_cve_id", "year_sha256": "nvd_baseline_year_sha256",
+			"year_generated": "nvd_baseline_year_generated_unix_us", "year_complete": "nvd_baseline_year_complete",
 			"should_advance": "nvd_baseline_should_advance",
 		},
 	}
@@ -81,6 +82,8 @@ func TestNVDVerdictKeysGoldenReaderPinSet(t *testing.T) {
 			"not_covered_missing_advance", "not_covered_zero_advance", "not_covered_string_advance", "not_covered_sha_blank",
 			"not_covered_sha_malformed", "holds_string_should_advance", "holds_no_snapshot_keys",
 			"refused_window_verdict_present", "refused_window_verdict_beside_baseline_hold",
+			"not_covered_same_position_incomplete", "not_covered_id_behind_position", "not_covered_dropped_id_behind_position",
+			"not_covered_complete_dropped_id_behind_position", "not_covered_id_numeric_order_behind_position",
 		},
 	}
 	for section, cases := range map[string][]verdictCase{"window": golden.Window.Cases, "baseline": golden.Baseline.Cases} {
@@ -116,7 +119,7 @@ type verdictSeed struct {
 // without a seed going red.
 func TestNVDVerdictKeysGoldenRejectsSeededCorruption(t *testing.T) {
 	original := string(NVDVerdictKeysGolden())
-	for _, seed := range verdictSeeds() {
+	for _, seed := range append(verdictSeeds(), positionSeeds()...) {
 		t.Run(seed.name, func(t *testing.T) {
 			t.Logf("seed %q want %q", seed.name, seed.want)
 			var mutated string
@@ -235,10 +238,10 @@ func verdictSeeds() []verdictSeed {
 		{name: "held window with a non-zero head", old: `"expect": {"outcome": "held", "advance_to": 0, "head": 0}`, new: `"expect": {"outcome": "held", "advance_to": 0, "head": 5}`, want: "a held window arms no writer"},
 		{name: "advanced window expects another advance_to", old: `"expect": {"outcome": "advanced", "advance_to": 1767398400000000, "head": 1767398400000000}`, new: `"expect": {"outcome": "advanced", "advance_to": 1767398400000001, "head": 1767398400000000}`, want: "an advanced window expects advance_to"},
 		{name: "advanced window expects another head", old: `"expect": {"outcome": "advanced", "advance_to": 1767398400000000, "head": 1767398400000000}`, new: `"expect": {"outcome": "advanced", "advance_to": 1767398400000000, "head": 1767398400000001}`, want: "an advanced window expects head"},
-		{name: "baseline expect advance_to sub-millisecond", old: `"advance_to": 1041379200000000, "year_complete": false}`, new: `"advance_to": 1041379200000500, "year_complete": false}`, want: "must be a whole millisecond"},
-		{name: "baseline expect advance_to not the floored stamp", old: `"advance_to": 1041379200000000, "year_complete": false}`, new: `"advance_to": 1041379201000000, "year_complete": false}`, want: "want the stamp floored"},
-		{name: "baseline expect year_complete differs from the stamp", old: `"advance_to": 1041379200000000, "year_complete": false}`, new: `"advance_to": 1041379200000000, "year_complete": true}`, want: "expects year_complete to equal the stamp"},
-		{name: "baseline expect year_complete not a bool", old: `"advance_to": 1041379200000000, "year_complete": false}`, new: `"advance_to": 1041379200000000, "year_complete": "false"}`, want: "must be a JSON bool"},
+		{name: "baseline expect advance_to sub-millisecond", old: `"advance_to": 1041379200000000, "year_complete": false`, new: `"advance_to": 1041379200000500, "year_complete": false`, want: "must be a whole millisecond"},
+		{name: "baseline expect advance_to not the floored stamp", old: `"advance_to": 1041379200000000, "year_complete": false`, new: `"advance_to": 1041379201000000, "year_complete": false`, want: "want the stamp floored"},
+		{name: "baseline expect year_complete differs from the stamp", old: `"advance_to": 1041379200000000, "year_complete": false`, new: `"advance_to": 1041379200000000, "year_complete": true`, want: "expects year_complete to equal the stamp"},
+		{name: "baseline expect year_complete not a bool", old: `"advance_to": 1041379200000000, "year_complete": false`, new: `"advance_to": 1041379200000000, "year_complete": "false"`, want: "must be a JSON bool"},
 		{name: "not_covered with a blank reason", old: `"reason": "advance_behind_start"`, new: `"reason": ""`, want: "must expect a reason from the closed reason set"},
 		{name: "not_covered with an unknown reason", old: `"reason": "advance_missing"`, new: `"reason": "no_advance"`, want: "must expect a reason from the closed reason set"},
 		{name: "advanced with a reason", old: `"outcome": "advanced", "reason": ""`, new: `"outcome": "advanced", "reason": "advance_missing"`, want: "only not_covered carries one"},

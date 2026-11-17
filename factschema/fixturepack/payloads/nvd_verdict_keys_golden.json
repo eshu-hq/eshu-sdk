@@ -1,7 +1,7 @@
 {
   "version": 1,
   "snapshot_fact_kind": "vulnerability.source_snapshot",
-  "comment": "Shared verdict-key vector for the NVD window and baseline checkpoint verdicts a satellite stamps on the vulnerability.source_snapshot payload and the Eshu core extension host reads (eshu-hq/eshu-sdk#93, eshu-hq/eshu#10732). Reader: eshu go/internal/collector/extensionhost nvd_window_cursor.go (armNVDWindowCursorWriter) and nvd_baseline_cursor.go (NVDBaselineCommitPolicy.CommitPolicy), read at eshu origin/main f6c9b68d4d5d9b4ef39b5490b1109cc7f1e4b1c2 and replayed unchanged at 6bf9450d7acb. Writers: eshu-collector-vulnerability-intelligence origin/main ffbeade7d38374d0bec8d2c4e6f327d7bd6f99ac for the window keys (stampNVDWindowVerdict, decideNVDWindowAdvance) and, for the baseline keys, its unmerged branch drive/158-nvd-baseline-snapshot-keys at 6965a17 (nvdBaselineSnapshot), because collector main does not yet stamp them. Numbers are plain JSON numbers because the claim transport decodes them as float64. expect.advance_to, expect.head and expect.year_complete are what the armed commit-transaction writer carries, and 0, 0 and false when no writer is armed. A case's malformed_keys names payload keys that deliberately carry the wrong JSON type. emitted_by_collector is true only when a real collector builder can stamp exactly that payload; false marks a reader pin that exercises core on input the collector never emits. Payload keys that ride on the same snapshot but are outside this vector: nvd_keyed, nvd_transport, nvd_feed_selector, nvd_feed_time_unix_us, nvd_feed_span_start_unix_us, nvd_feed_sha256.",
+  "comment": "Shared verdict-key vector for the NVD window and baseline checkpoint verdicts a satellite stamps on the vulnerability.source_snapshot payload and the Eshu core extension host reads (eshu-hq/eshu-sdk#93, eshu-hq/eshu#10732). Reader: eshu go/internal/collector/extensionhost nvd_window_cursor.go (armNVDWindowCursorWriter) and nvd_baseline_cursor.go (NVDBaselineCommitPolicy.CommitPolicy), read at eshu origin/main f6c9b68d4d5d9b4ef39b5490b1109cc7f1e4b1c2 and replayed unchanged at 6bf9450d7acb. Writers: eshu-collector-vulnerability-intelligence origin/main ffbeade7d38374d0bec8d2c4e6f327d7bd6f99ac for the window keys (stampNVDWindowVerdict, decideNVDWindowAdvance) and, for the baseline keys, its unmerged branch drive/158-nvd-baseline-snapshot-keys at 6965a17 (nvdBaselineSnapshot), because collector main does not yet stamp them. Numbers are plain JSON numbers because the claim transport decodes them as float64. expect.advance_to, expect.head and expect.year_complete are what the armed commit-transaction writer carries, and 0, 0 and false when no writer is armed. A case's malformed_keys names payload keys that deliberately carry the wrong JSON type. emitted_by_collector is true only when a real collector builder can stamp exactly that payload; false marks a reader pin that exercises core on input the collector never emits. Position keys (eshu-hq/eshu-sdk#97, ruling for eshu-hq/eshu#10671): nvd_baseline_advance_to_cve_id and nvd_baseline_year_generated_unix_us, the four-segment baseline scope, and the top-level position block are the shape ruled for the baseline resume position. No collector builder stamps them yet (the collector change is eshu-hq/eshu-collector-vulnerability-intelligence#199) and core does not read them yet (eshu-hq/eshu#10809, eshu-hq/eshu#10810), so emitted_by_collector on a case that carries them, and on the four older emitted baseline cases that gained year_generated_unix_us, states the shape that change must stamp, not what any collector main stamps today. expect.advance_to_cve_id and expect.year_generated_unix_us are optional members: absent reads as an empty id and 0. Payload keys that ride on the same snapshot but are outside this vector: nvd_keyed, nvd_transport, nvd_feed_selector, nvd_feed_time_unix_us, nvd_feed_span_start_unix_us, nvd_feed_sha256.",
   "window": {
     "scope_prefix": "vuln-intel://nvd/_window/",
     "key_prefix": "nvd_window_",
@@ -95,8 +95,10 @@
     "keys": [
       {"field": "run", "name": "nvd_baseline_run", "type": "string", "unit": "none", "read_by": "none", "presence": "always", "note": "Informational, not read by core: the run id is parsed from the scope id."},
       {"field": "year", "name": "nvd_baseline_year", "type": "int", "unit": "year", "read_by": "none", "presence": "always", "note": "Informational, not read by core: the year is parsed from the scope id."},
-      {"field": "advance_to", "name": "nvd_baseline_advance_to_unix_us", "type": "int64", "unit": "unix_us", "read_by": "core", "presence": "always", "note": "The resume stamp the next chunk starts from, exclusive. Core floors it to a whole millisecond."},
+      {"field": "advance_to", "name": "nvd_baseline_advance_to_unix_us", "type": "int64", "unit": "unix_us", "read_by": "core", "presence": "always", "note": "The resume stamp the next chunk starts from, exclusive. Core floors it to a whole millisecond. With advance_to_cve_id it is the stamp half of the resume position."},
+      {"field": "advance_to_cve_id", "name": "nvd_baseline_advance_to_cve_id", "type": "string", "unit": "none", "read_by": "core", "presence": "conditional", "note": "The id half of the resume position (advance_to, advance_to_cve_id): the first record this chunk did not emit, an inclusive lower bound for the next chunk. Present only when that position is inside an instant, that is when the chunk was cut between two records that share the stamp advance_to. Absent means the empty id, so an empty id is never stamped as an empty string. A canonical id is trimmed, upper-cased and matches [A-Z0-9-]{1,64}; ids compare by byte order, so CVE-2025-10000 sorts before CVE-2025-9999 (see the position block). Core requires an incomplete verdict to move strictly forward in (advance_to, advance_to_cve_id) order; a complete verdict may equal its start. How core treats a value that is not a canonical id is not pinned here."},
       {"field": "year_sha256", "name": "nvd_baseline_year_sha256", "type": "string", "unit": "none", "read_by": "core", "presence": "always", "note": "The seed year file identity: 64 lowercase hex characters once surrounding whitespace is trimmed. Anything else covers nothing."},
+      {"field": "year_generated", "name": "nvd_baseline_year_generated_unix_us", "type": "int64", "unit": "unix_us", "read_by": "core", "presence": "always", "note": "The seed manifest lastModified for the year, in unix microseconds, stamped beside year_sha256 so the checkpoint writer can refuse a seed rollback at commit. That guard compares against the stored checkpoint, so it is a commit-transaction refusal and not an outcome this vector can name. expect.year_generated_unix_us carries the stamped value on an advanced case. How core treats an absent or non-positive stamp is not pinned here."},
       {"field": "year_complete", "name": "nvd_baseline_year_complete", "type": "bool", "unit": "none", "read_by": "core", "presence": "always", "note": "True when the chunk finished the year. A complete chunk may land exactly on its start."},
       {"field": "should_advance", "name": "nvd_baseline_should_advance", "type": "bool", "unit": "none", "read_by": "core", "presence": "always", "note": "Strict: only the JSON boolean true can advance the checkpoint."}
     ],
@@ -104,24 +106,24 @@
       {
         "name": "advances_past_start",
         "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1009843200000000",
-        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
-        "expect": {"outcome": "advanced", "reason": "", "class": "", "advance_to": 1041379200000000, "year_complete": false},
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_generated_unix_us": 1794744000000000, "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "advanced", "reason": "", "class": "", "advance_to": 1041379200000000, "year_complete": false, "year_generated_unix_us": 1794744000000000},
         "emitted_by_collector": true,
         "note": "An incomplete chunk that moves strictly past its start: the checkpoint is armed to advance_to."
       },
       {
         "name": "advances_complete_past_start",
         "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1009843200000000",
-        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": true, "nvd_baseline_should_advance": true},
-        "expect": {"outcome": "advanced", "reason": "", "class": "", "advance_to": 1041379200000000, "year_complete": true},
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_generated_unix_us": 1794744000000000, "nvd_baseline_year_complete": true, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "advanced", "reason": "", "class": "", "advance_to": 1041379200000000, "year_complete": true, "year_generated_unix_us": 1794744000000000},
         "emitted_by_collector": true,
         "note": "A year-complete chunk past its start."
       },
       {
         "name": "advances_complete_at_start",
         "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1041379200000000",
-        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": true, "nvd_baseline_should_advance": true},
-        "expect": {"outcome": "advanced", "reason": "", "class": "", "advance_to": 1041379200000000, "year_complete": true},
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_generated_unix_us": 1794744000000000, "nvd_baseline_year_complete": true, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "advanced", "reason": "", "class": "", "advance_to": 1041379200000000, "year_complete": true, "year_generated_unix_us": 1794744000000000},
         "emitted_by_collector": true,
         "note": "A complete chunk may land exactly on its start: it resumed at the stream tail and has no later stamp to name."
       },
@@ -217,7 +219,7 @@
       {
         "name": "holds_should_advance_false",
         "scope_id": "vuln-intel://nvd/_baseline/run-1/2002/1041379200000000",
-        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": false},
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2002, "nvd_baseline_advance_to_unix_us": 1041379200000000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_generated_unix_us": 1794744000000000, "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": false},
         "expect": {"outcome": "held", "reason": "", "class": "", "advance_to": 0, "year_complete": false},
         "emitted_by_collector": true,
         "note": "The no-progress shape: an incomplete chunk that resumed at its own start and found nothing past it. should_advance is false, so facts commit and the checkpoint holds."
@@ -254,7 +256,145 @@
         "expect": {"outcome": "refused", "reason": "", "class": "nvd_baseline_window_writer_armed", "advance_to": 0, "year_complete": false},
         "emitted_by_collector": false,
         "note": "The window-verdict refusal comes before the baseline should_advance check, so a baseline hold does not hide it."
+      },
+      {
+        "name": "advances_cut_inside_instant",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792271400120000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2025, "nvd_baseline_advance_to_unix_us": 1792357800120000, "nvd_baseline_advance_to_cve_id": "CVE-2025-1500", "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_generated_unix_us": 1794744000000000, "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "advanced", "reason": "", "class": "", "advance_to": 1792357800120000, "advance_to_cve_id": "CVE-2025-1500", "year_complete": false, "year_generated_unix_us": 1794744000000000},
+        "emitted_by_collector": true,
+        "note": "The chunk was cut between two records that share the stamp advance_to: the position is (advance_to, CVE-2025-1500), so the id rides beside the stamp. The scope is the three-segment form because the start has no id."
+      },
+      {
+        "name": "advances_within_instant_by_cve_id",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/CVE-2025-1500",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2025, "nvd_baseline_advance_to_unix_us": 1792357800120000, "nvd_baseline_advance_to_cve_id": "CVE-2025-2500", "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_generated_unix_us": 1794744000000000, "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "advanced", "reason": "", "class": "", "advance_to": 1792357800120000, "advance_to_cve_id": "CVE-2025-2500", "year_complete": false, "year_generated_unix_us": 1794744000000000},
+        "emitted_by_collector": true,
+        "note": "Resumed inside the instant and cut inside it again: the stamp ties with the start, so the id alone moves the position strictly forward."
+      },
+      {
+        "name": "advances_instant_drained",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/CVE-2025-2500",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2025, "nvd_baseline_advance_to_unix_us": 1792357800121000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_generated_unix_us": 1794744000000000, "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "advanced", "reason": "", "class": "", "advance_to": 1792357800121000, "year_complete": false, "year_generated_unix_us": 1794744000000000},
+        "emitted_by_collector": true,
+        "note": "Resumed inside an instant and drained it: the next position is a later whole instant, so advance_to_cve_id is absent, not an empty string."
+      },
+      {
+        "name": "advances_id_byte_order_past_numeric",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/CVE-2025-10000",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2025, "nvd_baseline_advance_to_unix_us": 1792357800120000, "nvd_baseline_advance_to_cve_id": "CVE-2025-9999", "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_generated_unix_us": 1794744000000000, "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "advanced", "reason": "", "class": "", "advance_to": 1792357800120000, "advance_to_cve_id": "CVE-2025-9999", "year_complete": false, "year_generated_unix_us": 1794744000000000},
+        "emitted_by_collector": true,
+        "note": "Ids order by bytes: CVE-2025-9999 sorts after CVE-2025-10000 even though it is numerically smaller, so this is forward progress."
+      },
+      {
+        "name": "advances_complete_at_position",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/CVE-2025-2500",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2025, "nvd_baseline_advance_to_unix_us": 1792357800120000, "nvd_baseline_advance_to_cve_id": "CVE-2025-2500", "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_generated_unix_us": 1794744000000000, "nvd_baseline_year_complete": true, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "advanced", "reason": "", "class": "", "advance_to": 1792357800120000, "advance_to_cve_id": "CVE-2025-2500", "year_complete": true, "year_generated_unix_us": 1794744000000000},
+        "emitted_by_collector": true,
+        "note": "A complete chunk may land exactly on its start position, id included: it resumed at the stream tail and has nothing later to name."
+      },
+      {
+        "name": "holds_no_progress_at_position",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/CVE-2025-2500",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2025, "nvd_baseline_advance_to_unix_us": 1792357800120000, "nvd_baseline_advance_to_cve_id": "CVE-2025-2500", "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_generated_unix_us": 1794744000000000, "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": false},
+        "expect": {"outcome": "held", "reason": "", "class": "", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": true,
+        "note": "The no-progress shape at a four-segment start: an incomplete chunk that found nothing past its own position stamps should_advance false."
+      },
+      {
+        "name": "not_covered_same_position_incomplete",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/CVE-2025-2500",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2025, "nvd_baseline_advance_to_unix_us": 1792357800120000, "nvd_baseline_advance_to_cve_id": "CVE-2025-2500", "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_generated_unix_us": 1794744000000000, "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "not_covered", "reason": "advance_not_past_start", "class": "", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "Reader pin, not a shape the collector emits (it stamps should_advance false here): an incomplete chunk whose position ties its start would re-mint the same scope forever."
+      },
+      {
+        "name": "not_covered_id_behind_position",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/CVE-2025-2500",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2025, "nvd_baseline_advance_to_unix_us": 1792357800120000, "nvd_baseline_advance_to_cve_id": "CVE-2025-1500", "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_generated_unix_us": 1794744000000000, "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "not_covered", "reason": "advance_behind_start", "class": "", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "Same stamp, smaller id: no verdict may move behind the start position."
+      },
+      {
+        "name": "not_covered_dropped_id_behind_position",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/CVE-2025-2500",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2025, "nvd_baseline_advance_to_unix_us": 1792357800120000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_generated_unix_us": 1794744000000000, "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "not_covered", "reason": "advance_behind_start", "class": "", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "The empty id sorts before every id, so (T, empty) is behind (T, id): dropping the id from a verdict resumed inside the instant moves backward."
+      },
+      {
+        "name": "not_covered_complete_dropped_id_behind_position",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/CVE-2025-2500",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2025, "nvd_baseline_advance_to_unix_us": 1792357800120000, "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_generated_unix_us": 1794744000000000, "nvd_baseline_year_complete": true, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "not_covered", "reason": "advance_behind_start", "class": "", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "A complete verdict may equal its start but never sit behind it: (T, empty) is behind (T, id)."
+      },
+      {
+        "name": "not_covered_id_numeric_order_behind_position",
+        "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/CVE-2025-9999",
+        "payload": {"nvd_baseline_run": "run-1", "nvd_baseline_year": 2025, "nvd_baseline_advance_to_unix_us": 1792357800120000, "nvd_baseline_advance_to_cve_id": "CVE-2025-10000", "nvd_baseline_year_sha256": "61db8d5b74d993fed8e8d70e84200fbb9abb84dcf0d4cec4bce8a9e09104126d", "nvd_baseline_year_generated_unix_us": 1794744000000000, "nvd_baseline_year_complete": false, "nvd_baseline_should_advance": true},
+        "expect": {"outcome": "not_covered", "reason": "advance_behind_start", "class": "", "advance_to": 0, "year_complete": false},
+        "emitted_by_collector": false,
+        "note": "Byte order, not numeric order: CVE-2025-10000 sorts before CVE-2025-9999, so it is behind this start."
       }
+    ]
+  },
+  "position": {
+    "comment": "The NVD baseline resume position (eshu-hq/eshu-sdk#97, ruling for eshu-hq/eshu#10671): the pair (start_unix_us, from_cve_id) that a baseline scope id names and a baseline verdict advances. Core and the collector each implement the scope parser, the scope builder, the id canonicalization and the order, and replay these cases against them. A position has exactly one scope id: the id is the fourth segment only when it is not empty. An inclusive lower bound, not a pointer to a record: the next chunk starts at the first record at or after the position.",
+    "scope_grammar": "vuln-intel://nvd/_baseline/<run>/<year>/<start_unix_us>[/<from_cve_id>]",
+    "run_pattern": "^[A-Za-z0-9_-]{1,64}$",
+    "year_pattern": "^[0-9]{4}$",
+    "start_unix_us_pattern": "^[0-9]+$",
+    "cve_id_pattern": "^[A-Z0-9-]{1,64}$",
+    "cve_id_canonical": "trim ASCII space and tab, reject any non-ASCII byte, upper-case ASCII letters, then require cve_id_pattern",
+    "order": "start_unix_us ascending as an integer, then from_cve_id by unsigned byte order; the empty id sorts before every id",
+    "canonical_ids": [
+      {"name": "canonical_unchanged", "raw": "CVE-2025-1500", "canonical": "CVE-2025-1500", "valid": true, "note": "An id already canonical is unchanged."},
+      {"name": "lowercase_upper_cased", "raw": "cve-2025-1500", "canonical": "CVE-2025-1500", "valid": true, "note": "A record id is upper-cased. A scope id never carries the lowercase form."},
+      {"name": "tab_and_space_trimmed", "raw": "  CVE-2025-1500\t", "canonical": "CVE-2025-1500", "valid": true, "note": "Surrounding ASCII space and tab are trimmed. A scope id never carries the padded form."},
+      {"name": "longest_64", "raw": "CVE-2025-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "canonical": "CVE-2025-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "valid": true, "note": "64 characters is the longest canonical id."},
+      {"name": "blank", "raw": "", "canonical": "", "valid": false, "note": "A blank id is not canonical; an empty position id is written as no id at all."},
+      {"name": "overlong_65", "raw": "CVE-2025-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "canonical": "", "valid": false, "note": "65 characters is over the length bound."},
+      {"name": "inner_space", "raw": "CVE-2025 1500", "canonical": "", "valid": false, "note": "Only surrounding whitespace is trimmed."},
+      {"name": "underscore", "raw": "CVE_2025_1500", "canonical": "", "valid": false, "note": "Only A-Z, 0-9 and the hyphen are allowed."},
+      {"name": "non_ascii_accent", "raw": "CV\u00c9-2025-1500", "canonical": "", "valid": false, "note": "A non-ASCII id is rejected."},
+      {"name": "non_ascii_upper_cases_to_ascii", "raw": "cve-2025-\u017f1", "canonical": "", "valid": false, "note": "U+017F upper-cases to the ASCII letter S under unicode rules, so it is rejected before upper-casing, not after."}
+    ],
+    "round_trips": [
+      {"name": "three_segment_empty_id", "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000", "run": "run-1", "year": 2025, "start_unix_us": 1792357800120000, "from_cve_id": "", "note": "An empty id is never written as a trailing segment: the position (T, empty) has exactly this one scope id."},
+      {"name": "four_segment", "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/CVE-2025-1500", "run": "run-1", "year": 2025, "start_unix_us": 1792357800120000, "from_cve_id": "CVE-2025-1500", "note": "A position inside an instant adds the canonical id as the fourth segment."},
+      {"name": "four_segment_longest_id", "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/CVE-2025-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "run": "run-1", "year": 2025, "start_unix_us": 1792357800120000, "from_cve_id": "CVE-2025-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "note": "The 64-character id still round-trips."}
+    ],
+    "rejections": [
+      {"name": "empty_trailing_segment", "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/", "note": "An empty id is never a trailing segment; the three-segment form is the only encoding of an empty id."},
+      {"name": "lowercase_id", "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/cve-2025-1500", "note": "The scope carries the canonical id, so the lowercase form names no position."},
+      {"name": "padded_id_leading", "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/ CVE-2025-1500", "note": "A padded id is not canonical."},
+      {"name": "padded_id_trailing", "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/CVE-2025-1500 ", "note": "A padded id is not canonical."},
+      {"name": "overlong_id", "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/CVE-2025-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "note": "65 characters is over the length bound."},
+      {"name": "non_ascii_id", "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/CV\u00c9-2025-1500", "note": "A non-ASCII id is rejected."},
+      {"name": "non_ascii_id_upper_cases_to_ascii", "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/cve-2025-\u017f1", "note": "U+017F upper-cases to S: it must not be admitted by upper-casing first."},
+      {"name": "extra_segment", "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000/CVE-2025-1500/extra", "note": "A scope has at most four position segments."},
+      {"name": "id_in_start_slot", "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/CVE-2025-1500", "note": "An id cannot stand in for the start stamp."},
+      {"name": "non_numeric_start", "scope_id": "vuln-intel://nvd/_baseline/run-1/2025/1792357800120000x/CVE-2025-1500", "note": "The start is decimal digits only."}
+    ],
+    "orders": [
+      {"name": "id_ten_thousand_before_nine_thousand", "a": {"start_unix_us": 1792357800120000, "from_cve_id": "CVE-2025-10000"}, "b": {"start_unix_us": 1792357800120000, "from_cve_id": "CVE-2025-9999"}, "cmp": -1, "note": "Byte order, not numeric order: the byte 1 sorts before 9, so CVE-2025-10000 comes before CVE-2025-9999."},
+      {"name": "id_nine_thousand_after_ten_thousand", "a": {"start_unix_us": 1792357800120000, "from_cve_id": "CVE-2025-9999"}, "b": {"start_unix_us": 1792357800120000, "from_cve_id": "CVE-2025-10000"}, "cmp": 1, "note": "The same pair reversed: byte order makes CVE-2025-9999 the later position."},
+      {"name": "empty_id_before_any_id", "a": {"start_unix_us": 1792357800120000, "from_cve_id": ""}, "b": {"start_unix_us": 1792357800120000, "from_cve_id": "CVE-2025-0001"}, "cmp": -1, "note": "At one stamp the whole instant (empty id) sorts before every position inside it."},
+      {"name": "later_stamp_beats_id", "a": {"start_unix_us": 1792357800120000, "from_cve_id": "CVE-2025-9999"}, "b": {"start_unix_us": 1792357800121000, "from_cve_id": ""}, "cmp": -1, "note": "The stamp compares first, as an integer: any position in a later instant is later, whatever the ids."},
+      {"name": "equal_position", "a": {"start_unix_us": 1792357800120000, "from_cve_id": "CVE-2025-1500"}, "b": {"start_unix_us": 1792357800120000, "from_cve_id": "CVE-2025-1500"}, "cmp": 0, "note": "One position compares equal to itself."},
+      {"name": "equal_empty_position", "a": {"start_unix_us": 1792357800120000, "from_cve_id": ""}, "b": {"start_unix_us": 1792357800120000, "from_cve_id": ""}, "cmp": 0, "note": "Two whole-instant positions at one stamp compare equal."},
+      {"name": "shorter_prefix_first", "a": {"start_unix_us": 1792357800120000, "from_cve_id": "CVE-2025-1"}, "b": {"start_unix_us": 1792357800120000, "from_cve_id": "CVE-2025-10"}, "cmp": -1, "note": "An id that is a prefix of another sorts first."},
+      {"name": "hyphen_before_digit", "a": {"start_unix_us": 1792357800120000, "from_cve_id": "CVE-2025-1"}, "b": {"start_unix_us": 1792357800120000, "from_cve_id": "CVE-20251"}, "cmp": -1, "note": "The hyphen byte 0x2D sorts before a digit, which a linguistic collation can order differently; core stores the id with a byte-order collation."},
+      {"name": "letter_after_digit", "a": {"start_unix_us": 1792357800120000, "from_cve_id": "CVE-2025-A"}, "b": {"start_unix_us": 1792357800120000, "from_cve_id": "CVE-2025-9"}, "cmp": 1, "note": "Upper-case letters follow digits in byte order."}
     ]
   }
 }

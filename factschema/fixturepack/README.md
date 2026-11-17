@@ -85,6 +85,27 @@ shapes the target reducer release consumes.
   violations of each rule, and pins the digest. Payload keys that ride on the
   same snapshot but are outside the vector are listed in its `comment`.
 
+  The `baseline` section also pins the resume position (eshu-hq/eshu-sdk#97):
+  the pair `(start_unix_us, from_cve_id)` that lets a chunk resume inside one
+  instant. Two keys carry it, `nvd_baseline_advance_to_cve_id` (a string, present
+  only when the position is inside an instant, so an empty id is absent and
+  never `""`) and `nvd_baseline_year_generated_unix_us` (an int64, always
+  present: the seed manifest `lastModified` for the year, which the checkpoint
+  writer uses to refuse a seed rollback at commit). A scope id is
+  `vuln-intel://nvd/_baseline/<run>/<year>/<start_unix_us>`, plus
+  `/<from_cve_id>` when the id is not empty, so one position has exactly one
+  scope id. The top-level `position` block holds the scope grammar, the id
+  canonicalization (trimmed, upper-cased, `[A-Z0-9-]{1,64}`, ASCII only),
+  round-trip and rejection cases, and order cases: stamp first, then the id by
+  byte order, so `CVE-2025-10000` sorts before `CVE-2025-9999` and `(T, "")`
+  before `(T, id)`. The `expect` of a baseline case may carry
+  `advance_to_cve_id` and `year_generated_unix_us`; absent reads as `""` and 0.
+  No collector stamps these keys and core does not read them yet: the cases with
+  `emitted_by_collector` true that carry them state the shape the collector
+  change must stamp. The vector does not pin how core treats a malformed
+  `advance_to_cve_id` or an absent year stamp, nor the seed-rollback refusal,
+  which needs stored checkpoint state.
+
 The NVD golden records the **full provider fact payload maps**, including
 producer metadata outside the narrower typed factschema CVE and source-snapshot
 structs. It is separate from the per-kind schema-valid/invalid examples. The
