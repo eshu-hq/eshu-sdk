@@ -4,6 +4,9 @@ GO ?= go
 # .github/workflows/ci.yml) and by `make race` below. Floors start at the
 # measured baselines and only rise; neither module closes below 90% per
 # epic #27. Keep the Makefile defaults in sync with the workflow inputs.
+# apicontract holds zero coverable statements (one frozen const), so its
+# baseline is 0.0; the floor must rise if statements are ever added.
+COVERAGE_FLOOR_APICONTRACT ?= 0.0
 COVERAGE_FLOOR_COLLECTOR ?= 85.0
 COVERAGE_FLOOR_FACTSCHEMA ?= 48.3
 COVERAGE_FLOOR_WIRECONTRACT ?= 89.0
@@ -11,26 +14,31 @@ COVERAGE_FLOOR_WIRECONTRACT ?= 89.0
 .PHONY: build test vet lint tidy-check generate-check file-cap race coverage govulncheck shellcheck shape actionlint gosec ci pre-push
 
 build:
+	cd apicontract && GOWORK=off $(GO) build ./...
 	cd collector && GOWORK=off $(GO) build ./...
 	cd factschema && GOWORK=off $(GO) build ./...
 	cd wirecontract && GOWORK=off $(GO) build ./...
 
 test:
+	cd apicontract && GOWORK=off $(GO) test ./... -count=1
 	cd collector && GOWORK=off $(GO) test ./... -count=1
 	cd factschema && GOWORK=off $(GO) test ./... -count=1
 	cd wirecontract && GOWORK=off $(GO) test ./... -count=1
 
 vet:
+	cd apicontract && GOWORK=off $(GO) vet ./...
 	cd collector && GOWORK=off $(GO) vet ./...
 	cd factschema && GOWORK=off $(GO) vet ./...
 	cd wirecontract && GOWORK=off $(GO) vet ./...
 
 lint:
+	cd apicontract && GOWORK=off golangci-lint run ./...
 	cd collector && GOWORK=off golangci-lint run ./...
 	cd factschema && GOWORK=off golangci-lint run ./...
 	cd wirecontract && GOWORK=off golangci-lint run ./...
 
 tidy-check:
+	bash scripts/ci/tidy-check.sh apicontract
 	bash scripts/ci/tidy-check.sh collector
 	bash scripts/ci/tidy-check.sh factschema
 	bash scripts/ci/tidy-check.sh wirecontract
@@ -46,6 +54,8 @@ file-cap:
 	@bash scripts/dev/check-file-cap.sh
 
 race:
+	cd apicontract && GOWORK=off $(GO) test -race ./... -count=1 -coverprofile=coverage.out
+	cd apicontract && bash ../scripts/ci/check-coverage.sh coverage.out $(COVERAGE_FLOOR_APICONTRACT)
 	cd collector && GOWORK=off $(GO) test -race ./... -count=1 -coverprofile=coverage.out
 	cd collector && bash ../scripts/ci/check-coverage.sh coverage.out $(COVERAGE_FLOOR_COLLECTOR)
 	cd factschema && GOWORK=off $(GO) test -race ./... -count=1 -coverprofile=coverage.out
@@ -56,6 +66,7 @@ race:
 coverage: race
 
 govulncheck:
+	cd apicontract && GOWORK=off govulncheck ./...
 	cd collector && GOWORK=off govulncheck ./...
 	cd factschema && GOWORK=off govulncheck ./...
 	cd wirecontract && GOWORK=off govulncheck ./...

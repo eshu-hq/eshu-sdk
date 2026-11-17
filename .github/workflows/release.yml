@@ -1,7 +1,7 @@
 # SDK module release: CI creates the tag and proves it (replaces hand-pushed tags).
 #
 # Run by hand from the Actions tab ("Run workflow" on main) with:
-#   module         collector | factschema | wirecontract
+#   module         apicontract | collector | factschema | wirecontract
 #   version        the tag version, e.g. v0.1.0-rc.11
 #   commit         the full 40-hex SHA to tag; it must already be on main
 #   expect_file    optional: a file inside the module, repo-relative
@@ -55,6 +55,7 @@ on:
         required: true
         type: choice
         options:
+          - apicontract
           - collector
           - factschema
           - wirecontract
