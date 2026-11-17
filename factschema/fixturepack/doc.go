@@ -60,5 +60,9 @@
 // collector builder can emit it or whether it only exercises core. The
 // collector and core are expected to read it in their own changes (constants
 // and builders on one side, a replay through the commit path on the other);
-// this package validates the vector's shape.
+// this package validates the vector's shape. Its baseline section also pins
+// the resume position (start stamp plus an optional CVE id): the scope id
+// grammar, the id canonicalization and the order, stamp first and then the id
+// by byte order, in a position block with round-trip, rejection and order
+// cases.
 package fixturepack

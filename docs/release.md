@@ -213,7 +213,8 @@ has no tag; it is on `main` once that change merges. Its `CHANGELOG.md` section
 lists two changes: the six optional `vulnerability.cve` fields
 (eshu-hq/eshu#10755) and the shared NVD verdict-key vector,
 `fixturepack/payloads/nvd_verdict_keys_golden.json` with
-`NVDVerdictKeysGolden()` (eshu-hq/eshu-sdk#93, refs eshu-hq/eshu#10732). Both
+`NVDVerdictKeysGolden()` (eshu-hq/eshu-sdk#93, refs eshu-hq/eshu#10732),
+extended with the baseline resume position (eshu-hq/eshu-sdk#97). Both
 are additive, with no stable-key, schema-version, or wire change.
 
 Until the tag exists, a consumer that needs the vector may pin the merged
@@ -226,7 +227,7 @@ commit M; nobody tags by hand.
 When that ruling lands, run the release workflow (see Releasing a module tag)
 with `module=factschema`, `version=v0.1.0-rc.20`, commit M, and
 `factschema/fixturepack/payloads/nvd_verdict_keys_golden.json` as `expect_file`
-with SHA-256 `6a489baa68ec96eb01034536a78a8b3643c2ce31f8fe84cb73e2367830bdd073` as `expect_sha256`. That file is
+with SHA-256 `fdb456f8bac262f62374514e041663d8a771e3f5993c9a63fc759815c9b670f9` as `expect_sha256`. That file is
 the newest change, so the pin fails if the vector is missing.
 
 The `vulnerability.cve` schema cannot be pinned too, so check it by hand before
