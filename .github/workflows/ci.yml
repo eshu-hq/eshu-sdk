@@ -56,7 +56,7 @@ jobs:
     permissions:
       contents: read
       actions: write
-    uses: eshu-hq/.github/.github/workflows/go-multi-module-ci.yml@048d30a904b9e5f02ab8276285f0e889ce7820b0
+    uses: eshu-hq/.github/.github/workflows/go-multi-module-ci.yml@f76c87e1e0d5eee40e32a1f908868fa397dbd4a1
     with:
       modules: '["apicontract", "collector", "factschema", "wirecontract"]'
       coverage-floors: '{"apicontract": 0.0, "collector": 85.0, "factschema": 48.3, "wirecontract": 89.0}'
