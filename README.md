@@ -41,7 +41,7 @@ what's left out and why.
 
 ## Shortest path in
 
-All four modules need Go 1.26.10 or newer (check the `go` line in each
+All four modules need Go 1.26.11 or newer (check the `go` line in each
 `go.mod`). Pick an exact candidate version from the
 [compatibility policy](docs/compatibility.md) first. Never use
 `@latest` as release evidence.
@@ -81,9 +81,11 @@ old in-core module paths relate to these.
 
 ## Related repos
 
-Eshu core (`eshu-hq/eshu`) owns the original payload contract and the
-host, reducer, and API that use these modules. Collector repos and thin
-API clients sit on the other side and import them.
+[Eshu core](https://github.com/eshu-hq/eshu) owns the original payload
+contract and the host, reducer, and API that use these modules.
+Collector repos and thin API clients sit on the other side and import
+them. See [Start Here](https://github.com/eshu-hq/eshu/blob/main/docs/public/start-here.md)
+and the 31-repo [Repository Map](https://github.com/eshu-hq/eshu/blob/main/REPOSITORIES.md) for the full layout.
 
 ## Development
 
